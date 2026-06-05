@@ -1,0 +1,14 @@
+@import "tailwindcss";
+
+/* Definición de colores */
+@theme {
+  --color-alianza-azul: #002060;
+  --color-alianza-amarillo: #FFD700;
+}
+
+/* Aplicar estilos base */
+@layer base {
+  body {
+    @apply bg-alianza-azul text-white font-sans;
+  }
+}
