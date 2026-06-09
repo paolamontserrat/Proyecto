@@ -1,0 +1,104 @@
+{
+  "rangoEdad": "0-5",
+  "titulo": "Mi familia y el cochinito ahorrador",
+  "institucion": "ALIANZA CAJA POPULAR CERANO",
+  "portada": "/images/0-5/Inicio0-5.png",
+  "imgAhorro": "/images/0-5/6.png",
+  "imgJuegos": "/images/0-5/16.png",
+  "paginas": [
+    {
+      "id": 1,
+      "tipo": "bienvenida",
+      "titulo": "¡BIENVENIDO!",
+      "intro": "Estás comenzando una nueva etapa donde aprenderás algo muy importante: cómo manejar tu dinero con responsabilidad y visión. Aquí no solo guardarás dinero, aprenderás a tomar decisiones inteligentes y a convertirte en una persona responsable.",
+      "secciones": [
+        {
+          "subtitulo": "PROGRAMA CRECIENDO JUNTOS",
+          "texto": "Te invitamos a participar en nuestro programa. Consiste en lograr retos trimestrales de ahorro constante, donde obtienes premios y participas en sorteos.",
+          "icono": "⭐"
+        },
+        {
+          "subtitulo": "TUS CUENTAS",
+          "texto": "Cuenta Club Amigos de Alianzito (largo plazo hasta tu mayoría de edad) y Depósito a la vista (para retiros inmediatos).",
+          "icono": "💰"
+        }
+      ],
+      "beneficios": [
+        "Sesiones de educación financiera y cooperativa.",
+        "Cursos para desarrollar habilidades según tu edad.",
+        "Incentivos de apoyo escolar (si no eres beneficiario de Impulso a la Educación).",
+        "Esquema de crédito atractivo para tus papás."
+      ]
+    },
+    {
+      "id": 2,
+      "tipo": "educativo",
+      "titulo": "¿QUÉ ES AHORRAR?",
+      "contenido": "Es guardar parte del dinero que recibes, para reunir poco a poco cantidades más grandes y utilizarlo en el futuro.",
+      "cuento": {
+        "titulo": "El cochinito que aprendió a esperar",
+        "trama": "Pinky, un cochinito, quiere un carrito rojo. Su mamá le enseña a esperar y a ahorrar con una alcancía. Cada día escuchan el sonido de las monedas. Al final, logran comprar el juguete y Pinky entiende que esperar hace las cosas más especiales."
+      }
+    },
+    {
+      "id": 3,
+      "tipo": "tips_padres",
+      "titulo": "GUÍA FINANCIERA PARA PAPÁS",
+      "tips": [
+        { "tema": "Educación con el ejemplo", "consejos": ["Ahorrar", "Planear gastos", "Evitar compras impulsivas"] },
+        { "tema": "Crear hábitos", "consejos": ["Usar alcancías transparentes", "Contar dinero juntos", "Cantar al guardar"] },
+        { "tema": "Paciencia", "frases": ["Hoy no, pero luego sí", "Primero ahorramos y después compramos"] },
+        { "tema": "Comunicación positiva", "positivas": ["El dinero nos ayuda", "Guardar es bueno"], "evitar": ["No hay dinero para nada"] },
+        { "tema": "Seguridad", "concepto": "Asociar el ahorro con seguridad, no con carencia." },
+        { "tema": "Ahorro formal", "beneficios": ["Dinero seguro", "Crece con rendimientos", "Fortalece el hábito"] }
+      ]
+    },
+    {
+      "id": 4,
+      "tipo": "actividades",
+      "titulo": "MIS ACTIVIDADES",
+      "lista_ninos": [
+        "Colorear el cochinito y escribir su nombre",
+        "Dibujar a la familia ahorrando",
+        "Decorar un frasco (cochinito familiar) y guardar una moneda",
+        "Marcar el camino correcto en el laberinto",
+        "Relacionar palabras (Caja, Monedas, Familia, Alcancía, Billetes, Ahorro) con imágenes",
+        "Buscar las 6 diferencias"
+      ],
+      "bitacora_familiar": {
+        "titulo": "Bitácora mensual de ahorro",
+        "detalle": "Registro de metas y sellos por 12 meses."
+      }
+    },
+    {
+      "id": 5,
+      "tipo": "cierre",
+      "titulo": "¡A SEGUIR APRENDIENDO!",
+      "mensaje": "Ahorrar es bueno, la familia apoya y es posible aprender desde pequeño."
+    }
+  ],
+
+  "pasos": [
+    {
+      "id": 1,
+      "titulo": "¿QUÉ ES AHORRAR?",
+      "contenido": "Es guardar parte del dinero que recibes,  para reunir poco a poco cantidades más grandes y utilizarlo en el futuro.",
+      "actividad": "Colorear el cochinito y escribir tu nombre",
+      "recursos": {
+        "fondo": "/images/0-5/Fondo20-5.png",
+        "procesoAhorro": "/images/0-5/28.png",
+        "ninoIzquierda": "/images/0-5/4.png",
+        "ninoMostrador": "/images/0-5/3.png",
+        "cochinitoColorear": "/images/0-5/29.png"
+      }
+    },
+    {
+      "id": 2,
+      "titulo": "MONEDÍN Y MI FAMILIA",
+      "contenido": "Este es Monedín el cochinito. Vive con una familia que se quiere mucho...",
+      "tips_padres": ["Empieza con el ejemplo...", "Ahorran, planean, evitan..."],
+      "actividad": "Dibuja a tu familia ahorrando contigo",
+      "img": "/images/0-5/act2.png"
+    }
+  ]
+}
