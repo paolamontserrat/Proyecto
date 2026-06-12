@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
 import Passport from './pages/Passport';
-import Dashboard from './components/Dashboard';
+import Dashboard from './pages/Dashboard';
 // Importamos el nuevo contenedor
 import ContenedorActividades from './components/actividades/ContenedorActividades';
 

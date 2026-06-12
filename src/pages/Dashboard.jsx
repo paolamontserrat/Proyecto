@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import Footer from './Footer';
+import Footer from '../components/Footer';
 
 const Dashboard = () => {
   const { rango } = useParams();

@@ -1,25 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import ActividadColorear from './ActividadColorear';
-import ActividadFamilia from './ActividadFamilia';
+
+// 🔥 SOLO IMPORTAS EL ARRAY
+import actividades05 from '../../features/0-5/actividades/actividades';
+
 import Footer from '../Footer';
+import CapturarCoordenadas from './CapturarCoordenadas';
 
 const ContenedorActividades = () => {
   const { rango } = useParams();
   const navigate = useNavigate();
+
   const [data, setData] = useState(null);
-  
-  // Estado para el paso actual basado en localStorage
-  const [pasoActual, setPasoActual] = useState(() => 
-    parseInt(localStorage.getItem(`progreso-${rango}`)) || 1
+  const [pasoActual, setPasoActual] = useState(
+    () => parseInt(localStorage.getItem(`progreso-${rango}`)) || 1
   );
 
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const userId = usuario ? usuario.id : null;
+
+  // 🔥 JSON
   useEffect(() => {
     fetch(`/data/${rango}.json`)
-      .then(res => res.json())
+      .then(res => {
+        if (!res.ok) throw new Error("Error cargando JSON");
+        return res.json();
+      })
       .then(setData)
-      .catch(err => console.error("Error cargando JSON:", err));
+      .catch(err => console.error(err));
   }, [rango]);
+
+  // 🔝 SCROLL
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pasoActual]);
 
   const avanzar = () => {
     const siguiente = pasoActual + 1;
@@ -29,62 +43,96 @@ const ContenedorActividades = () => {
 
   const retroceder = () => {
     if (pasoActual > 1) {
-      setPasoActual(pasoActual - 1);
+      const anterior = pasoActual - 1;
+      setPasoActual(anterior);
+      localStorage.setItem(`progreso-${rango}`, anterior);
     } else {
-      // Si ya está en el primer paso, regresa a la selección de rangos
-      navigate('/'); 
+      navigate('/');
     }
   };
 
-  if (!data) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-xl font-bold text-alianza-azul">Cargando actividades...</p>
-      </div>
-    );
+  if (!data || !data.pasos) {
+    return <div className="p-20 text-center">Cargando actividades...</div>;
   }
 
-  // Mapa de componentes integrando las funciones de navegación
-  const componentes = {
-    1: (
-      <ActividadColorear 
-        data={data.pasos[0]} 
-        onComplete={avanzar} 
-        onBack={retroceder} 
-      />
-    ),
-    2: (
-      <ActividadFamilia 
-        data={data.pasos[1]} 
-        onComplete={avanzar} 
-        onBack={retroceder} 
-      />
-    )
+  // 🔥 MAPEO POR RANGO
+  const actividadesPorRango = {
+    "0-5": actividades05,
+    // "6-8": actividades68 (cuando lo hagas)
   };
 
-  return (
-    <div className="min-h-screen pb-12">
-      {/* Encabezado fijo o informativo */}
-      <header className="p-6 text-center">
-        <h1 className="text-2xl font-black text-alianza-azul">
-          {data.pasos[pasoActual - 1] ? `Reto: ${data.pasos[pasoActual - 1].titulo}` : "¡Felicidades!"}
-        </h1>
-      </header>
+  const actividades = actividadesPorRango[rango] || [];
 
-      {/* Contenido de la actividad */}
-      <main className="px-4">
-        {componentes[pasoActual] || (
-          <div className="text-center p-10 bg-white rounded-3xl shadow-lg border-2 border-alianza-amarillo">
-            <h2 className="text-3xl font-black text-alianza-azul mb-4">¡Excelente trabajo!</h2>
-            <p className="text-gray-600 mb-6">Has completado todas las actividades de este rango.</p>
-            <button 
+  const ActividadActual = actividades[pasoActual - 1];
+  const pData = data.pasos[pasoActual - 1];
+
+  const DEBUG_COORDENADAS = false;
+
+  return (
+    <div
+      className="min-h-screen pb-12"
+      style={{
+        backgroundImage: `url('/images/${rango}/Fondo${rango}.png')`,
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      <main className="container mx-auto px-4">
+
+        {DEBUG_COORDENADAS ? (
+          <CapturarCoordenadas
+            imagen={`/images/${rango}/20.png`}
+            total={6}
+          />
+        ) : pasoActual <= data.pasos.length ? (
+
+          ActividadActual ? (
+            <ActividadActual
+              data={pData}
+              onComplete={avanzar}
+              onBack={retroceder}
+              userId={userId}
+              rango={rango}
+            />
+          ) : (
+            <div className="text-center p-10">
+              Actividad no encontrada
+            </div>
+          )
+
+        ) : (
+
+          <div className="text-center p-8 md:p-16 bg-white/95 rounded-[3rem] shadow-2xl border-[6px] md:border-[8px] border-alianza-amarillo mt-10 md:mt-20 max-w-2xl mx-auto">
+
+            <img
+              src={`/images/${rango}/33.png`}
+              className="mx-auto mb-6 md:mb-8 w-40 md:w-64 drop-shadow-xl"
+            />
+
+            <h2 className="text-3xl md:text-5xl font-black text-alianza-azul mb-6">
+              ¡Felicidades terminaste las actividades!
+            </h2>
+
+            <button
               onClick={() => navigate('/')}
-              className="bg-alianza-azul text-white px-8 py-3 rounded-full font-bold"
+              className="bg-alianza-azul text-white px-8 py-4 rounded-full font-black mb-4 w-full md:w-auto"
             >
               Volver al inicio
             </button>
+
+            <button
+              onClick={() => {
+                setPasoActual(1);
+                localStorage.setItem(`progreso-${rango}`, 1);
+              }}
+              className="bg-gray-200 text-alianza-azul px-8 py-4 rounded-full font-black w-full md:w-auto"
+            >
+              Repasar actividades
+            </button>
+
           </div>
         )}
+
       </main>
 
       <Footer />
