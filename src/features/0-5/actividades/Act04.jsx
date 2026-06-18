@@ -9,7 +9,7 @@ const Act04 = ({ data, onComplete, onBack, userId }) => {
   const [subiendo, setSubiendo] = useState(false);
   const [safeUserId, setSafeUserId] = useState(null);
 
-  // 🔥 USER ID SEGURO
+  // USER ID SEGURO
   useEffect(() => {
     let tempId = localStorage.getItem('tempUserId');
 
@@ -24,7 +24,7 @@ const Act04 = ({ data, onComplete, onBack, userId }) => {
     }
   }, [userId]);
 
-  // 🔥 CARGAR IMAGEN
+  // CARGAR IMAGEN
   useEffect(() => {
     if (safeUserId) {
       const savedImage = localStorage.getItem(`foto-alcancia-${safeUserId}`);
@@ -32,7 +32,7 @@ const Act04 = ({ data, onComplete, onBack, userId }) => {
     }
   }, [safeUserId]);
 
-  // 🔥 SUBIR
+  // SUBIR
   const manejarCambioImagen = async (event) => {
     const file = event.target.files[0];
     if (!file || !safeUserId) return;
@@ -54,7 +54,7 @@ const Act04 = ({ data, onComplete, onBack, userId }) => {
 
       const publicUrl = data.publicUrl;
 
-      // 🔥 GUARDAR URL + NOMBRE
+      // GUARDAR URL + NOMBRE
       localStorage.setItem(`foto-alcancia-${safeUserId}`, publicUrl);
       localStorage.setItem(`foto-alcancia-file-${safeUserId}`, fileName);
 
@@ -68,7 +68,7 @@ const Act04 = ({ data, onComplete, onBack, userId }) => {
     setSubiendo(false);
   };
 
-  // 🔥 ELIMINAR (SUPABASE + LOCAL)
+  // ELIMINAR (SUPABASE + LOCAL)
   const eliminarImagen = async () => {
     if (!safeUserId) return;
 

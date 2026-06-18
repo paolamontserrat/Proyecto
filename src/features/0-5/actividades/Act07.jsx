@@ -21,9 +21,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
 
   const key = `act07-progreso-${rango || 1}`;
 
-  // =========================
-  // 🔁 CARGA INICIAL
-  // =========================
+  // CARGA INICIAL
   useEffect(() => {
     const saved = localStorage.getItem(key);
 
@@ -45,16 +43,14 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
 
     setReady(true);
 
-    // 🔥 IMPORTANTE: esperar render REAL del DOM
+    // IMPORTANTE: esperar render REAL del DOM
     requestAnimationFrame(() => {
       setLayoutReady(true);
     });
 
   }, [key, data]);
 
-  // =========================
-  // 💾 GUARDADO AUTOMÁTICO
-  // =========================
+  // GUARDADO AUTOMÁTICO
   useEffect(() => {
     if (!ready) return;
 
@@ -69,9 +65,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     localStorage.setItem(key, JSON.stringify(state));
   }, [relaciones, textos, imagenesIzq, imagenesDer, completado, ready, key]);
 
-  // =========================
-  // 📱 FIX RESIZE (recalcular líneas)
-  // =========================
+  // FIX RESIZE (recalcular líneas)
   useEffect(() => {
     const update = () => {
       setLayoutReady(false);
@@ -82,9 +76,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     return () => window.removeEventListener('resize', update);
   }, []);
 
-  // =========================
-  // 🔄 RESET
-  // =========================
+  // RESET
   const resetear = () => {
     const shuffled = shuffle(data.pares);
 
@@ -109,9 +101,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     requestAnimationFrame(() => setLayoutReady(true));
   };
 
-  // =========================
-  // 📍 COORDENADAS
-  // =========================
+  // COORDENADAS
   const getCoords = (id) => {
     const el = document.getElementById(id);
     const cont = containerRef.current;
@@ -127,9 +117,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     };
   };
 
-  // =========================
-  // 🎯 MATCH
-  // =========================
+  // MATCH
   const handleSelect = (item, tipo) => {
     if (completado || relaciones.find(r => r.id === item.id)) return;
 

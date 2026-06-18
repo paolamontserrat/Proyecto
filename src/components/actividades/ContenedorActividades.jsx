@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-// 🔥 SOLO IMPORTAS EL ARRAY
+// 🔥 IMPORTA TODOS LOS RANGOS
 import actividades05 from '../../features/0-5/actividades/actividades';
+import actividades68 from '../../features/6-8/actividades/actividades';
 
 import Footer from '../Footer';
 import CapturarCoordenadas from './CapturarCoordenadas';
@@ -19,7 +20,7 @@ const ContenedorActividades = () => {
   const usuario = JSON.parse(localStorage.getItem('usuario'));
   const userId = usuario ? usuario.id : null;
 
-  // 🔥 JSON
+  // 🔥 CARGAR JSON
   useEffect(() => {
     fetch(`/data/${rango}.json`)
       .then(res => {
@@ -30,77 +31,47 @@ const ContenedorActividades = () => {
       .catch(err => console.error(err));
   }, [rango]);
 
-  // 🔝 SCROLL
+  // 🔥 SCROLL AUTOMÁTICO
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [pasoActual]);
 
-  const avanzar = () => {
-    const siguiente = pasoActual + 1;
-    setPasoActual(siguiente);
-    localStorage.setItem(`progreso-${rango}`, siguiente);
-  };
-
-  const retroceder = () => {
-    if (pasoActual > 1) {
-      const anterior = pasoActual - 1;
-      setPasoActual(anterior);
-      localStorage.setItem(`progreso-${rango}`, anterior);
-    } else {
-      navigate('/');
-    }
-  };
-
-  if (!data || !data.pasos) {
-    return <div className="p-20 text-center">Cargando actividades...</div>;
-  }
-
-  // 🔥 MAPEO POR RANGO
+  // 🔥 MAPEO DE ACTIVIDADES
   const actividadesPorRango = {
     "0-5": actividades05,
-    // "6-8": actividades68 (cuando lo hagas)
+    "6-8": actividades68,
   };
 
   const actividades = actividadesPorRango[rango] || [];
 
-  const ActividadActual = actividades[pasoActual - 1];
-  const pData = data.pasos[pasoActual - 1];
+  // 🔥 VALIDACIÓN DE DATOS
+  if (!data || !data.pasos) {
+    return <div className="p-20 text-center">Cargando actividades...</div>;
+  }
 
-  const DEBUG_COORDENADAS = false;
+  const totalPasos = Math.min(data.pasos.length, actividades.length);
 
-  return (
-    <div
-      className="min-h-screen pb-12"
-      style={{
-        backgroundImage: `url('/images/${rango}/Fondo${rango}.png')`,
-        backgroundSize: 'cover',
-        backgroundAttachment: 'fixed'
-      }}
-    >
-      <main className="container mx-auto px-4">
+  // 🔥 PROTECCIÓN SI NO HAY ACTIVIDADES
+  if (actividades.length === 0) {
+    return (
+      <div className="text-center p-20">
+        No hay actividades configuradas para este rango
+      </div>
+    );
+  }
 
-        {DEBUG_COORDENADAS ? (
-          <CapturarCoordenadas
-            imagen={`/images/${rango}/20.png`}
-            total={6}
-          />
-        ) : pasoActual <= data.pasos.length ? (
-
-          ActividadActual ? (
-            <ActividadActual
-              data={pData}
-              onComplete={avanzar}
-              onBack={retroceder}
-              userId={userId}
-              rango={rango}
-            />
-          ) : (
-            <div className="text-center p-10">
-              Actividad no encontrada
-            </div>
-          )
-
-        ) : (
+  // 🔥 SI YA TERMINÓ
+  if (pasoActual > totalPasos) {
+    return (
+      <div
+        className="min-h-screen pb-12"
+        style={{
+          backgroundImage: `url('/images/${rango}/Fondo${rango}.png')`,
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed'
+        }}
+      >
+        <main className="container mx-auto px-4">
 
           <div className="text-center p-8 md:p-16 bg-white/95 rounded-[3rem] shadow-2xl border-[6px] md:border-[8px] border-alianza-amarillo mt-10 md:mt-20 max-w-2xl mx-auto">
 
@@ -131,6 +102,69 @@ const ContenedorActividades = () => {
             </button>
 
           </div>
+
+        </main>
+
+        <Footer />
+      </div>
+    );
+  }
+
+  const ActividadActual = actividades[pasoActual - 1];
+  const pData = data.pasos[pasoActual - 1];
+
+  // 🔥 PROTECCIÓN EXTRA
+  if (!ActividadActual || !pData) {
+    return (
+      <div className="text-center p-20">
+        Error: actividad no encontrada o desincronizada
+      </div>
+    );
+  }
+
+  // 🔥 NAVEGACIÓN
+  const avanzar = () => {
+    const siguiente = pasoActual + 1;
+    setPasoActual(siguiente);
+    localStorage.setItem(`progreso-${rango}`, siguiente);
+  };
+
+  const retroceder = () => {
+    if (pasoActual > 1) {
+      const anterior = pasoActual - 1;
+      setPasoActual(anterior);
+      localStorage.setItem(`progreso-${rango}`, anterior);
+    } else {
+      navigate('/');
+    }
+  };
+
+  const DEBUG_COORDENADAS = false;
+
+  return (
+    <div
+      className="min-h-screen pb-12"
+      style={{
+        backgroundImage: `url('/images/${rango}/Fondo${rango}.png')`,
+        backgroundSize: 'cover',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      <main className="container mx-auto px-4">
+
+        {DEBUG_COORDENADAS ? (
+          <CapturarCoordenadas
+            imagen={`/images/${rango}/20.png`}
+            total={6}
+          />
+        ) : (
+          <ActividadActual
+            data={pData}
+            onComplete={avanzar}
+            onBack={retroceder}
+            userId={userId}
+            rango={rango}
+          />
         )}
 
       </main>

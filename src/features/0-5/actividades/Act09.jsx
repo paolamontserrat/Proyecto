@@ -12,7 +12,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
   const [completado, setCompletado] = useState(false);
   const [cargando, setCargando] = useState(true);
 
-  // 🔥 CARGAR PROGRESO
+  // CARGAR PROGRESO
   useEffect(() => {
     const saved = localStorage.getItem(`diferencias-${rango}`);
 
@@ -25,7 +25,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
     setCargando(false);
   }, [rango]);
 
-  // 💾 GUARDAR
+  // GUARDAR
   useEffect(() => {
     if (cargando) return;
 
@@ -36,7 +36,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
 
   }, [encontradas, completado, cargando, rango]);
 
-  // 📏 CALCULAR ESCALA REAL
+  // CALCULAR ESCALA REAL
   useEffect(() => {
     const updateScale = () => {
       if (!imgRef.current) return;
@@ -53,7 +53,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
     return () => window.removeEventListener('resize', updateScale);
   }, []);
 
-  // 🎯 CLICK
+  // CLICK
   const handleClick = (e) => {
     if (completado) return;
 

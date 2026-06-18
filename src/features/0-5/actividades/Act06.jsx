@@ -18,7 +18,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
   const zonaInicio = { x: 10, y: 10, w: 120, h: 120 };
   const zonaMeta = { x: 670, y: 470, w: 120, h: 120 };
 
-  // 🔥 GUARDAR (imagen + estado)
+  // GUARDAR (imagen + estado)
   const guardar = (estadoTerminado = terminado) => {
     const dataURL = canvasRef.current.toDataURL();
 
@@ -28,7 +28,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     }));
   };
 
-  // 🔥 CARGAR LABERINTO + PROGRESO
+  // CARGAR LABERINTO + PROGRESO
   useEffect(() => {
     const img = new Image();
     img.src = data.recursos.laberintoImg;
@@ -42,7 +42,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
 
       mazeCtx.drawImage(img, 0, 0, BASE_WIDTH, BASE_HEIGHT);
 
-      // 🔥 RESTAURAR
+      // RESTAURAR
       const saved = localStorage.getItem(`laberinto-${rango}`);
 
       if (saved) {
@@ -66,7 +66,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
 
   }, [data.recursos.laberintoImg, rango]);
 
-  // 🔥 ESCALA RESPONSIVE
+  // ESCALA RESPONSIVE
   useEffect(() => {
     const updateScale = () => {
       if (!containerRef.current) return;
@@ -101,7 +101,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     x >= zona.x && x <= zona.x + zona.w &&
     y >= zona.y && y <= zona.y + zona.h;
 
-  // 🔥 INICIO
+  // INICIO
   const startDrawing = (e) => {
     if (terminado) return;
 
@@ -120,7 +120,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     setIsDrawing(true);
   };
 
-  // 🔥 DIBUJO (VALIDACIÓN CORREGIDA)
+  // DIBUJO (VALIDACIÓN CORREGIDA)
   const draw = (e) => {
     if (!isDrawing || terminado) return;
 
@@ -129,7 +129,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
 
     const esEventoTouch = e.type.includes('touch'); // 🔥 CLAVE
 
-    // 🔴 VALIDACIÓN SOLO CON MOUSE
+    // VALIDACIÓN SOLO CON MOUSE
     if (!esEventoTouch) {
       const mazeCtx = mazeCanvasRef.current.getContext('2d');
       const pixel = mazeCtx.getImageData(x, y, 1, 1).data;
@@ -145,7 +145,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
       }
     }
 
-    // 🟢 META
+    // META
     if (estaEnZona(x, y, zonaMeta)) {
       setIsDrawing(false);
       setTerminado(true);

@@ -20,7 +20,10 @@ const Dashboard = () => {
   const bienvenida = info.paginas[0];
 
   return (
-    <div className="min-h-screen pb-10" style={{ backgroundImage: "url('/images/0-5/Fondo0-5.png')", backgroundSize: 'cover' }}>
+    <div className="min-h-screen pb-10" style={{ 
+  backgroundImage: `url(${info.fondoPasaporte})`,
+  backgroundSize: 'cover'
+}}>
       
       {/* 1. CABECERA: Imagen de inicio sin cortes */}
       <div className="relative w-full h-auto py-10 bg-white/50 rounded-b-[2rem] shadow-md overflow-hidden flex items-center justify-center">
@@ -39,7 +42,7 @@ const Dashboard = () => {
             {bienvenida.titulo}
           </h2>
 
-          <p className="text-lg text-gray-800 leading-relaxed mb-8 font-medium">
+          <p className="whitespace-pre-line text-lg text-gray-800 leading-relaxed mb-8 font-medium">
             {bienvenida.intro}
           </p>
 

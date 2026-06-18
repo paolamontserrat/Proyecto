@@ -1,0 +1,365 @@
+{
+  "rangoEdad": "6-8",
+  "titulo": "Mi aventura del ahorro",
+  "fondoPasaporte": "/images/6-8/Fondo6-8.png",
+  "institucion": "ALIANZA CAJA POPULAR CERANO",
+  "portada": "/images/6-8/Inicio.png",
+  "imgAhorro": "/images/0-5/6.png",
+  "imgJuegos": "/images/0-5/16.png",
+  "config": {
+    "fondoActividades": "/images/6-8/Fondo6-8.png"
+  },
+  "paginas": [
+    {
+      "id": 1,
+      "tipo": "bienvenida",
+      "titulo": "¡Bienvenido a tu aventura del ahorro!",
+      "intro": "En este pasaporte aprenderás:\u00BFQué es ahorrar?\u00BFCómo hacer crecer tu dinero?\u00BFCómo cumplir tus metas?\u00BFCómo tu Caja te ayuda a lograrlo?\nEn la Caja, tu esfuerzo cuenta.",
+      "secciones": [
+        {
+          "subtitulo": "PROGRAMA CRECIENDO JUNTOS",
+          "texto": "Te invitamos a participar en nuestro programa Creciendo Juntos. Consiste en lograr retos trimestrales de ahorro constante, donde obtienes premios y participas en sorteos.",
+          "icono": "⭐"
+        },
+        {
+          "subtitulo": "TUS CUENTAS",
+          "texto": "Cuenta Club Amigos de Alianzito (ahorro a largo plazo hasta la mayoría de edad) y Depósito a la vista (para ahorrar y retirar en cualquier momento).",
+          "icono": "💰"
+        }
+      ],
+      "beneficios": [
+        "Participas en sesiones de educación financiera y cooperativa.",
+        "Acceso a cursos para desarrollar habilidades según tu edad.",
+        "Puedes recibir incentivos de apoyo escolar (si no eres beneficiario de Impulso a la Educación).",
+        "Tus papás pueden obtener un esquema de crédito atractivo."
+      ]
+    }
+  ],
+  "pasos": [
+    {
+    "id": 1,
+    "titulo": "¿QUÉ ES AHORRAR?",
+    "contenido": "Es guardar un poquito de dinero para usarlo después.\nCuando ahorramos, cuidamos nuestro futuro.",
+    "actividad": "Piensa: ¿En qué te gustaría usar tu dinero después? Dibuja aquí tu respuesta. ",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo1.png",
+        "imagen1": "/images/6-8/8.png",
+        "imagen2": "/images/6-8/7.png"
+    }
+    },
+    {
+    "id": 2,
+    "titulo": "La misión de Sofi",
+    "contenido": [
+        "Sofi recibió $20 por ayudar en casa.",
+        "Quería gastarlo en dulces…",
+        "pero decidió guardar la mitad."
+    ],
+    "actividad": "Dibuja qué harías tú con tu dinero",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo2.png",
+        "imagenIzquierda": "/images/6-8/12.png",
+        "imagenDerecha": "/images/6-8/11.png"
+    },
+    "tips": {
+        "titulo": "TIPS FINANCIERO PARA PAPÁS:",
+        "contenido": [
+        "Da una pequeña cantidad de dinero (semanal o quincenal) ayuda a que el niño:",
+        "• Aprenda a administrarlo",
+        "• Entienda que el dinero es limitado",
+        "• Tome decisiones",
+        "No importa la cantidad, importa la constancia."
+        ]
+    },
+    "instruccionDibujo": "Dibuja: ¿Qué crees que hará Sofi después?"
+
+    },
+    {
+    "id": 3,
+    "titulo": "Haz crecer tu dinero",
+    "contenido": {
+        "historia": [
+        "Un mes después, Sofi llevó su ahorro a la Caja.",
+        "Ahí le explicaron que su dinero puede crecer.",
+        "Cuando ahorras en la Caja, tu dinero puede ganar rendimientos."
+        ]
+    },
+    "recursos": {
+        "fondo": "/images/6-8/Fondo1.png",
+        "imagen1": "/images/6-8/14.png",
+        "imagen2": "/images/6-8/13.png",
+        "imagenTips": "/images/6-8/11.png",
+        "imagen3": "/images/6-8/17.png",
+        "imagen4": "/images/6-8/16.png",
+        "logoCentro": "/images/6-8/9.png"
+    },
+    "tips": {
+        "titulo": "TIPS FINANCIERO PARA PAPÁS:",
+        "contenido": [
+        "Fomentar el ahorro desde pequeños ayuda a crear hábitos responsables.",
+        "Explícales cómo el dinero puede crecer con el tiempo.",
+        "Motiva el ahorro constante, aunque sea con pequeñas cantidades."
+        ]
+    },
+    "pregunta": "¿Por qué crees que es mejor guardarlo en la Caja?"
+    },
+    {
+    "id": 4,
+    "titulo": "Mi meta de ahorro",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo2.png",
+        "imagenDerecha": "/images/6-8/11.png",
+        "ninoPensando": "/images/6-8/20.png",
+        "imagenArriba": "/images/6-8/21.png",
+        "imagenAbajo": "/images/6-8/19.png"
+    },
+    "tips": {
+        "titulo": "TIPS FINANCIERO PARA PAPÁS:",
+        "contenido": [
+        "Establezcan metas claras de ahorro",
+        "Ayuda a tu hijo a elegir una meta alcanzable:",
+        "Un libro",
+        "Un juego de mesa",
+        "Viaje",
+        "Cuando hay una meta, el ahorro tiene sentido."
+        ]
+    },
+    "actividad": "Dibuja tu meta",
+    "preguntas": [
+        "¿Qué quiero lograr?",
+        "Quiero ahorrar para:",
+        "¿Cuánto necesito?",
+        "¿En cuánto tiempo quiero lograrlo?"
+    ]
+    },
+    {
+    "id": 5,
+    "titulo": "Del cochinito a la Caja",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo1.png",
+        "imagenTip": "/images/6-8/10.png",
+        "img1": "/images/6-8/23.png",
+        "img2": "/images/6-8/18.png",
+        "imgCaja": "/images/6-8/6.png"
+    },
+    "tip": {
+        "titulo": "TIP FINANCIERO",
+        "subtexto": "Del cochinito a la Caja"
+    },
+    "contenido": [
+        "La alcancía te ayuda a empezar.",
+        "La Caja te ayuda a crecer.",
+        "Cuando llevas tu ahorro a la Caja:"
+    ],
+    "beneficios": [
+        "Está más seguro",
+        "Puede generar más dinero.",
+        "Aprendes a planear tu futuro.",
+        "Participas en promociones y otros beneficios."
+    ],
+    "plan": {
+        "titulo": "Plan de ahorro",
+        "tarea": "Tarea: ahorra semanas seguidas, si lo logras, obtienes tu sello de ahorro en tu sucursal de Alianza"
+    },
+    "actividadFinal": {
+        "texto": "Con ayuda de un adulto, dibuja cómo te sentiste al ahorrar",
+        "boton": "Ir a mi pasaporte"
+    }
+    },
+    {
+    "id": 6,
+    "titulo": "Encuentra las decisiones inteligentes",
+    "tipo": "seleccion",
+    "instruccion": "Marca con X las buenas decisiones:",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo2.png",
+        "imagenDecorativa": "/images/6-8/24.png"
+    },
+    "opciones": [
+        { "id": 1, "texto": "Realizar la tarea, antes de jugar.", "correcta": true },
+        { "id": 2, "texto": "Comprar golosinas.", "correcta": false },
+        { "id": 3, "texto": "Guardar una parte del dinero que te dan.", "correcta": true },
+        { "id": 4, "texto": "Jugar toda la tarde.", "correcta": false },
+        { "id": 5, "texto": "Gastar todo el dinero el mismo día.", "correcta": false },
+        { "id": 6, "texto": "Llevar lo ahorrado en casa a la Caja Alianza.", "correcta": true },
+        { "id": 7, "texto": "Romper la alcancía y gastarlo en videojuegos.", "correcta": false },
+        { "id": 8, "texto": "Ayudar a recoger mis juguetes.", "correcta": true },
+        { "id": 9, "texto": "Comer verduras y frutas.", "correcta": true }
+    ]
+    },
+    {
+    "id": 7,
+    "titulo": "Decisiones inteligentes",
+    "actividad": "Arma el rompecabezas",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo1.png",
+        "dulces": "/images/6-8/26.png",
+        "nina": "/images/6-8/27.png",
+        "dinero": "/images/6-8/30.png",
+        "imagenDerecha": "/images/6-8/11.png",
+        "imagenPrincipal": "/images/6-8/4.png",
+        "imagenInferior": "/images/6-8/25.png"
+    },
+    "textos": {
+        "izquierda": "¡Gastar en dulces!",
+        "derecha": "¡Ahorrar en Alianza!"
+    },
+    "tips": {
+        "titulo": "TIPS FINANCIERO PARA PAPÁS:",
+        "contenido": [
+        "Permite que se equivoquen,",
+        "no los rescates de inmediato, explica consecuencias.",
+        "Aprovecha para hablar:",
+        "• ¿Qué pasó?",
+        "• ¿Qué harías diferente la próxima vez?",
+        "Los errores son parte del aprendizaje financiero."
+        ]
+    }
+    },
+    {
+    "id": 8,
+    "titulo": "Carrera del Ahorro (actividad familiar)",
+    "subtitulo": "Juega en familia y conversa sobre las decisiones de ahorro.",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo2.png",
+        "tablero": "/images/6-8/Serpiente.png",
+        "pieza": "/images/6-8/2.png"
+    },
+    "instrucciones": [
+        "Más que ganar, lo importante es conversar.",
+        "En cada casilla pregunta a tu pequeño(a):",
+        "¿Por qué crees que esta fue una buena decisión?",
+        "¿Qué harías diferente la próxima vez?"
+    ],
+    "maxJugadores": 6
+    },
+    {
+    "id": 9,
+    "titulo": "Actividad familiar",
+    "subtitulo": "Aprendo: Mi opinión también cuenta.",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo1.png",
+        "imagenDerecha": "/images/6-8/11.png",
+        "imagenFinal": "/images/6-8/31.png"
+    },
+    "opciones": [
+        "Parque",
+        "Cine",
+        "Helado"
+    ],
+    "tips": {
+        "titulo": "TIPS FINANCIERO PARA PAPÁS:",
+        "contenido": [
+        "Inclúyelos en decisiones familiares sencillas",
+        "Ejemplos:",
+        "• Elegir entre dos opciones",
+        "• Decidir cómo ahorrar para una salida familiar",
+        "Se sienten importantes y responsables"
+        ]
+    },
+    "frases": [
+        "Cuando ahorro me siento",
+        "Mi Caja me ayuda a",
+        "En el futuro quiero"
+    ]
+    },
+    {
+    "id": 10,
+    "titulo": "Mi Compromiso",
+    "subtitulo": "Escribe tu nombre y firma tu compromiso de ahorro.",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo2.png",
+        "logoAlianza": "/images/Logo2.png",
+        "logoClub": "/images/6-8/9.png",
+        "personaje": "/images/6-8/24.png"
+    },
+    "compromisos": [
+        "Guardar una parte de mi dinero.",
+        "Pensar antes de gastar.",
+        "Llevar mi ahorro a la Caja."
+    ]
+    }, 
+     {
+    "id": 11,
+    "titulo": "Ahorrar es parte de mi formación.",
+    "bloques": [
+        {
+        "tipo": "Responsabilidad",
+        "color": "azul",
+        "titulo": "Responsabilidad",
+        "descripcion": [
+            "Cuando ahorras, estás cuidando tu dinero,",
+            "no lo gastas todo en lo primero que ves."
+        ],
+        "listaTitulo": "Ser responsable es:",
+        "lista": [
+            "Pensar antes de gastar",
+            "Guardar una parte",
+            "Cuidar lo que tienes"
+        ],
+        "frase": [
+            "Cuando ahorro, demuestro que sé",
+            "cuidar lo que es mío"
+        ],
+        "final": "Si ahorro, soy responsable.",
+        "imagen": "/images/6-8/36.png"
+        },
+        {
+        "tipo": "Paciencia",
+        "color": "morado",
+        "titulo": "Paciencia",
+        "descripcion": [
+            "En el ahorro casi nunca tienes todo el dinero el primer día.",
+            "Tienes que esperar, guardar poquito a poquito"
+        ],
+        "listaTitulo": "Ser paciente es:",
+        "lista": [
+            "No desesperarte.",
+            "No querer todo ahora mismo",
+            "Entender que lo bueno toma tiempo."
+        ],
+        "frase": [
+            "Si sé esperar, puedo lograr cosas",
+            "más grandes."
+        ],
+        "final": "Si espero, soy paciente.",
+        "imagen": "/images/6-8/39.png"
+        }
+    ],
+    "recursos": {
+        "fondo": "/images/6-8/Fondo1.png",
+        "decoracion": "/images/6-8/9.png",
+        "personaje": "/images/6-8/11.png"
+    }
+    },
+    {
+    "id": 12,
+    "titulo": "Solidaridad",
+    "subtitulo": "El ahorro también ayuda a construir sueños para otras personas.",
+    "recursos": {
+        "fondo": "/images/6-8/Fondo2.png",
+        "imagenSuperior": "/images/6-8/24.png",
+        "imagenInferior": "/images/6-8/46.png",
+        "logoClub": "/images/6-8/9.png",
+        "logoAlianza": "/images/Logo1.png",
+        "logoExtra1": "/images/6-8/1.png"
+    },
+    "contenido": {
+        "titulo": "Solidaridad",
+        "texto": [
+        "Ahorrar no es solo para uno mismo. También puedo usar mi dinero para ayudar.",
+        "Ser solidario es:",
+        "Pensar en los demás.",
+        "Compartir cuando alguien lo necesita.",
+        "Ayudar en familia o comunidad.",
+        "Cuando comparto, mi corazón también crece.",
+        "Si comparto, soy solidario."
+        ]
+    },
+    "mensajeFinal": [
+        "En mi Caja no solo crece mi dinero…",
+        "también contribuyo a que otras personas puedan realizar sus proyectos."
+    ]
+    }
+  ]
+}

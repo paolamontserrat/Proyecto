@@ -5,14 +5,14 @@ import LayoutActividad from '../../../components/layout/LayoutActividad';
 const Act08 = ({ data, onComplete, onBack }) => {
   const [indice, setIndice] = useState(0);
 
-  // 🧠 COMPATIBILIDAD TOTAL (escenas o fallback)
+  // COMPATIBILIDAD TOTAL (escenas o fallback)
   const escenas =
     data?.escenas ||
     data?.contenido ||
     data?.pasos ||
     [];
 
-  // 🚨 SI NO HAY DATA
+  // SI NO HAY DATA
   if (!data) {
     return (
       <LayoutActividad fondo="">
@@ -23,7 +23,7 @@ const Act08 = ({ data, onComplete, onBack }) => {
     );
   }
 
-  // 🚨 SI NO HAY ESCENAS
+  // SI NO HAY ESCENAS
   if (!Array.isArray(escenas) || escenas.length === 0) {
     return (
       <LayoutActividad fondo={data?.fondo}>

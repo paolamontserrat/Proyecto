@@ -57,7 +57,6 @@ const Footer = () => {
             </span>
           </a>
 
-          {/* YouTube */}
           <a 
             href="https://www.youtube.com/channel/UCwxA2Z92MgJLGWHWz1Ilkww" 
             target="_blank" 

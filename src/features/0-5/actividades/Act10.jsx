@@ -31,7 +31,7 @@ const Act10 = ({ data, onComplete, onBack }) => {
           </button>
         </div>
 
-        {/* 🔥 CUADRO ARRIBA DERECHA (MISMA POSICIÓN EXACTA) */}
+        {/* CUADRO ARRIBA DERECHA (MISMA POSICIÓN EXACTA) */}
         <motion.div
           initial={{ opacity: 0, x: 100, y: -50 }}
           animate={{ opacity: 1, x: 0, y: 0 }}

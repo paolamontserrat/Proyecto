@@ -69,7 +69,7 @@ const Act11 = ({ data, onBack, onComplete, rango }) => {
           </div>
         </motion.div>
 
-        {/* 💬 MENSAJES */}
+        {/* MENSAJES */}
         <div className="space-y-10 w-full max-w-5xl">
 
           {mensajes.map((item, i) => (
@@ -115,7 +115,7 @@ const Act11 = ({ data, onBack, onComplete, rango }) => {
           ))}
         </div>
 
-        {/* 🎯 ACTIVIDAD FINAL */}
+        {/* ACTIVIDAD FINAL */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -135,7 +135,7 @@ const Act11 = ({ data, onBack, onComplete, rango }) => {
             {actividadFinal.texto}
           </p>
 
-          {/* 🔵 PASSPORT */}
+          {/* PASSPORT */}
           <button
             onClick={() => navigate(`/pasaporte/${rango}`)}
             className="
@@ -154,7 +154,7 @@ const Act11 = ({ data, onBack, onComplete, rango }) => {
             {actividadFinal.boton}
           </button>
 
-          {/* 🟡 CONTINUAR */}
+          {/* CONTINUAR */}
           <button
             onClick={onComplete}
             className="

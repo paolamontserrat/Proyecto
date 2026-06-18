@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import Footer from './Footer';
-// Importa tus componentes de actividad aquí
-// import ActividadColorear from './ActividadColorear'; 
 
 const RutaAprendizaje = ({ pasos, onSelectPaso }) => {
   const [progreso, setProgreso] = useState(() => parseInt(localStorage.getItem('progreso-0-5')) || 1);
