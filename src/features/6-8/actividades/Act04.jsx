@@ -78,9 +78,28 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
             className="w-32 md:w-30 object-contain"
           />
 
-          <div className="flex flex-col gap-2">
-            <img src={data.recursos.imagenArriba} className="w-24 md:w-70" />
-            <img src={data.recursos.imagenAbajo} className="ml-25 w-24 md:w-32" />
+          <div className="flex flex-col items-center gap-3 w-full max-w-xs md:max-w-sm">
+            <img
+              src={data.recursos.imagenArriba}
+              alt=""
+              className="
+                w-full
+                max-w-[280px]
+                h-auto
+                object-contain
+              "
+            />
+
+            <img
+              src={data.recursos.imagenAbajo}
+              alt=""
+              className="
+                w-full
+                max-w-[180px]
+                h-auto
+                object-contain
+              "
+            />
           </div>
 
         </div>
