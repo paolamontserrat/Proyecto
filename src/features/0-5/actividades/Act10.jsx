@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import LayoutActividad from '../../../components/layout/LayoutActividad';
+import { supabase } from '../../../supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
-const Act10 = ({ data, onComplete, onBack }) => {
+
+const Act10 = ({ data, onComplete, onBack, rango }) => {
+const navigate = useNavigate();
   if (!data) {
     return (
       <LayoutActividad fondo="">
@@ -13,25 +17,83 @@ const Act10 = ({ data, onComplete, onBack }) => {
     );
   }
 
+  //  USUARIO
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const userId = usuario?.id;
+
+  //  CLAVE MULTIUSUARIO (FIX)
+  const storageKey = `act10-lectura-${rango}-${userId || 'anon'}`;
+
   const partes = data?.texto?.partes || [];
+
+  // ==============================
+  //  GUARDADO GLOBAL
+  // ==============================
+  const guardarTodo = async () => {
+
+    // 1. LOCAL (POR USUARIO)
+    localStorage.setItem(storageKey, "visitado");
+
+    // 2. SUPABASE
+    if (userId) {
+      try {
+        await supabase.from('progreso_actividades').upsert({
+          usuario_id: userId,
+          actividad_id: data.id,
+          datos_actividad: {},
+          completada: true
+        }, {
+          onConflict: 'usuario_id, actividad_id'
+        });
+
+      } catch (err) {
+        console.warn("Offline, se sincroniza después");
+      }
+    }
+  };
+
+  // ==============================
+  //  REINTENTO ONLINE
+  // ==============================
+  useEffect(() => {
+    const handleOnline = () => guardarTodo();
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  }, []);
+
+  // ==============================
+  //  CONTINUAR
+  // ==============================
+  const continuar = () => {
+    guardarTodo();
+    onComplete();
+  };
 
   return (
     <LayoutActividad fondo={data.fondo}>
 
-      {/* CONTENEDOR BASE (IMPORTANTE PARA ABSOLUTE) */}
       <div className="relative min-h-screen w-full">
 
-        {/* BOTÓN REGRESAR */}
-        <div className="w-full max-w-5xl mb-6">
-          <button
-            onClick={onBack}
-            className="bg-alianza-azul text-white px-8 py-3 rounded-full font-black shadow-lg hover:scale-105 transition"
-          >
-            ← Regresar
-          </button>
-        </div>
+       {/* HEADER */}
+      <div className="flex justify-between items-center mb-4">
 
-        {/* CUADRO ARRIBA DERECHA (MISMA POSICIÓN EXACTA) */}
+        <button
+          onClick={onBack}
+          className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold shadow"
+        >
+          ← Regresar
+        </button>
+
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition"
+        >
+          🏠 Inicio
+        </button>
+
+      </div>
+
+        {/* TARJETA */}
         <motion.div
           initial={{ opacity: 0, x: 100, y: -50 }}
           animate={{ opacity: 1, x: 0, y: 0 }}
@@ -47,7 +109,6 @@ const Act10 = ({ data, onComplete, onBack }) => {
           "
         >
 
-          {/* TEXTO SEGURO */}
           <p className="text-2xl md:text-3xl font-bold leading-relaxed">
             {partes.length > 0 ? (
               partes.map((parte, i) =>
@@ -68,12 +129,12 @@ const Act10 = ({ data, onComplete, onBack }) => {
 
         </motion.div>
 
-        {/* BOTÓN FINAL */}
+        {/* BOTÓN */}
         <div className="absolute bottom-10 left-0 right-0 flex justify-center">
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            onClick={onComplete}
+            onClick={continuar}
             className="
               bg-alianza-amarillo
               px-12 py-4

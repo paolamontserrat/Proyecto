@@ -1,8 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import LayoutActividad from '../../../components/layout/LayoutActividad';
+import { supabase } from '../../../supabaseClient';
+import { useNavigate } from 'react-router-dom';
+
 
 const Act06 = ({ data, onComplete, onBack, rango }) => {
-
+const navigate = useNavigate();
   const canvasRef = useRef(null);
   const mazeCanvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -18,55 +21,112 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
   const zonaInicio = { x: 10, y: 10, w: 120, h: 120 };
   const zonaMeta = { x: 670, y: 470, w: 120, h: 120 };
 
-  // GUARDAR (imagen + estado)
+  // ==============================
+  // USER SEGURO
+  // ==============================
+  const getUser = () => {
+    try { return JSON.parse(localStorage.getItem('usuario')); }
+    catch { return null; }
+  };
+
+  const userId = getUser()?.id || "anon";
+
+  // ==============================
+  // KEY MULTIUSUARIO REAL
+  // ==============================
+  const key = `laberinto-${rango}-${userId}-${data.id}`;
+
+// =========================
+// GUARDADO GLOBAL
+// =========================
+const guardarTodo = async (state) => {
+  // LOCAL
+  localStorage.setItem(key, JSON.stringify(state));
+
+  // SUPABASE
+  if (userId !== "anon") {
+    try {
+      await supabase.from('progreso_actividades').upsert(
+        {
+          usuario_id: userId,
+          actividad_id: data.id,
+          datos_actividad: state,
+          completada: state.terminado,
+        },
+        { onConflict: 'usuario_id,actividad_id' }   // ← sin espacio
+      );
+    } catch {
+      console.warn("Offline → se sincronizará después");
+    }
+  }
+};
+
   const guardar = (estadoTerminado = terminado) => {
     const dataURL = canvasRef.current.toDataURL();
 
-    localStorage.setItem(`laberinto-${rango}`, JSON.stringify({
+    const state = {
       imagen: dataURL,
       terminado: estadoTerminado
-    }));
+    };
+
+    guardarTodo(state);
   };
 
-  // CARGAR LABERINTO + PROGRESO
-  useEffect(() => {
+ // =========================
+// CARGA (SUPABASE PRIMERO → local como fallback)
+// =========================
+useEffect(() => {
+  const cargar = async () => {
     const img = new Image();
     img.src = data.recursos.laberintoImg;
 
-    img.onload = () => {
+    img.onload = async () => {
       const mazeCanvas = mazeCanvasRef.current;
       const mazeCtx = mazeCanvas.getContext('2d');
-
       mazeCanvas.width = BASE_WIDTH;
       mazeCanvas.height = BASE_HEIGHT;
-
       mazeCtx.drawImage(img, 0, 0, BASE_WIDTH, BASE_HEIGHT);
 
-      // RESTAURAR
-      const saved = localStorage.getItem(`laberinto-${rango}`);
-
-      if (saved) {
-        const parsed = JSON.parse(saved);
-
-        if (parsed.imagen) {
+      const aplicarEstado = ({ imagen, terminado: t }) => {
+        if (imagen) {
           const ctx = canvasRef.current.getContext('2d');
           const savedImg = new Image();
-          savedImg.src = parsed.imagen;
-
-          savedImg.onload = () => {
-            ctx.drawImage(savedImg, 0, 0, BASE_WIDTH, BASE_HEIGHT);
-          };
+          savedImg.src = imagen;
+          savedImg.onload = () => ctx.drawImage(savedImg, 0, 0, BASE_WIDTH, BASE_HEIGHT);
         }
+        if (t) setTerminado(true);
+      };
 
-        if (parsed.terminado) {
-          setTerminado(true);
+      // 1. SUPABASE (fuente de verdad, multi-dispositivo)
+      if (userId !== "anon") {
+        const { data: db } = await supabase
+          .from('progreso_actividades')
+          .select('datos_actividad')
+          .eq('usuario_id', userId)
+          .eq('actividad_id', data.id)
+          .maybeSingle();            // ← maybeSingle en lugar de single
+
+        if (db?.datos_actividad) {
+          aplicarEstado(db.datos_actividad);
+          localStorage.setItem(key, JSON.stringify(db.datos_actividad));
+          return;
         }
       }
+
+      // 2. LOCAL (fallback para anónimos o sin conexión)
+      const local = localStorage.getItem(key);
+      if (local) {
+        try { aplicarEstado(JSON.parse(local)); } catch { /* corrupto */ }
+      }
     };
+  };
 
-  }, [data.recursos.laberintoImg, rango]);
+  cargar();
+}, [data.id, userId, rango]);
 
-  // ESCALA RESPONSIVE
+  // ==============================
+  // SCALE
+  // ==============================
   useEffect(() => {
     const updateScale = () => {
       if (!containerRef.current) return;
@@ -75,7 +135,6 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
 
     updateScale();
     window.addEventListener('resize', updateScale);
-
     return () => window.removeEventListener('resize', updateScale);
   }, []);
 
@@ -101,7 +160,9 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     x >= zona.x && x <= zona.x + zona.w &&
     y >= zona.y && y <= zona.y + zona.h;
 
-  // INICIO
+  // ==============================
+  // DRAW
+  // ==============================
   const startDrawing = (e) => {
     if (terminado) return;
 
@@ -120,24 +181,22 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     setIsDrawing(true);
   };
 
-  // DIBUJO (VALIDACIÓN CORREGIDA)
   const draw = (e) => {
     if (!isDrawing || terminado) return;
 
     const { x, y } = getCoords(e);
     const ctx = getCtx();
 
-    const esEventoTouch = e.type.includes('touch'); // 🔥 CLAVE
+    const esTouch = e.type.includes('touch');
 
-    // VALIDACIÓN SOLO CON MOUSE
-    if (!esEventoTouch) {
+    if (!esTouch) {
       const mazeCtx = mazeCanvasRef.current.getContext('2d');
       const pixel = mazeCtx.getImageData(x, y, 1, 1).data;
       const [r, g, b] = pixel;
 
       if (r > 200 && g < 80 && b < 80) {
         ctx.clearRect(0, 0, BASE_WIDTH, BASE_HEIGHT);
-        localStorage.removeItem(`laberinto-${rango}`);
+        localStorage.removeItem(key);
         setIsDrawing(false);
         setMensaje("Tocaste la pared.");
         setTimeout(() => setMensaje(null), 2000);
@@ -145,7 +204,6 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
       }
     }
 
-    // META
     if (estaEnZona(x, y, zonaMeta)) {
       setIsDrawing(false);
       setTerminado(true);
@@ -158,49 +216,54 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
 
     ctx.lineTo(x, y);
     ctx.strokeStyle = '#2563eb';
-    ctx.lineWidth = esEventoTouch ? 10 : 5;
+    ctx.lineWidth = esTouch ? 10 : 5;
     ctx.stroke();
 
     guardar();
   };
 
+  // ==============================
+  //  RESET
+  // ==============================
   const reiniciar = () => {
     const ctx = getCtx();
     ctx.clearRect(0, 0, BASE_WIDTH, BASE_HEIGHT);
 
-    localStorage.removeItem(`laberinto-${rango}`);
+    const state = { imagen: null, terminado: false };
+
+    localStorage.removeItem(key);
     setTerminado(false);
+
+    guardarTodo(state);
   };
 
   return (
     <LayoutActividad fondo={data.recursos.fondoImg}>
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-4">
 
-      {/* BOTÓN REGRESAR */}
-      <div className="w-full max-w-4xl mb-4">
-        <button onClick={onBack} className="bg-blue-600 text-white px-6 py-3 rounded-full font-bold">
+        <button
+          onClick={onBack}
+          className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold shadow"
+        >
           ← Regresar
         </button>
+
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition"
+        >
+          🏠 Inicio
+        </button>
+
       </div>
 
       <div className="bg-white p-4 rounded-2xl border-4 border-yellow-400 max-w-4xl mx-auto">
 
-        <h2 className="text-xl font-bold text-center mb-2">
-          {data.titulo}
-        </h2>
-
-        <p className="text-center text-sm md:text-base text-gray-600 mb-4 font-semibold">
-          💡 Si quieres subir el nivel de dificultad, intenta hacerlo en computadora.
-        </p>
+        <h2 className="text-xl font-bold text-center mb-2">{data.titulo}</h2>
 
         <div ref={containerRef} className="w-full">
-
-          <div
-            className="relative"
-            style={{
-              width: '100%',
-              height: BASE_HEIGHT * scale
-            }}
-          >
+          <div className="relative" style={{ height: BASE_HEIGHT * scale }}>
 
             {mensaje && (
               <div className="absolute top-2 left-1/2 -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded z-10">
@@ -208,11 +271,10 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
               </div>
             )}
 
-            {/* LABERINTO */}
-            <img
-              src={data.recursos.laberintoImg}
-              className="absolute w-full h-full"
-              alt="Laberinto"
+            {/* LABERINTO BASE */}
+            <img 
+              src={data.recursos.laberintoImg} 
+              className="absolute w-full h-full" 
             />
 
             {/* INICIO */}
@@ -224,7 +286,6 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                 top: zonaInicio.y * scale,
                 width: zonaInicio.w * scale
               }}
-              alt="Inicio"
             />
 
             {/* META */}
@@ -236,10 +297,8 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                 top: zonaMeta.y * scale,
                 width: zonaMeta.w * scale
               }}
-              alt="Meta"
             />
 
-            {/* CANVAS */}
             <canvas
               ref={canvasRef}
               width={BASE_WIDTH}
@@ -258,13 +317,12 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
           </div>
         </div>
 
-        {/* BOTONES */}
         <div className="flex gap-4 justify-center mt-4">
           <button
             onClick={onComplete}
             disabled={!terminado}
             className={`px-6 py-2 rounded font-bold
-              ${terminado ? 'bg-yellow-400' : 'bg-gray-300 opacity-60 cursor-not-allowed'}
+              ${terminado ? 'bg-yellow-400' : 'bg-gray-300'}
             `}
           >
             Continuar

@@ -1,50 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import LayoutActividad from '../../../components/layout/LayoutActividad';
+import { supabase } from '../../../supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
 const Act06 = ({ data, onComplete, onBack, rango }) => {
 
-  const storageKey = `act06-${rango}`;
+  const navigate = useNavigate();
+
+  const usuario = JSON.parse(localStorage.getItem('usuario') || "{}");
+  const userId = usuario?.id ?? "anon";
+
+  const storageKey = `act06-${rango}-${userId}`;
 
   const [opciones, setOpciones] = useState([]);
   const [seleccionadas, setSeleccionadas] = useState({});
   const [resultado, setResultado] = useState(null);
 
-  // 🔀 Mezclar opciones SIN romper React
   const mezclar = (arr) => [...arr].sort(() => Math.random() - 0.5);
 
-  // 🔥 Cargar estado guardado o inicial
+  // =========================
+  // CARGA (SUPABASE PRIORIDAD)
+  // =========================
   useEffect(() => {
-    const guardado = JSON.parse(localStorage.getItem(storageKey));
 
-    if (guardado) {
-      setOpciones(guardado.opciones);
-      setSeleccionadas(guardado.seleccionadas);
-      setResultado(guardado.resultado);
-    } else {
-      setOpciones(mezclar(data.opciones));
-    }
-  }, []);
+    const cargar = async () => {
 
-  // 💾 Guardar automáticamente
-  useEffect(() => {
-    if (opciones.length > 0) {
-      localStorage.setItem(storageKey, JSON.stringify({
-        opciones,
-        seleccionadas,
-        resultado
-      }));
-    }
-  }, [opciones, seleccionadas, resultado]);
+      // 1. SUPABASE
+      if (userId !== "anon") {
+        const { data: db } = await supabase
+          .from("progreso_actividades")
+          .select("datos_actividad")
+          .eq("usuario_id", userId)
+          .eq("actividad_id", data.id)
+          .maybeSingle();
 
-  // ✅ Seleccionar opción
-  const toggleSeleccion = (id) => {
-    setSeleccionadas(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
+        if (db?.datos_actividad) {
+          const info = db.datos_actividad;
 
-  // 🧠 Validar respuestas
+          if (info.opciones) setOpciones(info.opciones);
+          else setOpciones(mezclar(data.opciones));
+
+          setSeleccionadas(info.seleccionadas || {});
+          setResultado(info.resultado ?? null);
+
+          return;
+        }
+      }
+
+      // 2. LOCAL FALLBACK
+      const guardado = localStorage.getItem(storageKey);
+
+      if (guardado) {
+        const dataGuardada = JSON.parse(guardado);
+        setOpciones(dataGuardada.opciones || []);
+        setSeleccionadas(dataGuardada.seleccionadas || {});
+        setResultado(dataGuardada.resultado ?? null);
+      } else {
+        setOpciones(mezclar(data.opciones));
+      }
+    };
+
+    cargar();
+  }, [data.id, storageKey, userId]);
+
+  // =========================
+  // VALIDAR
+  // =========================
   const validar = () => {
     let correctas = true;
 
@@ -58,34 +79,73 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     setResultado(correctas);
   };
 
-  // 🔄 Reiniciar
+  // =========================
+  // REINICIAR
+  // =========================
   const reiniciar = () => {
-    const nuevas = mezclar(data.opciones);
-    setOpciones(nuevas);
+    setOpciones(mezclar(data.opciones));
     setSeleccionadas({});
     setResultado(null);
   };
 
   const completado = resultado === true;
 
+  // =========================
+  // SYNC (LOCAL + SUPABASE)
+  // =========================
+  useEffect(() => {
+    if (opciones.length === 0) return;
+
+    const payload = {
+      opciones,
+      seleccionadas,
+      resultado
+    };
+
+    // LOCAL
+    localStorage.setItem(storageKey, JSON.stringify(payload));
+
+    // SUPABASE
+    const sync = async () => {
+      if (userId === "anon") return;
+
+      await supabase.from("progreso_actividades").upsert(
+        {
+          usuario_id: userId,
+          actividad_id: data.id,
+          datos_actividad: payload,
+          completada: resultado === true
+        },
+        { onConflict: "usuario_id,actividad_id" }
+      );
+    };
+
+    sync();
+
+  }, [opciones, seleccionadas, resultado]);
+
   return (
     <LayoutActividad fondo={data.recursos?.fondo}>
 
-      {/* BOTÓN REGRESAR */}
-      <div className="mb-4">
-        <button
-          onClick={onBack}
-          className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold shadow"
-        >
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-4">
+
+        <button onClick={onBack} className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold">
           ← Regresar
         </button>
+
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold"
+        >
+          🏠 Inicio
+        </button>
+
       </div>
 
-      {/* CONTENEDOR */}
-      <div className="bg-white/90 p-6 md:p-10 rounded-3xl shadow-xl border-4 border-alianza-amarillo">
+      <div className="bg-white/90 p-6 md:p-10 rounded-3xl border-4 border-alianza-amarillo">
 
-        {/* TÍTULO */}
-        <h2 className="text-2xl md:text-3xl font-black text-center text-alianza-azul mb-6">
+        <h2 className="text-2xl font-black text-center text-alianza-azul mb-6">
           Encuentra las decisiones inteligentes
         </h2>
 
@@ -97,23 +157,26 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
         <div className="space-y-3 mb-6">
           {opciones.map((op) => (
             <div
-              key={op.id} // 🔥 CLAVE CORRECTA
-              onClick={() => toggleSeleccion(op.id)}
+              key={op.id}
+              onClick={() =>
+                setSeleccionadas(prev => ({
+                  ...prev,
+                  [op.id]: !prev[op.id]
+                }))
+              }
               className={`p-3 rounded-xl border-2 cursor-pointer flex justify-between items-center transition
                 ${seleccionadas[op.id] ? 'bg-yellow-100 border-yellow-500' : 'bg-white'}
               `}
             >
               <span>{op.texto}</span>
-
-              {seleccionadas[op.id] && (
-                <span className="font-black text-xl notranslate">X</span>
-              )}
+              {seleccionadas[op.id] && <span className="font-black">X</span>}
             </div>
           ))}
         </div>
 
-        {/* BOTONES VALIDAR / REINICIAR */}
+        {/* BOTONES */}
         <div className="flex gap-3 mb-6">
+
           <button
             onClick={validar}
             className="flex-1 bg-green-500 text-white py-2 rounded-full font-bold"
@@ -127,6 +190,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
           >
             Reiniciar
           </button>
+
         </div>
 
         {/* RESULTADO */}
@@ -135,21 +199,22 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
             resultado ? 'text-green-600' : 'text-red-600'
           }`}>
             {resultado
-              ? '¡Muy bien! Elegiste correctamente 👏'
-              : 'Revisa tus respuestas e inténtalo otra vez ❌'}
+              ? '¡Muy bien! 👏'
+              : 'Revisa tus respuestas ❌'}
           </div>
         )}
-         {/* IMAGEN ESQUINA */}
-        <img 
-          src={data.recursos.imagenDecorativa}
-          className="w-50 ml-center mb-6"
+
+        {/* IMAGEN */}
+        <img
+          src={data.recursos?.imagenDecorativa}
+          className="w-48 mx-auto mb-6"
         />
 
-        {/* BOTÓN AVANZAR */}
+        {/* BOTÓN FINAL */}
         <button
           onClick={onComplete}
           disabled={!completado}
-          className={`w-full py-4 rounded-full font-black text-xl transition ${
+          className={`w-full py-4 rounded-full font-black text-xl ${
             completado
               ? 'bg-alianza-amarillo text-alianza-azul'
               : 'bg-gray-300 text-gray-500'

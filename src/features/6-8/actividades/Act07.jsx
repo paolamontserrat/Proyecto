@@ -1,43 +1,135 @@
 import React, { useState, useEffect } from 'react';
 import LayoutActividad from '../../../components/layout/LayoutActividad';
 import PuzzleImagen from '../../../components/actividades/tipos/PuzzleImagen';
+import { supabase } from '../../../supabaseClient';
+import { useNavigate } from "react-router-dom";
 
-const Act07 = ({ data, onBack, onComplete }) => {
+const Act07 = ({ data, onBack, onComplete, rango }) => {
+
+  const navigate = useNavigate();
+
+  const usuario = JSON.parse(localStorage.getItem('usuario') || "{}");
+  const userId = usuario?.id ?? "anon";
+
+  const storageKey = `act07-${rango}-${data.id}-${userId}`;
+
   const [puzzleCompletado, setPuzzleCompletado] = useState(false);
+  const [hasData, setHasData] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const guardado = localStorage.getItem('act07Puzzle');
+  // =========================
+  //  CARGA LOCAL + SUPABASE
+  // =========================
+useEffect(() => {
+  const load = async () => {
 
-    if (guardado) {
-      const datos = JSON.parse(guardado);
+    const local = localStorage.getItem(storageKey);
 
-      if (datos.completado) {
-        setPuzzleCompletado(true);
+    if (local) {
+      const parsed = JSON.parse(local);
+      setPuzzleCompletado(!!parsed.completado);
+      setHasData(true);
+    }
+
+    if (userId !== "anon") {
+      const { data: remote } = await supabase
+        .from("progreso_actividades")
+        .select("datos_actividad")
+        .eq("usuario_id", userId)
+        .eq("actividad_id", data.id)
+        .maybeSingle();
+
+      if (remote?.datos_actividad) {
+        const parsed = remote.datos_actividad;
+
+        setPuzzleCompletado(!!parsed.completado);
+        setHasData(true);
+
+        localStorage.setItem(storageKey, JSON.stringify(parsed));
       }
     }
-  }, []);
 
+    setLoading(false);
+  };
+
+  load();
+}, [storageKey, userId, data.id]);
+
+  // =========================
+  //  SYNC CENTRAL (tipo Act08)
+  // =========================
+ const syncAll = async (state) => {
+  if (userId === "anon") return;
+
+  localStorage.setItem(storageKey, JSON.stringify(state));
+
+  await supabase.from("progreso_actividades").upsert(
+    {
+      usuario_id: userId,
+      actividad_id: data.id,
+      datos_actividad: state,
+      completada: state.completado === true
+    },
+    { onConflict: "usuario_id,actividad_id" }
+  );
+};
+  // =========================
+  //  CUANDO SE COMPLETA PUZZLE
+  // =========================
+const handlePuzzleComplete = () => {
+  const state = { completado: true };
+
+  setPuzzleCompletado(true);
+  setHasData(true);
+
+  syncAll(state);
+};
+
+  // =========================
+  // CONTINUAR
+  // =========================
   const handleContinuar = () => {
-    localStorage.removeItem('act07Puzzle');
+
+    const finalState = {
+      completado: true
+    };
+
+    localStorage.removeItem(storageKey);
+    syncAll(finalState);
+
     onComplete();
   };
 
   return (
     <LayoutActividad fondo={data.recursos?.fondo}>
-      {/* BOTÓN REGRESAR */}
-      <div className="mb-4">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-4">
+
         <button
           onClick={onBack}
           className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold shadow"
         >
           ← Regresar
         </button>
+
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition"
+        >
+          🏠 Inicio
+        </button>
+
       </div>
 
-      {/* CONTENEDOR */}
+      {/* =========================
+          CONTENEDOR PRINCIPAL
+      ========================= */}
       <div className="bg-white/90 p-6 md:p-10 rounded-[2rem] shadow-2xl border-4 border-alianza-amarillo">
 
-        {/* ===== PARTE 1: ESCENA ===== */}
+        {/* =========================
+            ESCENA (UI ORIGINAL)
+        ========================= */}
         <div className="relative flex flex-col md:flex-row items-center justify-between mb-10">
 
           <div className="text-center md:text-left">
@@ -45,19 +137,11 @@ const Act07 = ({ data, onBack, onComplete }) => {
               {data.textos.izquierda}
             </h3>
 
-            <img
-              src={data.recursos.dulces}
-              className="w-40 md:w-56 mx-auto"
-              alt=""
-            />
+            <img src={data.recursos.dulces} className="w-40 md:w-56 mx-auto" />
           </div>
 
           <div className="my-6 md:my-0">
-            <img
-              src={data.recursos.nina}
-              className="w-44 md:w-60 mx-auto"
-              alt=""
-            />
+            <img src={data.recursos.nina} className="w-44 md:w-60 mx-auto" />
           </div>
 
           <div className="text-center md:text-right">
@@ -65,16 +149,14 @@ const Act07 = ({ data, onBack, onComplete }) => {
               {data.textos.derecha}
             </h3>
 
-            <img
-              src={data.recursos.dinero}
-              className="w-40 md:w-56 mx-auto"
-              alt=""
-            />
+            <img src={data.recursos.dinero} className="w-40 md:w-56 mx-auto" />
           </div>
 
         </div>
 
-        {/* ===== PARTE 2: TIPS ===== */}
+        {/* =========================
+            TIPS
+        ========================= */}
         <div className="flex flex-col md:flex-row items-stretch gap-4 mb-10">
 
           <div className="flex-1">
@@ -85,7 +167,7 @@ const Act07 = ({ data, onBack, onComplete }) => {
               </h3>
             </div>
 
-            <div className="bg-blue-400 p-4 rounded-b-2xl text-white font-bold text-sm md:text-base space-y-1">
+            <div className="bg-blue-400 p-4 rounded-b-2xl text-white font-bold space-y-1">
               {data.tips.contenido.map((t, i) => (
                 <p key={i}>{t}</p>
               ))}
@@ -96,65 +178,53 @@ const Act07 = ({ data, onBack, onComplete }) => {
           <img
             src={data.recursos.imagenDerecha}
             className="w-32 md:w-40 object-contain"
-            alt=""
           />
 
         </div>
 
-        {/* ===== PARTE 3: ROMPECABEZAS ===== */}
+        {/* =========================
+            PUZZLE
+        ========================= */}
         <div className="text-center mb-10">
 
           <h3 className="text-xl md:text-2xl font-black text-alianza-azul mb-4">
             {data.actividad}
           </h3>
 
-          {/* REFERENCIA */}
-          <div className="mb-6">
-            <p className="font-bold text-gray-700 mb-2">
-              Observa la imagen y arma el rompecabezas
-            </p>
+          <p className="font-bold text-gray-700 mb-4">
+            Observa la imagen y arma el rompecabezas
+          </p>
 
-            <img
-              src={data.recursos.imagenPrincipal}
-              className="w-52 md:w-72 mx-auto rounded-2xl shadow-lg"
-              alt=""
-            />
-          </div>
+          <img
+            src={data.recursos.imagenPrincipal}
+            className="w-52 md:w-72 mx-auto rounded-2xl shadow-lg mb-6"
+          />
 
-          {/* PUZZLE */}
           <PuzzleImagen
             imagen={data.recursos.imagenInferior}
-            onCompletePuzzle={() => setPuzzleCompletado(true)}
+            storageKey={`act07-${rango}-${data.id}-${userId}`}
+            onCompletePuzzle={handlePuzzleComplete}
           />
 
           {puzzleCompletado && (
-            <div className="mt-6">
-              <p className="text-green-600 font-black text-xl">
-                🎉 ¡Excelente trabajo!
-              </p>
-            </div>
+            <p className="text-green-600 font-black text-xl mt-6">
+              🎉 ¡EXCELENTE TARBAJO YA LO COMPLETASTE!
+            </p>
           )}
 
         </div>
 
-        {/* ===== BOTÓN CONTINUAR ===== */}
+        {/* =========================
+            BOTÓN CONTINUAR
+        ========================= */}
         <button
           onClick={handleContinuar}
           disabled={!puzzleCompletado}
-          className={`
-            w-full
-            py-4
-            rounded-full
-            font-black
-            text-xl
-            transition
-
-            ${
-              puzzleCompletado
-                ? 'bg-alianza-amarillo text-alianza-azul hover:scale-[1.02]'
-                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-            }
-          `}
+          className={`w-full py-4 rounded-full font-black text-xl transition ${
+            puzzleCompletado
+              ? 'bg-alianza-amarillo text-alianza-azul hover:scale-105'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
         >
           Continuar
         </button>

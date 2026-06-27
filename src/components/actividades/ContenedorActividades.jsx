@@ -1,42 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
-// 🔥 IMPORTA TODOS LOS RANGOS
 import actividades05 from '../../features/0-5/actividades/actividades';
 import actividades68 from '../../features/6-8/actividades/actividades';
 
 import Footer from '../Footer';
 import CapturarCoordenadas from './CapturarCoordenadas';
+import { supabase } from '../../supabaseClient';
 
 const ContenedorActividades = () => {
+
   const { rango } = useParams();
   const navigate = useNavigate();
 
   const [data, setData] = useState(null);
-  const [pasoActual, setPasoActual] = useState(
-    () => parseInt(localStorage.getItem(`progreso-${rango}`)) || 1
-  );
 
+  // =========================
+  // USER MULTIUSUARIO
+  // =========================
   const usuario = JSON.parse(localStorage.getItem('usuario'));
-  const userId = usuario ? usuario.id : null;
+  const userId = usuario?.id || "anon";
 
-  // 🔥 CARGAR JSON
-  useEffect(() => {
-    fetch(`/data/${rango}.json`)
-      .then(res => {
-        if (!res.ok) throw new Error("Error cargando JSON");
-        return res.json();
-      })
-      .then(setData)
-      .catch(err => console.error(err));
-  }, [rango]);
+  const progresoKey = `progreso-${userId}-${rango}`;
 
-  // 🔥 SCROLL AUTOMÁTICO
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [pasoActual]);
+  const [pasoActual, setPasoActual] = useState(() => {
+    const guardado = parseInt(localStorage.getItem(progresoKey));
+    return isNaN(guardado) ? 1 : guardado;
+  });
 
-  // 🔥 MAPEO DE ACTIVIDADES
   const actividadesPorRango = {
     "0-5": actividades05,
     "6-8": actividades68,
@@ -44,23 +35,128 @@ const ContenedorActividades = () => {
 
   const actividades = actividadesPorRango[rango] || [];
 
-  // 🔥 VALIDACIÓN DE DATOS
-  if (!data || !data.pasos) {
+  // =========================
+  // CARGAR JSON
+  // =========================
+  useEffect(() => {
+    fetch(`/data/${rango}.json`)
+      .then(res => res.json())
+      .then(setData)
+      .catch(console.error);
+  }, [rango]);
+
+  // =========================
+  // SCROLL
+  // =========================
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pasoActual]);
+
+  // =========================
+  // SINCRONIZAR PROGRESO (SUPABASE + LOCAL)
+  // =========================
+  useEffect(() => {
+
+    const sync = async () => {
+      if (userId === "anon") return;
+
+      try {
+        const { data: progreso } = await supabase
+          .from('progreso_actividades')
+          .select('actividad_id')
+          .eq('usuario_id', userId)
+          .eq('completada', true);
+
+        if (!progreso || progreso.length === 0) {
+          setPasoActual(1);
+          localStorage.setItem(progresoKey, 1);
+          return;
+        }
+
+        const max = Math.max(...progreso.map(p => p.actividad_id));
+        const siguiente = max + 1;
+
+        setPasoActual(siguiente);
+        localStorage.setItem(progresoKey, siguiente);
+
+      } catch (err) {
+        console.warn("Sync error:", err);
+      }
+    };
+
+    sync();
+
+  }, [userId, rango]);
+
+  // =========================
+  // TOTAL PASOS
+  // =========================
+  const totalPasos = Math.min(
+    data?.pasos?.length || 0,
+    actividades.length || 0
+  );
+
+  const pasoSeguro = Math.min(pasoActual, totalPasos || 1);
+
+  // =========================
+  // GUARDAR PROGRESO
+  // =========================
+  const guardarProgreso = async (idActividad) => {
+    if (userId === "anon") return;
+
+    try {
+      await supabase.from('progreso_actividades').upsert({
+        usuario_id: userId,
+        actividad_id: idActividad,
+        completada: true
+      }, {
+        onConflict: 'usuario_id,actividad_id'
+      });
+    } catch {}
+  };
+
+  // =========================
+  // AVANZAR
+  // =========================
+  const avanzar = () => {
+    const actividadActual = actividades[pasoSeguro - 1];
+    const idReal = actividadActual?.id || pasoSeguro;
+
+    guardarProgreso(idReal);
+
+    const siguiente = pasoSeguro + 1;
+
+    setPasoActual(siguiente);
+    localStorage.setItem(progresoKey, siguiente);
+  };
+
+  // =========================
+  // RETROCEDER
+  // =========================
+  const retroceder = () => {
+    if (pasoActual > 1) {
+      const anterior = pasoActual - 1;
+      setPasoActual(anterior);
+      localStorage.setItem(progresoKey, anterior);
+    } else {
+      navigate('/');
+    }
+  };
+
+  // =========================
+  // ESTADOS BASE
+  // =========================
+  if (!data?.pasos) {
     return <div className="p-20 text-center">Cargando actividades...</div>;
   }
 
-  const totalPasos = Math.min(data.pasos.length, actividades.length);
-
-  // 🔥 PROTECCIÓN SI NO HAY ACTIVIDADES
   if (actividades.length === 0) {
-    return (
-      <div className="text-center p-20">
-        No hay actividades configuradas para este rango
-      </div>
-    );
+    return <div className="p-20 text-center">Sin actividades configuradas</div>;
   }
 
-  // 🔥 SI YA TERMINÓ
+  // =========================
+  // FINAL
+  // =========================
   if (pasoActual > totalPasos) {
     return (
       <div
@@ -73,11 +169,11 @@ const ContenedorActividades = () => {
       >
         <main className="container mx-auto px-4">
 
-          <div className="text-center p-8 md:p-16 bg-white/95 rounded-[3rem] shadow-2xl border-[6px] md:border-[8px] border-alianza-amarillo mt-10 md:mt-20 max-w-2xl mx-auto">
+          <div className="text-center p-8 md:p-16 bg-white/95 rounded-[3rem] shadow-2xl border-[8px] border-alianza-amarillo mt-20 max-w-2xl mx-auto">
 
             <img
               src={`/images/${rango}/33.png`}
-              className="mx-auto mb-6 md:mb-8 w-40 md:w-64 drop-shadow-xl"
+              className="mx-auto mb-8 w-40 md:w-64"
             />
 
             <h2 className="text-3xl md:text-5xl font-black text-alianza-azul mb-6">
@@ -85,7 +181,7 @@ const ContenedorActividades = () => {
             </h2>
 
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate(`/dashboard/${rango}`)}
               className="bg-alianza-azul text-white px-8 py-4 rounded-full font-black mb-4 w-full md:w-auto"
             >
               Volver al inicio
@@ -94,7 +190,7 @@ const ContenedorActividades = () => {
             <button
               onClick={() => {
                 setPasoActual(1);
-                localStorage.setItem(`progreso-${rango}`, 1);
+                localStorage.setItem(progresoKey, 1);
               }}
               className="bg-gray-200 text-alianza-azul px-8 py-4 rounded-full font-black w-full md:w-auto"
             >
@@ -110,10 +206,9 @@ const ContenedorActividades = () => {
     );
   }
 
-  const ActividadActual = actividades[pasoActual - 1];
-  const pData = data.pasos[pasoActual - 1];
+  const ActividadActual = actividades[pasoSeguro - 1];
+  const pData = data.pasos[pasoSeguro - 1];
 
-  // 🔥 PROTECCIÓN EXTRA
   if (!ActividadActual || !pData) {
     return (
       <div className="text-center p-20">
@@ -121,23 +216,6 @@ const ContenedorActividades = () => {
       </div>
     );
   }
-
-  // 🔥 NAVEGACIÓN
-  const avanzar = () => {
-    const siguiente = pasoActual + 1;
-    setPasoActual(siguiente);
-    localStorage.setItem(`progreso-${rango}`, siguiente);
-  };
-
-  const retroceder = () => {
-    if (pasoActual > 1) {
-      const anterior = pasoActual - 1;
-      setPasoActual(anterior);
-      localStorage.setItem(`progreso-${rango}`, anterior);
-    } else {
-      navigate('/');
-    }
-  };
 
   const DEBUG_COORDENADAS = false;
 

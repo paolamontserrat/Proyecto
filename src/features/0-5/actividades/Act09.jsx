@@ -1,59 +1,117 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import LayoutActividad from '../../../components/layout/LayoutActividad';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+import LayoutActividad from "../../../components/layout/LayoutActividad";
+import { supabase } from "../../../supabaseClient";
+import { useNavigate } from "react-router-dom";
 
 const Act09 = ({ data, onComplete, onBack, rango }) => {
+  const navigate = useNavigate();
 
   const imgRef = useRef(null);
-  const [scale, setScale] = useState(1);
+  const saveTimer = useRef(null);
 
+  const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
+  const userId = usuario?.id ?? "anon";
+
+  const actividadId = data.id;
+
+  // =========================
+  // STATE (ACT02 STYLE)
+  // =========================
   const [encontradas, setEncontradas] = useState([]);
-  const [mensaje, setMensaje] = useState(null);
   const [completado, setCompletado] = useState(false);
-  const [cargando, setCargando] = useState(true);
+  const [mensaje, setMensaje] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [scale, setScale] = useState(1);
+  const [hasData, setHasData] = useState(false);
 
-  // CARGAR PROGRESO
+  const isValid = (arr) => Array.isArray(arr);
+
+  // =========================
+  // LOAD SUPABASE (SIN LOCALSTORAGE)
+  // =========================
   useEffect(() => {
-    const saved = localStorage.getItem(`diferencias-${rango}`);
-
-    if (saved) {
-      const parsed = JSON.parse(saved);
-      setEncontradas(parsed.encontradas || []);
-      setCompletado(parsed.completado || false);
+    if (userId === "anon") {
+      setLoading(false);
+      return;
     }
 
-    setCargando(false);
-  }, [rango]);
+    const cargar = async () => {
+      const { data: db } = await supabase
+        .from("progreso_actividades")
+        .select("datos_actividad")
+        .eq("usuario_id", userId)
+        .eq("actividad_id", actividadId)
+        .maybeSingle();
 
-  // GUARDAR
-  useEffect(() => {
-    if (cargando) return;
+      if (db?.datos_actividad) {
+        const d = db.datos_actividad;
 
-    localStorage.setItem(`diferencias-${rango}`, JSON.stringify({
-      encontradas,
-      completado
-    }));
+        if (isValid(d.encontradas)) {
+          setEncontradas(d.encontradas);
+          setHasData(true);
+        }
 
-  }, [encontradas, completado, cargando, rango]);
+        if (typeof d.completado === "boolean") {
+          setCompletado(d.completado);
+        }
+      }
 
-  // CALCULAR ESCALA REAL
+      setLoading(false);
+    };
+
+    cargar();
+  }, [userId, actividadId]);
+
+  // =========================
+  // SAVE SUPABASE (DEBOUNCE)
+  // =========================
+  const saveToSupabase = useCallback(async (nuevas, done) => {
+    if (userId === "anon") return;
+
+    const payload = {
+      encontradas: nuevas,
+      completado: done
+    };
+
+    await supabase.from("progreso_actividades").upsert(
+      {
+        usuario_id: userId,
+        actividad_id: actividadId,
+        datos_actividad: payload,
+        completada: done
+      },
+      { onConflict: "usuario_id,actividad_id" }
+    );
+  }, [userId, actividadId]);
+
+  const scheduleSave = useCallback((nuevas, done) => {
+    if (saveTimer.current) clearTimeout(saveTimer.current);
+
+    saveTimer.current = setTimeout(() => {
+      saveToSupabase(nuevas, done);
+    }, 400);
+  }, [saveToSupabase]);
+
+  // =========================
+  // ESCALA
+  // =========================
   useEffect(() => {
     const updateScale = () => {
       if (!imgRef.current) return;
-
       const displayedWidth = imgRef.current.clientWidth;
-      const originalWidth = 300; // 🔥 AJUSTA ESTE VALOR SI TU DISEÑO ES OTRO
-
+      const originalWidth = 300;
       setScale(displayedWidth / originalWidth);
     };
 
     updateScale();
-    window.addEventListener('resize', updateScale);
-
-    return () => window.removeEventListener('resize', updateScale);
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
   }, []);
 
+  // =========================
   // CLICK
+  // =========================
   const handleClick = (e) => {
     if (completado) return;
 
@@ -62,7 +120,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
     const x = (e.clientX - rect.left) / scale;
     const y = (e.clientY - rect.top) / scale;
 
-    let indexEncontrado = -1;
+    let foundIndex = -1;
 
     data.actividad.diferencias.forEach((d, i) => {
       if (encontradas.includes(i)) return;
@@ -71,51 +129,79 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
       const dy = y - d.y;
 
       if (Math.sqrt(dx * dx + dy * dy) < d.radio) {
-        indexEncontrado = i;
+        foundIndex = i;
       }
     });
 
-    if (indexEncontrado !== -1) {
+    if (foundIndex !== -1) {
+      const nuevas = [...encontradas];
 
-      setEncontradas(prev => {
-        if (prev.includes(indexEncontrado)) return prev;
+      if (!nuevas.includes(foundIndex)) {
+        nuevas.push(foundIndex);
 
-        const nuevas = [...prev, indexEncontrado];
+        const done = nuevas.length === data.actividad.totalDiferencias;
 
-        if (nuevas.length === data.actividad.totalDiferencias) {
-          setCompletado(true);
-          setMensaje("Actividad completada correctamente");
-        } else {
-          setMensaje("¡Bien hecho!");
-        }
+        setEncontradas(nuevas);
+        setCompletado(done);
 
-        return nuevas;
-      });
+        setMensaje(done ? "¡Completaste la actividad!" : "¡Bien hecho!");
 
-      setTimeout(() => setMensaje(null), 1000);
+        scheduleSave(nuevas, done);
 
+        setTimeout(() => setMensaje(null), 1200);
+      }
     } else {
       setMensaje("Sigue intentando");
       setTimeout(() => setMensaje(null), 1000);
     }
   };
 
-  const reiniciar = () => {
+  // =========================
+  // REINICIAR
+  // =========================
+  const reiniciar = async () => {
     setEncontradas([]);
     setCompletado(false);
-    localStorage.removeItem(`diferencias-${rango}`);
+
+    if (userId !== "anon") {
+      await supabase.from("progreso_actividades").upsert({
+        usuario_id: userId,
+        actividad_id: actividadId,
+        datos_actividad: { encontradas: [], completado: false },
+        completada: false
+      }, {
+        onConflict: "usuario_id,actividad_id"
+      });
+    }
   };
+
+  // =========================
+  // LOADING
+  // =========================
+  if (loading) {
+    return (
+      <LayoutActividad fondo={data.fondo}>
+        <div className="p-10 text-center font-bold animate-pulse">
+          Cargando...
+        </div>
+      </LayoutActividad>
+    );
+  }
 
   return (
     <LayoutActividad fondo={data.fondo}>
 
-      {/* BOTÓN */}
-      <div className="max-w-5xl mx-auto mb-4">
-        <button
-          onClick={onBack}
-          className="bg-blue-600 text-white px-8 py-3 rounded-full font-bold"
-        >
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-4">
+        <button onClick={onBack} className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold">
           ← Regresar
+        </button>
+
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold"
+        >
+          🏠 Inicio
         </button>
       </div>
 
@@ -142,7 +228,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
           </div>
         </motion.div>
 
-        {/* ACTIVIDAD */}
+        {/* JUEGO */}
         <div className="bg-yellow-50 p-6 rounded-3xl border-4 border-yellow-300 text-center">
 
           <h2 className="text-3xl font-black text-yellow-700 mb-6">
@@ -155,7 +241,6 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
             </div>
           )}
 
-          {/* IMÁGENES */}
           <div className="flex gap-6 justify-center flex-wrap">
 
             {[data.actividad.imagenA, data.actividad.imagenB].map((img, idx) => (
@@ -167,7 +252,6 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
                   className="w-[300px] md:w-[450px] rounded-xl shadow-xl cursor-pointer"
                 />
 
-                {/* CÍRCULOS */}
                 {encontradas.map((i) => {
                   const d = data.actividad.diferencias[i];
 
@@ -175,14 +259,14 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
                     <div
                       key={i}
                       style={{
-                        position: 'absolute',
+                        position: "absolute",
                         left: d.x * scale - d.radio * scale,
                         top: d.y * scale - d.radio * scale,
                         width: d.radio * 2 * scale,
                         height: d.radio * 2 * scale,
-                        borderRadius: '50%',
-                        border: '3px solid red',
-                        pointerEvents: 'none'
+                        borderRadius: "50%",
+                        border: "3px solid red",
+                        pointerEvents: "none"
                       }}
                     />
                   );
@@ -206,14 +290,13 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
           </button>
         </div>
 
-        {/* FINAL */}
         <button
           onClick={onComplete}
           disabled={!completado}
           className={`mt-8 w-full py-4 rounded-full font-black text-xl transition
             ${completado
-              ? 'bg-yellow-400 hover:scale-105'
-              : 'bg-gray-300 cursor-not-allowed opacity-60'
+              ? "bg-yellow-400 hover:scale-105"
+              : "bg-gray-300 cursor-not-allowed opacity-60"
             }`}
         >
           Finalizar

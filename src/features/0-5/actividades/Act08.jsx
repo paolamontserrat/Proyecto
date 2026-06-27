@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LayoutActividad from '../../../components/layout/LayoutActividad';
+import { supabase } from '../../../supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
-const Act08 = ({ data, onComplete, onBack }) => {
+
+const Act08 = ({ data, onComplete, onBack, rango }) => {
   const [indice, setIndice] = useState(0);
-
-  // COMPATIBILIDAD TOTAL (escenas o fallback)
+const navigate = useNavigate();
+  // COMPATIBILIDAD TOTAL
   const escenas =
     data?.escenas ||
     data?.contenido ||
     data?.pasos ||
     [];
 
-  // SI NO HAY DATA
   if (!data) {
     return (
       <LayoutActividad fondo="">
@@ -23,7 +25,6 @@ const Act08 = ({ data, onComplete, onBack }) => {
     );
   }
 
-  // SI NO HAY ESCENAS
   if (!Array.isArray(escenas) || escenas.length === 0) {
     return (
       <LayoutActividad fondo={data?.fondo}>
@@ -36,35 +37,98 @@ const Act08 = ({ data, onComplete, onBack }) => {
 
   const escena = escenas[indice] || {};
 
-  const siguiente = () => {
+  //  USUARIO
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const userId = usuario?.id;
+
+  const storageKey = `act08-${rango}`;
+
+  // ==============================
+  //  GUARDADO GLOBAL (ESPEJO)
+  // ==============================
+  const guardarTodo = async () => {
+    localStorage.setItem(storageKey, "visitado");
+
+    if (userId) {
+      try {
+        await supabase.from('progreso_actividades').upsert({
+          usuario_id: userId,
+          actividad_id: data.id,
+          datos_actividad: {
+            escena_actual: indice
+          },
+          completada: indice >= escenas.length - 1
+        }, {
+          onConflict: 'usuario_id, actividad_id'
+        });
+
+      } catch (err) {
+        console.warn("Offline, se sincroniza después");
+      }
+    }
+  };
+
+  // ==============================
+  //  REINTENTO ONLINE
+  // ==============================
+  useEffect(() => {
+    const handleOnline = () => guardarTodo();
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  }, [indice]);
+
+  // ==============================
+  // NAVEGACIÓN
+  // ==============================
+  const siguiente = async () => {
     if (indice < escenas.length - 1) {
-      setIndice(indice + 1);
+      const nuevo = indice + 1;
+      setIndice(nuevo);
+      await guardarTodo();
     } else {
+      await guardarTodo();
       onComplete?.();
     }
   };
 
-  const anterior = () => {
-    if (indice > 0) setIndice(indice - 1);
+  const anterior = async () => {
+    if (indice > 0) {
+      const nuevo = indice - 1;
+      setIndice(nuevo);
+      await guardarTodo();
+    }
+  };
+
+  const regresar = async () => {
+    await guardarTodo();
+    onBack?.();
   };
 
   return (
     <LayoutActividad fondo={data?.fondo}>
 
-      {/* BACK */}
-      <div className="w-full mb-4">
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-4">
+
         <button
           onClick={onBack}
-          className="bg-blue-600 text-white px-5 py-3 rounded-full font-bold text-sm sm:text-base"
+          className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold shadow"
         >
           ← Regresar
         </button>
+
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition"
+        >
+          🏠 Inicio
+        </button>
+
       </div>
 
       {/* CARD */}
       <div className="bg-white/95 p-4 sm:p-6 md:p-8 rounded-[2rem] border-[6px] border-yellow-400 w-full shadow-2xl text-center">
 
-        {/* TITULOS */}
         <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-blue-700">
           {data?.titulo}
         </h2>
@@ -87,18 +151,12 @@ const Act08 = ({ data, onComplete, onBack }) => {
             transition={{ duration: 0.4 }}
           >
 
-            {/* IMÁGENES */}
             <div className="flex justify-center flex-wrap gap-3 sm:gap-4 mb-4 sm:mb-6">
               {(escena?.imagenes || []).map((img, i) => (
                 <motion.img
                   key={i}
                   src={img}
-                  className="
-                    w-40 sm:w-56 md:w-72
-                    h-24 sm:h-32 md:h-40
-                    object-contain
-                    drop-shadow-lg
-                  "
+                  className="w-40 sm:w-56 md:w-72 h-24 sm:h-32 md:h-40 object-contain drop-shadow-lg"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: i * 0.15 }}
@@ -106,7 +164,6 @@ const Act08 = ({ data, onComplete, onBack }) => {
               ))}
             </div>
 
-            {/* TEXTO */}
             <p className="text-sm sm:text-lg md:text-2xl font-bold text-gray-800 leading-relaxed px-2 sm:px-4">
               {escena?.texto || "Sin texto disponible"}
             </p>
@@ -133,8 +190,6 @@ const Act08 = ({ data, onComplete, onBack }) => {
           </button>
 
         </div>
-
-        
 
       </div>
     </LayoutActividad>

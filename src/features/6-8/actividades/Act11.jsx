@@ -1,23 +1,100 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import LayoutActividad from '../../../components/layout/LayoutActividad';
+import { supabase } from '../../../supabaseClient';
+import { useNavigate } from 'react-router-dom';
 
-const Act11 = ({ data, onBack, onComplete }) => {
+const Act11 = ({ data, onBack, onComplete, rango }) => {
+
+  const navigate = useNavigate();
+
+  // =========================
+  //  USER SEGURO
+  // =========================
+  const getUser = () => {
+    try { return JSON.parse(localStorage.getItem('usuario')); }
+    catch { return null; }
+  };
+
+  const userId = getUser()?.id || "anon";
+
+  // =========================
+  //  KEY MULTIUSUARIO (FIX REAL)
+  // =========================
+  const storageKey = `act11-${rango}-${userId}`;
+
+  // =========================
+  //  GUARDADO GLOBAL (VACÍO {})
+  // =========================
+  const guardar = async () => {
+
+    //  LOCAL POR USUARIO
+    localStorage.setItem(storageKey, JSON.stringify({}));
+
+    //  SUPABASE
+    if (userId !== "anon") {
+      try {
+        await supabase.from('progreso_actividades').upsert({
+          usuario_id: userId,
+          actividad_id: data.id,
+          datos_actividad: {}, //  SIEMPRE VACÍO
+          completada: true
+        }, {
+          onConflict: 'usuario_id, actividad_id'
+        });
+      } catch (err) {
+        console.warn("Offline, se sincroniza después");
+      }
+    }
+  };
+
+  // =========================
+  //  AUTO-GUARDAR AL ENTRAR
+  // =========================
+  useEffect(() => {
+    guardar();
+  }, [userId]);
+
+  // =========================
+  //  REINTENTO ONLINE
+  // =========================
+  useEffect(() => {
+    const handleOnline = () => guardar();
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  }, [userId]);
+
+  // =========================
+  //  CONTINUAR
+  // =========================
+  const handleContinue = async () => {
+    await guardar();
+    onComplete();
+  };
 
   return (
     <LayoutActividad fondo={data.recursos?.fondo}>
 
-      {/* REGRESAR */}
-      <div className="mb-4">
+      {/* HEADER */}
+      <div className="flex justify-between items-center mb-4">
+
         <button
           onClick={onBack}
           className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold shadow"
         >
           ← Regresar
         </button>
+
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition"
+        >
+          🏠 Inicio
+        </button>
+
       </div>
 
-      {/* 🔥 CONTENEDOR IGUAL QUE ACT08 */}
+      {/* CONTENEDOR */}
       <div className="
         bg-white/90
         p-6 md:p-10
@@ -59,12 +136,10 @@ const Act11 = ({ data, onBack, onComplete }) => {
                 ${b.color === 'azul' ? 'bg-blue-900' : 'bg-purple-900'}
               `}>
 
-                {/* TÍTULO */}
                 <div className="bg-white py-3 text-center font-black text-lg md:text-2xl text-blue-800 rounded-b-[2rem] shadow">
                   {b.titulo}
                 </div>
 
-                {/* CONTENIDO */}
                 <div className="p-5 text-white space-y-3 text-sm md:text-base">
 
                   {b.descripcion.map((d, idx) => (
@@ -120,7 +195,7 @@ const Act11 = ({ data, onBack, onComplete }) => {
 
         {/* BOTÓN */}
         <button
-          onClick={onComplete}
+          onClick={handleContinue}
           className="w-full mt-8 py-4 rounded-full font-black text-xl bg-alianza-amarillo text-alianza-azul hover:scale-[1.02] transition"
         >
           Continuar

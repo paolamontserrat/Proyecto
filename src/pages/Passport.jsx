@@ -1,118 +1,187 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { supabase } from '../supabaseClient';
 import Footer from '../components/Footer';
 
 const Passport = () => {
   const navigate = useNavigate();
   const { rango } = useParams();
 
-  const [ahorros, setAhorros] = useState(() => JSON.parse(localStorage.getItem('ahorros_alianza')) || {});
+  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const userId = usuario?.id || "anon";
+
+  // =========================
+  // 🔥 MESES SEGUROS
+  // =========================
+  const obtenerMesActual = (fecha = new Date()) => {
+    const meses = [
+      "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+      "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+    ];
+    return meses[fecha.getMonth()];
+  };
+
+  const nombreMesActual = obtenerMesActual(new Date());
+
+  // =========================
+  // 🔥 STORAGE MULTIUSUARIO
+  // =========================
+  const storageKey = `ahorros_${userId}_${rango}`;
+
+  const [ahorros, setAhorros] = useState(() =>
+    JSON.parse(localStorage.getItem(storageKey)) || {}
+  );
+
   const [mesExpandido, setMesExpandido] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({ fecha: '', monto: '', id: null });
-  const [fondo, setFondo] = useState('/images/0-5/Fondo0-5.png'); // fallback directo
   const [error, setError] = useState('');
 
-  // CARGAR FONDO SEGURO
+  const [fondo, setFondo] = useState('/images/0-5/Fondo0-5.png');
+
+  // =========================
+  // 🔥 FONDO POR RANGO
+  // =========================
   useEffect(() => {
     const cargarFondo = async () => {
       try {
         const res = await fetch(`/data/${rango}.json`);
+        const data = await res.json();
 
-        // si no existe el archivo
-        if (!res.ok) return;
-
-        // verificar que sea JSON
-        const text = await res.text();
-        if (!text.startsWith('{')) return;
-
-        const data = JSON.parse(text);
-
-        if (data.fondoPasaporte) {
+        if (data?.fondoPasaporte) {
           setFondo(data.fondoPasaporte);
         }
+      } catch {}
+    };
 
-      } catch (err) {
-        console.warn("No se pudo cargar fondo, usando default");
+    if (rango) cargarFondo();
+  }, [rango]);
+
+  // =========================
+  // 🔥 LOAD SUPABASE
+  // =========================
+  useEffect(() => {
+    const load = async () => {
+      // Nota: Si el usuario es anon, solo carga de localStorage
+      if (userId === "anon") return;
+
+      const { data } = await supabase
+        .from('ahorros_usuario')
+        .select('datos')
+        .eq('usuario_id', userId)
+        .eq('rango', rango)
+        .maybeSingle();
+
+      if (data?.datos) {
+        setAhorros(data.datos);
+        localStorage.setItem(storageKey, JSON.stringify(data.datos));
       }
     };
 
-    if (rango) {
-      cargarFondo();
-    }
-  }, [rango]);
+    load();
+  }, [userId, rango, storageKey]);
 
-  // MESES
-  const mesesDelAnio = [
-    "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
-    "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
-  ];
+  // =========================
+  // 🔥 SYNC SUPABASE + LOCAL
+  // =========================
+  const sync = async (nuevo) => {
+    setAhorros(nuevo);
+    localStorage.setItem(storageKey, JSON.stringify(nuevo));
 
-  const mesActualIndex = new Date().getMonth();
-  const nombreMesActual = mesesDelAnio[mesActualIndex];
+    if (userId === "anon") return;
 
-  const mesesOrdenados = [nombreMesActual, ...mesesDelAnio.filter(m => m !== nombreMesActual)];
+    await supabase.from('ahorros_usuario').upsert({
+      usuario_id: userId,
+      rango,
+      datos: nuevo
+    }, {
+      onConflict: 'usuario_id,rango'
+    });
+  };
 
-  // GUARDAR
+  // =========================
+  // 🔥 VALIDACIÓN
+  // =========================
+  const validar = () => {
+    if (!formData.fecha) return false;
+    if (!formData.monto || Number(formData.monto) <= 0) return false;
+    if (mesExpandido !== nombreMesActual) return false;
+    return true;
+  };
+
+  // =========================
+  // 🔥 GUARDAR AHORRO
+  // =========================
   const handleSave = () => {
-    if (!formData.fecha || !formData.monto || Number(formData.monto) <= 0) {
-      setError("Debes ingresar fecha y un monto válido");
+    if (!validar()) {
+      setError("Solo puedes ahorrar en el mes actual con datos válidos");
       return;
     }
 
-    const nuevosAhorros = { ...ahorros };
+    const nuevos = { ...ahorros };
 
-    if (!nuevosAhorros[mesExpandido]) {
-      nuevosAhorros[mesExpandido] = [];
+    if (!nuevos[mesExpandido]) {
+      nuevos[mesExpandido] = [];
     }
+
+    const lista = nuevos[mesExpandido];
+
+    // ⭐ racha semanal
+    const esConstante =
+      lista.length === 0 ||
+      (Date.now() - lista[lista.length - 1]?.id > 604800000);
+
+    const nuevoItem = {
+      ...formData,
+      id: formData.id || Date.now(),
+      estrella: esConstante
+    };
 
     if (formData.id) {
-      nuevosAhorros[mesExpandido] = nuevosAhorros[mesExpandido].map(item =>
-        item.id === formData.id ? { ...formData } : item
+      nuevos[mesExpandido] = lista.map(item =>
+        item.id === formData.id ? nuevoItem : item
       );
     } else {
-      nuevosAhorros[mesExpandido].push({
-        ...formData,
-        id: Date.now()
-      });
+      nuevos[mesExpandido].push(nuevoItem);
     }
 
-    setAhorros(nuevosAhorros);
-    localStorage.setItem('ahorros_alianza', JSON.stringify(nuevosAhorros));
+    sync(nuevos);
 
     setShowForm(false);
     setFormData({ fecha: '', monto: '', id: null });
     setError('');
   };
 
-  // ELIMINAR
+  // =========================
+  // 🔥 ELIMINAR
+  // =========================
   const handleDelete = (id) => {
-    const nuevosAhorros = { ...ahorros };
+    const nuevos = { ...ahorros };
 
-    nuevosAhorros[mesExpandido] =
-      nuevosAhorros[mesExpandido].filter(item => item.id !== id);
+    nuevos[mesExpandido] =
+      nuevos[mesExpandido].filter(a => a.id !== id);
 
-    setAhorros(nuevosAhorros);
-    localStorage.setItem('ahorros_alianza', JSON.stringify(nuevosAhorros));
+    sync(nuevos);
   };
 
   const iniciarEdicion = (item) => {
     setFormData(item);
-    setError('');
     setShowForm(true);
   };
 
-  // TOTAL
-  const calcularTotalAnual = () => {
+  const calcularTotal = () => {
     let total = 0;
-
     Object.values(ahorros).forEach(mes => {
       mes.forEach(a => total += Number(a.monto));
     });
-
     return total;
   };
 
+  const puedeEditar = mesExpandido === nombreMesActual;
+
+  // =========================
+  // 🔥 UI (NO TOCAR)
+  // =========================
   return (
     <div
       className="p-4 min-h-screen pb-10"
@@ -122,80 +191,80 @@ const Passport = () => {
       }}
     >
 
-      {/*BOTONES */}
+      {/* HEADER */}
       <div className="max-w-md mx-auto mb-4 flex justify-between">
-        <button
-          onClick={() => navigate(-1)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold"
-        >
+        <button onClick={() => navigate(-1)} className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold">
           ← Volver
         </button>
 
-        <button
-          onClick={() => navigate(`/dashboard/${rango}`)}
-          className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold"
-        >
-          Volver al inicio
+        <button onClick={() => navigate(`/dashboard/${rango}`)} className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold">
+          Inicio
         </button>
       </div>
 
-      <h1 className="text-2xl font-black text-alianza-azul text-center mb-6 uppercase">
-        Mi Pasaporte
-      </h1>
-
-      {/*TOTAL */}
-      <div className="bg-alianza-azul text-white p-4 rounded-3xl mb-6 text-center shadow-lg">
-        <p className="text-xs uppercase opacity-80">Total ahorrado este año</p>
+      {/* TOTAL */}
+      <div className="bg-alianza-azul text-white p-4 rounded-3xl mb-6 text-center">
+        <p>Total ahorrado</p>
         <p className="text-3xl font-black text-alianza-amarillo">
-          ${calcularTotalAnual()}
+          ${calcularTotal()}
         </p>
       </div>
 
+      {/* MESES */}
       <div className="max-w-sm mx-auto space-y-4">
-        {mesesOrdenados.map((mes) => {
-          const esMesActual = mes === nombreMesActual;
-          const totalMes = ahorros[mes]?.reduce((sum, a) => sum + Number(a.monto), 0) || 0;
+        {[
+          "Enero","Febrero","Marzo","Abril","Mayo","Junio",
+          "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+        ].map(mes => {
+
+          const totalMes =
+            ahorros[mes]?.reduce((s, a) => s + Number(a.monto), 0) || 0;
+
+          const tieneEstrella =
+            ahorros[mes]?.some(a => a.estrella);
 
           return (
-            <div key={mes} className={`bg-white border-2 rounded-2xl overflow-hidden ${esMesActual ? 'border-alianza-amarillo shadow-lg' : 'border-alianza-azul'}`}>
+            <div key={mes} className="bg-white rounded-2xl border-2 overflow-hidden">
 
               <button
                 onClick={() => setMesExpandido(mesExpandido === mes ? null : mes)}
-                className={`w-full p-4 flex justify-between items-center font-black ${esMesActual ? 'bg-alianza-amarillo text-alianza-azul' : 'text-alianza-azul'}`}
+                className={`w-full p-4 flex justify-between font-black ${
+                  mes === nombreMesActual ? "bg-alianza-amarillo text-alianza-azul" : ""
+                }`}
               >
-                {mes} {esMesActual && "(ACTUAL)"}
-                <span className="bg-alianza-azul text-white px-3 py-1 rounded-full text-sm">
-                  ${totalMes}
-                </span>
+                {mes} {tieneEstrella && "⭐"}
+                <span>${totalMes}</span>
               </button>
 
               {mesExpandido === mes && (
-                <div className="p-4 bg-gray-50">
+                <div className="p-4">
 
-                  {ahorros[mes]?.map(a => (
-                    <div key={a.id} className="flex justify-between items-center py-2 border-b">
+                  {(ahorros[mes] || []).map(a => (
+                    <div key={a.id} className="flex justify-between py-2 border-b">
+
                       <div>
-                        <p className="font-bold text-sm">{a.fecha}</p>
-                        <p className="text-alianza-azul font-black">${a.monto}</p>
+                        <p className="text-sm">{a.fecha}</p>
+                        <p className="font-black">${a.monto}</p>
                       </div>
 
-                      {esMesActual && (
+                      {mes === nombreMesActual && (
                         <div className="flex gap-2">
                           <button onClick={() => iniciarEdicion(a)}>✏️</button>
                           <button onClick={() => handleDelete(a.id)}>🗑️</button>
                         </div>
                       )}
+
                     </div>
                   ))}
 
-                  {esMesActual && (
+                  {puedeEditar && (
                     <button
                       onClick={() => {
                         setFormData({ fecha: '', monto: '', id: null });
-                        setError('');
                         setShowForm(true);
+                        setError('');
                       }}
-                      className="mt-3 w-full py-2 bg-alianza-azul text-white rounded-lg font-bold"
+                      className="w-full mt-2 bg-alianza-azul text-white py-2 rounded"
                     >
                       + Agregar ahorro
                     </button>
@@ -208,48 +277,36 @@ const Passport = () => {
         })}
       </div>
 
-      {/*FORM */}
+      {/* FORM */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-3xl w-full max-w-sm">
-
-            <h3 className="font-black mb-4">
-              {formData.id ? 'Editar' : 'Nuevo'} ahorro
-            </h3>
-
-            {error && (
-              <div className="mb-3 bg-red-100 border border-red-400 text-red-700 px-3 py-2 rounded-lg text-sm font-bold">
-                {error}
-              </div>
-            )}
 
             <input
               type="date"
               value={formData.fecha}
-              className="w-full p-3 border rounded mb-3"
-              onChange={(e) => {
-                setFormData({ ...formData, fecha: e.target.value });
-                setError('');
-              }}
+              onChange={(e) =>
+                setFormData({ ...formData, fecha: e.target.value })
+              }
+              className="w-full p-3 border mb-2"
             />
 
             <input
               type="number"
               value={formData.monto}
-              placeholder="Monto"
-              className="w-full p-3 border rounded mb-4"
-              onChange={(e) => {
-                setFormData({ ...formData, monto: e.target.value });
-                setError('');
-              }}
+              onChange={(e) =>
+                setFormData({ ...formData, monto: e.target.value })
+              }
+              className="w-full p-3 border mb-2"
             />
 
-            <div className="flex gap-2">
+            {error && (
+              <p className="text-red-500 text-sm">{error}</p>
+            )}
+
+            <div className="flex gap-2 mt-2">
               <button
-                onClick={() => {
-                  setShowForm(false);
-                  setError('');
-                }}
+                onClick={() => setShowForm(false)}
                 className="flex-1 bg-gray-200 py-2 rounded"
               >
                 Cancelar

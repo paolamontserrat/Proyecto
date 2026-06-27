@@ -1,21 +1,48 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import Passport from './pages/Passport';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
-// Importamos el nuevo contenedor
+import Passport from './pages/Passport';
 import ContenedorActividades from './components/actividades/ContenedorActividades';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/dashboard/:rango" element={<Dashboard />} />
-        <Route path="/pasaporte/:rango" element={<Passport />} />
-        {/* Nueva ruta para las actividades dinámicas */}
-        <Route path="/actividades/:rango" element={<ContenedorActividades />} />
+
+        {/* 🔓 pública */}
+        <Route path="/" element={<Login />} />
+
+        {/* 🔐 protegidas */}
+        <Route
+          path="/dashboard/:rango"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/pasaporte/:rango"
+          element={
+            <ProtectedRoute>
+              <Passport />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/actividades/:rango"
+          element={
+            <ProtectedRoute>
+              <ContenedorActividades />
+            </ProtectedRoute>
+          }
+        />
+
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 
