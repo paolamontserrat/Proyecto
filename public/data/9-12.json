@@ -1,0 +1,500 @@
+{
+  "rangoEdad": "9-12",
+  "titulo": "Mi aventura del ahorro",
+  "fondoPasaporte": "/images/9-12/Fondo9-12.png",
+  "institucion": "ALIANZA CAJA POPULAR CERANO",
+  "portada": "/images/9-12/Inicio.png",
+  "imgAhorro": "/images/0-5/6.png",
+  "imgJuegos": "/images/0-5/16.png",
+  "paginas": [
+    {
+      "id": 1,
+      "tipo": "bienvenida",
+      "titulo": "¡Bienvenido a tu aventura del ahorro!",
+      "intro": "Estás comenzando una nueva etapa donde aprenderás algo muy importante: cómo manejar tu dinero con responsabilidad y visión. En esta aventura, descubrirás que ahorrar es divertido y que cada moneda que guardas te acerca a tus metas.",
+      "secciones": [
+        {
+          "subtitulo": "PROGRAMA CRECIENDO JUNTOS",
+          "texto": "Te invitamos a participar en nuestro programa Creciendo Juntos. Consiste en lograr retos trimestrales de ahorro constante, donde obtienes premios y participas en sorteos.",
+          "icono": "⭐"
+        },
+        {
+          "subtitulo": "TUS CUENTAS",
+          "texto": "Cuenta de club Alianzito sera para poder hacer retiros y la cuenta Creciendo Juntos sera para largo plazo.",
+          "icono": "💰"
+        }
+      ],
+      "beneficios": [
+        "Participas en sesiones de educación financiera y cooperativa.",
+        "Acceso a cursos para desarrollar habilidades según tu edad.",
+        "Puedes recibir incentivos de apoyo escolar (si no eres beneficiario de Impulso a la Educación).",
+        "Tus papás pueden obtener un esquema de crédito atractivo."
+      ]
+    }
+  ],
+  "pasos": [
+    {
+      "id": 1,
+      "tipo": "informacion",
+      "titulo": "¿QUÉ ES ALIANZA CAJA POPULAR CERANO?",
+      "fondo": "Fondo.png",
+      "imagen": "/images/9-12/1.png",
+      "contenido": {
+        "tituloSecundario": "¿Qué es la Caja?",
+        "descripcion": "Es una institución financiera, constituida como una Cooperativa de Ahorro y Préstamo.",
+        "subtitulo": "Eso significa que:",
+        "puntos": [
+          "Las personas ahorran juntas.",
+          "Todos aportan y se apoyan entre sí.",
+          "El dinero se administra con responsabilidad, brindando apoyo para que sus socios puedan lograr sus metas o proyectos."
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "titulo": "¿Qué hace una Caja Popular?",
+      "informacion": "No es un banco tradicional.\nLas personas ingresan y cada uno de ellos forman parte de los dueños (socios) quienes toman las decisiones más importantes en la cooperativa.",
+      "titulo2": "Pero... para ahorrar debemos tomar decisiones inteligentes, ya que el dinero es limitado y debemos cuidarlo, por ejemplo:",
+      "explicacion": "Al tomar decisiones inteligentes, podrás elegir lo que realmente necesitas y destinar un porcentaje para ahorrar y así tener un mejor beneficio en el futuro.",
+      "recursos": {
+        "fondo": "/images/9-12/Fondo.png",
+        "comunidad": "/images/9-12/8.png",
+        "benefician": "/images/9-12/5.png",
+        "nino": "/images/9-12/7.png",
+        "caja": "/images/9-12/11.png",
+        "esquema": "/images/9-12/9.png"
+      }
+    },
+    {
+      "id": 3,
+      "titulo": "¿POR QUÉ TU DINERO CRECE EN ALIANZA CAJA POPULAR CERANO?",
+      "pasos": [
+        "Tu dinero ayuda a otras personas.",
+        "Esas personas lo usan y lo devuelven.",
+        "Por usarlo, pagan una cantidad extra.",
+        "Parte de eso regresa a ti como rendimiento, y después de un tiempo tendrás más de lo que ahorraste."
+      ],
+      "rendimientos": "Es el dinero extra que puedes ganar por ahorrar; tu dinero puede ayudar a alguien a cumplir su meta y, al mismo tiempo, tú recibes un beneficio.",
+      "cooperacion": "En la Caja, mi dinero trabaja ayudando a otros…\n\nY por eso también crece.\n\nEn una Cooperativa:\nNo solo ganas tú.\nTambién gana la comunidad.\n\n¡Eso es cooperación!",
+      "actividad": {
+        "titulo": "Ayuda a Alianzito a poner la fruta en su lugar correcto.",
+        "instruccion": "Une cada fruta con su canasta correspondiente."
+      },
+      "recursos": {
+        "fondoImg": "/images/9-12/Fondo.png",
+        "personaje": "/images/9-12/10.png",
+        "laberintoImg": "/images/9-12/14.png",
+        "sandiaInicio": "/images/9-12/18.png",
+        "sandiaFin": "/images/9-12/16.png",
+        "naranjaInicio": "/images/9-12/20.png",
+        "naranjaFin": "/images/9-12/17.png",
+        "pinaInicio": "/images/9-12/19.png",
+        "pinaFin": "/images/9-12/15.png"
+      }
+    },
+    {
+      "id": 4,
+      "titulo": "¿QUÉ ES NECESIDAD Y QUÉ ES DESEO?",
+      "botones": {
+        "regresar": "← Regresar",
+        "inicio": "🏠 Inicio",
+        "validar": "Validar",
+        "reiniciar": "Reiniciar",
+        "continuar": "Continuar",
+        "cargando": "Cargando..."
+      },
+      "necesidad": {
+        "titulo": "NECESIDAD",
+        "descripcion": "Es algo que realmente necesito para vivir, crecer o estudiar.",
+        "ejemplosLabel": "Ejemplos:",
+        "ejemplos": "comida, agua, ropa básica, material escolar, medicinas.",
+        "nota": "Si no lo tengo, afecta mi bienestar."
+      },
+      "deseo": {
+        "titulo": "DESEO",
+        "descripcion": "Es algo que quiero, pero puedo vivir sin ello.",
+        "ejemplosLabel": "Ejemplos:",
+        "ejemplos": "Un juguete nuevo, el celular más reciente, dulces, accesorios de moda, videojuegos.",
+        "nota": "Me gusta, pero no es indispensable."
+      },
+      "preguntasTitulo": "Una manera fácil para identificarlo es preguntándote:",
+      "preguntas": [
+        "¿Lo necesito para vivir o aprender?",
+        "¿Puedo esperar para tenerlo?",
+        "¿Si no lo compro ahora, pasa algo grave?"
+      ],
+      "placeholderRespuesta": "Escribe tu respuesta...",
+      "fraseSwitch": "Si puedes vivir sin eso... probablemente es un deseo.",
+      "actividad": {
+        "titulo": "Demuestra tus conocimientos",
+        "instruccionPre": "Marca con una",
+        "instruccionX": "X",
+        "instruccionPost": "si es",
+        "columnaSituacion": "Situación",
+        "columnaNecesidad": "Necesidad",
+        "columnaDeseo": "Deseo"
+      },
+      "situaciones": [
+        {
+          "id": 1,
+          "texto": "Comprar comida",
+          "correcta": "Necesidad"
+        },
+        {
+          "id": 2,
+          "texto": "Comprar el videojuego nuevo",
+          "correcta": "Deseo"
+        },
+        {
+          "id": 3,
+          "texto": "Comprar útiles escolares",
+          "correcta": "Necesidad"
+        },
+        {
+          "id": 4,
+          "texto": "Comprar dulces todos los días",
+          "correcta": "Deseo"
+        },
+        {
+          "id": 5,
+          "texto": "Comprar zapatos porque los actuales ya no sirven",
+          "correcta": "Necesidad"
+        },
+        {
+          "id": 6,
+          "texto": "Cambiar de mochila solo por moda",
+          "correcta": "Deseo"
+        }
+      ],
+      "casoCarlos": {
+        "pregunta": "Carlos quiere unos tenis nuevos porque sus amigos los tienen, pero sus tenis actuales están en buen estado.",
+        "preguntaTipo": "¿Es necesidad o deseo?",
+        "preguntaPorque": "¿Por qué?",
+        "respuestaCorrecta": "Deseo"
+      },
+      "beneficios": {
+        "titulo": "Cuando aprendo a distinguir entre necesidad y deseo:",
+        "lista": [
+          "Tomo decisiones inteligentes",
+          "Evito gastar por impulso",
+          "Me acerco más rápido a mi meta",
+          "Uso mejor mi dinero en la Caja"
+        ]
+      },
+      "resultado": {
+        "exito": "🎉 ¡Excelente! Todas las respuestas son correctas.",
+        "error": "❌ Algunas respuestas no son correctas. Intenta nuevamente."
+      },
+      "recursos": {
+        "fondo": "/images/9-12/Fondo9-12.png",
+        "manoNecesidad": "/images/9-12/38.png",
+        "manoDeseo": "/images/9-12/37.png",
+        "switch": "/images/9-12/13.png",
+        "nina": "/images/9-12/39.png",
+        "mochila": "/images/9-12/21.png",
+        "flecha": "/images/9-12/22.png"
+      }
+    },
+    {
+      "id": 5,
+      "titulo": "MISIÓN: DETECTIVES DEL RIESGO",
+      "botones": {
+        "regresar": "← Regresar",
+        "inicio": "🏠 Inicio",
+        "validar": "Validar",
+        "reiniciar": "Reiniciar",
+        "continuar": "Continuar",
+        "cargando": "Cargando..."
+      },
+      "instrucciones": {
+        "titulo": "INSTRUCCIONES",
+        "texto": "Lee cada situación y marca",
+        "resaltado": "X",
+        "textoFinal": "con una  en la columna correcta:"
+      },
+      "columnaSituacion": "Situación:",
+      "columnaCasa": "CASA",
+      "columnaCaja": "CAJA",
+      "situaciones": [
+        {
+          "id": 1,
+          "texto": "Guardar dinero debajo del colchón",
+          "correcta": "Casa"
+        },
+        {
+          "id": 2,
+          "texto": "Depositar dinero y recibir comprobante",
+          "correcta": "Caja"
+        },
+        {
+          "id": 3,
+          "texto": "Olvidar cuánto dinero llevas ahorrado",
+          "correcta": "Casa"
+        },
+        {
+          "id": 4,
+          "texto": "Revisar tu saldo registrado",
+          "correcta": "Caja"
+        },
+        {
+          "id": 5,
+          "texto": "Tu ahorro no genera ningún beneficio adicional",
+          "correcta": "Casa"
+        },
+        {
+          "id": 6,
+          "texto": "El dinero puede perderse o dañarse",
+          "correcta": "Casa"
+        },
+        {
+          "id": 7,
+          "texto": "Tu ahorro puede generar rendimientos",
+          "correcta": "Caja"
+        },
+        {
+          "id": 8,
+          "texto": "Ser tomado por alguien más",
+          "correcta": "Casa"
+        },
+        {
+          "id": 9,
+          "texto": "Participas en promociones",
+          "correcta": "Caja"
+        },
+        {
+          "id": 10,
+          "texto": "Tu dinero está registrado y protegido",
+          "correcta": "Caja"
+        },
+        {
+          "id": 11,
+          "texto": "Cada depósito queda registrado",
+          "correcta": "Caja"
+        },
+        {
+          "id": 12,
+          "texto": "El ahorro es fácil gastarlo sin pensar",
+          "correcta": "Casa"
+        },
+        {
+          "id": 13,
+          "texto": "Para saber cuánto tienes debes contarlo",
+          "correcta": "Casa"
+        },
+        {
+          "id": 14,
+          "texto": "Sabes exactamente cuánto tienes",
+          "correcta": "Caja"
+        },
+        {
+          "id": 15,
+          "texto": "Puedes revisar cuando ahorraste",
+          "correcta": "Caja"
+        }
+      ],
+      "reflexiona": {
+        "titulo": "REFLEXIONA",
+        "preguntas": [
+          "¿Dónde hay más riesgos?",
+          "¿Dónde tu dinero puede crecer?",
+          "¿Cuál decisión es más inteligente?"
+        ],
+        "placeholder": "Escribe tu respuesta..."
+      },
+      "conclusion": {
+        "titulo": "CONCLUSIÓN",
+        "parrafos": [
+          [
+            {
+              "texto": "En casa mi dinero puede correr riesgos."
+            }
+          ],
+          [
+            {
+              "texto": "En la "
+            },
+            {
+              "texto": "Caja",
+              "negrita": true
+            },
+            {
+              "texto": " mi dinero está "
+            },
+            {
+              "texto": "protegido",
+              "negrita": true
+            },
+            {
+              "texto": ", registrado y puede crecer."
+            }
+          ],
+          [
+            {
+              "texto": "Ser inteligente no es esconder el dinero.",
+              "cursiva": true
+            }
+          ],
+          [
+            {
+              "texto": "Es saber dónde está más ",
+              "cursiva": true
+            },
+            {
+              "texto": "seguro.",
+              "cursiva": true,
+              "negrita": true
+            }
+          ]
+        ]
+      },
+      "resultado": {
+        "exito": "🎉 ¡Excelente! Todas las respuestas son correctas.",
+        "error": "❌ Algunas respuestas no son correctas. Intenta nuevamente."
+      },
+      "recursos": {
+        "fondo": "/images/9-12/Fondo9-12.png",
+        "flecha": "/images/9-12/23.png"
+      }
+    },
+    {
+      "id": 6,
+      "titulo": {
+        "partes": [
+          {
+            "texto": "EL ",
+            "color": "text-white"
+          },
+          {
+            "texto": "RETO ",
+            "color": "text-yellow-300"
+          },
+          {
+            "texto": "INTELIGENTE ",
+            "color": "text-sky-300"
+          },
+          {
+            "texto": "DE MATEO",
+            "color": "text-white"
+          }
+        ]
+      },
+      "botones": {
+        "inicio": "🏠 Inicio",
+        "siguiente": "Siguiente →",
+        "regresar": "← Regresar",
+        "continuar": "Continuar",
+        "tocaParaDescubrir": "Toca para descubrir"
+      },
+      "escenas": [
+        {
+          "parrafos": [
+            {
+              "texto": "Mateo tenía 11 años y siempre recibía dinero los domingos. A veces lo gastaba en lo primero que veía. Un día, en la escuela hablaron sobre metas.",
+              "tipo": "normal"
+            },
+            {
+              "texto": "—Quiero una bicicleta nueva… pero cuesta mucho.",
+              "tipo": "cita"
+            },
+            {
+              "texto": "Esa tarde, platicó con su mamá y decidió hacer algo diferente. Su mamá le explicó que podía llevar su dinero a Caja Cerano, donde estaría protegido y además podría crecer.",
+              "tipo": "normal"
+            },
+            {
+              "texto": "Cada domingo guardaba una parte y la llevaba a la Caja.",
+              "tipo": "normal"
+            }
+          ],
+          "listaTitulo": "Poco a poco aprendió que:",
+          "lista": [
+            "Su dinero estaba seguro",
+            "Tenía un registro claro de cuánto llevaba",
+            "Su ahorro generaba pequeños rendimientos",
+            "Podía participar en promociones"
+          ],
+          "notaFinal": {
+            "pre": "Un asesor le explicó que si mantenía su ahorro constante y lograba calificaciones de ",
+            "resaltado": "8.5 o más",
+            "post": ", podría participar en el programa de becas."
+          },
+          "imagen": "ninoDiploma"
+        },
+        {
+          "parrafos": [
+            {
+              "texto": "Mateo empezó a organizar mejor su tiempo. Estudiaba más, evitaba gastar por impulso y veía crecer su ahorro.",
+              "tipo": "normal"
+            },
+            {
+              "texto": "Pasaron los meses. No solo estaba más cerca de su bicicleta… también participó en la convocatoria de becas gracias a su esfuerzo.",
+              "tipo": "normal"
+            },
+            {
+              "texto": "El día que recibió la noticia de que había sido seleccionado, entendió que las decisiones inteligentes no solo ayudan a ahorrar dinero.",
+              "tipo": "normal"
+            },
+            {
+              "texto": "Ayudan a construir oportunidades.",
+              "tipo": "destacado"
+            }
+          ],
+          "fraseFinal": {
+            "partes": [
+              {
+                "texto": "¡MATEO PUDO, ",
+                "color": "text-alianza-azul"
+              },
+              {
+                "texto": "TÚ TAMBIÉN ALIANZITO!",
+                "color": "text-yellow-500"
+              }
+            ]
+          },
+          "imagen": "ninoBici"
+        }
+      ],
+      "recursos": {
+        "fondo": "/images/9-12/Fondo9-12.png",
+        "ninoDiploma": "/images/9-12/40.png",
+        "ninoBici": "/images/9-12/41.png",
+        "globo": "/images/9-12/22.png",
+        "caja": "/images/9-12/11.png"
+      }
+    },
+    {
+      "id": 7,
+      "titulo": "Del cochinito a la Caja",
+      "botones": {
+        "regresar": "← Regresar",
+        "inicio": "🏠 Inicio",
+        "terminar": "¡Terminé!",
+        "completaTodo": "Completa todo",
+        "cargando": "Cargando..."
+      },
+      "recursos": {
+        "fondo": "/images/9-12/Fondo9-12.png",
+        "imgCaja": "/images/9-12/6.png"
+      },
+      "plan": {
+        "titulo": "Plan de ahorro",
+        "tarea": "Tarea: ahorra semanas seguidas, si lo logras, obtienes tu sello de ahorro en tu sucursal de Alianza",
+        "imagen": "/images/9-12/43.png",
+        "etiquetas": {
+          "semana": "Si ahorro cada semana:",
+          "mes": "Al mes tendré:",
+          "meses9": "En 9 meses:"
+        }
+      },
+      "actividadFinal": {
+        "titulo": "Mi dibujo del ahorro",
+        "texto": "Dibuja cómo te sentiste al ahorrar",
+        "boton": "Ir a mi pasaporte"
+      },
+      "sync": {
+        "guardando": "Guardando...",
+        "guardado": "Guardado ✓",
+        "error": "No se pudo guardar, seguimos intentando"
+      }
+    }
+  ]
+}

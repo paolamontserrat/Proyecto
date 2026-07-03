@@ -41,7 +41,7 @@ function Login() {
   return (
     <div className="min-h-screen flex flex-col">
 
-      {/* 🔵 CONTENIDO */}
+      {/* CONTENIDO */}
       <div
         className="flex-1 flex items-center justify-center bg-cover bg-center px-4 py-10"
         style={{ backgroundImage: "url('/images/LoginFondo.png')" }}
@@ -116,10 +116,10 @@ function Login() {
           <p className="text-xs text-center text-black mt-6">
             De 6-8   Usuario: prueba6-8  o  prueba2 Contraseña: 1234
           </p>
-          {/* <p className="text-xs text-center text-black mt-6">
+          <p className="text-xs text-center text-black mt-6">
             De 9-12 Usuario:prueba9-12 o prueba3  Contraseña:1234
           </p>
-          <p className="text-xs text-center text-black mt-6">
+          {/*<p className="text-xs text-center text-black mt-6">
             De 13-15 Usuario:prueba13-15 o prueba4 Contraseña:1234
           </p>
           <p className="text-xs text-center text-black mt-6">

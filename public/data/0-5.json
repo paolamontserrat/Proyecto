@@ -6,9 +6,6 @@
   "portada": "/images/0-5/Inicio0-5.png",
   "imgAhorro": "/images/0-5/6.png",
   "imgJuegos": "/images/0-5/16.png",
-  "config": {
-    "fondoActividades": "/images/0-5/Fondo20-5.png"
-  },
   "paginas": [
     {
       "id": 1,
