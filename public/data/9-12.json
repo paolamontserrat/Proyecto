@@ -495,6 +495,226 @@
         "guardado": "Guardado ✓",
         "error": "No se pudo guardar, seguimos intentando"
       }
+    },
+    {
+      "id": 8,
+      "titulo": "¿QUÉ ES EL GASTO HORMIGA?",
+      "botones": {
+        "regresar": "← Regresar",
+        "inicio": "🏠 Inicio",
+        "validar": "Validar",
+        "reiniciar": "Reiniciar",
+        "continuar": "Continuar",
+        "cargando": "Cargando..."
+      },
+      "informacion": {
+        "titulo": "¿QUÉ ES EL GASTO HORMIGA?",
+        "descripcion1": "El gasto hormiga es cuando compras cositas pequeñas todos los días y parece que no cuestan mucho… pero si las juntas, ¡sí es bastante dinero!",
+        "descripcion2": "Se llama así porque es como las hormiguitas: una sola no pesa casi nada, pero muchas juntas pueden cargar cosas muy grandes.",
+        "descripcion3": "Imagina que todos los días compras:",
+        "mensaje": "¡Eso ya alcanza para ropa nueva, zapatos o guardarlo para algo importante!",
+        "descripcion4": "No está mal comprar cosas que te gustan, pero si gastas poquito todos los días sin darte cuenta, después puede faltarte dinero para algo más grande que sí quieres de verdad.",
+        "descripcion5": "Si ahorras $20 diarios en lugar de gastarlos, en un mes tendrás $600. Así pronto podrás lograr tu meta."
+      },
+      "actividad": {
+        "titulo": "LA MISIÓN DEL GUARDIÁN DEL AHORRO",
+        "subtitulo": "Dinámica Familiar",
+        "descripcion": "En una pequeña reunión familiar pregúntense:",
+        "preguntas": [
+          "¿En qué gastamos poquito todos los días?",
+          "¿Compramos refrescos seguido?",
+          "¿Pedimos comida sin planear?",
+          "¿Dejamos luces prendidas?",
+          "¿Desperdiciamos agua?"
+        ],
+        "placeholder": "Escribe tu respuesta aquí...",
+        "fraseFinal": "Anótenlos en una hoja que diga:",
+        "tituloHoja": "“Gastos Hormiga de Nuestra Casa”"
+      },
+      "resultado": {
+        "exito": "🎉 ¡Excelente! Ya identificaste algunos gastos hormiga de tu hogar.",
+        "error": "❌ Aún faltan respuestas. Completa todos los espacios."
+      },
+      "recursos": {
+        "fondo": "/images/9-12/Fondo.png",
+        "hormigas": "/images/9-12/46.png",
+        "pizarron": "/images/9-12/24.png"
+      }
+    },
+    {
+      "id": 9,
+      "titulo": "¡NUESTRA META FAMILIAR!",
+      "botones": {
+        "regresar": "← Regresar",
+        "inicio": "🏠 Inicio",
+        "continuar": "Continuar",
+        "cargando": "Cargando..."
+      },
+      "informacion": {
+        "titulo": "¡Convirtámonos en Guardianes del Ahorro!",
+        "descripcion1": "Elijan en familia a un Guardián del Ahorro. Su misión será ayudar a recordar los acuerdos, motivar a todos y celebrar cada logro para alcanzar una meta juntos.",
+        "descripcion2": "Los acuerdos ayudan a evitar pequeños gastos y a formar buenos hábitos de ahorro. Cuando toda la familia participa, ahorrar es más fácil y divertido.",
+        "tituloEjemplos": "Ejemplos de acuerdos familiares",
+        "ejemplos": [
+          "Tomar agua natural en vez de refresco entre semana.",
+          "Llevar termo en vez de comprar bebidas.",
+          "Apagar las luces que no se utilicen.",
+          "Cerrar la llave mientras se cepillan los dientes.",
+          "Pensar 24 horas antes de comprar algo que no sea necesario."
+        ],
+        "tituloMeta": "Nuestra Caja \"Meta Familiar\"",
+        "descripcion3": "Consigan un frasco o una caja transparente y pónganle el nombre \"Meta Familiar\". Ahí depositarán el dinero que ahorren al cumplir sus acuerdos.",
+        "ejemploTitulo": "Ejemplo",
+        "ejemplo": "Si dejaron de comprar refrescos durante 3 días y ahorraron $20 por día, colocarán $60 en la caja.",
+        "tituloGuardian": "Funciones del Guardián del Ahorro",
+        "funciones": [
+          "Recordar amablemente apagar las luces.",
+          "Contar el dinero ahorrado cada domingo.",
+          "Llevar una lista del progreso.",
+          "Motivar diciendo: ¡Vamos muy bien!"
+        ],
+        "mensaje": "Importante: El Guardián del Ahorro no regaña, solo ayuda a recordar los acuerdos."
+      },
+      "actividad": {
+        "titulo": "ACUERDOS DE MI FAMILIA",
+        "descripcion": "Ahora es momento de crear sus propios acuerdos familiares. Escriban entre todos los compromisos que cumplirán para ahorrar dinero y cuidar los recursos de su hogar.",
+        "instruccion": "Escriban al menos cinco acuerdos y al finalizar todos los participantes firmen como muestra de su compromiso.",
+        "acuerdos": [
+          "Acuerdo 1",
+          "Acuerdo 2",
+          "Acuerdo 3",
+          "Acuerdo 4",
+          "Acuerdo 5"
+        ],
+        "placeholder": "Escribe un acuerdo..."
+      },
+      "firma": {
+        "titulo": "Firmas de los participantes",
+        "descripcion": "Todos los integrantes que participaron pueden firmar este compromiso familiar."
+      },
+      "resultado": {
+        "exito": "🎉 ¡Excelente! Su familia ya tiene un plan para ahorrar juntos.",
+        "error": "❌ Escriban todos los acuerdos y agreguen la firma para continuar."
+      },
+      "recursos": {
+        "fondo": "/images/9-12/Fondo9-12.png",
+        "frasco": "/images/9-12/25.png"
+      }
+    },
+    {
+      "id": 10,
+      "titulo": "REGISTRO SEMANAL DE BUENAS ACCIONES",
+      "botones": {
+        "regresar": "← Regresar",
+        "inicio": "🏠 Inicio",
+        "continuar": "Continuar",
+        "cargando": "Cargando..."
+      },
+      "informacion": {
+        "titulo": "¡Cada pequeño esfuerzo cuenta!",
+        "descripcion1": "Durante esta semana escribe qué gasto evitaron en casa y cuánto dinero lograron ahorrar gracias a esa buena decisión.",
+        "descripcion2": "Al finalizar la semana suma todo el dinero ahorrado. Verás cómo los pequeños cambios pueden ayudar a cumplir una meta familiar.",
+        "mensaje": "¡Cada peso que no se gasta sin necesidad es un paso más hacia una meta importante!"
+      },
+      "registro": {
+        "titulo": "Registro de la Semana",
+        "descripcion": "Completa cada día con la acción que realizaron y cuánto dinero ahorraron.",
+        "columnas": {
+          "dia": "Día",
+          "accion": "¿Qué evitamos gastar?",
+          "ahorro": "¿Cuánto ahorramos?"
+        },
+        "dias": [
+          "Lunes",
+          "Martes",
+          "Miércoles",
+          "Jueves",
+          "Viernes",
+          "Sábado",
+          "Domingo"
+        ],
+        "placeholderAccion": "Ejemplo: No compramos refresco",
+        "placeholderAhorro": "$"
+      },
+      "total": {
+        "titulo": "Total Ahorrado de la Semana",
+        "placeholder": "$",
+        "mensaje": "Cada semana el Guardián del Ahorro reúne a la familia para compartir los avances de la meta."
+      },
+      "reconocimiento": {
+        "titulo": "Reconocimiento al Guardián",
+        "descripcion": "Esta semana el Guardián ayudó a:",
+        "lista": [
+          "Apagar luces que no se usan.",
+          "Cuidar el agua.",
+          "Evitar compras innecesarias.",
+          "Recordar las reglas con respeto.",
+          "Motivar a toda la familia."
+        ],
+        "mensaje": "👏 ¡Aplauso familiar del domingo!"
+      },
+      "firma": {
+        "titulo": "Firma del Guardián del Ahorro",
+        "descripcion": "Firma para confirmar que el registro semanal fue completado."
+      },
+      "resultado": {
+        "error": "Completa todos los días, el total y la firma para continuar.",
+        "exito": "🎉 ¡Excelente! Terminaste el registro semanal."
+      },
+      "recursos": {
+        "fondo": "/images/9-12/Fondo.png",
+        "aplausos": "/images/9-12/47.png"
+      }
+    },
+    {
+      "id": 11,
+      "titulo": "Encuentra las diferencias",
+      "fondo": "/images/9-12/Fondo9-12.png",
+      "actividad": {
+        "titulo": "¡Encuentra las 5 diferencias!",
+        "imagenA": "/images/9-12/49.png",
+        "imagenB": "/images/9-12/3.png",
+        "totalDiferencias": 5,
+        "diferencias": [
+          {
+            "x": 154,
+            "y": 33,
+            "radio": 30
+          },
+          {
+            "x": 137,
+            "y": 63,
+            "radio": 30
+          },
+          {
+            "x": 150,
+            "y": 118,
+            "radio": 30
+          },
+          {
+            "x": 164,
+            "y": 206,
+            "radio": 30
+          },
+          {
+            "x": 110,
+            "y": 276,
+            "radio": 30
+          }
+        ]
+      },
+      "despedida": {
+        "titulo": "¡Lo lograste!",
+        "mensaje": [
+          "Este pasaporte es la prueba de tu gran aventura",
+          "y de todo lo que has aprendido.",
+          "",
+          "¡SIGUE APRENDIENDO, SOÑANDO Y AHORRANDO",
+          "porque el mundo está lleno de nuevas metas",
+          "por alcanzar!"
+        ],
+        "imagen1": "/images/9-12/33.png"
+      }
     }
   ]
 }

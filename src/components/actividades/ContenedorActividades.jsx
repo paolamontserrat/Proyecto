@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import actividades05 from '../../features/0-5/actividades/actividades';
 import actividades68 from '../../features/6-8/actividades/actividades';
 import actividades912 from '../../features/9-12/actividades/actividades';
-import actividades1315 from '../../features/13-15/actividades/actividades';
 
 import Footer from '../Footer';
 import CapturarCoordenadas from './CapturarCoordenadas';
@@ -34,7 +33,6 @@ const ContenedorActividades = () => {
     "0-5": actividades05,
     "6-8": actividades68,
     "9-12": actividades912,
-    "13-15": actividades1315
   };
 
   const actividades = actividadesPorRango[rango] || [];
@@ -221,7 +219,7 @@ const ContenedorActividades = () => {
     );
   }
 
-  const DEBUG_COORDENADAS = false;
+  const DEBUG_COORDENADAS = false; // Cambiar a true para capturar coordenadas
 
   return (
     <div

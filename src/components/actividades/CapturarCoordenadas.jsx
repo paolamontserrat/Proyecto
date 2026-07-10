@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const CapturarCoordenadas = ({ imagen, total = 5 }) => {
+const CapturarCoordenadas = ({ imagen = `/images/9-12/3.png`, total = 5 }) => {
 
   const [puntos, setPuntos] = useState([]);
 
@@ -29,7 +29,7 @@ const CapturarCoordenadas = ({ imagen, total = 5 }) => {
 
       <div className="relative">
         <img
-          src={imagen}
+          src={imagen = `/images/9-12/3.png`}
           onClick={handleClick}
           className="w-[300px] cursor-crosshair"
         />
