@@ -119,16 +119,16 @@ function Login() {
           <p className="text-xs text-center text-black mt-6">
             De 9-12 Usuario:prueba9-12 o prueba3  Contraseña:1234
           </p>
-          {/*<p className="text-xs text-center text-black mt-6">
+          <p className="text-xs text-center text-black mt-6">
             De 13-15 Usuario:prueba13-15 o prueba4 Contraseña:1234
           </p>
-          <p className="text-xs text-center text-black mt-6">
+          {/*<p className="text-xs text-center text-black mt-6">
             De 16-17 Usuario:prueba16-17 o prueba5 Contraseña:1234
           </p>*/}
         </div>
       </div>
 
-      {/* 🔻 FOOTER SIEMPRE ABAJO */}
+      {/*FOOTER SIEMPRE ABAJO */}
       <Footer />
     </div>
   );

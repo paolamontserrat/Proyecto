@@ -1,0 +1,135 @@
+{
+    "rangoEdad": "13-15",
+    "titulo": "Mi aventura del ahorro",
+    "fondoPasaporte": "/images/13-15/Fondo13-15.png",
+    "institucion": "ALIANZA CAJA POPULAR CERANO",
+    "portada": "/images/13-15/Inicio.png",
+    "imgAhorro": "/images/0-5/6.png",
+    "imgJuegos": "/images/0-5/16.png",
+    "paginas": [
+        {
+        "id": 1,
+        "tipo": "bienvenida",
+        "titulo": "¡Bienvenido al pasaporte del Ahorrador Joven!",
+        "intro": "Aquí no solo vas a aprender a guardar dinero, vas a aprender a tomar decisiones inteligentes que te acerquen a lo que realmente quieres lograr.",
+        "secciones": [
+            {
+            "subtitulo": "PROGRAMA CRECIENDO JUNTOS",
+            "texto": "Te invitamos a participar en nuestro programa Creciendo Juntos. Consiste en lograr retos trimestrales de ahorro constante, donde obtienes premios y participas en sorteos.",
+            "icono": "⭐"
+            },
+            {
+            "subtitulo": "TUS CUENTAS",
+            "texto": "La cuenta Club Alianzito será para poder hacer retiros y la cuenta Creciendo Juntos será para largo plazo.",
+            "icono": "💰"
+            }
+        ],
+        "beneficios": [
+            "Participas en sesiones de educación financiera y cooperativa.",
+            "Acceso a cursos para desarrollar habilidades según tu edad.",
+            "Puedes recibir incentivos de apoyo escolar (si no eres beneficiario de Impulso a la Educación).",
+            "Tus papás pueden obtener un esquema de crédito atractivo."
+        ]
+        }
+    ],
+    "pasos": [
+        {
+        "id": 1,
+        "tipo": "informacion",
+        "titulo": "¿POR QUÉ ES IMPORTANTE TENER UN PRESUPUESTO A TU EDAD?",
+        "fondo": "/images/13-15/Fondo213-15.png",
+        "pasos": [
+            {
+            "id": 1,
+            "contenido": {
+                "tituloSecundario": "Empiezas a tomar decisiones reales",
+                "descripcion": "Aunque no pagues renta, sí manejas dinero.",
+                "subtitulo": "Fuentes de dinero:",
+                "puntos": [
+                "Lo que te dan tus papás.",
+                "Domingos.",
+                "Regalos.",
+                "Trabajitos pequeños.",
+                "Apoyos de tus papás."
+                ],
+                "mensajeFinal": "Cada peso que recibes ya implica una decisión: ¿Me lo gasto hoy o lo uso para algo más grande?"
+            }
+            },
+            {
+            "id": 2,
+            "imagen": "/images/13-15/19.png",
+            "contenido": {
+                "tituloSecundario": "Evitas que el dinero desaparezca",
+                "descripcion": "Los pequeños gastos suman más de lo que imaginas.",
+                "subtitulo": "Ejemplos:",
+                "puntos": [
+                "Snacks.",
+                "Golosinas.",
+                "Apps.",
+                "Salidas.",
+                "Cosas por moda."
+                ],
+                "mensajeFinal": "El presupuesto te muestra en qué lo estás usando, te ayuda a detectar gastos innecesarios y te enseña a priorizar."
+                }
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "tipo": "informacion",
+            "titulo": "¿POR QUÉ ES IMPORTANTE TENER UN PRESUPUESTO A TU EDAD?",
+            "fondo": "/images/13-15/Fondo213-15.png",
+            "pasos": [
+                {
+                "id": 1,
+                "imagen": "/images/13-15/20.png",
+                "contenido": {
+                    "tituloSecundario": "Te acerca a tus metas",
+                    "descripcion": "Ahorrar con un presupuesto te ayuda a conseguir cosas importantes.",
+                    "subtitulo": "Metas que puedes alcanzar:",
+                    "puntos": [
+                    "Un celular.",
+                    "Consola.",
+                    "Bici.",
+                    "Tablet.",
+                    "Laptop."
+                    ],
+                    "mensajeFinal": "Sin presupuesto compras lo pequeño. Con presupuesto alcanzas lo grande."
+                }
+                },
+                {
+                    "id": 2,
+                    "tipo": "informacion",
+                    "titulo": "¿POR QUÉ ES IMPORTANTE TENER UN PRESUPUESTO A TU EDAD?",
+                    "fondo": "/images/13-15/Fondo213-15.png",
+                    "contenido": {
+                        "tituloSecundario": "Te hace diferente",
+                        "descripcion": "La mayoría gasta lo que tiene, pocos planifican.",
+                        "subtitulo": "Saber hacer un presupuesto significa:",
+                        "puntos": [
+                        "Más control.",
+                        "Más libertad.",
+                        "Más tranquilidad."
+                        ]
+                    }
+                },
+                {
+                    "id": 3,
+                    "tipo": "informacion",
+                    "titulo": "¿POR QUÉ ES IMPORTANTE TENER UN PRESUPUESTO A TU EDAD?",
+                    "fondo": "/images/13-15/Fondo213-15.png",
+                    "contenido": {
+                        "tituloSecundario": "Estás entrenando tu futuro",
+                        "descripcion": "Hoy manejas $500 o $1,000 al mes, mañana manejarás tu sueldo.",
+                        "subtitulo": "Aprendizaje:",
+                        "puntos": [
+                        "Quien aprende a organizar poco dinero sabrá administrar mucho.",
+                        "Un presupuesto no limita tu dinero.",
+                        "Lo dirige hacia lo que realmente quieres."
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
