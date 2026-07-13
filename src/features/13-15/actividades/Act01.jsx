@@ -92,7 +92,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
             return (
                 <div
                 key={paso.id}
-                className="mb-12 border-b pb-10 last:border-none last:pb-0 last:mb-4"
+                className="mb-8 last:mb-4"
                 >
                 {/* Encabezado del Sub-paso */}
                 <div className="flex items-center gap-4 mb-6">
