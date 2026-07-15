@@ -8,6 +8,8 @@ import RecuperarPassword from "./pages/RecuperarPassword";
 import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
+import AdminUsuarios from './pages/admin/AdminUsuarios';
+
 
 function App() {
   return (
@@ -23,8 +25,10 @@ function App() {
               <AdminLayout />
             </AdminProtectedRoute>
           }
+          
         >
           <Route index element={<AdminDashboard />} />
+          <Route path="usuarios" element={<AdminUsuarios />} />
         </Route>
 
         {/* 🔐 protegidas */}
