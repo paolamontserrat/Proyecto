@@ -62,6 +62,15 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
 
     return (
         <LayoutActividad fondo={data?.fondo}>
+            <style>{`
+                @keyframes float {
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-10px); }
+                }
+                .animate-float {
+                    animation: float 3s ease-in-out infinite;
+                }
+            `}</style>
         
         {/* Barra de navegación superior */}
         <div className="flex justify-between mb-6">
@@ -71,7 +80,6 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
             >
             ← Regresar
             </button>
-
             <button
             onClick={() => navigate(`/dashboard/${rango}`)}
             className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg"
@@ -81,89 +89,103 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
         </div>
 
         {/* Tarjeta de Contenido Principal */}
-        <div
-            className="bg-white p-5 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl"
-            translate="no"
-        >
-            {/* Título Principal del paso actual */}
-            <h1
-            className="text-center font-extrabold text-blue-900 mb-10"
-            style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)" }}
+            <div
+                className="bg-white p-5 md:p-10 rounded-3xl border-4 border-alianza-amarillo shadow-2xl"
+                translate="no"
             >
-            {data?.titulo}
-            </h1>
-
-            {/* Iteramos los sub-pasos agrupados en esta pantalla */}
-            {pasos.map((paso) => {
-            const contenido = paso.contenido || {};
-            return (
-                <div
-                key={paso.id+2}
-                className="mb-8 last:mb-4"
+                {/* Titulo Principal */}
+                <h1
+                    className="text-center font-extrabold text-blue-900 mb-12 uppercase tracking-wide"
+                    style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)" }}
                 >
-                {/* Encabezado del Sub-paso */}
-                <div className="flex items-center gap-4 mb-6">
-                    <div className="w-12 h-12 flex-shrink-0 rounded-full bg-yellow-400 flex items-center justify-center font-black text-2xl text-blue-900">
-                    {paso.id+2}
-                    </div>
-                    <h2 className="text-2xl md:text-3xl font-bold text-blue-900">
-                    {contenido.tituloSecundario}
-                    </h2>
-                </div>
+                    {data?.titulo}
+                </h1>
 
-                {/* Descripción */}
-                <p className="text-xl text-gray-800 mb-6">
-                    {contenido.descripcion}
-                </p>
+                {pasos.map((paso) => {
+                    const contenido = paso.contenido || {};
+                    const tieneImagen = !!paso.imagen;
+                    const alternarColumnas = paso.id % 2 === 0;
 
-                {/* Bloque Destacado Azul */}
-                <div className="bg-sky-600 text-white rounded-3xl p-6 md:p-8 mb-6">
-                    <h3 className="text-2xl font-bold italic mb-4">
-                    {contenido.subtitulo}
-                    </h3>
+                    return (
+                        <div
+                            key={paso.id}
+                            className="mb-16 last:mb-6 pb-6 last:pb-0"
+                        >
+                            <div className={`grid grid-cols-1 ${tieneImagen ? "lg:grid-cols-12" : "grid-cols-1"} gap-8 items-center`}>
+                                
+                                {/* Columna de Información */}
+                                <div className={`space-y-6 ${tieneImagen ? "lg:col-span-7" : ""} ${tieneImagen && alternarColumnas ? "lg:order-2" : ""}`}>
+                                    
+                                    {/* Encabezado con Número Gigante */}
+                                    <div className="flex items-center gap-4 mb-4">
+                                        <span className="text-5xl md:text-7xl font-black text-sky-500 select-none leading-none">
+                                            {paso.id}
+                                        </span>
+                                        <h2 className="text-2xl md:text-3xl font-extrabold text-blue-900 leading-tight">
+                                            {contenido.tituloSecundario}
+                                        </h2>
+                                    </div>
 
-                    <div className="space-y-3">
-                    {contenido.puntos?.map((punto, index) => (
-                        <div key={index} className="flex items-start">
-                        <span className="text-yellow-300 text-2xl mr-3 select-none">
-                            ✔
-                        </span>
-                        <p className="text-xl">{punto}</p>
+                                    {/* Descripción */}
+                                    <p className="text-xl text-gray-700 font-medium leading-relaxed">
+                                        {contenido.descripcion}
+                                    </p>
+
+                                    {/* Bloque Destacado de Ejemplos */}
+                                    {contenido.subtitulo && (
+                                        <div className="bg-sky-50 border-2 border-sky-100 text-blue-950 rounded-3xl p-6 md:p-8 shadow-inner">
+                                            <h3 className="text-xl font-bold text-sky-700 uppercase tracking-wider mb-4 flex items-center gap-2">
+                                                <span>🪙</span> {contenido.subtitulo}
+                                            </h3>
+
+                                            <div className="space-y-3">
+                                                {contenido.puntos?.map((punto, index) => (
+                                                    <div key={index} className="flex items-start bg-white/60 p-3 rounded-xl border border-sky-100/50">
+                                                        <span className="text-yellow-500 text-2xl mr-3 select-none">
+                                                            ⭐
+                                                        </span>
+                                                        <p className="text-lg md:text-xl font-semibold text-gray-800">{punto}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                {/* Columna de la Imagen Animada */}
+                                {tieneImagen && (
+                                    <div className={`w-full flex justify-center items-center lg:col-span-5 ${alternarColumnas ? "lg:order-1" : ""}`}>
+                                        <div className="relative p-2">
+                                            {/* Sombra de fondo abstracta */}
+                                            <div className="absolute inset-0 bg-yellow-200 rounded-full blur-3xl opacity-30 transform -translate-y-4"></div>
+                                            <img
+                                                src={paso.imagen}
+                                                alt={contenido.tituloSecundario || "Ilustración del paso"}
+                                                className="w-64 md:w-80 object-contain animate-float filter drop-shadow-lg relative z-10" // Cambiado a animate-float
+                                            />
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Mensaje final */}
+                            {contenido.mensajeFinal && (
+                                <div className="bg-amber-50 border-l-8 border-yellow-400 rounded-2xl p-6 text-xl font-bold text-blue-900 mt-8 shadow-sm">
+                                    {contenido.mensajeFinal.split('\n').map((linea, index) => (
+                                        <p key={index} className="mb-2 last:mb-0">{linea}</p>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                    ))}
-                    </div>
-                </div>
-
-                {/* Imagen si existe */}
-                {paso.imagen && (
-                    <div className="w-full flex justify-center mb-6">
-                    <img
-                        src={paso.imagen}
-                        alt={contenido.tituloSecundario || "Ilustración"}
-                        className="w-64 md:w-80 object-contain"
-                    />
-                    </div>
-                )}
-
-                {/* Mensaje Final */}
-                {contenido.mensajeFinal && (
-                    <div className="bg-yellow-100 border-l-8 border-yellow-400 rounded-xl p-5 text-xl font-semibold text-blue-900">
-                    {contenido.mensajeFinal}
-                    </div>
-                )}
-                </div>
-            );
-            })}
-
-            {/* Botón de continuar al siguiente paso del contenedor */}
-            <button
-            onClick={handleContinue}
-            className="w-full mt-4 py-4 rounded-full font-black text-xl bg-alianza-amarillo text-alianza-azul hover:scale-102 active:scale-98 shadow-md transition-all"
-            >
-            Continuar
-            </button>
-
-        </div>
+                    );
+                })}
+                {/* Boton de Continuar */}
+                <button
+                    onClick={handleContinue}
+                    className="w-full mt-6 py-4 rounded-full font-black text-xl bg-alianza-amarillo text-alianza-azul hover:scale-102 active:scale-98 shadow-lg transition-all duration-200"
+                >
+                    Comenzar actividad
+                </button>
+            </div>
         </LayoutActividad>
     );
 };

@@ -71,16 +71,9 @@
                 ],
                 "mensajeFinal": "El presupuesto te muestra en qué lo estás usando, te ayuda a detectar gastos innecesarios y te enseña a priorizar."
                 }
-                }
-            ]
-        },
-        {
-            "id": 2,
-            "tipo": "informacion",
-            "fondo": "/images/13-15/Fondo213-15.png",
-            "pasos": [
-                {
-                "id": 1,
+            },
+            {
+                "id": 3,
                 "imagen": "/images/13-15/20.png",
                 "contenido": {
                     "tituloSecundario": "Te acerca a tus metas",
@@ -95,40 +88,184 @@
                     ],
                     "mensajeFinal": "Sin presupuesto compras lo pequeño. Con presupuesto alcanzas lo grande."
                 }
-                },
-                {
-                    "id": 2,
-                    "tipo": "informacion",
-                    "titulo": "¿POR QUÉ ES IMPORTANTE TENER UN PRESUPUESTO A TU EDAD?",
-                    "fondo": "/images/13-15/Fondo213-15.png",
-                    "contenido": {
-                        "tituloSecundario": "Te hace diferente",
-                        "descripcion": "La mayoría gasta lo que tiene, pocos planifican.",
-                        "subtitulo": "Saber hacer un presupuesto significa:",
-                        "puntos": [
-                        "Más control.",
-                        "Más libertad.",
-                        "Más tranquilidad."
-                        ]
-                    }
-                },
-                {
-                    "id": 3,
-                    "tipo": "informacion",
-                    "titulo": "¿POR QUÉ ES IMPORTANTE TENER UN PRESUPUESTO A TU EDAD?",
-                    "fondo": "/images/13-15/Fondo213-15.png",
-                    "contenido": {
-                        "tituloSecundario": "Estás entrenando tu futuro",
-                        "descripcion": "Hoy manejas $500 o $1,000 al mes, mañana manejarás tu sueldo.",
-                        "subtitulo": "Aprendizaje:",
-                        "puntos": [
-                        "Quien aprende a organizar poco dinero sabrá administrar mucho.",
-                        "Un presupuesto no limita tu dinero.",
-                        "Lo dirige hacia lo que realmente quieres."
-                        ]
-                    }
+            },
+            {
+                "id": 4,
+                "tipo": "informacion",
+                "titulo": "¿POR QUÉ ES IMPORTANTE TENER UN PRESUPUESTO A TU EDAD?",
+                "fondo": "/images/13-15/Fondo213-15.png",
+                "contenido": {
+                    "tituloSecundario": "Te hace diferente",
+                    "descripcion": "La mayoría gasta lo que tiene, pocos planifican.",
+                    "subtitulo": "Saber hacer un presupuesto significa:",
+                    "puntos": [
+                    "Más control.",
+                    "Más libertad.",
+                    "Más tranquilidad."
+                    ]
                 }
+            },
+            {
+                "id": 5,
+                "tipo": "informacion",
+                "titulo": "¿POR QUÉ ES IMPORTANTE TENER UN PRESUPUESTO A TU EDAD?",
+                "fondo": "/images/13-15/Fondo213-15.png",
+                "contenido": {
+                    "tituloSecundario": "Estás entrenando tu futuro",
+                    "descripcion": "Hoy manejas $500 o $1,000 al mes, mañana manejarás tu sueldo.",
+                    "subtitulo": "Aprendizaje:",
+                    "puntos": [
+                    "Quien aprende a organizar poco dinero sabrá administrar mucho.",
+                    "Un presupuesto no limita tu dinero.",
+                    "Lo dirige hacia lo que realmente quieres."
+                    ]
+                }
+            }
             ]
+        },
+        {
+        "id": 2,
+        "tipo": "informacion",
+        "titulo": "¿CÓMO ELABORAR MI PRIMER PRESUPUESTO?",
+        "fondo": "/images/13-15/Fondo413-15.png",
+        "pasos": [
+            {
+            "id": 1,
+            "imagen": "/images/13-15/7.png",
+            "contenido": {
+                "tituloSecundario": "Calcula cuánto dinero recibes al mes",
+                "descripcion": "Identifica todos tus ingresos (lo que te dan tus papás, domingos, apoyos, regalos en efectivo, trabajos pequeños).",
+                "subtitulo": "Ejemplo práctico:",
+                "puntos": [
+                "Domingos: $100 x 4 semanas = $400",
+                "Ayuda en casa: $200"
+                ],
+                "mensajeFinal": "Total mensual recibido: $600"
+            }
+            },
+            {
+            "id": 2,
+            "imagen": "/images/13-15/21.png",
+            "contenido": {
+                "tituloSecundario": "Anota en qué gastas tu dinero",
+                "descripcion": "Registra todo lo que sale de tu bolsillo (Snacks, salidas, transporte, compras, Apps, videojuegos, etc.).",
+                "subtitulo": "Ejemplo práctico:",
+                "puntos": [
+                "Snacks: $200",
+                "Salidas: $150",
+                "Apps/juegos: $100"
+                ],
+                "mensajeFinal": "Total gastos: $450\n\nAhora pregúntate: ¿Realmente todo eso era necesario?"
+            }
+            },
+            {
+            "id": 3,
+            "contenido": {
+                "tituloSecundario": "Decide cuánto vas a ahorrar",
+                "descripcion": "Regla básica recomendada: Ahorra mínimo el 30% si puedes (entre más, ¡mejor!).",
+                "subtitulo": "Analizando el ejemplo:",
+                "puntos": [
+                "Con un ingreso de $600, el 30% sería $180.",
+                "Pero si decides esforzarte y ahorrar $250, ¡mucho mejor!"
+                ]
+            }
+            },
+            {
+            "id": 4,
+            "imagen": "/images/13-15/2.png",
+            "contenido": {
+                "tituloSecundario": "Organiza tu dinero en 3 partes",
+                "descripcion": "Utiliza una fórmula sencilla para dividir tus ingresos de forma inteligente.",
+                "subtitulo": "La Fórmula de Distribución (Ejemplo con $600):",
+                "puntos": [
+                "Ahorro (40%): $240",
+                "Gastos personales (50%): $300",
+                "Emergencias (10%): $60"
+                ],
+                "mensajeFinal": "Si ahorras primero y gastas lo que queda... siempre avanzas. El presupuesto no es para limitarte, ¡es para darte libertad más adelante!"
+            }
+            }
+        ]
+        },
+        {
+        "id": 3,
+        "tipo": "interactivo",
+        "titulo": "Te invito a que realices tu propio presupuesto...",
+        "fondo": "/images/13-15/Fondo313-15.png",
+        "configuracion": {
+            "reglas": {
+            "porcentajeAhorroRecomendado": 30,
+            "distribucion": {
+                "ahorro": 0.40,
+                "gastos": 0.50,
+                "emergencia": 0.10
+            }
+            }
+        }
+        },
+        {
+        "id": 4,
+        "fondo": "/images/13-15/Fondo313-15.png",
+        "tipo": "interactivo",
+        "personaje": "/images/13-15/10.png",
+        "titulo": "¿POR QUÉ NECESITO UNA META PARA AHORRAR?",
+        "secciones": {
+            "infoMetas": {
+            "encabezado": "Ahorrar sin meta es como correr sin dirección. Te cansas... pero no llegas a ningún lado.",
+            "subtitulo": "Cuando tienes una meta:",
+            "puntos": [
+                "Sabes por qué te estás esforzando.",
+                "Es más fácil decir “no” a gastos impulsivos.",
+                "Tu ahorro deja de sentirse como un sacrificio.",
+                "Cada depósito tiene un propósito."
+            ]
+            },
+            "reflexion": {
+            "titulo": "Convierte el ahorro en algo necesario",
+            "pregunta": "¿Qué te gustaría tener en 6 meses que hoy no puedes comprar?",
+            "placeholder": "Ej. Una bicicleta nueva para ir a estudiar..."
+            },
+            "disciplina": {
+            "textoPrincipal": "Ahí nace la meta. Pero tener una meta no es suficiente. Aquí entra la disciplina.",
+            "subtitulo": "La disciplina es lo que haces cuando la emoción pasa. Por ejemplo:",
+            "ejemplos": [
+                "Depositar, aunque tengas ganas de gastar.",
+                "Respetar tu plan, aunque nadie te obligue.",
+                "Mantener tu meta, aunque salgan tentaciones.",
+                "La motivación te ayuda a empezar; la disciplina a terminar."
+            ]
+            },
+            "ligaMeta": {
+            "titulo": "Liga tu presupuesto a tu meta",
+            "descripcion": "Define una meta concreta. Debe responder tres cosas:",
+            "campos": {
+                "que": {
+                "label": "¿Qué quiero?",
+                "placeholder": "Ej. Una tablet para la escuela"
+                },
+                "cuanto": {
+                "label": "¿Cuánto cuesta?",
+                "placeholder": "0.00"
+                },
+                "cuando": {
+                "label": "¿Para cuándo lo quiero?",
+                "placeholder": "Ej. En 6 meses / Diciembre"
+                }
+            }
+            },
+            "tarjetaFinal": {
+            "titulo": "Mi Plan de Ahorro Semanal",
+            "metaTexto": "Meta:",
+            "metaPlaceholder": "(Escribe arriba qué quieres)",
+            "costoTexto": "Costo aproximado:",
+            "tiempoTexto": "Tiempo para lograrla:",
+            "tiempoInputPlaceholder": "Semanas",
+            "tiempoSufijo": "semanas.",
+            "calculoExito": "Para lograr tu meta necesitas ahorrar:",
+            "calculoSufijo": "cada semana",
+            "personajeNombre": "Súper Ahorro"
+            }
+        }
         }
     ]
 }
