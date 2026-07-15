@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import Footer from '../components/Footer';
+import Confetti from '../components/Confetti';
 
 const Passport = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Passport = () => {
   };
 
   const nombreMesActual = obtenerMesActual(new Date());
+  const anioActual = new Date().getFullYear();
 
   // =========================
   // 🔥 STORAGE MULTIUSUARIO
@@ -38,6 +40,29 @@ const Passport = () => {
   const [error, setError] = useState('');
 
   const [fondo, setFondo] = useState('/images/0-5/Fondo0-5.png');
+
+  // =========================
+  // 🏅 GAMIFICACIÓN: sellos y retos
+  // =========================
+  const [retoActual, setRetoActual] = useState(null);
+  const [mostrarSello, setMostrarSello] = useState(false);
+  const [sinceSello, setSelloInfo] = useState(null); // { mes, monto }
+  const [mostrarDiploma, setMostrarDiploma] = useState(false);
+
+  // Trae el reto vigente según la fecha de hoy
+  useEffect(() => {
+    const cargarReto = async () => {
+      const hoy = new Date().toISOString().slice(0, 10);
+      const { data } = await supabase
+        .from('retos_ahorro')
+        .select('*')
+        .lte('fecha_inicio', hoy)
+        .gte('fecha_fin', hoy)
+        .maybeSingle();
+      if (data) setRetoActual(data);
+    };
+    cargarReto();
+  }, []);
 
   // =========================
   // 🔥 FONDO POR RANGO
@@ -100,6 +125,75 @@ const Passport = () => {
   };
 
   // =========================
+  // 🏅 SELLO DIGITAL (mes con $100+ ahorrado)
+  // =========================
+  const verificarSello = async (mes, anio, totalMes) => {
+    if (userId === "anon") return;
+    if (totalMes < 100) return;
+
+    const { data: yaExiste } = await supabase
+      .from('sellos_digitales')
+      .select('id')
+      .eq('usuario_id', String(userId))
+      .eq('mes', mes)
+      .eq('anio', anio)
+      .maybeSingle();
+
+    if (yaExiste) return; // ya se otorgó el sello este mes
+
+    const { error: insertError } = await supabase.from('sellos_digitales').insert({
+      usuario_id: String(userId), mes, anio, monto_acumulado: totalMes
+    });
+
+    if (insertError) return;
+
+    setSelloInfo({ mes, monto: totalMes });
+    setMostrarSello(true);
+
+    await revisarReto();
+  };
+
+  // =========================
+  // 🏆 REVISAR SI SE COMPLETÓ EL RETO (3 sellos)
+  // =========================
+  const revisarReto = async () => {
+    if (!retoActual) return;
+
+    const { count } = await supabase
+      .from('sellos_digitales')
+      .select('id', { count: 'exact', head: true })
+      .eq('usuario_id', String(userId))
+      .in('mes', retoActual.meses)
+      .gte('fecha_sello', retoActual.fecha_inicio)
+      .lte('fecha_sello', retoActual.fecha_fin);
+
+    const sellosCompletados = count || 0;
+
+    const { data: progresoExistente } = await supabase
+      .from('reto_progreso')
+      .select('*')
+      .eq('usuario_id', String(userId))
+      .eq('reto_id', retoActual.id)
+      .maybeSingle();
+
+    const yaTeniaDiploma = progresoExistente?.diploma_generado || false;
+
+    await supabase.from('reto_progreso').upsert({
+      usuario_id: String(userId),
+      reto_id: retoActual.id,
+      sellos_completados: sellosCompletados,
+      diploma_generado: yaTeniaDiploma || sellosCompletados >= 3,
+      fecha_diploma: yaTeniaDiploma
+        ? progresoExistente.fecha_diploma
+        : (sellosCompletados >= 3 ? new Date().toISOString() : null),
+    }, { onConflict: 'usuario_id,reto_id' });
+
+    if (!yaTeniaDiploma && sellosCompletados >= 3) {
+      setMostrarDiploma(true);
+    }
+  };
+
+  // =========================
   // 🔥 VALIDACIÓN
   // =========================
   const validar = () => {
@@ -112,7 +206,7 @@ const Passport = () => {
   // =========================
   // 🔥 GUARDAR AHORRO
   // =========================
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!validar()) {
       setError("Solo puedes ahorrar en el mes actual con datos válidos");
       return;
@@ -145,7 +239,10 @@ const Passport = () => {
       nuevos[mesExpandido].push(nuevoItem);
     }
 
-    sync(nuevos);
+    await sync(nuevos);
+
+    const totalMes = nuevos[mesExpandido].reduce((s, a) => s + Number(a.monto), 0);
+    await verificarSello(mesExpandido, anioActual, totalMes);
 
     setShowForm(false);
     setFormData({ fecha: '', monto: '', id: null });
@@ -208,6 +305,11 @@ const Passport = () => {
         <p className="text-3xl font-black text-alianza-amarillo">
           ${calcularTotal()}
         </p>
+        {retoActual && (
+          <p className="text-xs text-white/80 mt-1">
+            {retoActual.nombre} en curso
+          </p>
+        )}
       </div>
 
       {/* MESES */}
@@ -232,7 +334,7 @@ const Passport = () => {
                   mes === nombreMesActual ? "bg-alianza-amarillo text-alianza-azul" : ""
                 }`}
               >
-                {mes} {tieneEstrella && "⭐"}
+                {mes} {tieneEstrella && "⭐"} {totalMes >= 100 && "🏅"}
                 <span>${totalMes}</span>
               </button>
 
@@ -320,6 +422,46 @@ const Passport = () => {
               </button>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* 🏅 SELLO DIGITAL */}
+      {mostrarSello && sinceSello && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <Confetti />
+          <div className="bg-white p-6 rounded-3xl w-full max-w-sm text-center">
+            <p className="text-5xl mb-2">🏅</p>
+            <h3 className="text-xl font-black text-alianza-azul">¡Sello digital ganado!</h3>
+            <p className="text-gray-600 mt-2">
+              Ahorraste ${sinceSello.monto} en {sinceSello.mes}
+            </p>
+            <button
+              onClick={() => setMostrarSello(false)}
+              className="w-full mt-4 bg-alianza-azul text-white py-2 rounded-lg font-semibold"
+            >
+              ¡Genial!
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 🏆 DIPLOMA POR RETO CUMPLIDO */}
+      {mostrarDiploma && retoActual && (
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+          <Confetti />
+          <div className="bg-white p-6 rounded-3xl w-full max-w-sm text-center">
+            <p className="text-5xl mb-2">🏆</p>
+            <h3 className="text-xl font-black text-alianza-azul">¡Reto cumplido!</h3>
+            <p className="text-gray-600 mt-2">
+              Completaste los 3 sellos de {retoActual.nombre}. Acude a tu sucursal por tu recompensa.
+            </p>
+            <button
+              onClick={() => setMostrarDiploma(false)}
+              className="w-full mt-4 bg-alianza-azul text-white py-2 rounded-lg font-semibold"
+            >
+              Cerrar
+            </button>
           </div>
         </div>
       )}
