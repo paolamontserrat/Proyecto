@@ -266,6 +266,238 @@
             "personajeNombre": "Súper Ahorro"
             }
         }
+        },
+        {
+        "id": 5,
+        "fondo": "/images/13-15/Fondo413-15.png",
+        "tipo": "informativo",
+        "titulo": "RESPONSABILIDAD",
+        "introduccion": {
+            "definicion": "Es cumplir lo que dices que vas a hacer, incluso cuando nadie te está viendo. Es hacer lo correcto, aunque cueste trabajo.",
+            "concepto": "La responsabilidad no cambia según el lugar. Lo que cambia es cómo se demuestra."
+        },
+        "secciones": {
+            "escuela": {
+            "titulo": "En la escuela se demuestra cuando:",
+            "puntos": [
+                "Entregas tareas a tiempo.",
+                "Estudias, aunque no haya examen.",
+                "Llevas tu material completo.",
+                "No copias, aunque sea fácil hacerlo.",
+                "Pides ayuda cuando no entiendes algo."
+            ],
+            "cierre": "Ser responsable en la escuela es entender que estudiar hoy impacta tu futuro."
+            },
+            "casa": {
+            "titulo": "En la casa se demuestra cuando:",
+            "puntos": [
+                "Cumples con tus tareas del hogar.",
+                "Cuidas los recursos (agua, luz, comida).",
+                "No gastas por impulso.",
+                "Si te prestan dinero, lo pagas.",
+                "Ahorras parte de lo que recibes."
+            ],
+            "cierre": "Responsabilidad en casa es aportar, no solo recibir."
+            },
+            "cajaPopular": {
+            "titulo": "En tu Caja Popular se demuestra cuando:",
+            "puntos": [
+                "Haces depósitos constantes.",
+                "Tienes clara tu meta de ahorro.",
+                "No retiras dinero por capricho.",
+                "Aprendes cómo funciona tu cuenta."
+            ],
+            "cierres": [
+                "Entiendes que tu ahorro puede generar rendimientos.",
+                "Ahorrar no es guardar lo que sobra.",
+                "Es apartar primero y gastar después."
+            ]
+            }
+        }
+        },
+        {
+        "id": 6,
+        "fondo": "/images/13-15/Fondo313-15.png",
+        "titulo": "Alianzito ayúdanos a completar:",
+        "secciones": {
+            "escuela": {
+            "titulo": "En la escuela soy responsable cuando:",
+            "placeholder": "Escribe aquí cómo eres responsable en tu escuela...",
+            "imagen": "/images/13-15/22.png"
+            },
+            "casa": {
+            "titulo": "En mi casa soy responsable cuando:",
+            "placeholder": "Escribe aquí tus responsabilidades en el hogar...",
+            "imagen": "/images/13-15/23.png"
+            },
+            "dinero": {
+            "titulo": "Con mi dinero soy responsable cuando:",
+            "placeholder": "Escribe aquí cómo cuidas y administras tu dinero...",
+            "imagen": "/images/13-15/10.png"
+            }
+        }
+        },
+        {
+        "id": 7,
+        "fondo": "/images/13-15/Fondo213-15.png",
+        "titulo": "¡Hora de Cómic! Lee la siguiente historia:",
+        "paginas": [
+            "/images/13-15/13.png",
+            "/images/13-15/14.png",
+            "/images/13-15/16.png",
+            "/images/13-15/15.png"
+        ]
+        },
+        {
+        "id": 8,
+        "fondo": "/images/13-15/Fondo313-15.png",
+        "titulo": "Alianzito ayúdanos a completar: \"La decisión consciente\"",
+        "subtitulo": "(Dibuja la escena correcta en el recuadro)"
+        },
+        {
+        "id": 9,
+        "fondo": "/images/13-15/Fondo513-15.png",
+        "titulo": "HONESTIDAD",
+        "introduccion": {
+            "definicion": "Es decir la verdad y actuar correctamente, incluso cuando sería más fácil mentir o aprovecharse. No es solo no robar.",
+            "concepto": "Es ser transparente en lo que haces, dices y decides. La honestidad empieza cuando nadie te está supervisando."
+        },
+        "secciones": {
+            "escuela": {
+            "titulo": "En la escuela se vive cuando:",
+            "puntos": [
+                "Haces tus propias tareas.",
+                "Admites si olvidaste algo.",
+                "No copias en exámenes.",
+                "Devuelves algo que no es tuyo."
+            ],
+            "cierre": "Tu reputación vale más que una calificación."
+            },
+            "casa": {
+            "titulo": "En la casa se demuestra cuando:",
+            "puntos": [
+                "Decir en qué gastaste el dinero.",
+                "Reconocer cuando rompiste algo.",
+                "No esconder errores.",
+                "No tomar dinero sin permiso."
+            ],
+            "cierre": "A esta edad, muchos errores no destruyen la confianza... la mentira sí."
+            },
+            "cajaPopular": {
+            "titulo": "En tu Caja Popular se demuestra por:",
+            "puntos": [
+                "La honestidad con el dinero y la Caja.",
+                "No decir \"ahorré\" cuando no lo hiciste.",
+                "No retirar dinero sin pensar en la meta.",
+                "No prometer pagos que sabes que no cumplirás.",
+                "Ser claro si necesitas ayuda."
+            ],
+            "cierre": "En una cooperativa, la honestidad es básica porque todo funciona por confianza."
+            }
+        }
+        },
+        {
+        "id": 10,
+        "fondo": "/images/13-15/Fondo213-15.png",
+        "titulo": "Un joven honesto:",
+        "puntos": [
+            "Genera confianza.",
+            "Consigue oportunidades.",
+            "Puede acceder a créditos con buen historial.",
+            "Construye relaciones sanas."
+        ],
+        "fraseDestacada": "La honestidad no es moral únicamente. Es estratégica.",
+        "imagen": "/images/13-15/25.png"
+        },
+        {
+        "id": 11,
+        "fondo": "/images/13-15/Fondo413-15.png",
+        "titulo": "Alianzito completa la sopa de letras sobre las redes sociales",
+        "palabras": [
+            { "texto": "FACEBOOK", "inicio": [6, 2], "fin": [13, 2] },
+            { "texto": "TWITTER", "inicio": [11, 8], "fin": [17, 14] },
+            { "texto": "INSTAGRAM", "inicio": [5, 19], "fin": [13, 19] },
+            { "texto": "SKYPE", "inicio": [0, 10], "fin": [4, 10] },
+            { "texto": "SNAPCHAT", "inicio": [19, 0], "fin": [19, 7] },
+            { "texto": "LINKEDIN", "inicio": [14, 0], "fin": [14, 7] },
+            { "texto": "PINTEREST", "inicio": [1, 15], "fin": [9, 7] },
+            { "texto": "YOUTUBE", "inicio": [13, 11], "fin": [13, 17] },
+            { "texto": "TWITCH", "inicio": [16, 7], "fin": [16, 11] },
+            { "texto": "WHATSAPP", "inicio": [7, 0], "fin": [7, 7] },
+            { "texto": "SPOTIFY", "inicio": [18, 10], "fin": [18, 16] },
+            { "texto": "REDDIT", "inicio": [2, 1], "fin": [2, 6] },
+            { "texto": "TIKTOK", "inicio": [8, 11], "fin": [8, 16] }
+        ],
+        "grid": [
+            ["S","T","U","V","F","Q","J","D","X","C","S","T","U","V","F","Q","J","D","X","C"],
+            ["B","A","D","M","I","N","T","O","N","R","K","A","D","M","I","P","T","O","N","R"],
+            ["E","R","E","D","D","I","T","D","F","I","Y","Q","E","L","I","M","E","D","F","I"],
+            ["E","M","Y","F","O","R","N","U","H","C","P","M","Y","N","O","R","N","U","H","C"],
+            ["H","F","C","H","B","B","N","L","O","K","E","F","T","H","B","B","N","L","O","K"],
+            ["D","Z","Y","O","U","R","I","Y","C","E","D","E","Y","O","U","R","I","Y","C","I"],
+            ["U","P","F","K","B","O","S","J","K","T","R","P","J","K","B","O","S","J","K","N"],
+            ["W","H","A","T","S","A","P","P","E","E","U","D","S","K","I","B","F","W","E","S"],
+            ["F","O","C","T","B","A","L","L","S","D","F","T","I","K","T","O","K","L","Y","T"],
+            ["U","M","E","Z","A","T","O","T","G","H","U","M","P","Z","A","T","O","A","G","A"],
+            ["S","T","B","V","F","Q","J","D","X","C","S","T","U","V","F","Q","J","D","X","G"],
+            ["B","A","O","M","I","N","T","O","T","R","B","A","D","M","J","N","T","O","N","R"],
+            ["E","Q","O","L","G","M","E","D","F","W","E","Q","E","L","G","M","E","D","F","A"],
+            ["E","M","K","F","O","R","N","U","H","C","I","Y","O","U","T","U","B","E","H","M"],
+            ["L","I","N","K","E","D","I","N","O","K","H","T","C","H","I","B","N","L","O","K"],
+            ["D","Z","Y","O","U","R","I","C","C","E","D","Z","T","O","K","R","I","Y","C","E"],
+            ["U","P","J","K","B","O","S","T","W","I","C","H","J","E","T","O","S","J","K","T"],
+            ["U","D","S","K","I","B","F","I","E","N","U","D","S","K","R","B","F","W","E","N"],
+            ["F","O","O","T","B","A","L","W","Y","D","S","P","O","T","I","F","Y","L","Y","D"],
+            ["S","N","A","P","C","H","A","T","G","H","U","M","P","Z","A","T","O","A","G","H"]
+        ]
+        },
+        {
+        "id": 12,
+        "fondo": "/images/13-15/Fondo313-15.png",
+        "titulo": "Alianzito eres muy inteligente",
+        "subtitulo": "Resuelve el crucigrama sobre las redes sociales usando las pistas",
+        "imagenes": [
+            "/images/13-15/27.png",
+            "/images/13-15/26.png",
+            "/images/13-15/18.png",
+            "/images/13-15/10.png"
+        ],
+        "solucionGrid": [
+            ["", "", "", "", "W", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "H", "", "", "", "", "Y", "", "", "P", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "F", "A", "C", "E", "B", "O", "O", "K", "", "I", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "T", "", "", "", "", "U", "", "", "N", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "S", "", "", "", "", "T", "I", "K", "T", "O", "K", "", "", "", "", "", "", ""],
+            ["", "", "", "", "A", "", "", "", "", "U", "", "", "E", "", "", "", "", "", "", "", "", ""],
+            ["", "", "", "", "P", "", "", "", "", "B", "", "", "R", "", "", "", "", "", "", "", "", ""],
+            ["", "S", "K", "Y", "P", "E", "", "", "", "E", "", "", "E", "", "", "", "", "", "", "", "", ""],
+            ["", "N", "", "", "", "", "", "", "", "", "", "", "S", "", "", "", "", "", "", "", "", ""],
+            ["", "A", "", "", "", "", "", "", "", "I", "N", "S", "T", "A", "G", "R", "A", "M", "", "", "", ""],
+            ["S", "P", "O", "T", "I", "F", "Y", "", "", "", "", "", "", "", "", "E", "", "", "", "", "", ""],
+            ["", "C", "", "", "", "", "", "", "", "", "L", "I", "N", "K", "E", "D", "I", "N", "", "", "", ""],
+            ["", "H", "", "", "", "", "", "", "", "", "", "", "", "", "", "I", "", "", "", "", "", ""],
+            ["", "A", "", "", "", "", "", "", "", "", "", "", "", "", "", "T", "W", "I", "T", "T", "E", "R"],
+            ["", "T", "W", "I", "T", "C", "H", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""]
+        ],
+        "pistas": {
+            "horizontales": [
+            { "numero": 2, "palabra": "FACEBOOK", "pista": "La red social clásica para conectar con amigos, subir estados y fotos en tu muro." },
+            { "numero": 5, "palabra": "TIKTOK", "pista": "Plataforma de videos cortos y verticales con música, retos y tendencias virales." },
+            { "numero": 6, "palabra": "SKYPE", "pista": "Herramienta clásica para hacer videollamadas y reuniones virtuales." },
+            { "numero": 8, "palabra": "INSTAGRAM", "pista": "Red enfocada en compartir fotos estéticas, historias de 24 horas y reels." },
+            { "numero": 9, "palabra": "SPOTIFY", "pista": "La plataforma líder para escuchar música en streaming, álbumes y podcasts." },
+            { "numero": 10, "palabra": "LINKEDIN", "pista": "Red social profesional para buscar empleo, conectar con empresas y subir tu CV." },
+            { "numero": 12, "palabra": "TWITCH", "pista": "La plataforma preferida por los gamers para transmisiones en vivo (streams)." },
+            { "numero": 13, "palabra": "TWITTER", "pista": "Red social de microblogging para leer noticias de último momento e hilos de texto cortos." }
+            ],
+            "verticales": [
+            { "numero": 1, "palabra": "WHATSAPP", "pista": "La aplicación de mensajería instantánea más usada para chatear y enviar archivos." },
+            { "numero": 3, "palabra": "YOUTUBE", "pista": "El gigante de los videos donde sigues a tus creadores favoritos y tutoriales." },
+            { "numero": 4, "palabra": "PINTEREST", "pista": "Tablero virtual para buscar ideas de decoración, outfits, recetas e inspiración visual." },
+            { "numero": 7, "palabra": "SNAPCHAT", "pista": "Aplicación famosa por sus filtros interactivos y mensajes que desaparecen tras ser vistos." },
+            { "numero": 11, "palabra": "REDDIT", "pista": "Red de foros organizados por comunidades de interés donde se votan publicaciones." }
+            ]
+        }
         }
     ]
 }

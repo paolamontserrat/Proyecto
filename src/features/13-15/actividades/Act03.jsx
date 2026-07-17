@@ -60,13 +60,11 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
             return;
         }
 
-        // Validación de consistencia financiera en tiempo real
         if (ingresos && gastos && gas > ing) {
             setError("¡Cuidado! Tus gastos no pueden ser mayores que tus ingresos. Revisa tus números.");
             return;
         }
 
-        // Validación estricta de asignación completa (Presupuesto Base Cero)
         if (ingresos && gastos && ahorroPlaneado) {
             const sumaAsignada = gas + aho;
             
@@ -84,12 +82,17 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
         }
     }, [ingresos, gastos, ahorroPlaneado, ing, gas, aho]);
 
-    // Determina si los primeros 3 pasos están llenos, son válidos y cuadran exactamente al 100%
     const pasosCompletadosYCuadrados = ing > 0 && gas > 0 && aho > 0 && (gas + aho === ing);
 
     // Guardar en Supabase / LocalStorage
     const guardarProgreso = async (datos) => {
-        localStorage.setItem(storageKey, JSON.stringify(datos));
+        const datosAGuardar = datos || {
+            ingresos: parseFloat(ingresos) || 0,
+            gastos: parseFloat(gastos) || 0,
+            ahorroPlaneado: parseFloat(ahorroPlaneado) || 0
+        };
+
+        localStorage.setItem(storageKey, JSON.stringify(datosAGuardar));
 
         if (userId !== "anon" && data?.id) {
             try {
@@ -99,7 +102,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                         {
                             usuario_id: userId,
                             actividad_id: data.id,
-                            datos_actividad: datos,
+                            datos_actividad: datosAGuardar,
                             completada: true,
                         },
                         {
@@ -112,12 +115,19 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
         }
     };
 
-    // Cálculos para la tabla de distribución del Paso 4
+    // Auto-guardado en cambios de conectividad
+    useEffect(() => {
+        const handleOnline = () => guardarProgreso();
+        window.addEventListener("online", handleOnline);
+        return () => {
+            window.removeEventListener("online", handleOnline);
+        };
+    }, [data?.id, ingresos, gastos, ahorroPlaneado]);
+
     const calculoAhorro = (ing * 0.40).toFixed(2);
     const calculoGastos = (ing * 0.50).toFixed(2);
     const calculoEmergencia = (ing * 0.10).toFixed(2);
 
-    // Acción para reiniciar todas las respuestas
     const handleReset = () => {
         setIngresos("");
         setGastos("");
@@ -126,7 +136,6 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
         localStorage.removeItem(storageKey);
     };
 
-    // Al presionar finalizar se comprueba que todo cuadre y no existan errores activos
     const handleContinue = async () => {
         if (error) return;
 
@@ -152,13 +161,12 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
 
     return (
         <LayoutActividad fondo={data?.fondo}>
-            {/* Barra de navegación superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
-                onClick={onBack}
-                className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg"
+                    onClick={onBack}
+                    className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg"
                 >
-                ← Regresar
+                    ← Regresar
                 </button>
                 <button
                     onClick={() => navigate(`/dashboard/${rango}`)}
@@ -168,23 +176,13 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                 </button>
             </div>
 
-            {/* Tarjeta de Contenido Principal */}
-            <div
-                className="bg-white p-5 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl"
-                translate="no"
-            >
-                {/* Título Principal */}
-                <h1
-                    className="text-center font-extrabold text-blue-900 mb-10"
-                    style={{ fontSize: "clamp(1.5rem, 3vw, 2.3rem)" }}
-                >
+            <div className="bg-white p-5 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl" translate="no">
+                <h1 className="text-center font-extrabold text-blue-900 mb-10" style={{ fontSize: "clamp(1.5rem, 3vw, 2.3rem)" }}>
                     {data?.titulo || "Te invito a que realices tu propio presupuesto..."}
                 </h1>
 
-                {/* Grid de los 3 Primeros Pasos */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-                    
-                    {/* Paso 1: Ingresos */}
+                    {/* Paso 1 */}
                     <div className="bg-white border-2 border-gray-200 rounded-3xl p-5 flex flex-col items-center text-center shadow-sm relative pt-10">
                         <div className="absolute -top-6 w-12 h-12 rounded-full bg-yellow-400 flex items-center justify-center font-black text-2xl text-blue-900 border-4 border-white shadow-md">
                             1
@@ -204,7 +202,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                         </div>
                     </div>
 
-                    {/* Paso 2: Gastos */}
+                    {/* Paso 2 */}
                     <div className="bg-white border-2 border-gray-200 rounded-3xl p-5 flex flex-col items-center text-center shadow-sm relative pt-10">
                         <div className="absolute -top-6 w-12 h-12 rounded-full bg-yellow-400 flex items-center justify-center font-black text-2xl text-blue-900 border-4 border-white shadow-md">
                             2
@@ -224,7 +222,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                         </div>
                     </div>
 
-                    {/* Paso 3: Ahorro Planeado */}
+                    {/* Paso 3 */}
                     <div className="bg-white border-2 border-gray-200 rounded-3xl p-5 flex flex-col items-center text-center shadow-sm relative pt-10">
                         <div className="absolute -top-6 w-12 h-12 rounded-full bg-yellow-400 flex items-center justify-center font-black text-2xl text-blue-900 border-4 border-white shadow-md">
                             3
@@ -243,78 +241,54 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                             />
                         </div>
                     </div>
-
                 </div>
 
-                {/* Paso 4: Distribución Dinámica (Solo se muestra cuando todo cuadra a la perfección y no hay errores) */}
+                {/* Paso 4 */}
                 {pasosCompletadosYCuadrados && !error && (
                     <div className="flex flex-col lg:flex-row gap-6 items-center bg-sky-50 p-6 rounded-3xl border-2 border-sky-100 mb-8 transition-all duration-500 animate-fadeIn">
-                        
-                        {/* Número de paso 4 */}
                         <div className="w-16 h-16 flex-shrink-0 rounded-full bg-yellow-400 flex items-center justify-center font-black text-4xl text-blue-900 shadow-md">
                             4
                         </div>
-
-                        {/* Tabla de Distribución */}
                         <div className="w-full overflow-x-auto">
                             <div className="min-w-[400px]">
-                                {/* Cabeceras de Tabla */}
                                 <div className="grid grid-cols-3 gap-3 mb-2 text-center font-black text-white text-lg">
                                     <div className="bg-blue-900 py-3 rounded-2xl">Categoría</div>
                                     <div className="bg-sky-600 py-3 rounded-2xl">Porcentaje</div>
                                     <div className="bg-blue-900 py-3 rounded-2xl">Dinero</div>
                                 </div>
-
-                                {/* Fila: Ahorro (40%) */}
                                 <div className="grid grid-cols-3 gap-3 mb-2 text-center text-xl font-bold">
                                     <div className="bg-white/80 py-3 rounded-2xl border border-sky-100 text-gray-700">Ahorro</div>
                                     <div className="bg-white/80 py-3 rounded-2xl border border-sky-100 text-gray-700">40%</div>
-                                    <div className="bg-sky-100/80 py-3 rounded-2xl border border-sky-200 text-blue-900 font-black">
-                                        ${calculoAhorro}
-                                    </div>
+                                    <div className="bg-sky-100/80 py-3 rounded-2xl border border-sky-200 text-blue-900 font-black">${calculoAhorro}</div>
                                 </div>
-
-                                {/* Fila: Gastos (50%) */}
                                 <div className="grid grid-cols-3 gap-3 mb-2 text-center text-xl font-bold">
                                     <div className="bg-white/80 py-3 rounded-2xl border border-sky-100 text-gray-700">Gastos</div>
                                     <div className="bg-white/80 py-3 rounded-2xl border border-sky-100 text-gray-700">50%</div>
-                                    <div className="bg-sky-100/80 py-3 rounded-2xl border border-sky-200 text-blue-900 font-black">
-                                        ${calculoGastos}
-                                    </div>
+                                    <div className="bg-sky-100/80 py-3 rounded-2xl border border-sky-200 text-blue-900 font-black">${calculoGastos}</div>
                                 </div>
-
-                                {/* Fila: Emergencia (10%) */}
                                 <div className="grid grid-cols-3 gap-3 text-center text-xl font-bold">
                                     <div className="bg-white/80 py-3 rounded-2xl border border-sky-100 text-gray-700">Emergencia</div>
                                     <div className="bg-white/80 py-3 rounded-2xl border border-sky-100 text-gray-700">10%</div>
-                                    <div className="bg-sky-100/80 py-3 rounded-2xl border border-sky-200 text-blue-900 font-black">
-                                        ${calculoEmergencia}
-                                    </div>
+                                    <div className="bg-sky-100/80 py-3 rounded-2xl border border-sky-200 text-blue-900 font-black">${calculoEmergencia}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {/* Banner de error dinámico e interactivo */}
                 {error && (
                     <div className="mb-6 bg-red-100 border-l-8 border-red-500 text-red-900 p-4 rounded-xl font-bold text-lg">
                         ⚠️ {error}
                     </div>
                 )}
 
-                {/* Fila de Botones Inferiores (Finalizar y Reiniciar juntos) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
-                    
-                    {/* Botón de Reiniciar */}
                     <button
                         onClick={handleReset}
                         className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-98 transition-all"
                     >
                         Reiniciar
                     </button>
-
-                    {/* Botón de Finalizar */}
                     <button
                         onClick={handleContinue}
                         disabled={!!error || !pasosCompletadosYCuadrados}
@@ -326,9 +300,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                     >
                         Continuar
                     </button>
-                    
                 </div>
-
             </div>
         </LayoutActividad>
     );
