@@ -27,7 +27,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
         }
     }, [config.id, solucionGrid]);
 
-    // --- Persistencia de Datos ---
+    // --- Persistencia de Datos (Supabase + LocalStorage) ---
     const getUser = () => {
         try {
             return JSON.parse(localStorage.getItem("usuario"));
@@ -41,25 +41,65 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
 
     // Cargar progreso guardado al iniciar
     useEffect(() => {
-        const guardado = localStorage.getItem(storageKey);
-        if (guardado) {
-            try {
-                const parsed = JSON.parse(guardado);
-                if (
-                    parsed.grid &&
-                    parsed.grid.length === solucionGrid.length &&
-                    parsed.grid.every((row, i) => row.length === solucionGrid[i].length)
-                ) {
-                    setUserGrid(parsed.grid);
-                } else {
-                    setUserGrid(solucionGrid.map(row => row.map(() => "")));
-                    localStorage.removeItem(storageKey);
+        const cargarProgreso = async () => {
+            if (userId !== "anon" && config.id) {
+                try {
+                    const { data: progreso, error } = await supabase
+                        .from("progreso_actividades")
+                        .select("datos_actividad, completada")
+                        .eq("usuario_id", userId)
+                        .eq("actividad_id", config.id)
+                        .maybeSingle();
+
+                    if (progreso) {
+                        // CASO A: Ya estaba completado en la nube (con versión vieja o nueva)
+                        if (progreso.completada || progreso.datos_actividad?.completado) {
+                            setUserGrid(solucionGrid);
+                            localStorage.setItem(storageKey, JSON.stringify({ grid: solucionGrid }));
+                            return;
+                        }
+
+                        // CASO B: Hay un progreso intermedio del tablero guardado
+                        if (progreso.datos_actividad?.grid) {
+                            const dbGrid = progreso.datos_actividad.grid;
+                            if (
+                                dbGrid.length === solucionGrid.length &&
+                                dbGrid.every((row, i) => row.length === solucionGrid[i].length)
+                            ) {
+                                setUserGrid(dbGrid);
+                                localStorage.setItem(storageKey, JSON.stringify({ grid: dbGrid }));
+                                return;
+                            }
+                        }
+                    }
+                } catch (err) {
+                    console.warn("Error cargando progreso de Supabase, intentando local...", err);
                 }
-            } catch (e) {
-                console.error("Error al cargar progreso local", e);
             }
-        }
-    }, [config.id]);
+
+            // Fallback al LocalStorage del dispositivo
+            const guardado = localStorage.getItem(storageKey);
+            if (guardado) {
+                try {
+                    const parsed = JSON.parse(guardado);
+                    if (
+                        parsed.grid &&
+                        parsed.grid.length === solucionGrid.length &&
+                        parsed.grid.every((row, i) => row.length === solucionGrid[i].length)
+                    ) {
+                        setUserGrid(parsed.grid);
+                    } else {
+                        setUserGrid(solucionGrid.map(row => row.map(() => "")));
+                        localStorage.removeItem(storageKey);
+                    }
+                } catch (e) {
+                    console.error("Error al cargar progreso local", e);
+                }
+            }
+        };
+
+        cargarProgreso();
+    }, [config.id, solucionGrid, userId]);
 
     // ==========================================
     // CÁLCULO DINÁMICO DE NÚMEROS DE LAS PISTAS
@@ -67,7 +107,6 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
     const mapaNumerosCeldas = {};
 
     if (solucionGrid.length > 0) {
-        // 1. Identificar el inicio de las palabras horizontales
         pistas.horizontales?.forEach((p) => {
             const palabra = p.palabra;
             let encontrada = false;
@@ -85,7 +124,6 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
             }
         });
 
-        // 2. Identificar el inicio de las palabras verticales
         pistas.verticales?.forEach((p) => {
             const palabra = p.palabra;
             let encontrada = false;
@@ -108,36 +146,28 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
     }
 
     const handleInputChange = (r, c, val) => {
-        const upperVal = val.toUpperCase().slice(-1); // Tomar solo un carácter y en mayúsculas
+        const upperVal = val.toUpperCase().slice(-1);
         const nuevoGrid = userGrid.map((row, rowIndex) => 
             row.map((char, colIndex) => (rowIndex === r && colIndex === c ? upperVal : char))
         );
         setUserGrid(nuevoGrid);
 
-        // Guardar progreso de forma local
         localStorage.setItem(storageKey, JSON.stringify({ grid: nuevoGrid }));
 
-        // Si la letra es correcta, saltar al siguiente casillero de la palabra
         if (upperVal === solucionGrid[r][c] && upperVal !== "") {
             focusSiguienteCelda(r, c);
         }
     };
 
-    // Mover el foco automáticamente al escribir
     const focusSiguienteCelda = (r, c) => {
         if (solucionGrid.length === 0) return;
-        
-        // 1. Intentar moverse a la derecha
         if (c + 1 < solucionGrid[r].length && solucionGrid[r][c + 1] !== "") {
             inputsRef.current[`${r}-${c + 1}`]?.focus();
-        } 
-        // 2. Si no hay celdas a la derecha, intentar moverse hacia abajo
-        else if (r + 1 < solucionGrid.length && solucionGrid[r + 1][c] !== "") {
+        } else if (r + 1 < solucionGrid.length && solucionGrid[r + 1][c] !== "") {
             inputsRef.current[`${r + 1}-${c}`]?.focus();
         }
     };
 
-    // Validar que todo el crucigrama esté completado con las letras correctas
     const estaCompletoYCorrecto = () => {
         if (solucionGrid.length === 0 || userGrid.length === 0) return false;
         
@@ -167,7 +197,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                     {
                         usuario_id: userId,
                         actividad_id: config.id,
-                        datos_actividad: { completado: true },
+                        datos_actividad: { grid: userGrid, completado: true },
                         completada: true,
                     },
                     { onConflict: "usuario_id,actividad_id" }
@@ -188,9 +218,9 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
             </LayoutActividad>
         );
     }
+
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Animación flotante para las ilustraciones decorativas */}
             <style>{`
                 @keyframes float-slow {
                     0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -201,7 +231,6 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Barra superior de navegación */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -217,12 +246,10 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                 </button>
             </div>
 
-            {/* Panel Principal */}
             <div className="bg-white p-4 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl relative overflow-visible" translate="no">
                 
-                {/* Títulos */}
                 <div className="text-center mb-6">
-                    <h1 className="font-extrabold text-blue-900 leading-tight text-3xl md:text-4xl">
+                    <h1 className="font-extrabold text-blue-900 leading-tight text-2xl md:text-4xl">
                         {config.titulo || "Alianzito eres muy inteligente"}
                     </h1>
                     <p className="text-gray-600 font-semibold mt-1">
@@ -230,43 +257,36 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                     </p>
                 </div>
 
-                {/* ========================================== */}
-                {/* SECCIÓN SUPERIOR: EL CRUCIGRAMA CENTRADO   */}
-                {/* ========================================== */}
-                <div className="relative w-full flex justify-center py-6 mb-28">
+                {/* Contenedor del Crucigrama */}
+                <div className="relative w-full flex justify-center py-4 mb-16 md:mb-28">
                     {imagenes[3] && (
                         <div className="hidden xl:block absolute right-[-2%] top-[-5px] w-48 animate-float-slow select-none z-10">
                             <img src={`${imagenes[0]}`} alt="Billete con laptop" className="w-full h-auto object-contain filter drop-shadow-md" />
                         </div>
                     )}
 
-                    {/* Ilustración 2: Billete saltando la cuerda (27.png) -> Abajo a la izquierda */}
                     {imagenes[0] && (
                         <div className="hidden xl:block absolute left-[-1%] bottom-[-120px] w-44 animate-float-slow select-none z-10">
                             <img src={`${imagenes[1]}`} alt="Billete saltando cuerda" className="w-full h-auto object-contain filter drop-shadow-md" />
                         </div>
                     )}
 
-                    {/* Ilustración 3: Alianzito celular (26.png) -> Abajo en el centro */}
                     {imagenes[1] && (
                         <div className="hidden xl:block absolute left-[38%] bottom-[-140px] w-40 animate-float-slow select-none z-10">
                             <img src={`${imagenes[2]}`} alt="Alianzito celular" className="w-full h-auto object-contain filter drop-shadow-md" />
                         </div>
                     )}
 
-                    {/* Ilustración 4: Billete portafolios (18.png) -> Abajo a la derecha */}
                     {imagenes[2] && (
                         <div className="hidden xl:block absolute right-[1%] bottom-[-80px] w-40 animate-float-slow select-none z-10">
                             <img src={`${imagenes[3]}`} alt="Billete portafolios" className="w-full h-auto object-contain filter drop-shadow-md" />
                         </div>
                     )}
 
-                    {/* El Tablero del Crucigrama */}
+                    {/* El Tablero del Crucigrama Responsivo */}
                     <div 
-                        className="grid gap-[3px] p-5 bg-yellow-400 rounded-3xl shadow-2xl border-4 border-yellow-500 overflow-x-auto max-w-full relative z-0"
+                        className="grid gap-[1px] xs:gap-[2px] p-2 sm:p-5 bg-yellow-400 rounded-3xl shadow-2xl border-4 border-yellow-500 w-full max-w-full relative z-0"
                         style={{ 
-                            minWidth: "460px", 
-                            maxWidth: "850px",
                             gridTemplateColumns: "repeat(22, minmax(0, 1fr))"
                         }}
                     >
@@ -278,13 +298,21 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                                 const numeroPista = mapaNumerosCeldas[`${r}-${c}`];
 
                                 if (!esCasilleroValido) {
-                                    return <div key={`${r}-${c}`} className="w-6 h-6 sm:w-8 sm:h-8 bg-transparent" />;
+                                    return (
+                                        <div 
+                                            key={`${r}-${c}`} 
+                                            className="w-full aspect-square bg-transparent" 
+                                        />
+                                    );
                                 }
 
                                 return (
-                                    <div key={`${r}-${c}`} className="relative w-6 h-6 sm:w-8 sm:h-8">
+                                    <div 
+                                        key={`${r}-${c}`} 
+                                        className="relative w-full aspect-square"
+                                    >
                                         {numeroPista && (
-                                            <span className="absolute top-[1px] left-[2px] text-[7px] sm:text-[9px] font-black text-blue-700 z-10 pointer-events-none select-none leading-none">
+                                            <span className="absolute top-[0.5px] left-[1px] text-[5px] xxs:text-[6px] xs:text-[7px] sm:text-[9px] font-black text-blue-700 z-10 pointer-events-none select-none leading-none">
                                                 {numeroPista}
                                             </span>
                                         )}
@@ -296,11 +324,12 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                                             onChange={(e) => handleInputChange(r, c, e.target.value)}
                                             disabled={esCorrecto}
                                             className={`
-                                                w-full h-full text-center font-black uppercase text-xs sm:text-base rounded-md
-                                                transition-all border-2 shadow-inner focus:outline-none focus:ring-2 focus:ring-blue-500
+                                                w-full h-full text-center font-black uppercase rounded-[2px] sm:rounded-md
+                                                transition-all border shadow-inner focus:outline-none focus:ring-1 focus:ring-blue-500
+                                                text-[8px] xxs:text-[9px] xs:text-[11px] sm:text-base border-gray-300
                                                 ${esCorrecto 
                                                     ? "bg-emerald-500 border-emerald-600 text-white font-black cursor-not-allowed scale-95" 
-                                                    : "bg-white border-gray-300 text-blue-900 focus:bg-amber-100"
+                                                    : "bg-white text-blue-900 focus:bg-amber-100"
                                                 }
                                             `}
                                         />
@@ -311,13 +340,13 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 </div>
 
-                <div className="flex xl:hidden gap-6 justify-center items-center flex-wrap mb-8">
+                <div className="flex xl:hidden gap-4 justify-center items-center flex-wrap mb-8">
                     {imagenes.map((imgName, idx) => (
                         <img 
                             key={idx}
                             src={`${imgName}`} 
                             alt="Ilustración móvil" 
-                            className="w-20 sm:w-24 h-auto object-contain animate-float-slow select-none filter drop-shadow-md" 
+                            className="w-14 sm:w-20 h-auto object-contain animate-float-slow select-none filter drop-shadow-md" 
                         />
                     ))}
                 </div>

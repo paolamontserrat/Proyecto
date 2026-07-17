@@ -23,20 +23,47 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act06-${rango}-${userId}`;
 
-    // Cargar datos guardados previamente
+    // Cargar progreso guardado al montar (Supabase + LocalStorage)
     useEffect(() => {
-        const guardado = localStorage.getItem(storageKey);
-        if (guardado) {
-            try {
-                const parsed = JSON.parse(guardado);
-                if (parsed.respEscuela) setRespEscuela(parsed.respEscuela);
-                if (parsed.respCasa) setRespCasa(parsed.respCasa);
-                if (parsed.respDinero) setRespDinero(parsed.respDinero);
-            } catch (e) {
-                console.error("Error al cargar progreso local", e);
+        const cargarProgreso = async () => {
+            if (userId !== "anon" && data?.id) {
+                try {
+                    const { data: progreso, error } = await supabase
+                        .from("progreso_actividades")
+                        .select("datos_actividad")
+                        .eq("usuario_id", userId)
+                        .eq("actividad_id", data.id)
+                        .maybeSingle();
+
+                    if (progreso?.datos_actividad) {
+                        const datos = progreso.datos_actividad;
+                        if (datos.respEscuela) setRespEscuela(datos.respEscuela);
+                        if (datos.respCasa) setRespCasa(datos.respCasa);
+                        if (datos.respDinero) setRespDinero(datos.respDinero);
+                        
+                        localStorage.setItem(storageKey, JSON.stringify(datos));
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Error consultando Supabase, intentando local...", err);
+                }
             }
-        }
-    }, []);
+
+            const guardado = localStorage.getItem(storageKey);
+            if (guardado) {
+                try {
+                    const parsed = JSON.parse(guardado);
+                    if (parsed.respEscuela) setRespEscuela(parsed.respEscuela);
+                    if (parsed.respCasa) setRespCasa(parsed.respCasa);
+                    if (parsed.respDinero) setRespDinero(parsed.respDinero);
+                } catch (e) {
+                    console.error("Error al cargar progreso local", e);
+                }
+            }
+        };
+
+        cargarProgreso();
+    }, [data?.id, userId]);
 
     // Validar en tiempo real si el usuario está escribiendo respuestas muy cortas
     useEffect(() => {
@@ -123,7 +150,6 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación superior básica */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -139,10 +165,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                 </button>
             </div>
 
-            {/* Tarjeta de Contenido Principal */}
             <div className="bg-white p-5 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl" translate="no">
-                
-                {/* Título Principal */}
                 <h1
                     className="text-center font-extrabold text-blue-900 mb-10"
                     style={{ fontSize: "clamp(1.5rem, 3.2vw, 2.3rem)" }}
@@ -150,10 +173,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                     {data.titulo || "Alianzito ayúdanos a completar:"}
                 </h1>
 
-                {/* Contenedor de Formularios con las Imágenes Reales y Animación */}
                 <div className="space-y-8 max-w-3xl mx-auto">
-                    
-                    {/* Sección 1: Escuela (Imagen 22.png a la izquierda) */}
                     {data.secciones?.escuela && (
                         <div>
                             <h2 className="text-xl font-bold text-blue-900 mb-3 text-center md:text-left">
@@ -175,7 +195,6 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                         </div>
                     )}
 
-                    {/* Sección 2: Casa (Imagen 10.png a la derecha y más grande) */}
                     {data.secciones?.casa && (
                         <div>
                             <h2 className="text-xl font-bold text-blue-900 mb-3 text-center md:text-left">
@@ -197,7 +216,6 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                         </div>
                     )}
 
-                    {/* Sección 3: Dinero (Imagen 23.png a la izquierda y más grande) */}
                     {data.secciones?.dinero && (
                         <div>
                             <h2 className="text-xl font-bold text-blue-900 mb-3 text-center md:text-left">
@@ -218,17 +236,14 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                             </div>
                         </div>
                     )}
-
                 </div>
 
-                {/* Banner de error interactivo */}
                 {error && (
                     <div className="max-w-3xl mx-auto mt-6 bg-red-100 border-l-8 border-red-500 text-red-900 p-4 rounded-xl font-bold text-lg">
                         ⚠️ {error}
                     </div>
                 )}
 
-                {/* Fila de Botones de Control */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 max-w-3xl mx-auto">
                     <button
                         onClick={handleReset}
@@ -249,7 +264,6 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                         Continuar
                     </button>
                 </div>
-
             </div>
         </LayoutActividad>
     );

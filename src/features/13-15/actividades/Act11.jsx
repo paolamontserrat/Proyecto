@@ -9,6 +9,9 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
     const grid = config.grid || [];
     const palabras = config.palabras || [];
 
+    // Referencia al contenedor de la sopa de letras para poder calcular las colisiones táctiles
+    const gridRef = useRef(null);
+
     // Estados de interacción de la sopa de letras
     const [celdasSeleccionadas, setCeldasSeleccionadas] = useState([]); // Array de strings "fila-col"
     const [estaArrastrando, setEstaArrastrando] = useState(false);
@@ -27,31 +30,62 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act11-${rango}-${userId}`;
 
-    // Cargar progreso guardado al iniciar
+    // Cargar progreso guardado al iniciar (Híbrido: Supabase + LocalStorage)[cite: 2]
     useEffect(() => {
-        const guardado = localStorage.getItem(storageKey);
-        if (guardado) {
-            try {
-                const parsed = JSON.parse(guardado);
-                if (parsed.palabrasEncontradas) {
-                    setPalabrasEncontradas(parsed.palabrasEncontradas);
-                    // Reconstruir el Set de celdas correctas basadas en las palabras cargadas
-                    const nuevasCeldas = new Set();
-                    parsed.palabrasEncontradas.forEach(palNombre => {
-                        const palObj = palabras.find(p => p.texto === palNombre);
-                        if (palObj) {
-                            obtenerCaminoEntrePuntos(palObj.inicio, palObj.fin).forEach(cellId => {
-                                nuevasCeldas.add(cellId);
-                            });
-                        }
-                    });
-                    setCeldasCorrectas(nuevasCeldas);
+        const cargarProgreso = async () => {
+            // 1. Intentar cargar desde la base de datos de Supabase si el usuario está logueado[cite: 2]
+            if (userId !== "anon" && config.id) {
+                try {
+                    const { data: progreso, error } = await supabase
+                        .from("progreso_actividades")
+                        .select("datos_actividad")
+                        .eq("usuario_id", userId)
+                        .eq("actividad_id", config.id)
+                        .maybeSingle();
+
+                    if (progreso?.datos_actividad?.palabrasEncontradas) {
+                        const pals = progreso.datos_actividad.palabrasEncontradas;
+                        procesarProgresoCargado(pals);
+                        // Respaldamos localmente también
+                        localStorage.setItem(storageKey, JSON.stringify({ palabrasEncontradas: pals }));
+                        return; // Termina con éxito trayendo el progreso de la nube
+                    }
+                } catch (err) {
+                    console.warn("Error consultando Supabase, recurriendo a localStorage...", err);
                 }
-            } catch (e) {
-                console.error("Error cargando progreso local de Sopa de Letras", e);
             }
-        }
-    }, [config.id]);
+
+            // 2. Si es anónimo o falló la red, recurrir al almacenamiento local del dispositivo[cite: 2]
+            const guardado = localStorage.getItem(storageKey);
+            if (guardado) {
+                try {
+                    const parsed = JSON.parse(guardado);
+                    if (parsed.palabrasEncontradas) {
+                        procesarProgresoCargado(parsed.palabrasEncontradas);
+                    }
+                } catch (e) {
+                    console.error("Error cargando progreso local de Sopa de Letras", e);
+                }
+            }
+        };
+
+        // Función interna para procesar y renderizar las palabras en pantalla
+        const procesarProgresoCargado = (listaPalabras) => {
+            setPalabrasEncontradas(listaPalabras);
+            const nuevasCeldas = new Set();
+            listaPalabras.forEach(palNombre => {
+                const palObj = palabras.find(p => p.texto === palNombre);
+                if (palObj) {
+                    obtenerCaminoEntrePuntos(palObj.inicio, palObj.fin).forEach(cellId => {
+                        nuevasCeldas.add(cellId);
+                    });
+                }
+            });
+            setCeldasCorrectas(nuevasCeldas);
+        };
+
+        cargarProgreso();
+    }, [config.id, userId]);
 
     // Función auxiliar para obtener todas las celdas intermedias entre dos coordenadas [f, c]
     const obtenerCaminoEntrePuntos = (inicio, fin) => {
@@ -76,25 +110,21 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
         return celdas;
     };
 
-    // Al pulsar el mouse en una celda
-    const handleMouseDown = (fila, col) => {
+    // --- CONTROLADORES DE INTERACCIÓN ---
+
+    const iniciarSeleccion = (fila, col) => {
         setEstaArrastrando(true);
         setCeldasSeleccionadas([`${fila}-${col}`]);
     };
 
-    // Al arrastrar el mouse sobre otras celdas
-    const handleMouseEnter = (fila, col) => {
-        if (!estaArrastrando) return;
+    const actualizarSeleccion = (fila, col) => {
         const nuevaCelda = `${fila}-${col}`;
-        
-        // Evitar duplicados consecutivos en el trazo de arrastre
         if (!celdasSeleccionadas.includes(nuevaCelda)) {
             setCeldasSeleccionadas((prev) => [...prev, nuevaCelda]);
         }
     };
 
-    // Al soltar el mouse, validamos si el camino trazado coincide con alguna palabra del JSON
-    const handleMouseUp = () => {
+    const finalizarSeleccion = () => {
         if (!estaArrastrando) return;
         setEstaArrastrando(false);
 
@@ -106,7 +136,6 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
         const [fI, cI] = primerID.split("-").map(Number);
         const [fF, cF] = ultimoID.split("-").map(Number);
 
-        // Buscamos si hay alguna palabra en el JSON que coincida en esas coordenadas (al derecho o al revés)
         const palabraEncontrada = palabras.find((pal) => {
             const coincideNormal = (pal.inicio[0] === fI && pal.inicio[1] === cI && pal.fin[0] === fF && pal.fin[1] === cF);
             const coincideInverso = (pal.inicio[0] === fF && pal.inicio[1] === cF && pal.fin[0] === fI && pal.fin[1] === cI);
@@ -114,7 +143,6 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
         });
 
         if (palabraEncontrada && !palabrasEncontradas.includes(palabraEncontrada.texto)) {
-            // Pintamos la palabra correcta trazando todo el camino en verde
             const caminoCompleto = obtenerCaminoEntrePuntos(palabraEncontrada.inicio, palabraEncontrada.fin);
             
             const nuevasCorrectas = new Set(celdasCorrectas);
@@ -125,11 +153,33 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
             setCeldasCorrectas(nuevasCorrectas);
             setPalabrasEncontradas(nuevaListaPalabras);
 
-            // Guardar progreso intermedio en local storage
             localStorage.setItem(storageKey, JSON.stringify({ palabrasEncontradas: nuevaListaPalabras }));
         }
 
         setCeldasSeleccionadas([]);
+    };
+
+    // --- CAPTURA DE ARRASTRE EN PANTALLAS TÁCTILES ---
+
+    const handleTouchStart = (e, fila, col) => {
+        e.preventDefault(); // Previene scrolls involuntarios mientras juegas
+        iniciarSeleccion(fila, col);
+    };
+
+    const handleTouchMove = (e) => {
+        if (!estaArrastrando || !gridRef.current) return;
+        e.preventDefault(); // Previene el scroll del navegador móvil
+
+        const touch = e.touches[0];
+        const elementoBajoElDedo = document.elementFromPoint(touch.clientX, touch.clientY);
+
+        if (elementoBajoElDedo) {
+            const cellId = elementoBajoElDedo.getAttribute("data-cell-id");
+            if (cellId) {
+                const [f, c] = cellId.split("-").map(Number);
+                actualizarSeleccion(f, c);
+            }
+        }
     };
 
     // Reiniciar actividad
@@ -140,7 +190,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
         localStorage.removeItem(storageKey);
     };
 
-    // Al presionar continuar, sincronizamos progreso final en Supabase
+    // Al presionar continuar, sincronizamos progreso final en Supabase[cite: 2]
     const handleContinue = async () => {
         if (palabrasEncontradas.length < palabras.length) return;
 
@@ -184,20 +234,22 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
             <div 
                 className="bg-white p-4 md:p-6 rounded-3xl border-4 border-alianza-amarillo shadow-2xl" 
                 translate="no"
-                onMouseUp={handleMouseUp} // Captura por si sueltan el mouse fuera de la cuadrícula
+                onMouseUp={finalizarSeleccion}
+                onTouchEnd={finalizarSeleccion}
             >
                 <h1
                     className="text-center font-extrabold text-blue-900 mb-6 px-4"
-                    style={{ fontSize: "clamp(1.3rem, 2.5vw, 2.1rem)" }}
+                    style={{ fontSize: "clamp(1.2rem, 2.5vw, 2.1rem)" }}
                 >
                     {config.titulo || "Alianzito completa la sopa de letras"}
                 </h1>
 
                 {/* Grid Sopa de Letras */}
-                <div className="flex justify-center mb-6 overflow-x-auto py-2">
+                <div className="flex justify-center mb-6 py-2">
                     <div 
-                        className="grid grid-cols-20 gap-[2px] p-2 bg-blue-900 rounded-2xl shadow-lg border-4 border-blue-950 select-none max-w-full"
-                        style={{ minWidth: "580px" }}
+                        ref={gridRef}
+                        onTouchMove={handleTouchMove} 
+                        className="grid grid-cols-20 gap-[1px] xs:gap-[2px] p-2 bg-blue-900 rounded-2xl shadow-lg border-4 border-blue-950 select-none max-w-full touch-none"
                     >
                         {grid.map((fila, iFila) =>
                             fila.map((letra, iCol) => {
@@ -208,11 +260,17 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
                                 return (
                                     <div
                                         key={idCelda}
-                                        onMouseDown={() => handleMouseDown(iFila, iCol)}
-                                        onMouseEnter={() => handleMouseEnter(iFila, iCol)}
+                                        data-cell-id={idCelda} 
+                                        onMouseDown={() => iniciarSeleccion(iFila, iCol)}
+                                        onMouseEnter={() => estaArrastrando && actualizarSeleccion(iFila, iCol)}
+                                        onTouchStart={(e) => handleTouchStart(e, iFila, iCol)}
                                         className={`
-                                            aspect-square w-[26px] h-[26px] sm:w-[32px] sm:h-[32px] 
-                                            flex items-center justify-center font-black rounded-md text-xs sm:text-sm 
+                                            w-[14px] h-[14px]
+                                            xxs:w-[16px] xxs:h-[16px]
+                                            xs:w-[22px] xs:h-[22px] 
+                                            sm:w-[32px] sm:h-[32px] 
+                                            flex items-center justify-center font-black rounded-sm sm:rounded-md 
+                                            text-[8px] xxs:text-[9px] xs:text-xs sm:text-sm 
                                             transition-all duration-150 cursor-pointer select-none
                                             ${esCorrecta 
                                                 ? "bg-emerald-500 text-white shadow-inner scale-95" 

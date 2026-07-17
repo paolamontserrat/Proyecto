@@ -23,20 +23,47 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act03-${rango}-${userId}`;
 
-    // Cargar progreso guardado al montar
+    // Cargar progreso guardado al montar (Supabase + LocalStorage)
     useEffect(() => {
-        const guardado = localStorage.getItem(storageKey);
-        if (guardado) {
-            try {
-                const parsed = JSON.parse(guardado);
-                if (parsed.ingresos) setIngresos(parsed.ingresos);
-                if (parsed.gastos) setGastos(parsed.gastos);
-                if (parsed.ahorroPlaneado) setAhorroPlaneado(parsed.ahorroPlaneado);
-            } catch (e) {
-                console.error("Error al cargar progreso local", e);
+        const cargarProgreso = async () => {
+            if (userId !== "anon" && data?.id) {
+                try {
+                    const { data: progreso, error } = await supabase
+                        .from("progreso_actividades")
+                        .select("datos_actividad")
+                        .eq("usuario_id", userId)
+                        .eq("actividad_id", data.id)
+                        .maybeSingle();
+
+                    if (progreso?.datos_actividad) {
+                        const datos = progreso.datos_actividad;
+                        if (datos.ingresos) setIngresos(datos.ingresos.toString());
+                        if (datos.gastos) setGastos(datos.gastos.toString());
+                        if (datos.ahorroPlaneado) setAhorroPlaneado(datos.ahorroPlaneado.toString());
+                        
+                        localStorage.setItem(storageKey, JSON.stringify(datos));
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Error consultando Supabase, intentando local...", err);
+                }
             }
-        }
-    }, []);
+
+            const guardado = localStorage.getItem(storageKey);
+            if (guardado) {
+                try {
+                    const parsed = JSON.parse(guardado);
+                    if (parsed.ingresos) setIngresos(parsed.ingresos.toString());
+                    if (parsed.gastos) setGastos(parsed.gastos.toString());
+                    if (parsed.ahorroPlaneado) setAhorroPlaneado(parsed.ahorroPlaneado.toString());
+                } catch (e) {
+                    console.error("Error al cargar progreso local", e);
+                }
+            }
+        };
+
+        cargarProgreso();
+    }, [data?.id, userId]);
 
     // Valores numéricos para validaciones dinámicas
     const ing = parseFloat(ingresos) || 0;

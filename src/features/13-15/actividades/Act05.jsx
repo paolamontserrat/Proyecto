@@ -90,8 +90,8 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                 
                 {/* Título Principal */}
                 <h1 
-                    className="text-center font-black text-amber-500 mb-6 uppercase tracking-wider" 
-                    style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)" }}
+                    className="text-center font-black text-amber-500 mb-6 uppercase tracking-wider break-words px-2" 
+                    style={{ fontSize: "clamp(1.8rem, 8vw, 3.5rem)" }}
                 >
                     {data.titulo || "RESPONSABILIDAD"}
                 </h1>

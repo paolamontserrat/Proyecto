@@ -25,22 +25,51 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act04-${rango}-${userId}`;
 
-    // Cargar progreso guardado al montar con llaves homologadas correctamente
+    // Cargar progreso guardado al montar (Supabase + LocalStorage)
     useEffect(() => {
-        const guardado = localStorage.getItem(storageKey);
-        if (guardado) {
-            try {
-                const parsed = JSON.parse(guardado);
-                if (parsed.reflexion) setReflexion(parsed.reflexion);
-                if (parsed.queQuiero) setQueQuiero(parsed.queQuiero);
-                if (parsed.cuantoCuesta) setCuantoCuesta(parsed.cuantoCuesta);
-                if (parsed.paraCuando) setParaCuando(parsed.paraCuando);
-                if (parsed.semanas) setSemanas(parsed.semanas);
-            } catch (e) {
-                console.error("Error al cargar progreso local", e);
+        const cargarProgreso = async () => {
+            if (userId !== "anon" && data?.id) {
+                try {
+                    const { data: progreso, error } = await supabase
+                        .from("progreso_actividades")
+                        .select("datos_actividad")
+                        .eq("usuario_id", userId)
+                        .eq("actividad_id", data.id)
+                        .maybeSingle();
+
+                    if (progreso?.datos_actividad) {
+                        const datos = progreso.datos_actividad;
+                        if (datos.reflexion) setReflexion(datos.reflexion);
+                        if (datos.queQuiero) setQueQuiero(datos.queQuiero);
+                        if (datos.cuantoCuesta) setCuantoCuesta(datos.cuantoCuesta.toString());
+                        if (datos.paraCuando) setParaCuando(datos.paraCuando);
+                        if (datos.semanas) setSemanas(datos.semanas.toString());
+                        
+                        localStorage.setItem(storageKey, JSON.stringify(datos));
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Error consultando Supabase, intentando local...", err);
+                }
             }
-        }
-    }, []);
+
+            const guardado = localStorage.getItem(storageKey);
+            if (guardado) {
+                try {
+                    const parsed = JSON.parse(guardado);
+                    if (parsed.reflexion) setReflexion(parsed.reflexion);
+                    if (parsed.queQuiero) setQueQuiero(parsed.queQuiero);
+                    if (parsed.cuantoCuesta) setCuantoCuesta(parsed.cuantoCuesta.toString());
+                    if (parsed.paraCuando) setParaCuando(parsed.paraCuando);
+                    if (parsed.semanas) setSemanas(parsed.semanas.toString());
+                } catch (e) {
+                    console.error("Error al cargar progreso local", e);
+                }
+            }
+        };
+
+        cargarProgreso();
+    }, [data?.id, userId]);
 
     // Efecto para calcular de forma automática las semanas a partir de la fecha seleccionada
     useEffect(() => {
@@ -118,7 +147,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
         const datosAGuardar = datos || {
             reflexion,
             queQuiero,       
-            cuantoCuesta,   
+            cuantoCuesta: parseFloat(cuantoCuesta) || 0,   
             paraCuando,
             semanas: semanasNum,
             ahorroSemanalRequerido: parseFloat(ahorroSemanal)
@@ -175,7 +204,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
         const datosCompletos = {
             reflexion,
             queQuiero,
-            cuantoCuesta,
+            cuantoCuesta: costoNum,
             paraCuando,
             semanas: semanasNum,
             ahorroSemanalRequerido: parseFloat(ahorroSemanal)
