@@ -9,6 +9,8 @@ import AdminLayout from "./pages/admin/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminProtectedRoute from "./components/AdminProtectedRoute";
 import AdminUsuarios from './pages/admin/AdminUsuarios';
+import AdminAhorros from './pages/admin/AdminAhorros';
+
 
 
 function App() {
@@ -29,6 +31,7 @@ function App() {
         >
           <Route index element={<AdminDashboard />} />
           <Route path="usuarios" element={<AdminUsuarios />} />
+          <Route path="ahorros" element={<AdminAhorros />} />
         </Route>
 
         {/* 🔐 protegidas */}

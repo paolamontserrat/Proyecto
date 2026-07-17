@@ -1,63 +1,106 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { supabase } from '../supabaseClient';
-import Footer from '../components/Footer';
-import Confetti from '../components/Confetti';
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { supabase } from "../supabaseClient";
+import Footer from "../components/Footer";
+import Confetti from "../components/Confetti";
+import PasaporteSellos from "../components/PasaporteSellos";
+import PasaporteDiplomas from "../components/PasaporteDiplomas";
 
 const Passport = () => {
   const navigate = useNavigate();
   const { rango } = useParams();
 
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
   const userId = usuario?.id || "anon";
 
-  // =========================
-  // 🔥 MESES SEGUROS
-  // =========================
-  const obtenerMesActual = (fecha = new Date()) => {
+  const nombreMesActual = (() => {
     const meses = [
-      "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-      "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre",
     ];
-    return meses[fecha.getMonth()];
-  };
-
-  const nombreMesActual = obtenerMesActual(new Date());
+    return meses[new Date().getMonth()];
+  })();
   const anioActual = new Date().getFullYear();
 
-  // =========================
-  // 🔥 STORAGE MULTIUSUARIO
-  // =========================
   const storageKey = `ahorros_${userId}_${rango}`;
 
-  const [ahorros, setAhorros] = useState(() =>
-    JSON.parse(localStorage.getItem(storageKey)) || {}
+  const [ahorros, setAhorros] = useState(
+    () => JSON.parse(localStorage.getItem(storageKey)) || {},
   );
 
   const [mesExpandido, setMesExpandido] = useState(null);
   const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState({ fecha: '', monto: '', id: null });
-  const [error, setError] = useState('');
-
-  const [fondo, setFondo] = useState('/images/0-5/Fondo0-5.png');
+  const [formData, setFormData] = useState({ fecha: "", monto: "", id: null });
+  const [error, setError] = useState("");
+  const [fondo, setFondo] = useState("/images/0-5/Fondo0-5.png");
 
   // =========================
-  // 🏅 GAMIFICACIÓN: sellos y retos
+  // 🏅 GAMIFICACIÓN: sellos, diplomas y reto vigente
   // =========================
   const [retoActual, setRetoActual] = useState(null);
   const [mostrarSello, setMostrarSello] = useState(false);
-  const [sinceSello, setSelloInfo] = useState(null); // { mes, monto }
+  const [sinceSello, setSelloInfo] = useState(null);
   const [mostrarDiploma, setMostrarDiploma] = useState(false);
+  const [misDiplomas, setMisDiplomas] = useState([]);
+  const [misSellos, setMisSellos] = useState([]);
+
+  const cargarDiplomas = useCallback(async () => {
+    if (userId === "anon") return;
+
+    const { data } = await supabase
+      .from("reto_progreso")
+      .select("reto_id, retos_ahorro(nombre)")
+      .eq("usuario_id", String(userId))
+      .eq("diploma_generado", true);
+
+    setMisDiplomas(
+      (data || []).map((d) => ({
+        reto_id: d.reto_id,
+        nombre: d.retos_ahorro?.nombre,
+      })),
+    );
+  }, [userId]);
+
+  const cargarSellos = useCallback(async () => {
+    if (userId === "anon") return;
+
+    const { data } = await supabase
+      .from("sellos_digitales")
+      .select("mes, anio")
+      .eq("usuario_id", String(userId))
+      .eq("anio", anioActual);
+
+    setMisSellos(data || []);
+  }, [userId, anioActual]);
+
+  useEffect(() => {
+    cargarDiplomas();
+  }, [cargarDiplomas]);
+  useEffect(() => {
+    cargarSellos();
+  }, [cargarSellos]);
+
+  const tieneSelloReal = (mes) => misSellos.some((s) => s.mes === mes);
 
   // Trae el reto vigente según la fecha de hoy
   useEffect(() => {
     const cargarReto = async () => {
       const hoy = new Date().toISOString().slice(0, 10);
       const { data } = await supabase
-        .from('retos_ahorro')
-        .select('*')
-        .lte('fecha_inicio', hoy)
-        .gte('fecha_fin', hoy)
+        .from("retos_ahorro")
+        .select("*")
+        .lte("fecha_inicio", hoy)
+        .gte("fecha_fin", hoy)
         .maybeSingle();
       if (data) setRetoActual(data);
     };
@@ -72,13 +115,9 @@ const Passport = () => {
       try {
         const res = await fetch(`/data/${rango}.json`);
         const data = await res.json();
-
-        if (data?.fondoPasaporte) {
-          setFondo(data.fondoPasaporte);
-        }
+        if (data?.fondoPasaporte) setFondo(data.fondoPasaporte);
       } catch {}
     };
-
     if (rango) cargarFondo();
   }, [rango]);
 
@@ -87,14 +126,13 @@ const Passport = () => {
   // =========================
   useEffect(() => {
     const load = async () => {
-      // Nota: Si el usuario es anon, solo carga de localStorage
       if (userId === "anon") return;
 
       const { data } = await supabase
-        .from('ahorros_usuario')
-        .select('datos')
-        .eq('usuario_id', userId)
-        .eq('rango', rango)
+        .from("ahorros_usuario")
+        .select("datos")
+        .eq("usuario_id", userId)
+        .eq("rango", rango)
         .maybeSingle();
 
       if (data?.datos) {
@@ -102,7 +140,6 @@ const Passport = () => {
         localStorage.setItem(storageKey, JSON.stringify(data.datos));
       }
     };
-
     load();
   }, [userId, rango, storageKey]);
 
@@ -115,13 +152,12 @@ const Passport = () => {
 
     if (userId === "anon") return;
 
-    await supabase.from('ahorros_usuario').upsert({
-      usuario_id: userId,
-      rango,
-      datos: nuevo
-    }, {
-      onConflict: 'usuario_id,rango'
-    });
+    await supabase
+      .from("ahorros_usuario")
+      .upsert(
+        { usuario_id: userId, rango, datos: nuevo },
+        { onConflict: "usuario_id,rango" },
+      );
   };
 
   // =========================
@@ -131,65 +167,24 @@ const Passport = () => {
     if (userId === "anon") return;
     if (totalMes < 100) return;
 
-    const { data: yaExiste } = await supabase
-      .from('sellos_digitales')
-      .select('id')
-      .eq('usuario_id', String(userId))
-      .eq('mes', mes)
-      .eq('anio', anio)
-      .maybeSingle();
-
-    if (yaExiste) return; // ya se otorgó el sello este mes
-
-    const { error: insertError } = await supabase.from('sellos_digitales').insert({
-      usuario_id: String(userId), mes, anio, monto_acumulado: totalMes
+    const { data, error: rpcError } = await supabase.rpc("registrar_sello", {
+      p_usuario_id: String(userId),
+      p_mes: mes,
+      p_anio: anio,
+      p_monto: totalMes,
     });
 
-    if (insertError) return;
+    if (rpcError || !data?.ok) return;
 
-    setSelloInfo({ mes, monto: totalMes });
-    setMostrarSello(true);
+    if (data.nuevo) {
+      setSelloInfo({ mes, monto: totalMes });
+      setMostrarSello(true);
+      cargarSellos();
+    }
 
-    await revisarReto();
-  };
-
-  // =========================
-  // 🏆 REVISAR SI SE COMPLETÓ EL RETO (3 sellos)
-  // =========================
-  const revisarReto = async () => {
-    if (!retoActual) return;
-
-    const { count } = await supabase
-      .from('sellos_digitales')
-      .select('id', { count: 'exact', head: true })
-      .eq('usuario_id', String(userId))
-      .in('mes', retoActual.meses)
-      .gte('fecha_sello', retoActual.fecha_inicio)
-      .lte('fecha_sello', retoActual.fecha_fin);
-
-    const sellosCompletados = count || 0;
-
-    const { data: progresoExistente } = await supabase
-      .from('reto_progreso')
-      .select('*')
-      .eq('usuario_id', String(userId))
-      .eq('reto_id', retoActual.id)
-      .maybeSingle();
-
-    const yaTeniaDiploma = progresoExistente?.diploma_generado || false;
-
-    await supabase.from('reto_progreso').upsert({
-      usuario_id: String(userId),
-      reto_id: retoActual.id,
-      sellos_completados: sellosCompletados,
-      diploma_generado: yaTeniaDiploma || sellosCompletados >= 3,
-      fecha_diploma: yaTeniaDiploma
-        ? progresoExistente.fecha_diploma
-        : (sellosCompletados >= 3 ? new Date().toISOString() : null),
-    }, { onConflict: 'usuario_id,reto_id' });
-
-    if (!yaTeniaDiploma && sellosCompletados >= 3) {
+    if (data.diploma_nuevo) {
       setMostrarDiploma(true);
+      cargarDiplomas();
     }
   };
 
@@ -213,27 +208,23 @@ const Passport = () => {
     }
 
     const nuevos = { ...ahorros };
-
-    if (!nuevos[mesExpandido]) {
-      nuevos[mesExpandido] = [];
-    }
+    if (!nuevos[mesExpandido]) nuevos[mesExpandido] = [];
 
     const lista = nuevos[mesExpandido];
 
-    // ⭐ racha semanal
     const esConstante =
       lista.length === 0 ||
-      (Date.now() - lista[lista.length - 1]?.id > 604800000);
+      Date.now() - lista[lista.length - 1]?.id > 604800000;
 
     const nuevoItem = {
       ...formData,
       id: formData.id || Date.now(),
-      estrella: esConstante
+      estrella: esConstante,
     };
 
     if (formData.id) {
-      nuevos[mesExpandido] = lista.map(item =>
-        item.id === formData.id ? nuevoItem : item
+      nuevos[mesExpandido] = lista.map((item) =>
+        item.id === formData.id ? nuevoItem : item,
       );
     } else {
       nuevos[mesExpandido].push(nuevoItem);
@@ -241,24 +232,53 @@ const Passport = () => {
 
     await sync(nuevos);
 
-    const totalMes = nuevos[mesExpandido].reduce((s, a) => s + Number(a.monto), 0);
+    const totalMes = nuevos[mesExpandido].reduce(
+      (s, a) => s + Number(a.monto),
+      0,
+    );
     await verificarSello(mesExpandido, anioActual, totalMes);
 
     setShowForm(false);
-    setFormData({ fecha: '', monto: '', id: null });
-    setError('');
+    setFormData({ fecha: "", monto: "", id: null });
+    setError("");
   };
 
   // =========================
   // 🔥 ELIMINAR
   // =========================
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
+    if (userId === "anon") {
+      const nuevos = { ...ahorros };
+      nuevos[mesExpandido] = nuevos[mesExpandido].filter((a) => a.id !== id);
+      sync(nuevos);
+      return;
+    }
+
+    const { data, error: rpcError } = await supabase.rpc(
+      "admin_eliminar_deposito",
+      {
+        p_usuario_id: String(userId),
+        p_rango: rango,
+        p_deposito_id: String(id),
+      },
+    );
+
+    if (rpcError || !data?.ok) {
+      setError("No se pudo eliminar el ahorro. Intenta de nuevo.");
+      return;
+    }
+
     const nuevos = { ...ahorros };
+    nuevos[mesExpandido] = nuevos[mesExpandido].filter((a) => a.id !== id);
+    setAhorros(nuevos);
+    localStorage.setItem(storageKey, JSON.stringify(nuevos));
 
-    nuevos[mesExpandido] =
-      nuevos[mesExpandido].filter(a => a.id !== id);
-
-    sync(nuevos);
+    if (data.sello_eliminado) {
+      cargarSellos();
+    }
+    if (data.diploma_revocado) {
+      cargarDiplomas();
+    }
   };
 
   const iniciarEdicion = (item) => {
@@ -268,8 +288,8 @@ const Passport = () => {
 
   const calcularTotal = () => {
     let total = 0;
-    Object.values(ahorros).forEach(mes => {
-      mes.forEach(a => total += Number(a.monto));
+    Object.values(ahorros).forEach((mes) => {
+      mes.forEach((a) => (total += Number(a.monto)));
     });
     return total;
   };
@@ -277,24 +297,25 @@ const Passport = () => {
   const puedeEditar = mesExpandido === nombreMesActual;
 
   // =========================
-  // 🔥 UI (NO TOCAR)
+  // 🔥 UI
   // =========================
   return (
     <div
       className="p-4 min-h-screen pb-10"
-      style={{
-        backgroundImage: `url(${fondo})`,
-        backgroundSize: 'cover'
-      }}
+      style={{ backgroundImage: `url(${fondo})`, backgroundSize: "cover" }}
     >
-
       {/* HEADER */}
       <div className="max-w-md mx-auto mb-4 flex justify-between">
-        <button onClick={() => navigate(-1)} className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold">
+        <button
+          onClick={() => navigate(-1)}
+          className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold"
+        >
           ← Volver
         </button>
-
-        <button onClick={() => navigate(`/dashboard/${rango}`)} className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold">
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold"
+        >
           Inicio
         </button>
       </div>
@@ -312,66 +333,85 @@ const Passport = () => {
         )}
       </div>
 
+      {/* 🏅 VITRINA DE SELLOS Y DIPLOMAS */}
+      <PasaporteSellos
+        ahorros={ahorros}
+        mesActual={nombreMesActual}
+        sellosReales={misSellos}
+      />
+      <PasaporteDiplomas diplomas={misDiplomas} />
+
       {/* MESES */}
       <div className="max-w-sm mx-auto space-y-4">
         {[
-          "Enero","Febrero","Marzo","Abril","Mayo","Junio",
-          "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
-        ].map(mes => {
-
+          "Enero",
+          "Febrero",
+          "Marzo",
+          "Abril",
+          "Mayo",
+          "Junio",
+          "Julio",
+          "Agosto",
+          "Septiembre",
+          "Octubre",
+          "Noviembre",
+          "Diciembre",
+        ].map((mes) => {
           const totalMes =
             ahorros[mes]?.reduce((s, a) => s + Number(a.monto), 0) || 0;
-
-          const tieneEstrella =
-            ahorros[mes]?.some(a => a.estrella);
+          const tieneEstrella = ahorros[mes]?.some((a) => a.estrella);
 
           return (
-            <div key={mes} className="bg-white rounded-2xl border-2 overflow-hidden">
-
+            <div
+              key={mes}
+              className="bg-white rounded-2xl border-2 overflow-hidden"
+            >
               <button
-                onClick={() => setMesExpandido(mesExpandido === mes ? null : mes)}
+                onClick={() =>
+                  setMesExpandido(mesExpandido === mes ? null : mes)
+                }
                 className={`w-full p-4 flex justify-between font-black ${
-                  mes === nombreMesActual ? "bg-alianza-amarillo text-alianza-azul" : ""
+                  mes === nombreMesActual
+                    ? "bg-alianza-amarillo text-alianza-azul"
+                    : ""
                 }`}
               >
-                {mes} {tieneEstrella && "⭐"} {totalMes >= 100 && "🏅"}
+                {mes} {tieneEstrella && "⭐"} {tieneSelloReal(mes) && "🏅"}
                 <span>${totalMes}</span>
               </button>
 
               {mesExpandido === mes && (
                 <div className="p-4">
-
-                  {(ahorros[mes] || []).map(a => (
-                    <div key={a.id} className="flex justify-between py-2 border-b">
-
+                  {(ahorros[mes] || []).map((a) => (
+                    <div
+                      key={a.id}
+                      className="flex justify-between py-2 border-b"
+                    >
                       <div>
                         <p className="text-sm">{a.fecha}</p>
                         <p className="font-black">${a.monto}</p>
                       </div>
-
                       {mes === nombreMesActual && (
                         <div className="flex gap-2">
                           <button onClick={() => iniciarEdicion(a)}>✏️</button>
                           <button onClick={() => handleDelete(a.id)}>🗑️</button>
                         </div>
                       )}
-
                     </div>
                   ))}
 
                   {puedeEditar && (
                     <button
                       onClick={() => {
-                        setFormData({ fecha: '', monto: '', id: null });
+                        setFormData({ fecha: "", monto: "", id: null });
                         setShowForm(true);
-                        setError('');
+                        setError("");
                       }}
                       className="w-full mt-2 bg-alianza-azul text-white py-2 rounded"
                     >
                       + Agregar ahorro
                     </button>
                   )}
-
                 </div>
               )}
             </div>
@@ -383,7 +423,6 @@ const Passport = () => {
       {showForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-3xl w-full max-w-sm">
-
             <input
               type="date"
               value={formData.fecha}
@@ -392,7 +431,6 @@ const Passport = () => {
               }
               className="w-full p-3 border mb-2"
             />
-
             <input
               type="number"
               value={formData.monto}
@@ -401,11 +439,7 @@ const Passport = () => {
               }
               className="w-full p-3 border mb-2"
             />
-
-            {error && (
-              <p className="text-red-500 text-sm">{error}</p>
-            )}
-
+            {error && <p className="text-red-500 text-sm">{error}</p>}
             <div className="flex gap-2 mt-2">
               <button
                 onClick={() => setShowForm(false)}
@@ -413,7 +447,6 @@ const Passport = () => {
               >
                 Cancelar
               </button>
-
               <button
                 onClick={handleSave}
                 className="flex-1 bg-blue-600 text-white py-2 rounded"
@@ -421,7 +454,6 @@ const Passport = () => {
                 Guardar
               </button>
             </div>
-
           </div>
         </div>
       )}
@@ -432,7 +464,9 @@ const Passport = () => {
           <Confetti />
           <div className="bg-white p-6 rounded-3xl w-full max-w-sm text-center">
             <p className="text-5xl mb-2">🏅</p>
-            <h3 className="text-xl font-black text-alianza-azul">¡Sello digital ganado!</h3>
+            <h3 className="text-xl font-black text-alianza-azul">
+              ¡Sello digital ganado!
+            </h3>
             <p className="text-gray-600 mt-2">
               Ahorraste ${sinceSello.monto} en {sinceSello.mes}
             </p>
@@ -452,9 +486,12 @@ const Passport = () => {
           <Confetti />
           <div className="bg-white p-6 rounded-3xl w-full max-w-sm text-center">
             <p className="text-5xl mb-2">🏆</p>
-            <h3 className="text-xl font-black text-alianza-azul">¡Reto cumplido!</h3>
+            <h3 className="text-xl font-black text-alianza-azul">
+              ¡Reto cumplido!
+            </h3>
             <p className="text-gray-600 mt-2">
-              Completaste los 3 sellos de {retoActual.nombre}. Acude a tu sucursal por tu recompensa.
+              Completaste los 3 sellos de {retoActual.nombre}. Acude a tu
+              sucursal por tu recompensa.
             </p>
             <button
               onClick={() => setMostrarDiploma(false)}

@@ -1,28 +1,84 @@
-import { Outlet, useNavigate, Link } from 'react-router-dom';
+import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
+import { LayoutDashboard, Users, PiggyBank, LogOut } from "lucide-react";
+
+const ITEMS = [
+  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/admin/usuarios", label: "Usuarios", icon: Users },
+  { to: "/admin/ahorros", label: "Ahorros y sellos", icon: PiggyBank },
+];
 
 function AdminLayout() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
-    localStorage.removeItem('usuario');
-    navigate('/');
+    localStorage.removeItem("usuario");
+    navigate("/");
   };
+
+  const estaActivo = (item) =>
+    item.exact
+      ? location.pathname === item.to
+      : location.pathname.startsWith(item.to);
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      <aside className="w-56 bg-alianza-azul text-white p-4 flex flex-col">
-        <h2 className="font-bold text-lg mb-6">Admin</h2>
-        <Link to="/admin" className="block py-2 px-3 rounded hover:bg-blue-800">Dashboard</Link>
-        <Link to="/admin/usuarios" className="block py-2 px-3 rounded hover:bg-blue-800">Usuarios</Link>
-        <button
-          onClick={handleLogout}
-          className="block w-full text-left py-2 px-3 rounded hover:bg-blue-800 mt-auto"
-        >
-          Cerrar sesión
-        </button>
+      {/* SIDEBAR */}
+      <aside className="w-64 bg-gradient-to-b from-alianza-azul to-blue-900 text-white flex flex-col shadow-xl">
+        <div className="p-6 border-b border-white/10">
+          <div className="flex flex-col items-center justify-center">
+            <img src="/images/LogoBlanco.png" alt="Logo" className="w-50 h-50 mb-3"/>
+            <div className="text-center">
+              <p className="font-black text-lg leading-tight">Administrador</p>
+            </div>
+          </div>
+        </div>
+
+        <nav className="flex-1 p-3 space-y-1">
+          {ITEMS.map((item) => {
+            const Icon = item.icon;
+            const activo = estaActivo(item);
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition ${
+                  activo
+                    ? "bg-alianza-amarillo text-alianza-azul shadow"
+                    : "text-white/80 hover:bg-white/10 hover:text-white"
+                }`}
+              >
+                <Icon size={18} />
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="p-3 border-t border-white/10">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-white/80 hover:bg-white/10 hover:text-white transition"
+          >
+            <LogOut size={18} />
+            Cerrar sesión
+          </button>
+        </div>
       </aside>
-      <main className="flex-1 p-6">
-        <Outlet />
+
+      {/* CONTENIDO */}
+      <main
+        className="flex-1 relative overflow-y-auto"
+        style={{
+          backgroundImage: "url('/images/FondoAdmin.png')",
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
+          backgroundPosition: "center",
+        }}
+      >
+        <div className="min-h-screen bg-white/85 p-6">
+          <Outlet />
+        </div>
       </main>
     </div>
   );
