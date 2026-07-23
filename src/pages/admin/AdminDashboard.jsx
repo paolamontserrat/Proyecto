@@ -69,7 +69,7 @@ function AdminDashboard() {
         supabase.from('ahorros_usuario').select('datos'),
         supabase.from('sellos_digitales').select('id', { count: 'exact', head: true }).eq('mes', nombreMesActual).eq('anio', anioActual),
         supabase.from('sellos_digitales').select('id', { count: 'exact', head: true }),
-        supabase.from('reto_progreso').select('usuario_id', { count: 'exact', head: true }).eq('diploma_generado', true),
+        supabase.from('diplomas').select('id', { count: 'exact', head: true }),
         supabase.from('usuarios').select('nombre, numero_socio, nivel, fecha_registro').neq('rol', 'admin').order('fecha_registro', { ascending: false }).limit(5),
       ]);
 

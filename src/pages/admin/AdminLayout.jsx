@@ -1,11 +1,15 @@
 import { Outlet, useNavigate, Link, useLocation } from "react-router-dom";
-import { LayoutDashboard, Users, PiggyBank, LogOut } from "lucide-react";
+import { LayoutDashboard, Users, PiggyBank, Award, Settings, FileText, LogOut } from 'lucide-react';
 
 const ITEMS = [
-  { to: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/admin/usuarios", label: "Usuarios", icon: Users },
-  { to: "/admin/ahorros", label: "Ahorros y sellos", icon: PiggyBank },
+  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+  { to: '/admin/usuarios', label: 'Usuarios', icon: Users },
+  { to: '/admin/ahorros', label: 'Ahorros y sellos', icon: PiggyBank },
+  { to: '/admin/ciclos', label: 'Ciclos', icon: Award },
+  { to: '/admin/contenido', label: 'Contenido', icon: FileText },
+  { to: '/admin/configuracion', label: 'Ajustes', icon: Settings },
 ];
+
 
 function AdminLayout() {
   const navigate = useNavigate();

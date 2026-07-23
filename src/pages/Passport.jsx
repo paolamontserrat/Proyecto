@@ -47,7 +47,6 @@ const Passport = () => {
   // =========================
   // 🏅 GAMIFICACIÓN: sellos, diplomas y reto vigente
   // =========================
-  const [retoActual, setRetoActual] = useState(null);
   const [mostrarSello, setMostrarSello] = useState(false);
   const [sinceSello, setSelloInfo] = useState(null);
   const [mostrarDiploma, setMostrarDiploma] = useState(false);
@@ -58,17 +57,12 @@ const Passport = () => {
     if (userId === "anon") return;
 
     const { data } = await supabase
-      .from("reto_progreso")
-      .select("reto_id, retos_ahorro(nombre)")
+      .from("diplomas")
+      .select("numero")
       .eq("usuario_id", String(userId))
-      .eq("diploma_generado", true);
+      .order("numero");
 
-    setMisDiplomas(
-      (data || []).map((d) => ({
-        reto_id: d.reto_id,
-        nombre: d.retos_ahorro?.nombre,
-      })),
-    );
+    setMisDiplomas(data || []);
   }, [userId]);
 
   const cargarSellos = useCallback(async () => {
@@ -91,21 +85,6 @@ const Passport = () => {
   }, [cargarSellos]);
 
   const tieneSelloReal = (mes) => misSellos.some((s) => s.mes === mes);
-
-  // Trae el reto vigente según la fecha de hoy
-  useEffect(() => {
-    const cargarReto = async () => {
-      const hoy = new Date().toISOString().slice(0, 10);
-      const { data } = await supabase
-        .from("retos_ahorro")
-        .select("*")
-        .lte("fecha_inicio", hoy)
-        .gte("fecha_fin", hoy)
-        .maybeSingle();
-      if (data) setRetoActual(data);
-    };
-    cargarReto();
-  }, []);
 
   // =========================
   // 🔥 FONDO POR RANGO
@@ -326,11 +305,6 @@ const Passport = () => {
         <p className="text-3xl font-black text-alianza-amarillo">
           ${calcularTotal()}
         </p>
-        {retoActual && (
-          <p className="text-xs text-white/80 mt-1">
-            {retoActual.nombre} en curso
-          </p>
-        )}
       </div>
 
       {/* 🏅 VITRINA DE SELLOS Y DIPLOMAS */}
@@ -481,17 +455,16 @@ const Passport = () => {
       )}
 
       {/* 🏆 DIPLOMA POR RETO CUMPLIDO */}
-      {mostrarDiploma && retoActual && (
+      {mostrarDiploma && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <Confetti />
           <div className="bg-white p-6 rounded-3xl w-full max-w-sm text-center">
             <p className="text-5xl mb-2">🏆</p>
             <h3 className="text-xl font-black text-alianza-azul">
-              ¡Reto cumplido!
+              ¡Diploma ganado!
             </h3>
             <p className="text-gray-600 mt-2">
-              Completaste los 3 sellos de {retoActual.nombre}. Acude a tu
-              sucursal por tu recompensa.
+              Completaste 3 sellos más. Acude a tu sucursal por tu recompensa.
             </p>
             <button
               onClick={() => setMostrarDiploma(false)}

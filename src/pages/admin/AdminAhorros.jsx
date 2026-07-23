@@ -30,7 +30,7 @@ function AdminAhorros() {
         {[
           { id: "buscar", label: "Historial de usuario" },
           { id: "sellos", label: "Sellos otorgados" },
-          { id: "retos", label: "Retos y diplomas" },
+          { id: "diplomas", label: "Diplomas" },
         ].map((t) => (
           <button
             key={t.id}
@@ -48,7 +48,7 @@ function AdminAhorros() {
 
       {tab === "buscar" && <TabHistorial />}
       {tab === "sellos" && <TabSellos />}
-      {tab === "retos" && <TabRetos />}
+      {tab === "diplomas" && <TabDiplomas />}
     </div>
   );
 }
@@ -483,229 +483,82 @@ function TabSellos() {
 // =====================================================
 // TAB 3: Retos (fechas) y diplomas pendientes de entregar
 // =====================================================
-function TabRetos() {
-  const [retos, setRetos] = useState([]);
+function TabDiplomas() {
   const [pendientes, setPendientes] = useState([]);
-  const [editando, setEditando] = useState(null);
-  const [fechasEdit, setFechasEdit] = useState({ inicio: "", fin: "" });
   const [cargando, setCargando] = useState(true);
 
   const cargar = useCallback(async () => {
     setCargando(true);
 
-    const { data: retosData, error: retosError } = await supabase
-      .from("retos_ahorro")
-      .select("*")
-      .order("fecha_inicio");
+    const { data } = await supabase
+      .from("diplomas")
+      .select("usuario_id, numero, fecha_generado")
+      .eq("entregado", false)
+      .order("fecha_generado");
 
-    if (retosError) console.error("Error cargando retos:", retosError);
-    setRetos(retosData || []);
-
-    const { data: progresoData } = await supabase
-      .from("reto_progreso")
-      .select("usuario_id, reto_id, fecha_diploma")
-      .eq("diploma_generado", true)
-      .eq("entregado", false);
-
-    if (!progresoData || progresoData.length === 0) {
+    if (!data || data.length === 0) {
       setPendientes([]);
       setCargando(false);
       return;
     }
 
-    const ids = [...new Set(progresoData.map((p) => p.usuario_id))];
+    const ids = [...new Set(data.map((d) => d.usuario_id))];
     const { data: usuariosData } = await supabase
       .from("usuarios")
       .select("id, nombre, numero_socio")
       .in("id", ids);
 
-    const mapaUsuarios = Object.fromEntries(
-      (usuariosData || []).map((u) => [String(u.id), u]),
-    );
-    const mapaRetos = Object.fromEntries(
-      (retosData || []).map((r) => [r.id, r]),
-    );
+    const mapaUsuarios = Object.fromEntries((usuariosData || []).map((u) => [String(u.id), u]));
 
-    setPendientes(
-      progresoData.map((p) => ({
-        ...p,
-        usuario: mapaUsuarios[p.usuario_id],
-        reto: mapaRetos[p.reto_id],
-      })),
-    );
+    setPendientes(data.map((d) => ({ ...d, usuario: mapaUsuarios[d.usuario_id] })));
     setCargando(false);
   }, []);
 
-  useEffect(() => {
-    cargar();
-  }, [cargar]);
+  useEffect(() => { cargar(); }, [cargar]);
 
-  const iniciarEdicion = (reto) => {
-    setEditando(reto.id);
-    setFechasEdit({ inicio: reto.fecha_inicio, fin: reto.fecha_fin });
-  };
-
-  const guardarFechas = async (id) => {
-    await supabase.rpc("admin_actualizar_reto", {
-      p_id: id,
-      p_fecha_inicio: fechasEdit.inicio,
-      p_fecha_fin: fechasEdit.fin,
-    });
-    setEditando(null);
-    cargar();
-  };
-
-  const marcarEntregado = async (usuarioId, retoId) => {
+  const marcarEntregado = async (usuarioId, numero) => {
     await supabase.rpc("admin_marcar_diploma_entregado", {
       p_usuario_id: usuarioId,
-      p_reto_id: retoId,
+      p_numero: numero,
     });
     cargar();
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-2xl shadow overflow-x-auto">
-        <table className="w-full text-sm">
-          <thead className="bg-gray-50 text-left">
-            <tr>
-              <th className="p-3">Reto</th>
-              <th className="p-3">Meses</th>
-              <th className="p-3">Fecha inicio</th>
-              <th className="p-3">Fecha fin</th>
-              <th className="p-3">Acción</th>
+    <div className="bg-white rounded-2xl shadow overflow-x-auto">
+      <table className="w-full text-sm">
+        <thead className="bg-gray-50 text-left">
+          <tr>
+            <th className="p-3">Usuario</th>
+            <th className="p-3">Diploma</th>
+            <th className="p-3">Fecha generado</th>
+            <th className="p-3">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {cargando && (
+            <tr><td colSpan={4} className="p-4 text-center text-gray-400">Cargando...</td></tr>
+          )}
+          {!cargando && pendientes.length === 0 && (
+            <tr><td colSpan={4} className="p-4 text-center text-gray-400">No hay diplomas pendientes</td></tr>
+          )}
+          {pendientes.map((p, i) => (
+            <tr key={i} className="border-t">
+              <td className="p-3">{p.usuario?.nombre} <span className="text-gray-400 font-mono text-xs">{p.usuario?.numero_socio}</span></td>
+              <td className="p-3">Diploma #{p.numero}</td>
+              <td className="p-3 text-gray-500">{new Date(p.fecha_generado).toLocaleDateString()}</td>
+              <td className="p-3">
+                <button
+                  onClick={() => marcarEntregado(p.usuario_id, p.numero)}
+                  className="text-green-600 text-xs font-semibold"
+                >
+                  Marcar entregado
+                </button>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {cargando && (
-              <tr>
-                <td colSpan={5} className="p-4 text-center text-gray-400">
-                  Cargando...
-                </td>
-              </tr>
-            )}
-            {!cargando && retos.length === 0 && (
-              <tr>
-                <td colSpan={5} className="p-4 text-center text-gray-400">
-                  No hay retos configurados todavía
-                </td>
-              </tr>
-            )}
-            {retos.map((r) => (
-              <tr key={r.id} className="border-t">
-                <td className="p-3 font-semibold">{r.nombre}</td>
-                <td className="p-3 text-gray-500">
-                  {(r.meses || []).join(", ")}
-                </td>
-                <td className="p-3">
-                  {editando === r.id ? (
-                    <input
-                      type="date"
-                      value={fechasEdit.inicio}
-                      onChange={(e) =>
-                        setFechasEdit({ ...fechasEdit, inicio: e.target.value })
-                      }
-                      className="border rounded px-2 py-1 text-sm"
-                    />
-                  ) : (
-                    r.fecha_inicio
-                  )}
-                </td>
-                <td className="p-3">
-                  {editando === r.id ? (
-                    <input
-                      type="date"
-                      value={fechasEdit.fin}
-                      onChange={(e) =>
-                        setFechasEdit({ ...fechasEdit, fin: e.target.value })
-                      }
-                      className="border rounded px-2 py-1 text-sm"
-                    />
-                  ) : (
-                    r.fecha_fin
-                  )}
-                </td>
-                <td className="p-3">
-                  {editando === r.id ? (
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => guardarFechas(r.id)}
-                        className="text-green-600 text-xs font-semibold"
-                      >
-                        Guardar
-                      </button>
-                      <button
-                        onClick={() => setEditando(null)}
-                        className="text-gray-400 text-xs font-semibold"
-                      >
-                        Cancelar
-                      </button>
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => iniciarEdicion(r)}
-                      className="text-alianza-azul text-xs font-semibold"
-                    >
-                      Editar fechas
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div>
-        <p className="font-semibold text-alianza-azul mb-3">
-          Diplomas pendientes de entregar
-        </p>
-        <div className="bg-white rounded-2xl shadow overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-left">
-              <tr>
-                <th className="p-3">Usuario</th>
-                <th className="p-3">Reto</th>
-                <th className="p-3">Fecha completado</th>
-                <th className="p-3">Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              {pendientes.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="p-4 text-center text-gray-400">
-                    No hay diplomas pendientes
-                  </td>
-                </tr>
-              )}
-              {pendientes.map((p, i) => (
-                <tr key={i} className="border-t">
-                  <td className="p-3">
-                    {p.usuario?.nombre}{" "}
-                    <span className="text-gray-400 font-mono text-xs">
-                      {p.usuario?.numero_socio}
-                    </span>
-                  </td>
-                  <td className="p-3">{p.reto?.nombre}</td>
-                  <td className="p-3 text-gray-500">
-                    {p.fecha_diploma
-                      ? new Date(p.fecha_diploma).toLocaleDateString()
-                      : "-"}
-                  </td>
-                  <td className="p-3">
-                    <button
-                      onClick={() => marcarEntregado(p.usuario_id, p.reto_id)}
-                      className="text-green-600 text-xs font-semibold"
-                    >
-                      Marcar entregado
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }

@@ -6,9 +6,9 @@ function PasaporteDiplomas({ diplomas }) {
       <p className="text-xs font-bold text-alianza-azul mb-2 text-center">Tus diplomas</p>
       <div className="flex flex-wrap justify-center gap-3">
         {diplomas.map((d) => (
-          <div key={d.reto_id} className="flex flex-col items-center" title={d.nombre}>
+          <div key={d.numero} className="flex flex-col items-center">
             <span className="text-2xl">🏆</span>
-            <span className="text-[9px] text-gray-500 text-center">{d.nombre}</span>
+            <span className="text-[9px] text-gray-500">Diploma {d.numero}</span>
           </div>
         ))}
       </div>
