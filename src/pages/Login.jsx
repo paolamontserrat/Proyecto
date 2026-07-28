@@ -323,6 +323,8 @@ function Login() {
           <p>Número de socio: 10000006 contraseña: 1234 usuario: prueba3</p>
           <p>Número de socio: 10000007 contraseña: 1234 usuario: prueba13-15</p>
           <p>Número de socio: 10000008 contraseña: 1234 usuario: prueba4</p>
+          <p>Número de socio: 10000009 contraseña: 1234 usuario: prueba16-17</p>
+          <p>Número de socio: 10000010 contraseña: 1234 usuario: prueba5</p>
         </div>
       </div>
 

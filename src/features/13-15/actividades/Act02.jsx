@@ -76,13 +76,13 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
         <div className="flex justify-between mb-6">
             <button
             onClick={onBack}
-            className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg"
+            className="bg-azul-oscuro text-white px-5 py-2 rounded-full font-bold shadow-lg"
             >
             ← Regresar
             </button>
             <button
             onClick={() => navigate(`/dashboard/${rango}`)}
-            className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg"
+            className="bg-azul-oscuro text-white px-5 py-2 rounded-full font-bold shadow-lg"
             >
             🏠 Inicio
             </button>
