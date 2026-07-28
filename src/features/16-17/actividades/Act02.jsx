@@ -3,7 +3,7 @@ import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-const Act2 = ({ data, onComplete, onBack, rango }) => {
+const Act02 = ({ data, onComplete, onBack, rango }) => {
     const navigate = useNavigate();
     const config = data || {};
     const ingresoTotal = config.ingresoTotal || 1200;
@@ -280,4 +280,4 @@ const Act2 = ({ data, onComplete, onBack, rango }) => {
     );
 };
 
-export default Act2;
+export default Act02;

@@ -3,7 +3,7 @@ import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-const Act6 = ({ data, onComplete, onBack, rango }) => {
+const Act06 = ({ data, onComplete, onBack, rango }) => {
     const navigate = useNavigate();
     const config = data || {};
     const puntos = config.puntos || [];
@@ -55,13 +55,13 @@ const Act6 = ({ data, onComplete, onBack, rango }) => {
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
-                    className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition"
+                    className="bg-azul-oscuro text-white px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition"
                 >
                     ← Regresar
                 </button>
                 <button
                     onClick={() => navigate(`/dashboard/${rango}`)}
-                    className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold shadow hover:scale-105 transition"
+                    className="bg-azul-oscuro text-white px-4 py-2 rounded-full font-bold shadow hover:scale-105 transition"
                 >
                     🏠 Inicio
                 </button>
@@ -162,7 +162,7 @@ const Act6 = ({ data, onComplete, onBack, rango }) => {
 
                 {/* Frase de Reflexión Final */}
                 {config.fraseFinal && (
-                    <div className="bg-gradient-to-r from-sky-900 to-blue-950 text-amber-300 p-6 rounded-2xl text-center shadow-lg border-2 border-amber-400">
+                    <div className="bg-gradient-to-r  text-blue-800 p-6 rounded-2xl text-center shadow-lg border-2 border-amber-400">
                         <p className="text-lg md:text-2xl font-black italic tracking-wide">
                             {config.fraseFinal}
                         </p>
@@ -184,4 +184,4 @@ const Act6 = ({ data, onComplete, onBack, rango }) => {
     );
 };
 
-export default Act6;
+export default Act06;

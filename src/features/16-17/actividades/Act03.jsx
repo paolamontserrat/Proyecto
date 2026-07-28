@@ -3,7 +3,7 @@ import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-const Act3 = ({ data, onComplete, onBack, rango }) => {
+const Act03 = ({ data, onComplete, onBack, rango }) => {
     const navigate = useNavigate();
     const config = data || {};
     const secciones = config.secciones || [];
@@ -199,4 +199,4 @@ const Act3 = ({ data, onComplete, onBack, rango }) => {
     );
 };
 
-export default Act3;
+export default Act03;

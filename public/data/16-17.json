@@ -284,6 +284,192 @@
             }
         ],
         "fraseFinal": "“Ya no dependes... ahora respondes por ti”"
+        },
+        {
+        "id": 7,
+        "fondo": "/images/16-17/Fondo416-17.png",
+        "titulo": "Al cumplir 18 tú podrás:",
+        "pasos": [
+            {
+            "numero": 1,
+            "titulo": "Votar",
+            "imagen": "/images/16-17/16.png"
+            },
+            {
+            "numero": 2,
+            "titulo": "Firmar contratos",
+            "imagen": "/images/16-17/17.png"
+            },
+            {
+            "numero": 3,
+            "titulo": "Trabajar formalmente",
+            "imagen": "/images/16-17/18.png"
+            },
+            {
+            "numero": 4,
+            "titulo": "Tomar decisiones legales",
+            "subtitulo": "“Empiezas a formar parte activa de la sociedad”",
+            "imagen": "/images/16-17/19.png"
+            },
+            {
+            "numero": 5,
+            "titulo": "Necesitas identificarte como ciudadano mexicano y tramitar “Tu INE” la cual es:",
+            "puntosIne": [
+                "Una identificación oficial en México.",
+                "Necesaria para trámites.",
+                "Indispensable para votar.",
+                "Necesaria para cambiar de ahorrador a socio en Caja ALIANZA."
+            ],
+            "imagen": "/images/16-17/20.png"
+            }
+        ]
+        },
+        {
+        "id": 8,
+        "fondo": "/images/16-17/Fondo516-17.png",
+        "titulo": "¿Qué pasa cuando cumples 18?",
+        "seccionMenor": {
+            "logo": "/images/16-17/4.png",
+            "texto": "Mientras eres menor de edad, manejas cuentas de ahorro “Club de amigos de Alianzito” que te ayudan a crear el hábito de ahorrar y empezar tu patrimonio."
+        },
+        "seccionMayor": {
+            "subtitulo": "Cuando cumples la mayoría de edad, te conviertes oficialmente en socio de la Caja.",
+            "detalle": "Para hacerlo, necesitas cubrir un certificado de aportación que tiene un valor de $1,000.00 y que también es conocido como parte social.",
+            "imagen": "/images/16-17/21.png"
+        }
+        },
+        {
+        "id": 9,
+        "fondo": "/images/16-17/Fondo216-17.png",
+        "titulo": "¿Qué es la aportación social?",
+        "introduccion": {
+            "definicion": "Es como una “parte de dinero” que das para poder ser socio. Te acredita como uno de los dueños de la cooperativa adquiriendo derechos y obligaciones, así como la oportunidad de participar en la toma de decisiones de esta.",
+            "montoGrafico": "/images/16-17/38.png",
+            "personaje": "/images/16-17/39.png",
+            "notaFooter": "Ese capital sigue siendo tuyo, si algún día decides retirarte de la caja, se te entrega."
+        },
+        "subtituloBeneficios": "La parte social te da derecho a manejar los productos y servicios de la Caja, así como gozar de los beneficios como:",
+        "beneficios": [
+            {
+            "id": 1,
+            "texto": "Acceso a diversos esquemas de ahorro",
+            "imagen": "/images/16-17/26.png",
+            "posicion": "derecha"
+            },
+            {
+            "id": 2,
+            "texto": "Solicitar créditos e ir formando tu historial de crédito.",
+            "imagen": "/images/16-17/22.png",
+            "posicion": "izquierda"
+            },
+            {
+            "id": 3,
+            "texto": "Tarjeta de débito",
+            "imagen": "/images/16-17/25.png",
+            "posicion": "derecha"
+            },
+            {
+            "id": 4,
+            "texto": "Puedes consultar saldos, realizar transferencias entre tus cuentas o a otros bancos al activar la App Móvil en tu celular.",
+            "imagen": "/images/16-17/29.png",
+            "posicion": "derecha"
+            },
+            {
+            "id": 5,
+            "texto": "Participar en proyectos enfocados al cuidado del medio ambiente.",
+            "imagen": "/images/16-17/28.png",
+            "posicion": "izquierda"
+            },
+            {
+            "id": 6,
+            "texto": "Apoyo de obras que contribuyen el desarrollo comunitario.",
+            "imagen": "/images/16-17/27.png",
+            "posicion": "derecha"
+            }
+        ]
+        },
+        {
+        "id": 10,
+        "fondo": "/images/16-17/Fondo316-17.png",
+        "titulo": "Beneficios",
+        "imagenes": [
+            "/images/16-17/40.png",
+            "/images/16-17/41.png",
+            "/images/16-17/42.png",
+            "/images/16-17/43.png",
+            "/images/16-17/44.png",
+            "/images/16-17/45.png",
+            "/images/16-17/46.png",
+            "/images/16-17/47.png",
+            "/images/16-17/48.png"
+        ]
+        },
+        {
+        "id": 11,
+        "fondo": "/images/16-17/Fondo416-17.png",
+        "personajeHeader": "/images/16-17/11.png",
+        "seccionCredito": {
+            "titulo": "Tips financieros para pedir un crédito",
+            "tarjetas": [
+            {
+                "id": 1,
+                "encabezado": "Un crédito te ayuda a conseguir tus metas rápidamente.",
+                "contenido": "La clave es saber cuándo solicitarlo y cómo manejarlo. Tu capacidad económica determina la cantidad de dinero que se te presta, así evitas deudas impagables."
+            },
+            {
+                "id": 2,
+                "encabezado": "Cuidado con el sobre-endeudamiento",
+                "contenido": "Define bien tus metas financieras y usa el crédito solo si te ayuda a lograrlas, sin poner en peligro lo que ya es tuyo."
+            },
+            {
+                "id": 3,
+                "encabezado": "¡Ojo con las condiciones de tu crédito!",
+                "contenido": "Si consideras que realmente necesitas un crédito, infórmate bien sobre las condiciones: los intereses, el plazo y las penalizaciones por falta de pago."
+            }
+            ]
+        },
+        "seccionAhorro": {
+            "titulo": "Ventajas de ahorrar",
+            "tarjetas": [
+            {
+                "id": 1,
+                "encabezado": "Sientes tranquilidad en tiempos difíciles",
+                "contenido": "Ahorrar te ayudará durante los meses del imprevisto. Lo ideal es que llegues a juntar un fondo de emergencias que cubra tus gastos."
+            },
+            {
+                "id": 2,
+                "encabezado": "Te ayuda a cumplir tus objetivos",
+                "contenido": "Proponte cantidades a ahorrar, para alcanzar cualquier meta que te propongas y fomentar el hábito para toda tu vida."
+            },
+            {
+                "id": 3,
+                "encabezado": "Es una manera de formar tu patrimonio",
+                "contenido": "Es importante destinar un monto fijo, aunque sea pequeño, a tu cuenta de ahorro."
+            }
+            ]
+        }
+        },
+        {
+        "id": 12,
+        "fondo": "/images/16-17/Fondo516-17.png",
+        "titulo": "Mi compromiso con mi historial",
+        "personaje": "/images/16-17/9.png",
+        "compromisos": [
+            { "id": "comp1", "texto": "No solicitar crédito sin plan." },
+            { "id": "comp2", "texto": "Pagar siempre puntual." },
+            { "id": "comp3", "texto": "Leer antes de firmar." },
+            { "id": "comp4", "texto": "Ahorrar antes de endeudarme." },
+            { "id": "comp5", "texto": "Construir un historial que me abra oportunidades." }
+        ],
+        "preguntasEvaluacion": [
+            "¿Realmente lo necesito?",
+            "¿Tengo ingresos constantes?",
+            "¿Puedo pagarlo sin afectar mis gastos básicos?",
+            "¿Ya tengo un ahorro previo?",
+            "¿Entiendo las condiciones?"
+        ],
+        "mensajeReglaOro": "La diferencia no es la edad, es la disciplina. Regla de oro antes de solicitar cualquier crédito pregúntate:",
+        "mensajeConclusion": "Si no puedes responder con claridad, aún no es momento."
         }
     ]
 }

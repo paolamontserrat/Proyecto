@@ -3,7 +3,7 @@ import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-const Act4 = ({ data, onComplete, onBack, rango }) => {
+const Act04 = ({ data, onComplete, onBack, rango }) => {
     const navigate = useNavigate();
     const config = data || {};
     const pasos = config.pasos || [];
@@ -304,4 +304,4 @@ const Act4 = ({ data, onComplete, onBack, rango }) => {
     );
 };
 
-export default Act4;
+export default Act04;
