@@ -35,19 +35,50 @@ const Act2 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act2-${rango}-${userId}`;
 
-    // Cargar progreso guardado
+    // Cargar progreso guardado desde Supabase o LocalStorage
     useEffect(() => {
-        const guardado = localStorage.getItem(storageKey);
-        if (guardado) {
-            try {
-                const parsed = JSON.parse(guardado);
-                if (parsed.tablaActual) setTablaActual(parsed.tablaActual);
-                if (parsed.tablaAjustada) setTablaAjustada(parsed.tablaAjustada);
-            } catch (e) {
-                console.error("Error al cargar datos locales", e);
+        const cargarProgreso = async () => {
+            if (userId !== "anon" && config.id) {
+                try {
+                    const { data: progreso, error } = await supabase
+                        .from("progreso_actividades")
+                        .select("datos_actividad, completada")
+                        .eq("usuario_id", userId)
+                        .eq("actividad_id", config.id)
+                        .maybeSingle();
+
+                    if (progreso) {
+                        const datos = progreso.datos_actividad;
+                        if (datos?.tablaActual || datos?.tablaAjustada) {
+                            if (datos.tablaActual) setTablaActual(datos.tablaActual);
+                            if (datos.tablaAjustada) setTablaAjustada(datos.tablaAjustada);
+                            localStorage.setItem(storageKey, JSON.stringify({ 
+                                tablaActual: datos.tablaActual, 
+                                tablaAjustada: datos.tablaAjustada 
+                            }));
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    console.warn("Error cargando progreso de Supabase, intentando local...", err);
+                }
             }
-        }
-    }, [config.id]);
+
+            // Fallback al LocalStorage del dispositivo
+            const guardado = localStorage.getItem(storageKey);
+            if (guardado) {
+                try {
+                    const parsed = JSON.parse(guardado);
+                    if (parsed.tablaActual) setTablaActual(parsed.tablaActual);
+                    if (parsed.tablaAjustada) setTablaAjustada(parsed.tablaAjustada);
+                } catch (e) {
+                    console.error("Error al cargar datos locales", e);
+                }
+            }
+        };
+
+        cargarProgreso();
+    }, [config.id, userId]);
 
     // Manejar cambios en los inputs
     const handleInputChange = (tabla, conceptoId, valor) => {

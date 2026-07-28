@@ -36,20 +36,63 @@ const Act5 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act5-${rango}-${userId}`;
 
-    // Cargar borrador previo si existe
+    // Cargar progreso guardado desde Supabase o LocalStorage
     useEffect(() => {
-        const guardado = localStorage.getItem(storageKey);
-        if (guardado) {
-            try {
-                const parsed = JSON.parse(guardado);
-                if (parsed.ingresos) setIngresos(parsed.ingresos);
-                if (parsed.gastos) setGastos(parsed.gastos);
-                if (parsed.distribucionPct) setDistribucionPct(parsed.distribucionPct);
-            } catch (e) {
-                console.error("Error cargando guardado local", e);
+        const cargarProgreso = async () => {
+            if (userId !== "anon" && config.id) {
+                try {
+                    const { data: progreso, error } = await supabase
+                        .from("progreso_actividades")
+                        .select("datos_actividad, completada")
+                        .eq("usuario_id", userId)
+                        .eq("actividad_id", config.id)
+                        .maybeSingle();
+
+                    if (progreso) {
+                        const datos = progreso.datos_actividad;
+                        if (datos) {
+                            if (datos.ingresos) setIngresos(datos.ingresos);
+                            if (datos.gastos) setGastos(datos.gastos);
+                            if (datos.distribucion) {
+                                setDistribucionPct({
+                                    ahorro: datos.distribucion.ahorro?.pct ?? 40,
+                                    gastos: datos.distribucion.gastosPersonales?.pct ?? 50,
+                                    emergencias: datos.distribucion.emergencias?.pct ?? 10
+                                });
+                            }
+                            localStorage.setItem(storageKey, JSON.stringify({
+                                ingresos: datos.ingresos,
+                                gastos: datos.gastos,
+                                distribucionPct: datos.distribucion ? {
+                                    ahorro: datos.distribucion.ahorro?.pct ?? 40,
+                                    gastos: datos.distribucion.gastosPersonales?.pct ?? 50,
+                                    emergencias: datos.distribucion.emergencias?.pct ?? 10
+                                } : undefined
+                            }));
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    console.warn("Error cargando progreso de Supabase, intentando local...", err);
+                }
             }
-        }
-    }, [config.id]);
+
+            // Fallback al LocalStorage del dispositivo
+            const guardado = localStorage.getItem(storageKey);
+            if (guardado) {
+                try {
+                    const parsed = JSON.parse(guardado);
+                    if (parsed.ingresos) setIngresos(parsed.ingresos);
+                    if (parsed.gastos) setGastos(parsed.gastos);
+                    if (parsed.distribucionPct) setDistribucionPct(parsed.distribucionPct);
+                } catch (e) {
+                    console.error("Error cargando guardado local", e);
+                }
+            }
+        };
+
+        cargarProgreso();
+    }, [config.id, userId]);
 
     const guardarLocal = (nuevosIngresos, nuevosGastos, nuevaDist) => {
         localStorage.setItem(

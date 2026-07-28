@@ -32,20 +32,47 @@ const Act1 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act1-${rango}-${userId}`;
 
-    // Cargar progreso guardado en localStorage
+    // Cargar progreso guardado desde Supabase o LocalStorage
     useEffect(() => {
-        const guardado = localStorage.getItem(storageKey);
-        if (guardado) {
-            try {
-                const parsed = JSON.parse(guardado);
-                if (parsed.respuestas) {
-                    setRespuestas(parsed.respuestas);
+        const cargarProgreso = async () => {
+            if (userId !== "anon" && config.id) {
+                try {
+                    const { data: progreso, error } = await supabase
+                        .from("progreso_actividades")
+                        .select("datos_actividad, completada")
+                        .eq("usuario_id", userId)
+                        .eq("actividad_id", config.id)
+                        .maybeSingle();
+
+                    if (progreso) {
+                        const respuestasNube = progreso.datos_actividad?.respuestas;
+                        if (respuestasNube) {
+                            setRespuestas(respuestasNube);
+                            localStorage.setItem(storageKey, JSON.stringify({ respuestas: respuestasNube }));
+                            return;
+                        }
+                    }
+                } catch (err) {
+                    console.warn("Error cargando progreso de Supabase, intentando local...", err);
                 }
-            } catch (e) {
-                console.error("Error al cargar progreso local", e);
             }
-        }
-    }, [config.id]);
+
+            // Fallback al LocalStorage del dispositivo
+            const guardado = localStorage.getItem(storageKey);
+            if (guardado) {
+                try {
+                    const parsed = JSON.parse(guardado);
+                    if (parsed.respuestas) {
+                        setRespuestas(parsed.respuestas);
+                    }
+                } catch (e) {
+                    console.error("Error al cargar progreso local", e);
+                }
+            }
+        };
+
+        cargarProgreso();
+    }, [config.id, userId]);
 
     // Calcular ahorro estimado de forma dinámica
     const calcularAhorroAutomatico = (montoFalta, fechaObjStr) => {
@@ -139,12 +166,6 @@ const Act1 = ({ data, onComplete, onBack, rango }) => {
 
             {/* Barra superior */}
             <div className="flex justify-between items-center mb-4">
-                <button
-                    onClick={onBack}
-                    className="bg-azul-oscuro text-white px-5 py-2 rounded-full font-bold shadow-lg hover:scale-105 transition"
-                >
-                    ← Regresar
-                </button>
                 <button
                     onClick={() => navigate(`/dashboard/${rango}`)}
                     className="bg-azul-oscuro text-white px-4 py-2 rounded-full font-bold shadow hover:scale-105 transition"
