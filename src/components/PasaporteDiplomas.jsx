@@ -1,17 +1,39 @@
+import { useState } from 'react';
+import ModalDiploma from './ModalDiploma';
+
 function PasaporteDiplomas({ diplomas }) {
+  const [diplomaAbierto, setDiplomaAbierto] = useState(null);
+  const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
+
   if (!diplomas || diplomas.length === 0) return null;
 
   return (
-    <div className="max-w-sm mx-auto bg-white/90 rounded-2xl p-3 mb-6">
-      <p className="text-xs font-bold text-alianza-azul mb-2 text-center">Tus diplomas</p>
-      <div className="flex flex-wrap justify-center gap-3">
+    <div className="w-full bg-gradient-to-br from-alianza-azul to-blue-800 rounded-3xl p-4 shadow-lg">
+      <p className="text-sm font-black text-alianza-amarillo mb-3 text-center">
+        🏆 Tus diplomas ganados
+      </p>
+      <div className="flex flex-wrap justify-center gap-4">
         {diplomas.map((d) => (
-          <div key={d.numero} className="flex flex-col items-center">
-            <span className="text-2xl">🏆</span>
-            <span className="text-[9px] text-gray-500">Diploma {d.numero}</span>
-          </div>
+          <button
+            key={d.numero}
+            onClick={() => setDiplomaAbierto(d)}
+            className="flex flex-col items-center bg-white/10 hover:bg-white/20 transition rounded-2xl px-4 py-3 border-2 border-alianza-amarillo/60"
+          >
+            <span className="text-4xl drop-shadow">🏆</span>
+            <span className="text-xs mt-1 font-bold text-white">Diploma {d.numero}</span>
+            <span className="text-[10px] text-alianza-amarillo mt-0.5">Toca para ver</span>
+          </button>
         ))}
       </div>
+
+      {diplomaAbierto && (
+        <ModalDiploma
+          diploma={diplomaAbierto}
+          nombreUsuario={usuario?.nombre}
+          onClose={() => setDiplomaAbierto(null)}
+          onDescargado={() => setDiplomaAbierto(null)}
+        />
+      )}
     </div>
   );
 }

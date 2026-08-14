@@ -5,11 +5,18 @@ const MESES = [
 const ABREV = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 
 function PasaporteSellos({ ahorros, mesActual, sellosReales = [] }) {
-  return (
-    <div className="max-w-sm mx-auto bg-white/90 rounded-2xl p-3 mb-4">
-      <p className="text-xs font-bold text-alianza-azul mb-2 text-center">Tus sellos del año</p>
+  const totalGanados = sellosReales.length;
 
-      <div className="grid grid-cols-6 gap-2">
+  return (
+    <div className="w-full bg-white rounded-3xl p-4 shadow-lg border-2 border-alianza-amarillo/40">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-sm font-black text-alianza-azul">🏅 Tus sellos del año</p>
+        <span className="bg-alianza-azul text-white text-xs font-bold px-2.5 py-1 rounded-full">
+          {totalGanados}/12
+        </span>
+      </div>
+
+      <div className="grid grid-cols-4 gap-3">
         {MESES.map((mes, i) => {
           const total = (ahorros[mes] || []).reduce((s, a) => s + Number(a.monto), 0);
           const conseguido = sellosReales.some((s) => s.mes === mes);
@@ -20,20 +27,29 @@ function PasaporteSellos({ ahorros, mesActual, sellosReales = [] }) {
             <div key={mes} className="flex flex-col items-center">
               <div
                 title={`${mes}: $${total}`}
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm border-2 ${
+                className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl border-4 transition-transform ${
                   conseguido
-                    ? 'bg-alianza-amarillo border-alianza-amarillo'
+                    ? 'bg-alianza-amarillo border-yellow-300 shadow-md scale-105'
                     : esActual
-                      ? 'border-alianza-azul bg-white'
+                      ? 'border-alianza-azul bg-blue-50 animate-pulse'
                       : 'border-gray-200 bg-gray-50'
                 }`}
               >
-                {conseguido && '🏅'}
+                {conseguido ? '🏅' : esActual ? '⏳' : ''}
               </div>
-              <span className="text-[9px] text-gray-500 mt-1">{ABREV[i]}</span>
+              <span
+                className={`text-xs mt-1.5 font-bold ${
+                  conseguido ? 'text-alianza-azul' : esActual ? 'text-alianza-azul' : 'text-gray-400'
+                }`}
+              >
+                {ABREV[i]}
+              </span>
               {esActual && !conseguido && (
-                <div className="w-7 h-1 bg-gray-200 rounded-full mt-1 overflow-hidden">
-                  <div className="h-full bg-alianza-azul" style={{ width: `${progreso}%` }} />
+                <div className="w-12 h-1.5 bg-gray-200 rounded-full mt-1 overflow-hidden">
+                  <div
+                    className="h-full bg-alianza-azul transition-all"
+                    style={{ width: `${progreso}%` }}
+                  />
                 </div>
               )}
             </div>

@@ -13,6 +13,8 @@ import AdminAhorros from './pages/admin/AdminAhorros';
 import AdminCiclos from './pages/admin/AdminCiclos';
 import AdminConfiguracion from './pages/admin/AdminConfiguracion';
 import AdminContenido from './pages/admin/AdminContenido';
+import AdminActividades from './pages/admin/AdminActividades';
+
 
 
 
@@ -39,6 +41,7 @@ function App() {
           <Route path="ciclos" element={<AdminCiclos />} />
           <Route path="configuracion" element={<AdminConfiguracion />} />   
           <Route path="contenido" element={<AdminContenido />} />
+          <Route path="actividades" element={<AdminActividades />} />
         </Route>
 
         {/* 🔐 protegidas */}

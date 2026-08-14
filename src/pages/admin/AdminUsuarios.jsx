@@ -18,8 +18,9 @@ function AdminUsuarios() {
   const [cargando, setCargando] = useState(false);
   const [modalUsuario, setModalUsuario] = useState(null); // null | {} nuevo | usuario editar
   const [modalImportar, setModalImportar] = useState(false);
-  const [confirmarAccion, setConfirmarAccion] = useState(null); // { tipo: 'reset'|'bloquear', usuario }
+  const [confirmarAccion, setConfirmarAccion] = useState(null); // { tipo: 'reset'|'bloquear'|'eliminar', usuario }
   const [procesandoAccion, setProcesandoAccion] = useState(false);
+  const [errorAccion, setErrorAccion] = useState("");
 
   const cargarUsuarios = useCallback(async () => {
     setCargando(true);
@@ -62,6 +63,7 @@ function AdminUsuarios() {
   const ejecutarAccion = async () => {
     if (!confirmarAccion) return;
     setProcesandoAccion(true);
+    setErrorAccion("");
 
     const { tipo, usuario } = confirmarAccion;
 
@@ -71,6 +73,22 @@ function AdminUsuarios() {
 
     if (tipo === "bloquear") {
       await supabase.rpc("admin_alternar_bloqueo", { p_id: usuario.id });
+    }
+
+    if (tipo === "eliminar") {
+      const { data, error } = await supabase.rpc("admin_eliminar_usuario", {
+        p_id: usuario.id,
+      });
+
+      if (error || !data?.ok) {
+        setProcesandoAccion(false);
+        setErrorAccion(
+          data?.error === "no_se_puede_eliminar_admin"
+            ? "No se puede eliminar una cuenta de administrador."
+            : "No se pudo eliminar el usuario."
+        );
+        return;
+      }
     }
 
     setProcesandoAccion(false);
@@ -208,6 +226,14 @@ function AdminUsuarios() {
                     >
                       {u.bloqueado ? "Desbloquear" : "Bloquear"}
                     </button>
+                    <button
+                      onClick={() =>
+                        setConfirmarAccion({ tipo: "eliminar", usuario: u })
+                      }
+                      className="text-red-800 text-xs font-semibold"
+                    >
+                      🗑️ Eliminar
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -264,19 +290,26 @@ function AdminUsuarios() {
           titulo={
             confirmarAccion.tipo === "reset"
               ? "Resetear contraseña"
-              : confirmarAccion.usuario.bloqueado
-                ? "Desbloquear usuario"
-                : "Bloquear usuario"
+              : confirmarAccion.tipo === "eliminar"
+                ? "Eliminar usuario"
+                : confirmarAccion.usuario.bloqueado
+                  ? "Desbloquear usuario"
+                  : "Bloquear usuario"
           }
           mensaje={
             confirmarAccion.tipo === "reset"
               ? `${confirmarAccion.usuario.nombre} deberá crear una nueva contraseña la próxima vez que inicie sesión.`
-              : confirmarAccion.usuario.bloqueado
-                ? `${confirmarAccion.usuario.nombre} podrá volver a iniciar sesión.`
-                : `${confirmarAccion.usuario.nombre} no podrá iniciar sesión hasta que lo desbloquees.`
+              : confirmarAccion.tipo === "eliminar"
+                ? `Esto elimina permanentemente a ${confirmarAccion.usuario.nombre}, junto con todo su historial de ahorro, sellos, diplomas y progreso de actividades. Esta acción no se puede deshacer.${errorAccion ? `\n\n${errorAccion}` : ""}`
+                : confirmarAccion.usuario.bloqueado
+                  ? `${confirmarAccion.usuario.nombre} podrá volver a iniciar sesión.`
+                  : `${confirmarAccion.usuario.nombre} no podrá iniciar sesión hasta que lo desbloquees.`
           }
           onConfirmar={ejecutarAccion}
-          onCancelar={() => setConfirmarAccion(null)}
+          onCancelar={() => {
+            setConfirmarAccion(null);
+            setErrorAccion("");
+          }}
           cargando={procesandoAccion}
         />
       )}

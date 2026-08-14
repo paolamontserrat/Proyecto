@@ -85,6 +85,22 @@ const Passport = () => {
   }, [cargarSellos]);
 
   const tieneSelloReal = (mes) => misSellos.some((s) => s.mes === mes);
+  // =========================
+  // Sonidos de gamificación
+  // =========================
+  useEffect(() => {
+  if (mostrarDiploma) {
+    const audio = new Audio('/sounds/diploma.mp3');
+    audio.play().catch(() => {});
+  }
+}, [mostrarDiploma]);
+
+useEffect(() => {
+  if (mostrarSello) {
+    const audio = new Audio("/sounds/sello.mp3");
+    audio.play().catch(() => {});
+  }
+}, [mostrarSello]);
 
   // =========================
   // 🔥 FONDO POR RANGO
@@ -308,12 +324,42 @@ const Passport = () => {
       </div>
 
       {/* 🏅 VITRINA DE SELLOS Y DIPLOMAS */}
-      <PasaporteSellos
-        ahorros={ahorros}
-        mesActual={nombreMesActual}
-        sellosReales={misSellos}
-      />
-      <PasaporteDiplomas diplomas={misDiplomas} />
+      <div className="max-w-3xl mx-auto flex flex-col md:flex-row gap-4 mb-4 px-2 md:px-0">
+        <div className="w-full md:w-1/2">
+          <PasaporteSellos
+            ahorros={ahorros}
+            mesActual={nombreMesActual}
+            sellosReales={misSellos}
+          />
+        </div>
+        <div className="w-full md:w-1/2">
+          <PasaporteDiplomas diplomas={misDiplomas} />
+        </div>
+      </div>
+
+      {/* ⚠️ LEYENDA DE HONESTIDAD */}
+      <div className="max-w-3xl mx-auto bg-amber-50 border-2 border-amber-300 rounded-2xl px-5 py-4 mb-6 flex items-center gap-4 shadow-md">
+        {/* Imagen */}
+        <img
+          src="/images/6-8/16.png"
+          alt="Acude a tu sucursal"
+          className="w-24 h-20 object-contain shrink-0"
+        />
+
+        {/* Icono de advertencia */}
+        <span className="text-4xl shrink-0">⚠️</span>
+
+        {/* Texto */}
+        <p className="text-base md:text-lg text-amber-900 leading-relaxed font-semibold">
+          <span className="font-black text-amber-950 text-lg md:text-xl">
+            ¡Importante!
+          </span>{" "}
+          Registra tu ahorro aquí solo cuando realmente lo hayas guardado.{" "}
+          <span className="font-black">Acude a tu sucursal a depositarlo</span>{" "}
+          y conserva tu ticket. Con eso tu sello y diploma quedan validados de
+          forma oficial y podrás recoger tu recompensa en Caja Popular.
+        </p>
+      </div>
 
       {/* MESES */}
       <div className="max-w-sm mx-auto space-y-4">
@@ -437,7 +483,11 @@ const Passport = () => {
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
           <Confetti />
           <div className="bg-white p-6 rounded-3xl w-full max-w-sm text-center">
-            <p className="text-5xl mb-2">🏅</p>
+            <img
+              src="/images/0-5/9.png"
+              alt="Medalla de buen ahorrador"
+              className="w-36 h-36 mx-auto mb-2 object-contain"
+            />
             <h3 className="text-xl font-black text-alianza-azul">
               ¡Sello digital ganado!
             </h3>
