@@ -341,7 +341,7 @@ useEffect(() => {
       <div className="max-w-3xl mx-auto bg-amber-50 border-2 border-amber-300 rounded-2xl px-5 py-4 mb-6 flex items-center gap-4 shadow-md">
         {/* Imagen */}
         <img
-          src="/images/6-8/16.png"
+          src="/images/6/16.png"
           alt="Acude a tu sucursal"
           className="w-24 h-20 object-contain shrink-0"
         />

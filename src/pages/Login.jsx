@@ -1,57 +1,57 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../supabaseClient';
-import Footer from '../components/Footer';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../supabaseClient";
+import Footer from "../components/Footer";
 
 // Preguntas de seguridad sugeridas para la activación de cuenta.
 // Puedes editar esta lista libremente.
 const PREGUNTAS_SEGURIDAD = [
-  '¿Cuál es el nombre de tu mascota?',
-  '¿Cuál es tu color favorito?',
-  '¿Cuál es el nombre de tu mejor amigo(a)?',
-  '¿En qué ciudad naciste?',
+  "¿Cuál es el nombre de tu mascota?",
+  "¿Cuál es tu color favorito?",
+  "¿Cuál es el nombre de tu mejor amigo(a)?",
+  "¿En qué ciudad naciste?",
 ];
 
 function Login() {
   // 'socio'  -> pantalla inicial, se captura el número de socio
   // 'activar'-> primer ingreso, el menor crea su contraseña
   // 'login'  -> ingreso normal, ya tiene contraseña
-  const [paso, setPaso] = useState('socio');
+  const [paso, setPaso] = useState("socio");
 
-  const [numeroSocio, setNumeroSocio] = useState('');
-  const [nombreUsuario, setNombreUsuario] = useState('');
+  const [numeroSocio, setNumeroSocio] = useState("");
+  const [nombreUsuario, setNombreUsuario] = useState("");
 
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [pregunta, setPregunta] = useState(PREGUNTAS_SEGURIDAD[0]);
-  const [respuesta, setRespuesta] = useState('');
+  const [respuesta, setRespuesta] = useState("");
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [cargando, setCargando] = useState(false);
 
   const navigate = useNavigate();
 
-  const limpiarMensajes = () => setError('');
+  const limpiarMensajes = () => setError("");
 
   const guardarSesion = (data) => {
-    localStorage.removeItem('usuario');
+    localStorage.removeItem("usuario");
     localStorage.setItem(
-      'usuario',
+      "usuario",
       JSON.stringify({
         id: data.id,
         numero_socio: numeroSocio,
         nivel: data.nivel,
         nombre: data.nombre,
-        rol: data.rol || 'menor',
-      })
+        rol: data.rol || "menor",
+      }),
     );
   };
 
   const volverInicio = () => {
-    setPaso('socio');
-    setPassword('');
-    setConfirmPassword('');
-    setRespuesta('');
+    setPaso("socio");
+    setPassword("");
+    setConfirmPassword("");
+    setRespuesta("");
     limpiarMensajes();
   };
 
@@ -64,32 +64,34 @@ function Login() {
 
     const socioLimpio = numeroSocio.trim().toUpperCase();
     if (!/^[A-Z0-9]{8,10}$/.test(socioLimpio)) {
-      setError('El número de socio debe tener entre 8 y 10 dígitos');
+      setError("El número de socio debe tener entre 8 y 10 dígitos");
       return;
     }
 
     setCargando(true);
 
     const { data, error: dbError } = await supabase
-      .from('usuarios')
-      .select('nombre, activado')
-      .eq('numero_socio', socioLimpio)
+      .from("usuarios")
+      .select("nombre, activado")
+      .eq("numero_socio", socioLimpio)
       .maybeSingle();
 
     setCargando(false);
 
     if (dbError) {
-      setError('Ocurrió un problema al verificar tu número de socio. Intenta de nuevo.');
+      setError(
+        "Ocurrió un problema al verificar tu número de socio. Intenta de nuevo.",
+      );
       return;
     }
 
     if (!data) {
-      setError('No encontramos ese número de socio. Verifica con tu sucursal.');
+      setError("No encontramos ese número de socio. Verifica con tu sucursal.");
       return;
     }
 
-    setNombreUsuario(data.nombre || '');
-    setPaso(data.activado ? 'login' : 'activar');
+    setNombreUsuario(data.nombre || "");
+    setPaso(data.activado ? "login" : "activar");
   };
 
   // =========================
@@ -100,23 +102,25 @@ function Login() {
     limpiarMensajes();
 
     if (password.length < 4) {
-      setError('La contraseña debe tener al menos 4 caracteres');
+      setError("La contraseña debe tener al menos 4 caracteres");
       return;
     }
 
     if (password !== confirmPassword) {
-      setError('Las contraseñas no coinciden');
+      setError("Las contraseñas no coinciden");
       return;
     }
 
     if (!respuesta.trim()) {
-      setError('Responde la pregunta de seguridad, te servirá si olvidas tu contraseña');
+      setError(
+        "Responde la pregunta de seguridad, te servirá si olvidas tu contraseña",
+      );
       return;
     }
 
     setCargando(true);
 
-    const { data, error: rpcError } = await supabase.rpc('activar_cuenta', {
+    const { data, error: rpcError } = await supabase.rpc("activar_cuenta", {
       p_numero_socio: numeroSocio.trim().toUpperCase(),
       p_password: password,
       p_pregunta: pregunta,
@@ -126,12 +130,14 @@ function Login() {
     setCargando(false);
 
     if (rpcError || !data?.ok) {
-      setError('No se pudo crear tu contraseña. Intenta de nuevo o contacta a tu sucursal.');
+      setError(
+        "No se pudo crear tu contraseña. Intenta de nuevo o contacta a tu sucursal.",
+      );
       return;
     }
 
     guardarSesion(data);
-    navigate(data.rol === 'admin' ? '/admin' : `/dashboard/${data.nivel}`);
+    navigate(data.rol === "admin" ? "/admin" : `/dashboard/${data.nivel}`);
   };
 
   // =========================
@@ -142,13 +148,13 @@ function Login() {
     limpiarMensajes();
 
     if (!password) {
-      setError('Escribe tu contraseña');
+      setError("Escribe tu contraseña");
       return;
     }
 
     setCargando(true);
 
-    const { data, error: rpcError } = await supabase.rpc('login_usuario', {
+    const { data, error: rpcError } = await supabase.rpc("login_usuario", {
       p_numero_socio: numeroSocio.trim().toUpperCase(),
       p_password: password,
     });
@@ -156,12 +162,12 @@ function Login() {
     setCargando(false);
 
     if (rpcError || !data?.ok) {
-      setError('Número de socio o contraseña incorrectos');
+      setError("Número de socio o contraseña incorrectos");
       return;
     }
 
     guardarSesion(data);
-    navigate(data.rol === 'admin' ? '/admin' : `/dashboard/${data.nivel}`);
+    navigate(data.rol === "admin" ? "/admin" : `/dashboard/${data.nivel}`);
   };
 
   return (
@@ -175,28 +181,35 @@ function Login() {
 
         <div className="relative w-full max-w-md bg-white/90 backdrop-blur-md rounded-2xl shadow-2xl p-6 sm:p-8">
           <div className="flex flex-col items-center mb-6">
-            <img src="/images/Logo2.png" alt="Logo" className="w-32 sm:w-36 mb-2" />
+            <img
+              src="/images/Logo2.png"
+              alt="Logo"
+              className="w-32 sm:w-36 mb-2"
+            />
             <h2 className="text-xl sm:text-2xl font-bold text-alianza-azul text-center">
-              {paso === 'activar' && nombreUsuario
+              {paso === "activar" && nombreUsuario
                 ? `¡Hola, ${nombreUsuario}!`
-                : '¡Bienvenido!'}
+                : "¡Bienvenido!"}
             </h2>
             <p className="text-gray-600 text-sm text-center">
-              {paso === 'socio' && 'Ingresa tu número de socio para continuar'}
-              {paso === 'activar' && 'Es tu primera vez aquí, crea tu contraseña'}
-              {paso === 'login' && 'Escribe tu contraseña para continuar'}
+              {paso === "socio" && "Ingresa tu número de socio para continuar"}
+              {paso === "activar" &&
+                "Es tu primera vez aquí, crea tu contraseña"}
+              {paso === "login" && "Escribe tu contraseña para continuar"}
             </p>
           </div>
 
           {/* PASO 1: NÚMERO DE SOCIO */}
-          {paso === 'socio' && (
+          {paso === "socio" && (
             <form onSubmit={handleContinuar} className="space-y-4">
               <input
                 type="text"
                 inputMode="text"
                 placeholder="Número de socio"
                 value={numeroSocio}
-                onChange={(e) => setNumeroSocio(e.target.value.replace(/[^a-zA-Z0-9]/g, ''))}
+                onChange={(e) =>
+                  setNumeroSocio(e.target.value.replace(/[^a-zA-Z0-9]/g, ""))
+                }
                 maxLength={10}
                 required
                 className="w-full px-4 py-2 border rounded-lg text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-alianza-azul"
@@ -207,13 +220,13 @@ function Login() {
                 disabled={cargando}
                 className="w-full bg-alianza-azul text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition disabled:opacity-60"
               >
-                {cargando ? 'Verificando...' : 'Continuar'}
+                {cargando ? "Verificando..." : "Continuar"}
               </button>
             </form>
           )}
 
           {/* PASO 2A: ACTIVAR CUENTA */}
-          {paso === 'activar' && (
+          {paso === "activar" && (
             <form onSubmit={handleActivar} className="space-y-4">
               <input
                 type="password"
@@ -259,7 +272,7 @@ function Login() {
                 disabled={cargando}
                 className="w-full bg-alianza-azul text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition disabled:opacity-60"
               >
-                {cargando ? 'Creando cuenta...' : 'Crear contraseña y entrar'}
+                {cargando ? "Creando cuenta..." : "Crear contraseña y entrar"}
               </button>
 
               <button
@@ -273,7 +286,7 @@ function Login() {
           )}
 
           {/* PASO 2B: LOGIN NORMAL */}
-          {paso === 'login' && (
+          {paso === "login" && (
             <form onSubmit={handleLogin} className="space-y-4">
               <input
                 type="password"
@@ -290,16 +303,20 @@ function Login() {
                 disabled={cargando}
                 className="w-full bg-alianza-azul text-white py-2 rounded-lg font-semibold hover:bg-blue-800 transition disabled:opacity-60"
               >
-                {cargando ? 'Entrando...' : 'Iniciar sesión'}
+                {cargando ? "Entrando..." : "Iniciar sesión"}
               </button>
 
               <div className="flex justify-between text-xs">
-                <button type="button" onClick={volverInicio} className="text-alianza-azul font-semibold">
+                <button
+                  type="button"
+                  onClick={volverInicio}
+                  className="text-alianza-azul font-semibold"
+                >
                   ← Otro número de socio
                 </button>
                 <button
                   type="button"
-                  onClick={() => navigate('/recuperar-password')}
+                  onClick={() => navigate("/recuperar-password")}
                   className="text-gray-500 font-semibold"
                 >
                   Olvidé mi contraseña
@@ -308,23 +325,45 @@ function Login() {
             </form>
           )}
 
-          {error && <p className="text-red-500 text-sm mt-3 text-center">{error}</p>}
-          <p className="text-center text-red-500 mt-6">Nuevo panel de administración </p>
-          <p className="text-center text-red-500">Número de socio: ADMIN0001 contraseña: ADMIN0001</p>
+          {error && (
+            <p className="text-red-500 text-sm mt-3 text-center">{error}</p>
+          )}
+          <p className="text-center text-red-500 mt-6">
+            Nuevo panel de administración{" "}
+          </p>
+          <p className="text-center text-red-500">
+            Número de socio: ADMIN0001 contraseña: ADMIN0001
+          </p>
 
           <p className="text-xs text-center text-gray-500 mt-6">
             Aprender juntos, crecer siempre 💛
           </p>
-          <p>Número de socio: 10000001 contraseña: 1234 usuario: prueba0-5</p>
-          <p>Número de socio: 10000002 contraseña: 1234 usuario: prueba6-8</p>
-          <p>Número de socio: 10000003 contraseña: 1234 usuario: prueba1</p>
-          <p>Número de socio: 10000004 contraseña: 1234 usuario: prueba2</p>
-          <p>Número de socio: 10000005 contraseña: 1234 usuario: prueba9-12</p>
-          <p>Número de socio: 10000006 contraseña: 1234 usuario: prueba3</p>
-          <p>Número de socio: 10000007 contraseña: 1234 usuario: prueba13-15</p>
-          <p>Número de socio: 10000008 contraseña: 1234 usuario: prueba4</p>
-          <p>Número de socio: 10000009 contraseña: 1234 usuario: prueba16-17</p>
-          <p>Número de socio: 10000010 contraseña: 1234 usuario: prueba5</p>
+          <p>Número de socio: 30000001 contraseña: 1234 usuario: prueba0-5-A</p>
+          <p>Número de socio: 30000002 contraseña: 1234 usuario: prueba0-5-B</p>
+          <p>Número de socio: 30000003 contraseña: 1234 usuario: prueba6-A</p>
+          <p>Número de socio: 30000004 contraseña: 1234 usuario: prueba6-B</p>
+          <p>Número de socio: 30000005 contraseña: 1234 usuario: prueba7-A</p>
+          <p>Número de socio: 30000006 contraseña: 1234 usuario: prueba7-B</p>
+          <p>Número de socio: 30000007 contraseña: 1234 usuario: prueba8-A</p>
+          <p>Número de socio: 30000008 contraseña: 1234 usuario: prueba8-B</p>
+          <p>Número de socio: 30000009 contraseña: 1234 usuario: prueba9-A</p>
+          <p>Número de socio: 30000010 contraseña: 1234 usuario: prueba9-B</p>
+          <p>Número de socio: 30000011 contraseña: 1234 usuario: prueba10-A</p>
+          <p>Número de socio: 30000012 contraseña: 1234 usuario: prueba10-B</p>
+          <p>Número de socio: 30000013 contraseña: 1234 usuario: prueba11-A</p>
+          <p>Número de socio: 30000014 contraseña: 1234 usuario: prueba11-B</p>
+          <p>Número de socio: 30000015 contraseña: 1234 usuario: prueba12-A</p>
+          <p>Número de socio: 30000016 contraseña: 1234 usuario: prueba12-B</p>
+          <p>Número de socio: 30000017 contraseña: 1234 usuario: prueba13-A</p>
+          <p>Número de socio: 30000018 contraseña: 1234 usuario: prueba13-B</p>
+          <p>Número de socio: 30000019 contraseña: 1234 usuario: prueba14-A</p>
+          <p>Número de socio: 30000020 contraseña: 1234 usuario: prueba14-B</p>
+          <p>Número de socio: 30000021 contraseña: 1234 usuario: prueba15-A</p>
+          <p>Número de socio: 30000022 contraseña: 1234 usuario: prueba15-B</p>
+          <p>Número de socio: 30000023 contraseña: 1234 usuario: prueba16-A</p>
+          <p>Número de socio: 30000024 contraseña: 1234 usuario: prueba16-B</p>
+          <p>Número de socio: 30000025 contraseña: 1234 usuario: prueba17-A</p>
+          <p>Número de socio: 30000026 contraseña: 1234 usuario: prueba17-B</p>
         </div>
       </div>
 

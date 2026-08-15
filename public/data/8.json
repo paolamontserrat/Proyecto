@@ -1,0 +1,35 @@
+{
+  "rangoEdad": "8",
+  "titulo": "Mi aventura del ahorro",
+  "fondoPasaporte": "/images/8/Fondo8.png",
+  "institucion": "ALIANZA CAJA POPULAR CERANO",
+  "portada": "/images/8/Inicio.png",
+  "imgAhorro": "/images/0-5/6.png",
+  "imgJuegos": "/images/0-5/16.png",
+  "paginas": [
+    {
+      "id": 1,
+      "tipo": "bienvenida",
+      "titulo": "¡Bienvenido a tu aventura del ahorro!",
+      "intro": "En este pasaporte aprenderás:\u00BFQué es ahorrar?\u00BFCómo hacer crecer tu dinero?\u00BFCómo cumplir tus metas?\u00BFCómo tu Caja te ayuda a lograrlo?\nEn la Caja, tu esfuerzo cuenta.",
+      "secciones": [
+        {
+          "subtitulo": "PROGRAMA CRECIENDO JUNTOS",
+          "texto": "Te invitamos a participar en nuestro programa Creciendo Juntos. Consiste en lograr retos trimestrales de ahorro constante, donde obtienes premios y participas en sorteos.",
+          "icono": "⭐"
+        },
+        {
+          "subtitulo": "TUS CUENTAS",
+          "texto": "Cuenta de club Alianzito sera para poder hacer retiros y la cuenta Creciendo Juntos sera para largo plazo.",
+          "icono": "💰"
+        }
+      ],
+      "beneficios": [
+        "Participas en sesiones de educación financiera y cooperativa.",
+        "Acceso a cursos para desarrollar habilidades según tu edad.",
+        "Puedes recibir incentivos de apoyo escolar (si no eres beneficiario de Impulso a la Educación).",
+        "Tus papás pueden obtener un esquema de crédito atractivo."
+      ]
+    }
+  ]
+}

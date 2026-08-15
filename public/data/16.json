@@ -1,0 +1,475 @@
+{
+    "rangoEdad": "16",
+    "titulo": "Mi aventura del ahorro",
+    "fondoPasaporte": "/images/16/Fondo16.png",
+    "institucion": "ALIANZA CAJA POPULAR CERANO",
+    "portada": "/images/16/Inicio.png",
+    "imgAhorro": "/images/0-5/6.png",
+    "imgJuegos": "/images/0-5/16.png",
+    "paginas": [
+        {
+        "id": 1,
+        "tipo": "bienvenida",
+        "titulo": "Bienvenido (a):",
+        "intro": "Estás en una etapa clave: ya no eres un niño, pero aún estás a tiempo de prepararte mejor que muchos adultos. Este pasaporte es tu guía para cerrar tu ciclo como menor ahorrador con una meta cumplida y comenzar tu mayoría de edad con bases sólidas.\nAquí no solo vas a hablar de ahorro. Vas a hablar de decisiones, metas, disciplina y futuro.\nTu historia financiera comienza ahora.",
+        "secciones": [
+            {
+            "subtitulo": "Te invitamos a participar en el programa \"Creciendo Juntos\".",
+            "texto": "Este programa consiste en lograr retos trimestrales de ahorro constante, donde obtienes premios y participas en sorteos.",
+            "icono": "⭐"
+            },
+            {
+            "subtitulo": "TUS CUENTAS",
+            "texto": "Funciona a través de la cuenta Club Amigos de Alianzito, donde realizarás un ahorro a largo plazo y lo podrás retirar hasta la mayoría de edad.\nPara ahorrar y realizar retiros en cualquier momento, tendrás disponible una segunda cuenta conocida como Depósito a la vista.",
+            "icono": "💰"
+            }
+        ],
+        "beneficios": [
+            "Participas en sesiones de educación financiera y cooperativa.",
+            "Acceso a cursos para desarrollar habilidades en función de su edad.",
+            "Podrás recibir incentivos de apoyo escolar, (si no eres beneficiario del programa Impulso a la Educación).",
+            "Tus papás pueden obtener un esquema de crédito atractivo."
+        ]
+        }
+    ],
+    "pasos":[
+        {
+        "id": 1,
+        "fondo": "/images/16/Fondo216.png",
+        "titulo": "META PRINCIPAL",
+        "descripcion": "Esta es tu oportunidad de dejar una huella financiera inteligente. Antes de cumplir 18 años puedes lograr algo que muchos adultos nunca aprendieron: ponerte una meta, ahorrar con intención y verla hecha realidad.",
+        "subtitulo": "Para ayudarte, completa las siguientes preguntas:",
+        "preguntas": [
+            {
+            "id": "meta",
+            "label": "¿Qué quiero lograr antes de cumplir 18?",
+            "placeholder": "Ej. Comprar una laptop, ahorrar para un curso, etc.",
+            "type": "text"
+            },
+            {
+            "id": "costo",
+            "label": "¿Cuánto cuesta?",
+            "placeholder": "Ej. 3500",
+            "type": "number"
+            },
+            {
+            "id": "falta",
+            "label": "¿Cuánto me falta?",
+            "placeholder": "Ej. 1200",
+            "type": "number"
+            },
+            {
+            "id": "fechaLimite",
+            "label": "¿Cuánto tengo para lograrlo? (Selecciona la fecha de tu cumpleaños 18)",
+            "type": "date"
+            },
+            {
+            "id": "cuota",
+            "label": "¿Cuánto debo ahorrar por semana o por mes?",
+            "placeholder": "Se calculará automáticamente según la fecha y lo que te falta",
+            "type": "auto"
+            }
+        ],
+        "mensajeConclusion": "Al tener esta información tendrás una meta clara y qué tiempo necesitas.\nAntes de pedir crédito, primero demuestro que puedo ahorrar y cumplir metas.",
+        "destacado": "El ahorro ya no es opcional",
+        "puntosClave": [
+            "Decides más cosas.",
+            "Empiezas a generar ingresos.",
+            "Gastas más.",
+            "Te acercas a la mayoría de edad."
+        ],
+        "imagenes": [
+            "/images/16/1.png"
+        ]
+        },
+        {
+        "id": 2,
+        "fondo": "/images/16/Fondo316.png",
+        "titulo": "PRESUPUESTO Y AJUSTES",
+        "ingresoTotal": 1200,
+        "escenario1": {
+            "titulo": "¿En qué lo utilizas actualmente?",
+            "subtitulo": "Suponiendo que recibes $1,200 al mes trabajando fines de semana..."
+        },
+        "escenario2": {
+            "titulo": "Con una meta clara, ¿qué ajustes realizarías?",
+            "subtitulo": "Redistribuye los $1,200 asignando más prioridad a tu meta de ahorro."
+        },
+        "conceptos": [
+            { "id": "ahorro", "label": "Ahorro" },
+            { "id": "gastos_personales", "label": "Gastos personales" },
+            { "id": "apoyo_casa", "label": "Apoyo en casa" },
+            { "id": "diversion", "label": "Diversión" }
+        ]
+        },
+        {
+        "id": 3,
+        "fondo": "/images/16/Fondo416.png",
+        "titulo": "¿Por qué es importante tener un presupuesto a tu edad?",
+        "secciones": [
+            {
+            "numero": 1,
+            "titulo": "Empiezas a tomar decisiones reales",
+            "subtitulo": "Aunque no pagues renta, sí manejas dinero:",
+            "puntos": [
+                "Lo que te dan tus papás",
+                "Domingos",
+                "Regalos",
+                "Trabajitos pequeños",
+                "Apoyos de tus papás"
+            ],
+            "destacado": "Cada peso que recibes ya implica una decisión: ¿Me lo gasto hoy o lo uso para algo más grande?",
+            "imagen": "/images/16/2.png",
+            "colorTema": "blue"
+            },
+            {
+            "numero": 2,
+            "titulo": "Evitas que el dinero \"desaparezca\"",
+            "subtitulo": "Los pequeños gastos...",
+            "puntos": [
+                "Snacks",
+                "Golosinas",
+                "Apps",
+                "Salidas",
+                "Cosas por moda"
+            ],
+            "notaPie": "...suman más de lo que imaginas.",
+            "destacado": "El presupuesto: Te muestra en qué lo estás usando, te ayuda a detectar gastos innecesarios y te enseña a priorizar.",
+            "imagen": "/images/16/13.png",
+            "colorTema": "indigo"
+            },
+            {
+            "numero": 3,
+            "titulo": "Te acerca a tus metas",
+            "puntos": [
+                "Un celular",
+                "Consola",
+                "Bici",
+                "Viaje",
+                "Laptop"
+            ],
+            "comparativa": {
+                "sin": "Sin presupuesto ➔ compras lo pequeño.",
+                "con": "Con presupuesto ➔ alcanzas lo grande."
+            },
+            "imagen": "/images/16/31.png",
+            "colorTema": "amber"
+            },
+            {
+            "numero": 4,
+            "titulo": "Te hace diferente",
+            "subtitulo": "La mayoría gasta lo que tiene, pocos planifican. Saber hacer un presupuesto a tu edad significa:",
+            "puntos": [
+                "Más control",
+                "Más libertad",
+                "Más tranquilidad"
+            ],
+            "imagen": "/images/16/32.png",
+            "colorTema": "amber"
+            },
+            {
+            "numero": 5,
+            "titulo": "Estás entrenando tu futuro",
+            "descripcion": "Hoy manejas $500 o $1,000 al mes, mañana manejarás tu sueldo.",
+            "destacado": "El que aprende a organizar poco dinero, sabrá administrar mucho.",
+            "conclusion": "Un presupuesto no limita tu dinero... lo dirige hacia lo que realmente quieres.",
+            "colorTema": "amber"
+            }
+        ]
+        },
+        {
+        "id": 4,
+        "fondo": "/images/16/Fondo516.png",
+        "titulo": "¿CÓMO ELABORAR MI PRIMER PRESUPUESTO?",
+        "pasos": [
+            {
+            "numero": 1,
+            "instruccion": "Calcula cuánto dinero recibes al mes.",
+            "detalle": "(lo que te dan tus papás, domingos, apoyos, regalos en efectivo, trabajos pequeños).",
+            "ejemplo": {
+                "filas": [
+                { "concepto": "Domingos: $100 x 4 semanas", "monto": "$400.00" },
+                { "concepto": "Para la escuela: 50x5 x 4 semanas", "monto": "$1,000.00" },
+                { "concepto": "Ayuda en casa", "monto": "$200.00" }
+                ],
+                "totalLabel": "Total mensual:",
+                "totalMonto": "$1,600.00"
+            },
+            "imagen": "/images/16/11.png"
+            },
+            {
+            "numero": 2,
+            "instruccion": "Anota en qué gastas tu dinero.",
+            "detalle": "(Snacks, salidas, transporte, compras, Apps, videojuegos, etc.)",
+            "ejemplo": {
+                "filas": [
+                { "concepto": "Snacks", "monto": "$500.00" },
+                { "concepto": "Salidas", "monto": "$450.00" },
+                { "concepto": "Apps/juegos", "monto": "$100.00" }
+                ],
+                "totalLabel": "Total gastos:",
+                "totalMonto": "$1,050.00"
+            },
+            "preguntas": [
+                "¿Realmente todo eso era necesario?",
+                "¿Qué gastos puedo disminuir?"
+            ],
+            "imagen": "/images/16/34.png"
+            },
+            {
+            "numero": 3,
+            "instruccion": "Decide cuánto vas a ahorrar",
+            "regla": "Regla básica recomendada: Ahorra mínimo el 30% si puedes (entre más mejor)",
+            "ejemploAhorro": "Ejemplo con $600: 30% sería $180, pero si decides ahorrar $250, mejor.",
+            "imagen": "/images/16/1.png"
+            },
+            {
+            "numero": 4,
+            "instruccion": "Organiza tu dinero en 3 partes",
+            "subtitulo": "Una fórmula sencilla:",
+            "distribucion": [
+                { "categoria": "Ahorro", "porcentaje": "40%" },
+                { "categoria": "Gastos personales", "porcentaje": "50%" },
+                { "categoria": "Emergencias", "porcentaje": "10%" }
+            ],
+            "ejemploCalculo": {
+                "titulo": "Ejemplo con $600:",
+                "filas": [
+                { "cat": "Ahorro:", "pct": "40%", "monto": "$240" },
+                { "cat": "Gastos:", "pct": "50%", "monto": "$300" },
+                { "cat": "Emergencia:", "pct": "10%", "monto": "$60" }
+                ]
+            },
+            "reflexion": [
+                "Si ahorras primero y gastas lo que queda... siempre avanzas.",
+                "El presupuesto no es para limitarte. Es para darte libertad más adelante."
+            ],
+            "imagen": "/images/16/12.png"
+            }
+        ]
+        },
+        {
+        "id": 5,
+        "fondo": "/images/16/Fondo216.png",
+        "titulo": "En acción realiza tu propio presupuesto:",
+        "filasIniciales": 4,
+        "distribucionBase": [
+            { "id": "ahorro", "categoria": "Ahorro Meta", "porcentaje": 40 },
+            { "id": "gastos", "categoria": "Gastos personales", "porcentaje": 50 },
+            { "id": "emergencias", "categoria": "Emergencias", "porcentaje": 10 }
+        ]
+        },
+        {
+        "id": 6,
+        "fondo": "/images/16/Fondo316.png",
+        "titulo": "¿Qué significa cumplir 18?",
+        "puntos": [
+            {
+            "id": 1,
+            "texto": "Dejas de ser menor de edad",
+            "imagen": "/images/16/35.png",
+            "posicionImagen": "izquierda"
+            },
+            {
+            "id": 2,
+            "texto": "Te conviertes en adulto legal en México",
+            "imagen": "/images/16/36.png",
+            "posicionImagen": "derecha"
+            },
+            {
+            "id": 3,
+            "texto": "Ya eres responsable de tus decisiones",
+            "imagen": "/images/16/37.png",
+            "posicionImagen": "izquierda"
+            }
+        ],
+        "fraseFinal": "“Ya no dependes... ahora respondes por ti”"
+        },
+        {
+        "id": 7,
+        "fondo": "/images/16/Fondo416.png",
+        "titulo": "Al cumplir 18 tú podrás:",
+        "pasos": [
+            {
+            "numero": 1,
+            "titulo": "Votar",
+            "imagen": "/images/16/16.png"
+            },
+            {
+            "numero": 2,
+            "titulo": "Firmar contratos",
+            "imagen": "/images/16/17.png"
+            },
+            {
+            "numero": 3,
+            "titulo": "Trabajar formalmente",
+            "imagen": "/images/16/18.png"
+            },
+            {
+            "numero": 4,
+            "titulo": "Tomar decisiones legales",
+            "subtitulo": "“Empiezas a formar parte activa de la sociedad”",
+            "imagen": "/images/16/19.png"
+            },
+            {
+            "numero": 5,
+            "titulo": "Necesitas identificarte como ciudadano mexicano y tramitar “Tu INE” la cual es:",
+            "puntosIne": [
+                "Una identificación oficial en México.",
+                "Necesaria para trámites.",
+                "Indispensable para votar.",
+                "Necesaria para cambiar de ahorrador a socio en Caja ALIANZA."
+            ],
+            "imagen": "/images/16/20.png"
+            }
+        ]
+        },
+        {
+        "id": 8,
+        "fondo": "/images/16/Fondo516.png",
+        "titulo": "¿Qué pasa cuando cumples 18?",
+        "seccionMenor": {
+            "logo": "/images/16/4.png",
+            "texto": "Mientras eres menor de edad, manejas cuentas de ahorro “Club de amigos de Alianzito” que te ayudan a crear el hábito de ahorrar y empezar tu patrimonio."
+        },
+        "seccionMayor": {
+            "subtitulo": "Cuando cumples la mayoría de edad, te conviertes oficialmente en socio de la Caja.",
+            "detalle": "Para hacerlo, necesitas cubrir un certificado de aportación que tiene un valor de $1,000.00 y que también es conocido como parte social.",
+            "imagen": "/images/16/21.png"
+        }
+        },
+        {
+        "id": 9,
+        "fondo": "/images/16/Fondo216.png",
+        "titulo": "¿Qué es la aportación social?",
+        "introduccion": {
+            "definicion": "Es como una “parte de dinero” que das para poder ser socio. Te acredita como uno de los dueños de la cooperativa adquiriendo derechos y obligaciones, así como la oportunidad de participar en la toma de decisiones de esta.",
+            "montoGrafico": "/images/16/38.png",
+            "personaje": "/images/16/39.png",
+            "notaFooter": "Ese capital sigue siendo tuyo, si algún día decides retirarte de la caja, se te entrega."
+        },
+        "subtituloBeneficios": "La parte social te da derecho a manejar los productos y servicios de la Caja, así como gozar de los beneficios como:",
+        "beneficios": [
+            {
+            "id": 1,
+            "texto": "Acceso a diversos esquemas de ahorro",
+            "imagen": "/images/16/26.png",
+            "posicion": "derecha"
+            },
+            {
+            "id": 2,
+            "texto": "Solicitar créditos e ir formando tu historial de crédito.",
+            "imagen": "/images/16/22.png",
+            "posicion": "izquierda"
+            },
+            {
+            "id": 3,
+            "texto": "Tarjeta de débito",
+            "imagen": "/images/16/25.png",
+            "posicion": "derecha"
+            },
+            {
+            "id": 4,
+            "texto": "Puedes consultar saldos, realizar transferencias entre tus cuentas o a otros bancos al activar la App Móvil en tu celular.",
+            "imagen": "/images/16/29.png",
+            "posicion": "derecha"
+            },
+            {
+            "id": 5,
+            "texto": "Participar en proyectos enfocados al cuidado del medio ambiente.",
+            "imagen": "/images/16/28.png",
+            "posicion": "izquierda"
+            },
+            {
+            "id": 6,
+            "texto": "Apoyo de obras que contribuyen el desarrollo comunitario.",
+            "imagen": "/images/16/27.png",
+            "posicion": "derecha"
+            }
+        ]
+        },
+        {
+        "id": 10,
+        "fondo": "/images/16/Fondo316.png",
+        "titulo": "Beneficios",
+        "imagenes": [
+            "/images/16/40.png",
+            "/images/16/41.png",
+            "/images/16/42.png",
+            "/images/16/43.png",
+            "/images/16/44.png",
+            "/images/16/45.png",
+            "/images/16/46.png",
+            "/images/16/47.png",
+            "/images/16/48.png"
+        ]
+        },
+        {
+        "id": 11,
+        "fondo": "/images/16/Fondo416.png",
+        "personajeHeader": "/images/16/11.png",
+        "seccionCredito": {
+            "titulo": "Tips financieros para pedir un crédito",
+            "tarjetas": [
+            {
+                "id": 1,
+                "encabezado": "Un crédito te ayuda a conseguir tus metas rápidamente.",
+                "contenido": "La clave es saber cuándo solicitarlo y cómo manejarlo. Tu capacidad económica determina la cantidad de dinero que se te presta, así evitas deudas impagables."
+            },
+            {
+                "id": 2,
+                "encabezado": "Cuidado con el sobre-endeudamiento",
+                "contenido": "Define bien tus metas financieras y usa el crédito solo si te ayuda a lograrlas, sin poner en peligro lo que ya es tuyo."
+            },
+            {
+                "id": 3,
+                "encabezado": "¡Ojo con las condiciones de tu crédito!",
+                "contenido": "Si consideras que realmente necesitas un crédito, infórmate bien sobre las condiciones: los intereses, el plazo y las penalizaciones por falta de pago."
+            }
+            ]
+        },
+        "seccionAhorro": {
+            "titulo": "Ventajas de ahorrar",
+            "tarjetas": [
+            {
+                "id": 1,
+                "encabezado": "Sientes tranquilidad en tiempos difíciles",
+                "contenido": "Ahorrar te ayudará durante los meses del imprevisto. Lo ideal es que llegues a juntar un fondo de emergencias que cubra tus gastos."
+            },
+            {
+                "id": 2,
+                "encabezado": "Te ayuda a cumplir tus objetivos",
+                "contenido": "Proponte cantidades a ahorrar, para alcanzar cualquier meta que te propongas y fomentar el hábito para toda tu vida."
+            },
+            {
+                "id": 3,
+                "encabezado": "Es una manera de formar tu patrimonio",
+                "contenido": "Es importante destinar un monto fijo, aunque sea pequeño, a tu cuenta de ahorro."
+            }
+            ]
+        }
+        },
+        {
+        "id": 12,
+        "fondo": "/images/16/Fondo516.png",
+        "titulo": "Mi compromiso con mi historial",
+        "personaje": "/images/16/9.png",
+        "compromisos": [
+            { "id": "comp1", "texto": "No solicitar crédito sin plan." },
+            { "id": "comp2", "texto": "Pagar siempre puntual." },
+            { "id": "comp3", "texto": "Leer antes de firmar." },
+            { "id": "comp4", "texto": "Ahorrar antes de endeudarme." },
+            { "id": "comp5", "texto": "Construir un historial que me abra oportunidades." }
+        ],
+        "preguntasEvaluacion": [
+            "¿Realmente lo necesito?",
+            "¿Tengo ingresos constantes?",
+            "¿Puedo pagarlo sin afectar mis gastos básicos?",
+            "¿Ya tengo un ahorro previo?",
+            "¿Entiendo las condiciones?"
+        ],
+        "mensajeReglaOro": "La diferencia no es la edad, es la disciplina. Regla de oro antes de solicitar cualquier crédito pregúntate:",
+        "mensajeConclusion": "Si no puedes responder con claridad, aún no es momento."
+        }
+    ]
+}

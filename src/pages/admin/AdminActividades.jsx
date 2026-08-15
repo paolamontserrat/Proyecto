@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabaseClient';
-
-const RANGOS = ["0-5", "6-8", "9-12", "13-15", "16-17"];
+import { RANGOS } from '../../constants/rangos';
 
 function AdminActividades() {
   const [rango, setRango] = useState(RANGOS[0]);

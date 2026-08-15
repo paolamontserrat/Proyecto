@@ -3,6 +3,7 @@ import { supabase } from "../../supabaseClient";
 import ModalUsuario from "../../components/admin/ModalUsuario";
 import ModalImportarCSV from "../../components/admin/ModalImportarCSV";
 import ModalConfirmar from "../../components/admin/ModalConfirmar";
+import { RANGOS } from "../../constants/rangos";
 
 const POR_PAGINA = 15;
 
@@ -85,7 +86,7 @@ function AdminUsuarios() {
         setErrorAccion(
           data?.error === "no_se_puede_eliminar_admin"
             ? "No se puede eliminar una cuenta de administrador."
-            : "No se pudo eliminar el usuario."
+            : "No se pudo eliminar el usuario.",
         );
         return;
       }
@@ -133,11 +134,11 @@ function AdminUsuarios() {
           className="px-3 py-2 border rounded-lg text-sm bg-white"
         >
           <option value="todos">Todos los rangos</option>
-          <option value="0-5">0-5</option>
-          <option value="6-8">6-8</option>
-          <option value="9-12">9-12</option>
-          <option value="13-15">13-15</option>
-          <option value="16-17">16-17</option>
+          {RANGOS.map((r) => (
+            <option key={r} value={r}>
+              {r}
+            </option>
+          ))}
         </select>
         <select
           value={filtroEstado}
