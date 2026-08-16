@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 
-import actividades05 from '../../features/0-5/actividades/actividades';
-import actividades6 from '../../features/6/actividades/actividades';
-import actividades9 from '../../features/9/actividades/actividades';
-import actividades13 from '../../features/13/actividades/actividades';
-import actividades16 from '../../features/16/actividades/actividades';
+import actividades05 from "../../features/0-5/actividades/actividades";
+import actividades6 from "../../features/6/actividades/actividades";
+import actividades9 from "../../features/9/actividades/actividades";
+import actividades13 from "../../features/13/actividades/actividades";
+import actividades16 from "../../features/16/actividades/actividades";
 
-import Footer from '../Footer';
-import CapturarCoordenadas from './CapturarCoordenadas';
-import { supabase } from '../../supabaseClient';
+import Footer from "../Footer";
+import CapturarCoordenadas from "./CapturarCoordenadas";
+import ModalActividadCompletada from "../gamificacion/ModalActividadCompletada";
+import { useGamificacion } from "../gamificacion/Gamificacion";
+import { supabase } from "../../supabaseClient";
 
 const ContenedorActividades = () => {
-
   const { rango } = useParams();
   const navigate = useNavigate();
 
@@ -21,8 +22,11 @@ const ContenedorActividades = () => {
   // =========================
   // USER MULTIUSUARIO
   // =========================
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
   const userId = usuario?.id || "anon";
+
+  const { celebracion, registrarActividad, cerrarCelebracion } =
+    useGamificacion(userId);
 
   const progresoKey = `progreso-${userId}-${rango}`;
 
@@ -33,10 +37,10 @@ const ContenedorActividades = () => {
 
   const actividadesPorRango = {
     "0-5": actividades05,
-    "6": actividades6,
-    "9": actividades9,
-    "13": actividades13,
-    "16": actividades16
+    6: actividades6,
+    9: actividades9,
+    13: actividades13,
+    16: actividades16,
   };
 
   const actividades = actividadesPorRango[rango] || [];
@@ -46,7 +50,7 @@ const ContenedorActividades = () => {
   // =========================
   useEffect(() => {
     fetch(`/data/${rango}.json`)
-      .then(res => res.json())
+      .then((res) => res.json())
       .then(setData)
       .catch(console.error);
   }, [rango]);
@@ -55,23 +59,22 @@ const ContenedorActividades = () => {
   // SCROLL
   // =========================
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [pasoActual]);
 
   // =========================
   // SINCRONIZAR PROGRESO (SUPABASE + LOCAL)
   // =========================
   useEffect(() => {
-
     const sync = async () => {
       if (userId === "anon") return;
 
       try {
         const { data: progreso } = await supabase
-          .from('progreso_actividades')
-          .select('actividad_id')
-          .eq('usuario_id', userId)
-          .eq('completada', true);
+          .from("progreso_actividades")
+          .select("actividad_id")
+          .eq("usuario_id", userId)
+          .eq("completada", true);
 
         if (!progreso || progreso.length === 0) {
           setPasoActual(1);
@@ -79,19 +82,17 @@ const ContenedorActividades = () => {
           return;
         }
 
-        const max = Math.max(...progreso.map(p => p.actividad_id));
+        const max = Math.max(...progreso.map((p) => p.actividad_id));
         const siguiente = max + 1;
 
         setPasoActual(siguiente);
         localStorage.setItem(progresoKey, siguiente);
-
       } catch (err) {
         console.warn("Sync error:", err);
       }
     };
 
     sync();
-
   }, [userId, rango]);
 
   // =========================
@@ -99,7 +100,7 @@ const ContenedorActividades = () => {
   // =========================
   const totalPasos = Math.min(
     data?.pasos?.length || 0,
-    actividades.length || 0
+    actividades.length || 0,
   );
 
   const pasoSeguro = Math.min(pasoActual, totalPasos || 1);
@@ -111,27 +112,50 @@ const ContenedorActividades = () => {
     if (userId === "anon") return;
 
     try {
-      await supabase.from('progreso_actividades').upsert({
-        usuario_id: userId,
-        actividad_id: idActividad,
-        completada: true
-      }, {
-        onConflict: 'usuario_id,actividad_id'
-      });
+      await supabase.from("progreso_actividades").upsert(
+        {
+          usuario_id: userId,
+          actividad_id: idActividad,
+          completada: true,
+        },
+        {
+          onConflict: "usuario_id,actividad_id",
+        },
+      );
     } catch {}
   };
 
   // =========================
-  // AVANZAR
+  // AVANZAR (ahora pasa por gamificación)
   // =========================
-  const avanzar = () => {
+  const avanzar = async () => {
     const actividadActual = actividades[pasoSeguro - 1];
     const idReal = actividadActual?.id || pasoSeguro;
 
-    guardarProgreso(idReal);
+    await guardarProgreso(idReal);
 
-    const siguiente = pasoSeguro + 1;
+    if (userId === "anon") {
+      const siguiente = pasoActual + 1;
+      setPasoActual(siguiente);
+      localStorage.setItem(progresoKey, siguiente);
+      return;
+    }
 
+    const resultado = await registrarActividad(idReal);
+
+    if (!resultado.nuevo) {
+      // Ya había dado estrella antes: avanza directo, sin modal ni sonido
+      const siguiente = pasoActual + 1;
+      setPasoActual(siguiente);
+      localStorage.setItem(progresoKey, siguiente);
+    }
+    // Si sí es nueva, el avance ocurre en continuarDespuesDeCelebracion,
+    // cuando el niño cierra el modal de celebración
+  };
+
+  const continuarDespuesDeCelebracion = () => {
+    cerrarCelebracion();
+    const siguiente = pasoActual + 1;
     setPasoActual(siguiente);
     localStorage.setItem(progresoKey, siguiente);
   };
@@ -145,7 +169,7 @@ const ContenedorActividades = () => {
       setPasoActual(anterior);
       localStorage.setItem(progresoKey, anterior);
     } else {
-      navigate('/');
+      navigate("/");
     }
   };
 
@@ -169,14 +193,12 @@ const ContenedorActividades = () => {
         className="min-h-screen pb-12"
         style={{
           backgroundImage: `url('/images/${rango}/Fondo${rango}.png')`,
-          backgroundSize: 'cover',
-          backgroundAttachment: 'fixed'
+          backgroundSize: "cover",
+          backgroundAttachment: "fixed",
         }}
       >
         <main className="container mx-auto px-4">
-
           <div className="text-center p-8 md:p-16 bg-white/95 rounded-[3rem] shadow-2xl border-[8px] border-alianza-amarillo mt-20 max-w-2xl mx-auto">
-
             <img
               src={`/images/${rango}/33.png`}
               className="mx-auto mb-8 w-40 md:w-64"
@@ -202,9 +224,7 @@ const ContenedorActividades = () => {
             >
               Repasar actividades
             </button>
-
           </div>
-
         </main>
 
         <Footer />
@@ -230,17 +250,13 @@ const ContenedorActividades = () => {
       className="min-h-screen pb-12"
       style={{
         backgroundImage: `url('/images/${rango}/Fondo${rango}.png')`,
-        backgroundSize: 'cover',
-        backgroundAttachment: 'fixed'
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
       }}
     >
       <main className="container mx-auto px-4">
-
         {DEBUG_COORDENADAS ? (
-          <CapturarCoordenadas
-            imagen={`/images/${rango}/20.png`}
-            total={6}
-          />
+          <CapturarCoordenadas imagen={`/images/${rango}/20.png`} total={6} />
         ) : (
           <ActividadActual
             data={pData}
@@ -250,8 +266,12 @@ const ContenedorActividades = () => {
             rango={rango}
           />
         )}
-
       </main>
+
+      <ModalActividadCompletada
+        celebracion={celebracion}
+        onContinuar={continuarDespuesDeCelebracion}
+      />
 
       <Footer />
     </div>

@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { PiggyBank, Gamepad2, LogOut } from 'lucide-react';
-import Footer from '../components/Footer';
-import AvisoDiplomas from '../components/AvisoDiplomas';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { PiggyBank, Gamepad2, LogOut } from "lucide-react";
+import Footer from "../components/Footer";
+import AvisoDiplomas from "../components/AvisoDiplomas";
+import ProgresoAventura from "../components/gamificacion/ProgresoAventura";
 
 const Dashboard = () => {
   const { rango } = useParams();
   const navigate = useNavigate();
   const [info, setInfo] = useState(null);
-  const usuario = JSON.parse(localStorage.getItem('usuario'));
+  const usuario = JSON.parse(localStorage.getItem("usuario"));
 
   useEffect(() => {
     fetch(`/data/${rango}.json`)
@@ -18,8 +19,8 @@ const Dashboard = () => {
   }, [rango]);
 
   const cerrarSesion = () => {
-    localStorage.removeItem('usuario');
-    navigate('/');
+    localStorage.removeItem("usuario");
+    navigate("/");
   };
 
   if (!info)
@@ -30,14 +31,14 @@ const Dashboard = () => {
     );
 
   const bienvenida = info.paginas[0];
-  const inicial = (usuario?.nombre || '?').trim().charAt(0).toUpperCase();
+  const inicial = (usuario?.nombre || "?").trim().charAt(0).toUpperCase();
 
   return (
     <div
       className="min-h-screen pb-10"
       style={{
         backgroundImage: `url(${info.fondoPasaporte})`,
-        backgroundSize: 'cover',
+        backgroundSize: "cover",
       }}
     >
       {/* HEADER */}
@@ -49,7 +50,7 @@ const Dashboard = () => {
           <div>
             <p className="text-xs text-gray-500 leading-none">Hola,</p>
             <h1 className="text-lg font-black text-alianza-azul leading-tight">
-              {usuario?.nombre || 'Invitado'} 👋
+              {usuario?.nombre || "Invitado"} 👋
             </h1>
           </div>
         </div>
@@ -68,6 +69,11 @@ const Dashboard = () => {
         <AvisoDiplomas />
       </div>
 
+      {/* 🚀 PROGRESO DE AVENTURA */}
+      <div className="px-6">
+        <ProgresoAventura rango={rango} />
+      </div>
+
       {/* PORTADA */}
       <div className="px-6 mt-2">
         <div className="w-full py-8 bg-white/60 rounded-[2rem] shadow-lg overflow-hidden flex items-center justify-center">
@@ -82,7 +88,6 @@ const Dashboard = () => {
       {/* BIENVENIDA */}
       <div className="px-6 mt-6">
         <div className="bg-white/95 p-6 md:p-8 rounded-[2.5rem] shadow-2xl backdrop-blur-md">
-
           <h2 className="text-2xl md:text-3xl font-black text-alianza-azul mb-1 uppercase tracking-tight text-center">
             {bienvenida.titulo}
           </h2>
@@ -119,7 +124,10 @@ const Dashboard = () => {
             </h3>
             <ul className="space-y-3">
               {bienvenida.beneficios.map((b, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm md:text-base font-medium">
+                <li
+                  key={i}
+                  className="flex items-start gap-3 text-sm md:text-base font-medium"
+                >
                   <span className="shrink-0 w-6 h-6 rounded-full bg-alianza-amarillo text-alianza-azul flex items-center justify-center text-xs font-black mt-0.5">
                     ✓
                   </span>
