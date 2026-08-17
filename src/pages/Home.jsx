@@ -8,7 +8,7 @@ const Home = () => {
     { label: "0 a 5 Años", color: "bg-alianza-rosa", id: "0-5" },
     { label: "6 a 8 Años", color: "bg-alianza-amarillo", id: "6-8" },
     { label: "9 a 12 Años", color: "bg-alianza-azul", id: "9-12" },
-    { label: "13 a 15 Años", color: "bg-alianza-azul", id: "13-15" },
+    { label: "13 a 15 Años", color: "bg-alianza-amarillo", id: "13-15" },
     { label: "16 a 17 Años", color: "bg-alianza-azul", id: "16-17" },
   ];
 

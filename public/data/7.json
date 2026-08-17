@@ -1,35 +1,257 @@
 {
-  "rangoEdad": "7",
-  "titulo": "Mi aventura del ahorro",
-  "fondoPasaporte": "/images/7/Fondo7.png",
-  "institucion": "ALIANZA CAJA POPULAR CERANO",
-  "portada": "/images/7/Inicio.png",
-  "imgAhorro": "/images/0-5/6.png",
-  "imgJuegos": "/images/0-5/16.png",
-  "paginas": [
-    {
-      "id": 1,
-      "tipo": "bienvenida",
-      "titulo": "¡Bienvenido a tu aventura del ahorro!",
-      "intro": "En este pasaporte aprenderás:\u00BFQué es ahorrar?\u00BFCómo hacer crecer tu dinero?\u00BFCómo cumplir tus metas?\u00BFCómo tu Caja te ayuda a lograrlo?\nEn la Caja, tu esfuerzo cuenta.",
-      "secciones": [
+    "rangoEdad": "7",
+    "titulo": "Mi aventura del ahorro",
+    "fondoPasaporte": "/images/6/Fondo6.png",
+    "institucion": "ALIANZA CAJA POPULAR CERANO",
+    "portada": "/images/6/Inicio.png",
+    "imgAhorro": "/images/0-5/6.png",
+    "imgJuegos": "/images/0-5/16.png",
+    "paginas": [
         {
-          "subtitulo": "PROGRAMA CRECIENDO JUNTOS",
-          "texto": "Te invitamos a participar en nuestro programa Creciendo Juntos. Consiste en lograr retos trimestrales de ahorro constante, donde obtienes premios y participas en sorteos.",
-          "icono": "⭐"
+        "id": 1,
+        "tipo": "bienvenida",
+        "titulo": "¡Bienvenido a tu aventura del ahorro!",
+        "intro": "En este pasaporte aprenderás:\u00BFQué es ahorrar?\u00BFCómo hacer crecer tu dinero?\u00BFCómo cumplir tus metas?\u00BFCómo tu Caja te ayuda a lograrlo?\nEn la Caja, tu esfuerzo cuenta.",
+        "secciones": [
+            {
+            "subtitulo": "PROGRAMA CRECIENDO JUNTOS",
+            "texto": "Te invitamos a participar en nuestro programa Creciendo Juntos. Consiste en lograr retos trimestrales de ahorro constante, donde obtienes premios y participas en sorteos.",
+            "icono": "⭐"
+            },
+            {
+            "subtitulo": "TUS CUENTAS",
+            "texto": "Cuenta de club Alianzito sera para poder hacer retiros y la cuenta Creciendo Juntos sera para largo plazo.",
+            "icono": "💰"
+            }
+        ],
+        "beneficios": [
+            "Participas en sesiones de educación financiera y cooperativa.",
+            "Acceso a cursos para desarrollar habilidades según tu edad.",
+            "Puedes recibir incentivos de apoyo escolar (si no eres beneficiario de Impulso a la Educación).",
+            "Tus papás pueden obtener un esquema de crédito atractivo."
+        ]
+        }
+    ],
+    "pasos": [
+    {
+        "id": "1",
+        "titulo": "¡Hola, pequeño ahorrador!",
+        "fondo": "/images/7/Fondo72.jpg",
+        "secciones": [
+            {
+            "id": "bienvenida",
+            "titulo": "¡Hola, pequeño ahorrador!",
+            "preguntaInicial": "¿Alguna vez has querido comprar un juguete, un balón, una bicicleta o algo que te gusta mucho?",
+            "introduccion": "A veces no podemos conseguirlo de inmediato, pero existe algo que nos ayuda a lograrlo poco a poco. Eso se llama ahorro.",
+            "imagenes": [
+                { "url": "/images/7/1.png", "alt": "Alianzito saludando"},
+                { "url": "/images/7/4.png", "alt": "Oso de peluche"},
+                { "url": "/images/7/2.png", "alt": "Balón de fútbol"},
+                { "url": "/images/7/3.png", "alt": "Bicicleta"}
+            ]
+            },
+            {
+            "id": "definicion",
+            "preguntaClave": "¿Qué es ahorrar?",
+            "concepto": "Ahorrar es guardar en Caja Popular Cerano una parte de nuestro dinero para usarla después.",
+            "ejemploTitulo": "Por ejemplo:",
+            "ejemploTexto": "Imagina que cada semana recibes una moneda. En lugar de gastarla toda en dulces, decides guardar una parte en la cooperativa.",
+            "imagenes": [
+                { "url": "/images/7/5.png", "alt": "Alianzito con alcancía"},
+                { "url": "/images/7/75.png", "alt": "Monedas acumuladas"}
+            ]
+            },
+            {
+            "id": "proceso",
+            "explicacion": "Después de varias semanas tendrás muchas monedas y podrás comprar algo más grande o importante.",
+            "imagenes": [
+                { "url": "/images/7/76.png", "alt": "Edificio Alianza con monedas"},
+                { "url": "/images/7/77.png", "alt": "Torres de monedas"}
+            ]
+            },
+            {
+            "id": "resumen",
+            "tituloResumen": "Recuerda: Ahorrar es:",
+            "subtituloResumen": "Guardar, pensar en el futuro y cumplir metas",
+            "imagenes": [
+                { "url": "/images/7/78.png", "alt": "Proceso de ahorro"},
+                { "url": "/images/7/10.png", "alt": "Alianzito con trofeo"}
+            ]
+            }
+        ]
+    },
+    {
+        "id": "2",
+        "titulo": "Encuentra las 6 monedas",
+        "instrucciones": "Toca o haz clic sobre cada moneda que encuentres escondida entre los juguetes.",
+        "fondo": "/images/7/Fondo72.jpg",
+        "imgActividad": "/images/7/12.jpg",
+        "imgMoneda": "/images/7/13.png",
+        "totalMonedas": 6,
+        "posicionesPosibles": [
+            { "id": 1, "top": "59%", "left": "6%", "alt": "Moneda en el baúl del unicornio" },
+            { "id": 2, "top": "81%", "left": "17.5%", "alt": "Moneda entre las pesas azules" },
+            { "id": 3, "top": "66%", "left": "39.5%", "alt": "Moneda cerca del patito de hule" },
+            { "id": 4, "top": "61.5%", "left": "53%", "alt": "Moneda al lado del barco de juguete" },
+            { "id": 5, "top": "74.5%", "left": "64.5%", "alt": "Moneda sobre el avión blanco" },
+            { "id": 6, "top": "66%", "left": "74%", "alt": "Moneda sobre el camión amarillo" },
+            { "id": 7, "top": "30%", "left": "22%", "alt": "Moneda cerca del robot" },
+            { "id": 8, "top": "45%", "left": "44%", "alt": "Moneda en la jirafa" },
+            { "id": 9, "top": "52%", "left": "68%", "alt": "Moneda en la casita roja" },
+            { "id": 10, "top": "78%", "left": "32%", "alt": "Moneda en el pulpo morado" }
+        ],
+        "mensajeExito": "¡Felicidades! Encontraste todas las monedas de tu ahorro."
+    },
+    {
+        "id": "3",
+        "titulo": "Conociendo las opciones de ahorro de menores en Caja Popular Cerano",
+        "fondo": "/images/7/Fondo72.jpg",
+        "subtitulo": "En CAJA POPULAR CERANO existen opciones para que los niños y jóvenes aprendan a administrar su dinero y puedan cumplir sus metas.",
+        "imagen": "/images/7/16.png",
+        "secciones": [
+        {
+        "id": "cuenta_ahorro",
+        "tipo": "Cuenta de ahorro",
+        "descripcion": "Es una cuenta donde puedes guardar tu dinero, aprender a manejarlo y disponer de él cuando lo necesites, siempre con el acompañamiento de tus padres o tutores.",
+        "ejemplo": "Puedo ahorrar para una salida, un regalo, un material escolar o una meta que tenga a corto plazo.",
+        "imagen": "/images/7/17.png"
         },
         {
-          "subtitulo": "TUS CUENTAS",
-          "texto": "Cuenta de club Alianzito sera para poder hacer retiros y la cuenta Creciendo Juntos sera para largo plazo.",
-          "icono": "💰"
+        "id": "subcuenta_creciendo_juntos",
+        "tipo": "Subcuenta \"Creciendo Juntos\"",
+        "descripcion": "Es una opción especial para ahorrar pensando en metas importantes de largo plazo. La idea es que el dinero que se guarda ahí pueda crecer mientras tú también creces.",
+        "caracteristicas": [
+            "Está diseñada para ayudarte a cumplir metas futuras.",
+            "El ahorro permanece protegido hasta que estes en el programa.",
+            "No puedes retirar el dinero antes, porque está pensado para construir un proyecto a futuro y saldrías del programa.",
+            "Te ayuda a desarrollar el hábito de ahorrar desde pequeño."
+        ],
+        "ejemplosMetas": [
+            {
+                "imagen": "/images/7/79.png"
+            }   
+        ]
         }
-      ],
-      "beneficios": [
-        "Participas en sesiones de educación financiera y cooperativa.",
-        "Acceso a cursos para desarrollar habilidades según tu edad.",
-        "Puedes recibir incentivos de apoyo escolar (si no eres beneficiario de Impulso a la Educación).",
-        "Tus papás pueden obtener un esquema de crédito atractivo."
-      ]
+        ]
+    },
+    {
+        "id": "4",
+        "titulo": "Conozcamos a Sofía",
+        "fondo": "/images/7/Fondo72.jpg",
+        "subtitulo": "Descubre cómo Sofía logró cumplir su meta de ahorro paso a paso.",
+        "secciones": [
+            {
+            "id": "inicio_historia",
+            "titulo": "El sueño de Sofía",
+            "texto": "Sofía quería comprar un balón nuevo.",
+            "imagen": "/images/7/20.png"
+            },
+            {
+            "id": "conflicto",
+            "titulo": "La tentación de gastar",
+            "texto": "Cuando veía dulces en la tienda, quería gastar todo su dinero.",
+            "imagen": "/images/7/21.png"
+            },
+            {
+            "id": "decision",
+            "titulo": "Una decisión inteligente",
+            "texto": "Pero decidió guardar una moneda cada semana en su cuenta de ahorro de la cooperativa.",
+            "subtexto": "Pasaron algunos días y su alcancía comenzó a llenarse.",
+            "imagen": "/images/7/22.png"
+            },
+            {
+            "id": "logro",
+            "titulo": "¡Meta cumplida!",
+            "texto": "Después de varias semanas, Sofía tenía suficiente dinero para comprar el balón que tanto quería.",
+            "imagen": "/images/7/23.png"
+            },
+            {
+            "id": "conclusion",
+            "pregunta": "¿Cómo lo logró?",
+            "imagen": "/images/7/1.png",
+            "puntosClave": [
+                "Porque fue paciente.",
+                "Porque guardó parte de su dinero.",
+                "Porque aprendió a ahorrar."
+            ]
+            }
+        ]
+    },
+    {
+        "id": "5",
+        "titulo": "¿Por qué es importante ahorrar con la Cooperativa?",
+        "fondo": "/images/7/Fondo72.jpg",
+        "imagen": "/images/7/25.png",
+        "introduccion": {
+            "titulo": "Ahorrar nos ayuda a:",
+            "beneficios": [
+            {
+                "id": "meta",
+                "texto": "Cumplir metas.",
+                "imagen": "/images/7/26.jpg"
+            },
+            {
+                "id": "comprar",
+                "texto": "Comprar algo que queremos.",
+                "imagen": "/images/7/23.png"
+            },
+            {
+                "id": "futuro",
+                "texto": "Estar preparados para el futuro y aprender a cuidar nuestro dinero.",
+                "imagen": "/images/7/27.jpg"
+            }
+            ]
+        },
+        "preguntaSeleccion": {
+            "instruccion": "Selecciona ¿Cuál niño está haciendo buenas acciones?",
+            "casos": [
+            {
+                "id": "utiles",
+                "categoria": "Útiles escolares",
+                "opciones": [
+                { "id": "u1", "imagen": "/images/7/24.png", "esCorrecta": true },
+                { "id": "u2", "imagen": "/images/7/28.jpg", "esCorrecta": false }
+                ]
+            },
+            {
+                "id": "luz",
+                "categoria": "Ahorro de luz",
+                "opciones": [
+                { "id": "l1", "imagen": "/images/7/30.jpg", "esCorrecta": true },
+                { "id": "l2", "imagen": "/images/7/29.jpg", "esCorrecta": false }
+                ]
+            },
+            {
+                "id": "agua",
+                "categoria": "Cuidado del agua",
+                "opciones": [
+                { "id": "a1", "imagen": "/images/7/80.png", "esCorrecta": false },
+                { "id": "a2", "imagen": "/images/7/81.png", "esCorrecta": true }
+                ]
+            },
+            {
+                "id": "juguetes",
+                "categoria": "Cuidado de juguetes",
+                "opciones": [
+                { "id": "j1", "imagen": "/images/7/82.png", "esCorrecta": true },
+                { "id": "j2", "imagen": "/images/7/32.jpg", "esCorrecta": false }
+                ]
+            }
+            ]
+        },
+        "seccionFrases": {
+            "titulo": "Completa la frase",
+            "preguntas": [
+            {
+                "id": "ahorrar_para",
+                "textoBase": "Yo quiero ahorrar para:"
+            },
+            {
+                "id": "cerrar_llave",
+                "textoBase": "Cierro la llave del agua porque:"
+            }
+            ]
+        }
     }
-  ]
+    ]
 }

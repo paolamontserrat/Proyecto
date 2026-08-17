@@ -273,7 +273,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
                                             text-[8px] xxs:text-[9px] xs:text-xs sm:text-sm 
                                             transition-all duration-150 cursor-pointer select-none
                                             ${esCorrecta 
-                                                ? "bg-emerald-500 text-white shadow-inner scale-95" 
+                                                ? "bg-blue-600 text-white shadow-inner scale-95" 
                                                 : esSeleccionada 
                                                     ? "bg-sky-500 text-white animate-pulse" 
                                                     : "bg-white text-blue-900 hover:bg-yellow-100"

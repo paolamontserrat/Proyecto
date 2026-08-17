@@ -27,6 +27,7 @@ const MESES = [
   "Noviembre",
   "Diciembre",
 ];
+const RANGOS = ["0-5","6","7","8","9-12","13-15","16-17"];
 
 function TarjetaKPI({ titulo, valor, subtitulo, color = "text-alianza-azul" }) {
   return (

@@ -328,7 +328,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                                                 transition-all border shadow-inner focus:outline-none focus:ring-1 focus:ring-blue-500
                                                 text-[8px] xxs:text-[9px] xs:text-[11px] sm:text-base border-gray-300
                                                 ${esCorrecto 
-                                                    ? "bg-emerald-500 border-emerald-600 text-white font-black cursor-not-allowed scale-95" 
+                                                    ? "bg-blue-600 border-yellow-600 text-white font-black cursor-not-allowed scale-95" 
                                                     : "bg-white text-blue-900 focus:bg-amber-100"
                                                 }
                                             `}
