@@ -281,6 +281,365 @@
             }
             ]
         }
+    },
+    {
+        "id": "7",
+        "titulo": "Pasos para alcanzar una meta",
+        "subtitulo": "con Alianzito",
+        "fondo": "/images/7/Fondo72.jpg",
+        "pasos": [
+            {
+            "numero": 1,
+            "texto": "Piensa qué quieres lograr. ¿Qué te gustaría tener o aprender?",
+            "imagen": "/images/7/37.png"
+            },
+            {
+            "numero": 2,
+            "texto": "Imagina cómo será cuando lo consigas. Piensa en lo feliz que te sentirás.",
+            "imagen": "/images/7/38.png"
+            },
+            {
+            "numero": 3,
+            "texto": "Haz un plan. Decide cuánto ahorrarás o qué acciones realizarás.",
+            "imagen": "/images/7/39.png"
+            },
+            {
+            "numero": 4,
+            "texto": "Sé paciente. Las metas importantes requieren tiempo.",
+            "imagen": "/images/7/40.png"
+            },
+            {
+            "numero": 5,
+            "texto": "Sigue intentándolo. No te rindas, aunque parezca difícil."
+            }
+        ],
+        "seccionMeta": {
+            "titulo": "MENCIONA TU META:",
+            "placeholder": "Escribe aquí tu meta...",
+            "imagen": "/images/7/41.png"
+        }
+    },
+    {
+        "id": "8",
+        "titulo": "Clasificación de Metas",
+        "instruccion": "Clasifica cada meta según su tamaño: Meta Pequeña o Meta Grande.",
+        "fondo": "/images/7/Fondo72.jpg",
+        "categorias": [
+            {
+            "id": "pequeña",
+            "nombre": "Meta Pequeña",
+            "color": "bg-yellow-100 border-yellow-400"
+            },
+            {
+            "id": "grande",
+            "nombre": "Meta Grande",
+            "color": "bg-amber-100 border-amber-500"
+            }
+        ],
+        "metas": [
+            {
+            "id": "helado",
+            "texto": "Comprar un helado",
+            "categoriaCorrecta": "pequeña",
+            "imagen": "/images/7/83.png"
+            },
+            {
+            "id": "cuento",
+            "texto": "Comprar un cuento",
+            "categoriaCorrecta": "pequeña",
+            "imagen": "/images/7/84.png"
+            },
+            {
+            "id": "colores",
+            "texto": "Conseguir colores nuevos",
+            "categoriaCorrecta": "pequeña",
+            "imagen": "/images/7/85.png"
+            },
+            {
+            "id": "bicicleta",
+            "texto": "Comprar una bicicleta",
+            "categoriaCorrecta": "grande",
+            "imagen": "/images/7/86.png"
+            },
+            {
+            "id": "consola",
+            "texto": "Comprar una consola de videojuegos",
+            "categoriaCorrecta": "grande",
+            "imagen": "/images/7/87.png"
+            }
+        ]
+    },
+    {
+        "id": "9",
+        "titulo": "¿Qué pasa si tengo una meta?",
+        "subtitulo": "Cuando tenemos una meta:",
+        "fondo": "/images/7/Fondo72.jpg",
+        "personaje": "/images/7/1.png",
+        "puntos": [
+            "Pensamos mejor antes de gastar.",
+            "Aprendemos a ahorrar en la cooperativa.",
+            "Nos esforzamos más.",
+            "Nos sentimos orgullosos cuando la alcanzamos."
+        ]
+    },
+    {
+        "id": "10",
+        "fondo": "/images/7/Fondo72.jpg",
+        "titulo": "Alianzito completa la sopa de letras y encuentra las palabras relacionadas con el ahorro",
+        "palabras": [
+            { "texto": "AHORRO", "inicio": [0, 0], "fin": [0, 5] },
+            { "texto": "INVERTIR", "inicio": [0, 11], "fin": [0, 18] },
+            { "texto": "BENEFICIO", "inicio": [2, 8], "fin": [2, 16] },
+            { "texto": "FUTURO", "inicio": [3, 3], "fin": [3, 8] },
+            { "texto": "RESERVA", "inicio": [5, 6], "fin": [5, 12] },
+            { "texto": "RESPONSABLE", "inicio": [11, 4], "fin": [11, 14] },
+            { "texto": "PACIENCIA", "inicio": [14, 5], "fin": [14, 13] },
+            { "texto": "PLANEAR", "inicio": [17, 9], "fin": [17, 15] },
+            { "texto": "PRESUPUESTO", "inicio": [19, 0], "fin": [19, 10] },
+            { "texto": "DISCIPLINA", "inicio": [1, 2], "fin": [10, 2] },
+            { "texto": "CONSTANCIA", "inicio": [14, 3], "fin": [5, 12] },
+            { "texto": "SEGURIDAD", "inicio": [6, 16], "fin": [14, 16] },
+            { "texto": "METAS", "inicio": [14, 19], "fin": [18, 19] }
+        ],
+        "grid": [
+            ["A","H","O","R","R","O","J","D","X","C","S","I","N","V","E","R","T","I","R","C"],
+            ["B","A","D","M","I","N","T","O","N","R","K","A","D","M","I","P","T","O","N","R"],
+            ["E","R","I","J","D","I","T","D","B","E","N","E","F","I","C","I","O","D","F","I"],
+            ["E","M","S","F","U","T","U","R","O","C","R","M","Y","N","O","R","N","U","H","C"],
+            ["H","F","C","H","B","B","N","L","O","K","E","F","E","H","B","B","N","L","O","K"],
+            ["D","Z","I","O","U","R","R","E","S","E","R","V","A","O","U","R","I","Y","C","I"],
+            ["U","P","P","K","B","O","S","J","K","T","R","I","R","K","B","O","S","J","K","N"],
+            ["B","H","L","T","R","A","G","P","E","E","C","D","E","K","I","B","E","W","E","S"],
+            ["F","O","I","T","B","A","L","L","S","N","F","T","S","K","T","O","G","L","Y","T"],
+            ["U","M","N","Z","A","T","O","T","A","H","U","M","E","Z","A","T","U","A","G","A"],
+            ["S","T","A","V","F","Q","J","T","X","C","S","T","R","V","F","Q","R","D","X","O"],
+            ["B","A","O","M","R","E","S","P","O","N","S","A","B","L","E","N","I","O","N","R"],
+            ["E","Q","O","L","G","N","E","D","F","W","E","Q","E","L","G","M","D","D","F","P"],
+            ["E","M","E","F","O","R","N","U","H","C","I","Y","O","Z","T","U","A","E","H","Y"],
+            ["L","G","N","C","L","P","A","C","I","E","N","C","I","A","I","B","D","L","O","M"],
+            ["D","Z","Y","O","U","R","I","C","C","E","D","Z","O","O","K","R","I","Y","C","E"],
+            ["U","P","J","K","B","O","S","T","S","I","C","H","J","E","T","O","S","J","K","T"],
+            ["U","D","S","K","I","B","F","I","E","P","L","A","N","E","A","R","F","W","E","A"],
+            ["F","O","O","T","B","A","L","W","Y","D","S","P","O","H","L","F","X","L","Y","S"],
+            ["P","R","E","S","U","P","U","E","S","T","O","M","P","Z","A","T","O","A","G","H"]
+        ]
+    },
+    {
+        "id": "11",
+        "titulo": "¡Las cosas importantes requieren esfuerzo!",
+        "fondo": "/images/7/Fondo72.jpg",
+        "seccionInformativa": {
+            "pregunta": "¿Has aprendido alguna vez algo nuevo?",
+            "ejemplos": [
+            { "texto": "Andar en bicicleta.", "imagen": "/images/7/43.png" },
+            { "texto": "Jugar fútbol.", "imagen": "/images/7/45.png" },
+            { "texto": "Leer un cuento.", "imagen": "/images/7/44.png" },
+            { "texto": "Dibujar.", "imagen": "/images/7/44.png" },
+            { "texto": "Armar un rompecabezas.", "imagen": "/images/7/46.png" }
+            ],
+            "mensajeInicial": "Al principio pudo parecer difícil, pero con práctica y esfuerzo lo lograste. Así ocurre también con muchas cosas que queremos conseguir.",
+            "definicionEsfuerzo": "El esfuerzo es poner atención, dedicación y ganas para lograr algo.",
+            "imagen": "/images/7/47.png",
+            "cuandoTeEsfuerzas": [
+            "Practicas.",
+            "Intentas de nuevo.",
+            "No te rindes fácilmente.",
+            "Sigues adelante, aunque algo sea difícil."
+            ]
+        },
+        "dinamica": {
+            "instruccion": "Selecciona las acciones en las que se necesite realizar un esfuerzo:",
+            "opciones": [
+            {
+                "id": 1,
+                "texto": "No cumplir con las tareas de la escuela.",
+                "imagen": "/images/7/88.png",
+                "requiereEsfuerzo": false
+            },
+            {
+                "id": 2,
+                "texto": "Ayudamos en casa.",
+                "imagen": "/images/7/89.png",
+                "requiereEsfuerzo": true
+            },
+            {
+                "id": 3,
+                "texto": "Aprendemos una canción.",
+                "imagen": "/images/7/90.png",
+                "requiereEsfuerzo": true
+            },
+            {
+                "id": 4,
+                "texto": "Practicamos un deporte.",
+                "imagen": "/images/7/93.png",
+                "requiereEsfuerzo": true
+            },
+            {
+                "id": 5,
+                "texto": "Estar acostados viendo televisión.",
+                "imagen": "/images/7/92.png",
+                "requiereEsfuerzo": false
+            },
+            {
+                "id": 6,
+                "texto": "Aprendemos a leer mejor.",
+                "imagen": "/images/7/91.png",
+                "requiereEsfuerzo": true
+            },
+            {
+                "id": 7,
+                "texto": "Mejoramos un dibujo.",
+                "imagen": "/images/7/94.png",
+                "requiereEsfuerzo": true
+            },
+            {
+                "id": 8,
+                "texto": "Estar dormido todo el día.",
+                "imagen": "/images/7/95.png",
+                "requiereEsfuerzo": false
+            },
+            {
+                "id": 9,
+                "texto": "Hacemos la tarea.",
+                "imagen": "/images/7/96.png",
+                "requiereEsfuerzo": true
+            }
+            ],
+            "mensajeFinal": {
+            "titulo": "Mensaje",
+            "lineas": [
+                "Las metas no se alcanzan de un día para otro.",
+                "Cada vez que te esfuerzas, das un paso más hacia tus sueños. Así como el ahorro crece moneda por moneda, los logros se alcanzan esfuerzo por esfuerzo.",
+                "¡Tú puedes lograr grandes cosas cuando te esfuerzas y no te rindes!"
+            ]
+            }
+        }
+    },
+    {
+        "id": "12",
+        "titulo": "¿Qué es la ayuda mutua?",
+        "fondo": "/images/7/Fondo72.jpg",
+        "seccionInformativa": {
+            "introduccion": "La ayuda mutua ocurre cuando dos o más personas se apoyan para lograr algo.",
+            "significa": [
+                "Ayudar cuando alguien lo necesita.",
+                "Trabajar en equipo.",
+                "Compartir.",
+                "Colaborar para alcanzar una meta común."
+            ],
+            "notaFormasAyuda": "La ayuda mutua no siempre significa dar cosas. También podemos ayudar con nuestro tiempo, nuestras ideas o nuestras acciones.",
+            "imagenIlustrativa": "/images/7/57.png",
+            "preguntaReflexiva": "¡Juntos podemos hacer más! ¿Alguna vez alguien te ha ayudado?",
+            "subtituloEjemplos": "Tal vez:",
+            "ejemplos": [
+                {
+                    "imagen": "/images/7/51.png"
+                },
+                {
+                    "imagen": "/images/7/53.png"
+                },
+                {
+                    "imagen": "/images/7/54.png"
+                },
+                {
+                    "imagen": "/images/7/52.png"
+                }
+            ],
+            "conclusion": "Cuando las personas se ayudan entre sí, las cosas pueden ser más fáciles y divertidas.",
+            "imagenAlianzito": "/images/7/56.png"
+        }
+    },
+    {
+        "id": "13",
+        "titulo": "Los conejitos del huerto",
+        "fondo": "/images/7/Fondo72.jpg",
+        "historia": [
+            {
+            "texto": "En un bosque vivían cuatro conejitos que querían sembrar zanahorias.",
+            "imagen": "/images/7/97.png"
+            },
+            {
+            "texto": "Cada uno intentó hacerlo solo. Uno cavaba muy despacio. Otro no podía cargar las semillas.",
+            "imagen": "/images/7/61.png"
+            },
+            {
+            "imagen": "/images/7/59.png"
+            },
+            {
+            "imagen": "/images/7/58.png"
+            },
+            {
+            "texto": "Otro olvidaba regar las plantas. Y otro se cansaba rápidamente.",
+            "imagen": "/images/7/60.png"
+            },
+            {
+            "texto": "Entonces decidieron trabajar juntos.",
+            "imagen": "/images/7/67.png"
+            },
+            {
+            "texto": "Uno cavaba la tierra. Otro colocaba las semillas. Otro regaba las plantas. Y otro cuidaba el huerto.",
+            "imagen": "/images/7/63.png"
+            },
+            {
+            "imagen": "/images/7/65.png"
+            },
+            {
+            "imagen": "/images/7/64.png"
+            },
+            {
+            "texto": "Después de varias semanas, las zanahorias crecieron grandes y saludables.",
+            "imagen": "/images/7/66.png"
+            },
+            {
+            "texto": "Los conejitos aprendieron que cuando trabajan juntos pueden lograr cosas mejores.",
+            "imagen": "/images/7/68.png"
+            }
+        ],
+        "pregunta": "¿Qué aprendieron los conejitos?",
+        "instruccion": "Completa la frase:",
+        "textoFijo": "TRABAJAR",
+        "opciones": [
+            { "id": 1, "texto": "JUNTOS", "esCorrecta": true },
+            { "id": 2, "texto": "SOLOS", "esCorrecta": false },
+            { "id": 3, "texto": "LENTO", "esCorrecta": false }
+        ]
+    },
+    {
+        "id": "actividad-14",
+        "titulo": "Formas de practicar la ayuda mutua",
+        "subtitulo": "EJEMPLOS:",
+        "fondo": "/images/7/Fondo72.jpg",
+        "ejemplos": [
+            {
+            "imagen": "/images/7/69.png",
+            "texto": "Participas en actividades en equipo."
+            },
+            {
+            "imagen": "/images/7/70.png",
+            "texto": "Explicas algo a un compañero."
+            },
+            {
+            "imagen": "/images/7/71.png",
+            "texto": "Ayudas a un familiar en casa."
+            },
+            {
+            "imagen": "/images/7/72.png",
+            "texto": "Ayudas a recoger el salón."
+            },
+            {
+            "imagen": "/images/7/73.png",
+            "texto": "Escuchas a alguien que necesita apoyo."
+            }
+        ]
+    },
+    {
+        "id": "actividad-15",
+        "titulo": "Actividad: Sube una foto tuya practicando el valor de ayuda mutua en casa o escuela.",
+        "subtitulo": "La ayuda mutua en las cooperativas",
+        "fondo": "/images/7/Fondo72.jpg",
+        "contenido": {
+            "textoCooperativa": "Las cooperativas, como CAJA POPULAR CERANO, creen en la ayuda mutua. Esto significa que muchas personas trabajan juntas para apoyarse y crecer. Así como en una cooperativa las personas colaboran unas con otras, en la escuela, en casa y con nuestros amigos también podemos ayudarnos para lograr cosas importantes."
+        }
     }
     ]
 }
