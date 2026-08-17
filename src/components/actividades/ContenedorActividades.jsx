@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
-
-import actividades05 from '../../features/0-5/actividades/actividades';
-import actividades6 from '../../features/6/actividades/actividades';
-import actividades7 from '../../features/7/actividades/actividades';
-import actividades8 from '../../features/8/actividades/actividades';
-import actividades912 from '../../features/9-12/actividades/actividades';
-import actividades1315 from '../../features/13-15/actividades/actividades';
-import actividades1617 from '../../features/16-17/actividades/actividades';
+import actividades05 from "../../features/0-5/actividades/actividades";
+import actividades6 from "../../features/6/actividades/actividades";
+import actividades7 from "../../features/7/actividades/actividades";
+import actividades9 from "../../features/9/actividades/actividades";
+import actividades13 from "../../features/13/actividades/actividades";
+import actividades16 from "../../features/16/actividades/actividades";
 
 import Footer from "../Footer";
 import CapturarCoordenadas from "./CapturarCoordenadas";
@@ -40,12 +38,11 @@ const ContenedorActividades = () => {
 
   const actividadesPorRango = {
     "0-5": actividades05,
-    "6": actividades6,
-    "7": actividades7,
-    "8": actividades8,
-    "9-12": actividades912,
-    "13-15": actividades1315,
-    "16-17": actividades1617
+    6: actividades6,
+    7: actividades7,
+    9: actividades9,
+    13: actividades13,
+    16: actividades16,
   };
 
   const actividades = actividadesPorRango[rango] || [];

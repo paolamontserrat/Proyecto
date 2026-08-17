@@ -252,6 +252,35 @@
             }
             ]
         }
+    },
+    {
+        "id": "6",
+        "titulo": "¿Qué es una meta?",
+        "fondo": "/images/7/Fondo72.jpg",
+        "definicion": {
+            "concepto": "Una meta es algo que queremos lograr o conseguir. Las metas nos ayudan a saber hacia dónde queremos llegar.",
+            "imagenCabecera": "/images/7/26.jpg"
+        },
+        "ejemplos": {
+            "titulo": "Por ejemplo:",
+            "lista": [
+            {
+                "id": "bicicleta",
+                "texto": "Si quieres una bicicleta, tu meta es tener una bicicleta.",
+                "imagen": "/images/7/35.jpg"
+            },
+            {
+                "id": "patines",
+                "texto": "Si quieres aprender a andar en patines, tu meta es aprender a patinar.",
+                "imagen": "/images/7/36.jpg"
+            },
+            {
+                "id": "libro",
+                "texto": "Si quieres comprar un cuento nuevo, tu meta es conseguir ese libro.",
+                "imagen": "/images/7/34.jpg"
+            }
+            ]
+        }
     }
     ]
 }
