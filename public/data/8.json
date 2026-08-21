@@ -3,7 +3,7 @@
   "titulo": "Mi aventura del ahorro",
   "fondoPasaporte": "/images/8/Fondo8.png",
   "institucion": "ALIANZA CAJA POPULAR CERANO",
-  "portada": "/images/8/Inicio.png",
+  "portada": "/images/6/Inicio.png",
   "imgAhorro": "/images/0-5/6.png",
   "imgJuegos": "/images/0-5/16.png",
   "paginas": [
@@ -29,6 +29,497 @@
         "Acceso a cursos para desarrollar habilidades según tu edad.",
         "Puedes recibir incentivos de apoyo escolar (si no eres beneficiario de Impulso a la Educación).",
         "Tus papás pueden obtener un esquema de crédito atractivo."
+      ]
+    }
+  ],
+  "pasos": [
+    {
+      "id": "1",
+      "titulo": "Mis decisiones tienen valor en mi CAJA POPULAR CERANO",
+      "fondo": "/images/8/Fondo81.jpeg",
+      "secciones": [
+        {
+          "tipo": "introduccion",
+          "texto": "Alianzito todos los días toma decisiones.",
+          "subtexto": "Decide:",
+          "decisiones": [
+            "Qué comer.",
+            "A qué jugar.",
+            "Cuándo hacer la tarea.",
+            "Qué hacer con su dinero."
+          ],
+          "reflexion": "Algunas decisiones nos ayudan a lograr nuestras metas y otras pueden alejarnos de ellas. Por eso es importante aprender a tomar buenas decisiones día con día y lo lograremos junto con Alianzito."
+        },
+        {
+          "tipo": "ejemplo",
+          "titulo": "Imagina que tienes $50 por el domingo que te dieron tus papás.",
+          "subtitulo": "Puedes:",
+          "opciones": [
+            {
+              "id": "ahorrar",
+              "texto": "Guardar el dinero en la Cooperativa para comprar un juego de colores que realmente necesitas.",
+              "imagen": "/images/8/12.png"
+            },
+            {
+              "id": "gastardulces",
+              "texto": "Comprar dulces hoy.",
+              "imagen": "/images/8/15.png"
+            }
+          ],
+          "pregunta": "¿Qué decisión te acercaría más a una meta? Selecciona cuál elegirías tú..."
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "titulo": "Detective de decisiones",
+      "instrucciones": "Lee cada situación y marca si es una buena o mala decisión.",
+      "fondo": "/images/8/Fondo81.jpeg",
+      "preguntas": [
+        {
+          "id": 1,
+          "texto": "1. Pedro guardó parte de su dinero para comprar un libro.",
+          "respuestaCorrecta": "buena"
+        },
+        {
+          "id": 2,
+          "texto": "2. Ana gastó todo su dinero en un solo día.",
+          "respuestaCorrecta": "mala"
+        },
+        {
+          "id": 3,
+          "texto": "3. Luis cuidó sus útiles para que duraran más tiempo.",
+          "respuestaCorrecta": "buena"
+        },
+        {
+          "id": 4,
+          "texto": "4. Sofía rompió sus colores por no guardarlos.",
+          "respuestaCorrecta": "mala"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "titulo": "Diseña tu meta",
+      "instrucciones": "Completa cada apartado para definir tu meta financiera:",
+      "fondo": "/images/8/Fondo81.jpeg",
+      "campos": [
+        {
+          "id": "meta",
+          "label": "Mi meta es:",
+          "placeholder": "Escribe aquí tu meta...",
+          "tipo": "input"
+        },
+        {
+          "id": "porQue",
+          "label": "¿Por qué es importante para mí?",
+          "placeholder": "Escribe aquí la razón...",
+          "tipo": "textarea"
+        },
+        {
+          "id": "queHare",
+          "label": "¿Qué haré para lograrla?",
+          "placeholder": "Escribe aquí las acciones que realizarás...",
+          "tipo": "textarea"
+        },
+        {
+          "id": "imagen",
+          "label": "Sube una imagen de tu meta"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "fondo": "/images/8/Fondo81.jpeg",
+      "secciones": {
+        "planear": {
+          "titulo": "Planear antes de gastar",
+          "descripcion": "Alianzito ahorra y suele pensar antes de gastar.",
+          "preguntaAhorro": "Antes de comprar algo se preguntan:",
+          "preguntas": [
+            "¿Lo necesito?",
+            "¿Me ayudará?",
+            "¿Puedo esperar?",
+            "¿Tengo una meta más importante?"
+          ],
+          "imagen": "/images/8/13.png"
+        },
+        "esfuerzo": {
+          "imagen": "/images/8/14.png",
+          "titulo": "El esfuerzo trae recompensas",
+          "reflexion": "Reflexión: Las metas no se consiguen de inmediato.",
+          "ejemplos": "Para aprender a andar en bicicleta, jugar fútbol, leer mejor o dibujar, necesitamos practicar y poner nuestro máximo esfuerzo."
+        },
+        "formulario": {
+          "titulo": "Lo mismo sucede con el ahorro.",
+          "subtitulo": "Escribe algo que hayas logrado gracias a tu esfuerzo.",
+          "pasos": [
+            {
+              "id": "paso1",
+              "label": "Paso 1: Lo intenté.",
+              "placeholder": "Escribe qué intentaste hacer..."
+            },
+            {
+              "id": "paso2",
+              "label": "Paso 2: Practiqué.",
+              "placeholder": "Escribe cómo practicaste..."
+            },
+            {
+              "id": "paso3",
+              "label": "Paso 3: Mejoré.",
+              "placeholder": "Escribe cómo fuiste mejorando..."
+            },
+            {
+              "id": "paso4",
+              "label": "Paso 4: Lo logré.",
+              "placeholder": "Escribe cuál fue tu resultado final..."
+            }
+          ]
+        }
+      }
+    },
+    {
+        "id": "3",
+        "titulo": "Conociendo las opciones de ahorro de menores en Caja Popular Cerano",
+        "fondo": "/images/7/Fondo72.jpg",
+        "subtitulo": "En CAJA POPULAR CERANO existen opciones para que los niños y jóvenes aprendan a administrar su dinero y puedan cumplir sus metas.",
+        "imagen": "/images/7/16.png",
+        "secciones": [
+        {
+        "id": "cuenta_ahorro",
+        "tipo": "Cuenta de ahorro",
+        "descripcion": "Es una cuenta donde puedes guardar tu dinero, aprender a manejarlo y disponer de él cuando lo necesites, siempre con el acompañamiento de tus padres o tutores.",
+        "ejemplo": "Puedo ahorrar para una salida, un regalo, un material escolar o una meta que tenga a corto plazo.",
+        "imagen": "/images/7/17.png"
+        },
+        {
+        "id": "subcuenta_creciendo_juntos",
+        "tipo": "Subcuenta \"Creciendo Juntos\"",
+        "descripcion": "Es una opción especial para ahorrar pensando en metas importantes de largo plazo. La idea es que el dinero que se guarda ahí pueda crecer mientras tú también creces.",
+        "caracteristicas": [
+            "Está diseñada para ayudarte a cumplir metas futuras.",
+            "El ahorro permanece protegido hasta que estes en el programa.",
+            "No puedes retirar el dinero antes, porque está pensado para construir un proyecto a futuro y saldrías del programa.",
+            "Te ayuda a desarrollar el hábito de ahorrar desde pequeño."
+        ],
+        "ejemplosMetas": [
+            {
+                "imagen": "/images/7/79.png"
+            }   
+        ]
+        }
+        ]
+    },
+    {
+      "id": "6",
+      "titulo": "AUTORRESPONSABILIDAD EN MI COOPERATIVA",
+      "subtitulo": "Valor Cooperativo",
+      "fondo": "/images/8/Fondo81.jpeg",
+      "secciones": {
+        "introduccion": {
+          "titulo": "Valor Cooperativo",
+          "subtitulo": "AUTORRESPONSABILIDAD EN MI COOPERATIVA",
+          "imagen": "/images/8/41.png"
+        },
+        "queEs": {
+          "pregunta": "¿Qué es la autorresponsabilidad?",
+          "definicion": "La autorresponsabilidad significa:",
+          "puntos": [
+            {
+              "destacado": "Hacer lo que nos corresponde",
+              "texto": "sin que alguien nos lo recuerde."
+            },
+            {
+              "destacado": "Cumplir",
+              "texto": "nuestros compromisos."
+            },
+            {
+              "destacado": "Cuidar",
+              "texto": "nuestras cosas."
+            },
+            {
+              "destacado": "Reconocer",
+              "texto": "nuestros errores y ",
+              "destacado2": "aprender",
+              "texto2": " de ellos."
+            },
+            {
+              "destacado": "Tomar buenas decisiones.",
+              "texto": ""
+            }
+          ],
+          "conclusion": "Ser autorresponsable significa entender que nuestras acciones tienen consecuencias y nos tenemos que hacer responsables de ellas.",
+          "imagen": "/images/8/21.png"
+        },
+        "decisiones": {
+          "titulo": "Soy responsable de mis decisiones",
+          "descripcion": "Cada día tomamos muchas decisiones.",
+          "subtitulo": "Decidimos:",
+          "ejemplos": [
+            {
+              "id": 1,
+              "texto": "Si utilizamos bien nuestro tiempo.",
+              "imagen": "/images/8/26.jpg"
+            },
+            {
+              "id": 2,
+              "texto": "Si hacemos nuestra tarea.",
+              "imagen": "/images/8/25.jpg"
+            },
+            {
+              "id": 3,
+              "texto": "Si ahorramos o gastamos nuestro dinero.",
+              "imagen": "/images/8/23.jpg"
+            },
+            {
+              "id": 4,
+              "texto": "Si cuidamos nuestras cosas.",
+              "imagen": "/images/8/24.jpg"
+            }
+          ],
+          "conclusion": "Cuando aceptamos las consecuencias de nuestras decisiones y cumplimos con nuestros compromisos, estamos practicando la autorresponsabilidad."
+        }
+      }
+    },
+    {
+      "id": "7",
+      "titulo": "Alianzito y su meta de ahorro",
+      "fondo": "/images/8/Fondo81.jpeg",
+      "secciones": {
+        "historia": {
+          "titulo": "“Alianzito y su meta de ahorro”",
+          "pasos": [
+            {
+              "id": 1,
+              "texto": "Alianzito quería comprar un balón.",
+              "imagen": "/images/8/28.png"
+            },
+            {
+              "id": 2,
+              "texto": "Su mamá le sugirió ahorrar una pequeña cantidad cada semana.",
+              "imagen": "/images/8/29.png"
+            },
+            {
+              "id": 3,
+              "texto": "Durante algunos días olvidó guardar su dinero y gastó algunas monedas en cosas que no necesitaba.",
+              "imagen": "/images/8/30.png"
+            },
+            {
+              "id": 4,
+              "texto": "Entonces se dio cuenta de que si quería alcanzar su meta debía ser más responsable.",
+              "imagenes": [
+                "/images/8/31.png",
+                "/images/8/32.png"
+              ]
+            },
+            {
+              "id": 5,
+              "texto": "Comenzó a guardar sus monedas en una alcancía y llevó un registro de su ahorro.",
+              "imagen": "/images/8/39.png"
+            },
+            {
+              "id": 6,
+              "texto": "Después de varias semanas logró comprar el balón que tanto deseaba.",
+              "imagen": "/images/8/40.png"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8",
+      "titulo": "¿Qué tan buen ahorrador eres?",
+      "fondo": "/images/8/Fondo81.jpeg",
+      "instrucciones": "Marca las acciones que haces casi siempre.",
+      "preguntas": [
+        { "id": 1, "texto": "Guardo una parte de mi dinero antes de gastarlo." },
+        { "id": 2, "texto": "Pienso si realmente necesito comprar algo." },
+        { "id": 3, "texto": "Cuido mis juguetes y útiles escolares." },
+        { "id": 4, "texto": "Termino mis tareas antes de jugar." },
+        { "id": 5, "texto": "Apago la luz cuando no la necesito." },
+        { "id": 6, "texto": "Cierro la llave del agua al lavarme los dientes." },
+        { "id": 7, "texto": "Ahorro para comprar algo importante." },
+        { "id": 8, "texto": "Ayudo en casa sin que me lo pidan." },
+        { "id": 9, "texto": "Cumplo lo que prometo." },
+        { "id": 10, "texto": "Si me equivoco, trato de hacerlo mejor la próxima vez." }
+      ],
+      "retroalimentaciones": [
+        {
+          "min": 0,
+          "max": 2,
+          "rangoTexto": "0 a 2 respuestas",
+          "titulo": "¡Nunca es tarde para empezar!",
+          "mensaje": "\"Todos podemos aprender. Desde hoy puedes convertirte en un gran ahorrador si practicas un poquito cada día.\"",
+          "imagen": "/images/8/44.png"
+        },
+        {
+          "min": 3,
+          "max": 4,
+          "rangoTexto": "3 a 4 respuestas",
+          "titulo": "¡Es hora de comenzar!",
+          "mensaje": "\"Cada pequeño esfuerzo cuenta. Empieza hoy guardando unas monedas y cuidando tus cosas.\"",
+          "imagen": "/images/8/33.png"
+        },
+        {
+          "min": 5,
+          "max": 6,
+          "rangoTexto": "5 a 6 respuestas",
+          "titulo": "¡Puedes mejorar!",
+          "mensaje": "\"Ya conoces algunas buenas acciones. Intenta hacer una más cada día y verás cómo mejoras.\"",
+          "imagen": "/images/8/34.png"
+        },
+        {
+          "min": 7,
+          "max": 8,
+          "rangoTexto": "7 a 8 respuestas",
+          "titulo": "¡Vas por muy buen camino!",
+          "mensaje": "\"Lo estás haciendo muy bien. Sigue practicando y pronto serás un Super Ahorrador.\"",
+          "imagen": "/images/8/35.png",
+          "premioTexto": "Medalla de Plata",
+          "premioImagen": "/images/8/46.png"
+        },
+        {
+          "min": 9,
+          "max": 10,
+          "rangoTexto": "9 a 10 respuestas",
+          "subtitulo": "¡SUPER AHORRADOR!",
+          "titulo": "¡Felicidades!",
+          "mensaje": "\"¡Eres un gran ejemplo! Sabes ahorrar, cuidar tus cosas y tomar buenas decisiones. Sigue así y alcanzarás muchas metas.\"",
+          "imagen": "/images/8/36.png",
+          "premioTexto": "Medalla de Oro del Ahorro",
+          "premioImagen": "/images/8/47.png"
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "titulo": "Elige la decisión responsable",
+      "subtitulo": "Alianzito aprendió que ser responsable con sus decisiones le ayudó a cumplir su meta.",
+      "preguntasOpcionMultiple": [
+        {
+          "id": 1,
+          "situacion": "Juan recibió dinero y quiere comprar una bicicleta.",
+          "opciones": [
+            { "id": "A", "texto": "A) Gastar todo en dulces.", "esCorrecta": false },
+            { "id": "B", "texto": "B) Guardar una parte para su meta.", "esCorrecta": true }
+          ]
+        },
+        {
+          "id": 2,
+          "situacion": "María terminó de usar sus colores.",
+          "opciones": [
+            { "id": "A", "texto": "A) Dejarlos tirados.", "esCorrecta": false },
+            { "id": "B", "texto": "B) Guardarlos en su mochila.", "esCorrecta": true }
+          ]
+        },
+        {
+          "id": 3,
+          "situacion": "Pedro tiene tarea para mañana.",
+          "opciones": [
+            { "id": "A", "texto": "A) Hacerla a tiempo.", "esCorrecta": true },
+            { "id": "B", "texto": "B) Esperar hasta el último momento.", "esCorrecta": false }
+          ]
+        },
+        {
+          "id": 4,
+          "situacion": "Ana rompió accidentalmente un cuaderno.",
+          "opciones": [
+            { "id": "A", "texto": "A) Ocultarlo.", "esCorrecta": false },
+            { "id": "B", "texto": "B) Decir la verdad y buscar una solución.", "esCorrecta": true }
+          ]
+        }
+      ],
+      "preguntasChecklist": [
+        { "id": "c1", "texto": "Cuido mis útiles escolares." },
+        { "id": "c2", "texto": "Cumplo con mis tareas." },
+        { "id": "c3", "texto": "Ordeno mis materiales después de usarlos." },
+        { "id": "c4", "texto": "Ahorro para alcanzar mis metas." },
+        { "id": "c5", "texto": "Reconozco cuando cometo un error." },
+        { "id": "c6", "texto": "Cumplo los compromisos que hago." }
+      ]
+    },
+    {
+      "id": "10",
+      "titulo": "AUTORRESPONSABILIDAD EN MI COOPERATIVA",
+      "secciones": [
+        {
+          "id": 1,
+          "tipo": "imagen",
+          "instrucciones": "Coloca una imagen o fotografía donde tu puedas explicar ¿Porqué es un ejemplo de autorresponsabilidad en la cooperativa de CAJAPOPULAR CERANO?."
+        },
+        {
+          "id": 2,
+          "tipo": "texto",
+          "instrucciones": "Escribe un texto donde expliques ¿Porqué es un ejemplo de autorresponsabilidad en la cooperativa de CAJAPOPULAR CERANO?."
+        }
+      ]
+    },
+    {
+        "id": "11",
+        "fondo": "/images/7/Fondo72.jpg",
+        "titulo": "Alianzito completa la sopa de letras y encuentra las palabras relacionadas con el ahorro",
+        "palabras": [
+            { "texto": "AHORRO", "inicio": [0, 0], "fin": [0, 5] },
+            { "texto": "INVERTIR", "inicio": [0, 11], "fin": [0, 18] },
+            { "texto": "BENEFICIO", "inicio": [2, 8], "fin": [2, 16] },
+            { "texto": "FUTURO", "inicio": [3, 3], "fin": [3, 8] },
+            { "texto": "RESERVA", "inicio": [5, 6], "fin": [5, 12] },
+            { "texto": "RESPONSABLE", "inicio": [11, 4], "fin": [11, 14] },
+            { "texto": "PACIENCIA", "inicio": [14, 5], "fin": [14, 13] },
+            { "texto": "PLANEAR", "inicio": [17, 9], "fin": [17, 15] },
+            { "texto": "PRESUPUESTO", "inicio": [19, 0], "fin": [19, 10] },
+            { "texto": "DISCIPLINA", "inicio": [1, 2], "fin": [10, 2] },
+            { "texto": "CONSTANCIA", "inicio": [14, 3], "fin": [5, 12] },
+            { "texto": "SEGURIDAD", "inicio": [6, 16], "fin": [14, 16] },
+            { "texto": "METAS", "inicio": [14, 19], "fin": [18, 19] }
+        ],
+        "grid": [
+            ["A","H","O","R","R","O","J","D","X","C","S","I","N","V","E","R","T","I","R","C"],
+            ["B","A","D","M","I","N","T","O","N","R","K","A","D","M","I","P","T","O","N","R"],
+            ["E","R","I","J","D","I","T","D","B","E","N","E","F","I","C","I","O","D","F","I"],
+            ["E","M","S","F","U","T","U","R","O","C","R","M","Y","N","O","R","N","U","H","C"],
+            ["H","F","C","H","B","B","N","L","O","K","E","F","E","H","B","B","N","L","O","K"],
+            ["D","Z","I","O","U","R","R","E","S","E","R","V","A","O","U","R","I","Y","C","I"],
+            ["U","P","P","K","B","O","S","J","K","T","R","I","R","K","B","O","S","J","K","N"],
+            ["B","H","L","T","R","A","G","P","E","E","C","D","E","K","I","B","E","W","E","S"],
+            ["F","O","I","T","B","A","L","L","S","N","F","T","S","K","T","O","G","L","Y","T"],
+            ["U","M","N","Z","A","T","O","T","A","H","U","M","E","Z","A","T","U","A","G","A"],
+            ["S","T","A","V","F","Q","J","T","X","C","S","T","R","V","F","Q","R","D","X","O"],
+            ["B","A","O","M","R","E","S","P","O","N","S","A","B","L","E","N","I","O","N","R"],
+            ["E","Q","O","L","G","N","E","D","F","W","E","Q","E","L","G","M","D","D","F","P"],
+            ["E","M","E","F","O","R","N","U","H","C","I","Y","O","Z","T","U","A","E","H","Y"],
+            ["L","G","N","C","L","P","A","C","I","E","N","C","I","A","I","B","D","L","O","M"],
+            ["D","Z","Y","O","U","R","I","C","C","E","D","Z","O","O","K","R","I","Y","C","E"],
+            ["U","P","J","K","B","O","S","T","S","I","C","H","J","E","T","O","S","J","K","T"],
+            ["U","D","S","K","I","B","F","I","E","P","L","A","N","E","A","R","F","W","E","A"],
+            ["F","O","O","T","B","A","L","W","Y","D","S","P","O","H","L","F","X","L","Y","S"],
+            ["P","R","E","S","U","P","U","E","S","T","O","M","P","Z","A","T","O","A","G","H"]
+        ]
+    },
+    {
+      "id": "12",
+      "titulo": "¿Cuál será tu compromiso para esta semana?",
+      "fondo": "/images/8/Fondo81.jpeg",
+      "imagenMascota": "/images/8/43.png",
+      "opciones": [
+        { "id": "opcion_1", "texto": "Ahorraré un poco de dinero." },
+        { "id": "opcion_2", "texto": "Cuidaré mis útiles." },
+        { "id": "opcion_3", "texto": "Apagaré la luz." },
+        { "id": "opcion_4", "texto": "Cerraré la llave del agua." },
+        { "id": "opcion_5", "texto": "Ayudaré en casa." },
+        { "id": "opcion_6", "texto": "Cumpliré mis responsabilidades." }
+      ]
+    },
+    {
+      "id": "13",
+      "titulo": "Mensaje final",
+      "fondo": "/images/8/Fondo81.jpeg",
+      "imagenMascota": "/images/8/41.png",
+      "parrafos": [
+        "Ser autorresponsable significa hacer lo correcto incluso cuando nadie nos está observando.",
+        "Cada decisión que tomamos nos acerca o nos aleja de nuestras metas.",
+        "Así como el ahorro crece moneda por moneda, la confianza y la responsabilidad crecen acción por acción.",
+        "Cuando soy responsable, construyo un mejor futuro para mí y para quienes me rodean."
       ]
     }
   ]
