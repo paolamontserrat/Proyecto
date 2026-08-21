@@ -6,10 +6,14 @@ import actividades6 from "../../features/6/actividades/actividades";
 import actividades7 from "../../features/7/actividades/actividades";
 import actividades8 from "../../features/8/actividades/actividades";
 import actividades9 from "../../features/9/actividades/actividades";
-// import actividades10 from "../../features/10/actividades/actividades";
+import actividades10 from "../../features/10/actividades/actividades";
 // import actividades11 from "../../features/11/actividades/actividades";
+// import actividades12 from "../../features/12/actividades/actividades";
 import actividades13 from "../../features/13/actividades/actividades";
+// import actividades14 from "../../features/14/actividades/actividades";
+// import actividades15 from "../../features/15/actividades/actividades";
 import actividades16 from "../../features/16/actividades/actividades";
+// import actividades17 from "../../features/17/actividades/actividades";
 
 import Footer from "../Footer";
 import CapturarCoordenadas from "./CapturarCoordenadas";
@@ -45,10 +49,14 @@ const ContenedorActividades = () => {
     7: actividades7,
     8: actividades8,
     9: actividades9,
-    // 10: actividades10,
+    10: actividades10,
     // 11: actividades11,
+    // 12: actividades12,
     13: actividades13,
+    // 14: actividades14,
+    // 15: actividades15,
     16: actividades16,
+    // 17: actividades17,
   };
 
   const actividades = actividadesPorRango[rango] || [];

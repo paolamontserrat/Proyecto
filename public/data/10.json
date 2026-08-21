@@ -31,5 +31,545 @@
         "Tus papás pueden obtener un esquema de crédito atractivo."
       ]
     }
+  ],
+  "pasos": [
+    {
+      "id": "1",
+      "titulo": "EL DINERO Y SUS PROPÓSITOS",
+      "fondo": "/images/10/Fondo.png",
+      "secciones": {
+        "introduccion": {
+          "titulo": "Muchas personas creen que el dinero sirve solamente para comprar cosas.",
+          "subtitulo": "Pero el dinero también puede ayudarte a:",
+          "imagenMoneda": "/images/10/2.png",
+          "puntos": [
+            { "id": 1, "texto": "Alcanzar metas." },
+            { "id": 2, "texto": "Continuar estudiando." },
+            { "id": 3, "texto": "Comprar algo importante." },
+            { "id": 4, "texto": "Aprovechar oportunidades." }
+          ],
+          "fraseDestacada": "Cuando ahorras, cada peso tiene una misión.",
+          "imagenPuerta": "/images/10/4.png",
+          "decoraciones": [
+            { "id": 1, "src": "/images/10/1.png", "alt": "Moneda comprando" },
+            { "id": 2, "src": "/images/10/5.png", "alt": "Club Amigos de Alianzito" },
+            { "id": 3, "src": "/images/10/3.png", "alt": "Moneda en la meta" }
+          ]
+        },
+        "cuentaAhorro": {
+          "mensajeCaja": "En CAJA POPULAR CERANO existen opciones para que los niños y jóvenes aprendan a administrar su dinero y puedan cumplir sus metas.",
+          "tituloCuenta": "Cuenta de ahorro",
+          "logoClub": "/images/10/5.png",
+          "descripcion": "Es una cuenta donde puedes guardar tu dinero, aprender a manejarlo y disponer de él cuando lo necesites, siempre con el acompañamiento de tus padres o tutores.",
+          "ejemploLabel": "Ejemplo:",
+          "ejemploTexto": "“Puedo ahorrar para una salida, un regalo, un material escolar o una meta que tenga a corto plazo.”",
+          "imagenPlazo": "/images/10/6.png"
+        },
+        "creciendoJuntos": {
+          "logoSubcuenta": "/images/10/7.png",
+          "tituloSubcuenta": "Subcuenta “Creciendo Juntos”",
+          "descripcion": "Es una opción especial para ahorrar pensando en metas importantes de largo plazo. La idea es que el dinero que se guarda ahí pueda crecer mientras tú también creces.",
+          "caracteristicas": [
+            "Está diseñada para ayudarte a cumplir metas futuras.",
+            "El ahorro permanece protegido hasta que estés en el programa.",
+            "No puedes retirar el dinero antes, porque está pensado para construir un proyecto a futuro y saldrías del programa.",
+            "Te ayuda a desarrollar el hábito de ahorrar desde pequeño."
+          ],
+          "imagenPlazo": "/images/10/8.png",
+          "ejemplosMetas": "/images/10/36.png"
+        }
+      }
+    },
+    {
+      "id": "2",
+      "titulo": "Actividad",
+      "instrucciones": "Diseña tu misión financiera junto a Alianzito",
+      "subinstruccion": "Completa:",
+      "fondo": "/images/10/Fondo.png",
+      "personaje": "/images/10/9.png",
+      "preguntas": [
+        {
+          "id": "meta",
+          "label": "Mi meta más importante es:",
+          "tipo": "textarea",
+          "placeholder": "Escribe aquí tu meta..."
+        },
+        {
+          "id": "monto",
+          "label": "Necesitaré aproximadamente:",
+          "tipo": "number",
+          "simbolo": "$",
+          "placeholder": "0.00"
+        },
+        {
+          "id": "motivo",
+          "label": "¿Por qué vale la pena alcanzarla?",
+          "tipo": "textarea",
+          "placeholder": "Escribe aquí tus razones..."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "titulo": "DECISIONES INTELIGENTES VS DECISIONES IMPULSIVAS",
+      "explicacion": "Todos tomamos decisiones todos los días. Algunas nos acercan a nuestras metas. Otras nos alejan.",
+      "fondo": "/images/10/Fondo.png",
+      "casoPractico": {
+        "descripcion": "A Alianzito le dieron $200 por realizar sus tareas en casa durante 1 semana completa sin enojarse.",
+        "subtitulo": "Analiza los siguientes pensamientos de Alianzito:",
+        "opciones": [
+          "Gastar $150 en comida rápida.",
+          "Comprar un accesorio para videojuegos.",
+          "Guardar $100 para una meta importante."
+        ]
+      },
+      "actividad": {
+        "titulo": "Actividad",
+        "subtitulo": "Analiza:",
+        "preguntas": [
+          {
+            "id": "opcionFuturo",
+            "label": "¿Qué opción le ayuda más a Alianzito para su futuro?",
+            "placeholder": "Escribe aquí tu respuesta..."
+          },
+          {
+            "id": "porQue",
+            "label": "¿Por qué?",
+            "placeholder": "Explica tu razón..."
+          }
+        ]
+      },
+      "recursos": {
+        "fondoImg": "/images/10/Fondo.png",
+        "personaje1": "/images/10/10.png",
+        "monedas": "/images/10/11.png",
+        "personaje2": "/images/10/12.png"
+      }
+    },
+    {
+      "id": "4",
+      "titulo": "El poder del ahorro constante en Caja Popular Cerano",
+      "fondo": "/images/10/Fondo.png",
+      "subtitulo": "Gana quien ahorra con mayor constancia",
+      "seccion1": {
+        "casoSofía": "Sofía ahorra $30 cada semana.",
+        "casoCarlos": "Carlos ahorra solamente cuando le sobra dinero.",
+        "mensajeClave": {
+          "linea1": "No siempre gana quien ahorra más.",
+          "linea2": "Gana quien ahorra con mayor constancia.",
+          "fraseLibreta": "Primero ahorrar, después gastar"
+        },
+        "personajeImg": "/images/10/13.png"
+      },
+      "seccion2": {
+        "tituloActividad": "Ayuda a Alianzito a resolver el laberinto guiando cada opción hacia su monto correcto.",
+        "laberintoImg": "/images/10/35.png"
+      },
+      "preguntas": [
+        {
+          "id": "quienAhorraMas",
+          "pregunta": "Después de varios meses, ¿Quién tendrá mucho más dinero ahorrado en la cooperativa? y ¿Por qué?",
+          "placeholder": "Escribe aquí tu respuesta..."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "fondo": "/images/13/Fondo.png",
+      "titulo": "Alianzito eres muy inteligente",
+      "subtitulo": "Resuelve el crucigrama sobre finanzas y ahorro usando las pistas",
+      "imagenes": [
+        "/images/10/2.png"
+      ],
+      "solucionGrid": [
+        ["", "", "", "", "", "", "", "", "", "", "", "", "A", "H", "O", "R", "R","O","","","","","","",""],
+        ["", "", "", "", "", "", "", "", "", "", "", "", "H", "", "", "E", "","","","","","","","",""],
+        ["", "D", "", "", "B", "E", "N", "E", "F", "I", "C", "I", "O", "", "", "S", "","","","","","","","",""],
+        ["", "I", "", "", "", "F", "", "", "", "", "", "", "R", "", "", "E", "","","","","","M","","",""],
+        ["", "S", "", "", "", "I", "", "", "", "", "", "", "R", "", "P", "R", "E","S","U","P","U","E","S","T","O"],
+        ["", "C", "", "", "", "C", "", "", "", "", "", "", "A", "", "", "V", "","","","","","T","","",""],
+        ["", "I", "", "", "", "I", "", "", "", "", "", "", "R", "", "", "A", "","","","","","A","","",""],
+        ["", "P", "", "", "", "E", "", "", "", "", "", "", "", "", "", "", "","","","","","","","",""],
+        ["", "L", "", "", "", "N", "", "", "", "", "", "", "", "", "", "", "","","","","","","","",""],
+        ["", "I", "", "", "", "C", "", "", "", "", "", "", "", "", "", "", "","","","","","","","",""],
+        ["", "N", "", "", "", "I", "", "", "", "", "", "", "", "", "", "", "","","","","","","","",""],
+        ["C", "A", "P", "I", "T", "A", "L", "", "", "", "", "", "", "", "", "", "","","","","","","","",""]
+        
+      ],
+      "pistas": {
+        "horizontales": [
+          {
+            "numero": 1,
+            "palabra": "PRESUPUESTO",
+            "pista": "Plan que haces para organizar tu dinero."
+          },
+          {
+            "numero": 2,
+            "palabra": "AHORRO",
+            "pista": "Dinero que no gastas hoy para usarlo después."
+          },
+          {
+            "numero": 3,
+            "palabra": "BENEFICIO",
+            "pista": "Lo que obtienes de algo que te beneficia."
+          },
+          {
+            "numero": 4,
+            "palabra": "CAPITAL",
+            "pista": "Cantidad de dinero que tienes disponible."
+          }
+        ],
+        "verticales": [
+          {
+            "numero": 5,
+            "palabra": "AHORRAR",
+            "pista": "Lo contrario de gastar."
+          },
+          {
+            "numero": 6,
+            "palabra": "DISCIPLINA",
+            "pista": "Actitud responsable con tu dinero y tus decisiones."
+          },
+          {
+            "numero": 7,
+            "palabra": "META",
+            "pista": "Sueño o propósito que quieres lograr."
+          },
+          {
+            "numero": 8,
+            "palabra": "RESERVA",
+            "pista": "Parte del dinero que guardas regularmente."
+          },
+          {
+            "numero": 9,
+            "palabra": "EFICIENCIA",
+            "pista": "Cualidad de usar bien tus recursos."
+          }
+        ]
+      }
+    },
+    {
+      "id": 6,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "Actividad detective financiero",
+      "subtitulo": "Identifica cinco ventajas de ahorrar en la Caja.",
+      "comparativo": {
+        "titulo": "¿Dónde está más seguro mi dinero?",
+        "columnaCasa": {
+          "titulo": "Guardado en casa",
+          "puntos": [
+            "Puede perderse",
+            "No genera beneficios",
+            "No hay control"
+          ]
+        },
+        "columnaCaja": {
+          "titulo": "Guardado en Caja Popular Cerano",
+          "puntos": [
+            "Está registrado",
+            "Puede generar rendimientos",
+            "Puedes revisar tu ahorro"
+          ]
+        }
+      },
+      "minimoRespuestas": 5,
+      "conclusion": {
+        "titulo": "CONCLUSIÓN",
+        "texto": "En casa mi dinero puede correr riesgos.\nEn la Caja mi dinero está protegido, registrado y puede crecer.\nSer inteligente no es esconder el dinero.\nEs saber dónde está más seguro."
+      }
+    },
+    {
+      "id": 7,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "MISIÓN: DETECTIVES DEL RIESGO",
+      "instrucciones": "Lee cada situación y marca con una X en la columna correcta:",
+      "columnas": ["CASA", "CAJA"],
+      "situaciones": [
+        {
+          "id": 1,
+          "texto": "Guardar dinero debajo del colchón",
+          "respuestaCorrecta": "CASA"
+        },
+        {
+          "id": 2,
+          "texto": "Depositar dinero y recibir comprobante",
+          "respuestaCorrecta": "CAJA"
+        },
+        {
+          "id": 3,
+          "texto": "Olvidar cuánto dinero llevas ahorrado",
+          "respuestaCorrecta": "CASA"
+        },
+        {
+          "id": 4,
+          "texto": "Revisar tu saldo registrado",
+          "respuestaCorrecta": "CAJA"
+        },
+        {
+          "id": 5,
+          "texto": "Tu ahorro no genera ningún beneficio adicional",
+          "respuestaCorrecta": "CASA"
+        },
+        {
+          "id": 6,
+          "texto": "El dinero puede perderse o dañarse",
+          "respuestaCorrecta": "CASA"
+        },
+        {
+          "id": 7,
+          "texto": "Tu ahorro puede generar rendimientos",
+          "respuestaCorrecta": "CAJA"
+        },
+        {
+          "id": 8,
+          "texto": "Ser tomado por alguien más",
+          "respuestaCorrecta": "CASA"
+        },
+        {
+          "id": 9,
+          "texto": "Participas en promociones",
+          "respuestaCorrecta": "CAJA"
+        },
+        {
+          "id": 10,
+          "texto": "Tu dinero está registrado y protegido",
+          "respuestaCorrecta": "CAJA"
+        },
+        {
+          "id": 11,
+          "texto": "Cada depósito queda registrado",
+          "respuestaCorrecta": "CAJA"
+        },
+        {
+          "id": 12,
+          "texto": "El ahorro es fácil gastarlo sin pensar",
+          "respuestaCorrecta": "CASA"
+        },
+        {
+          "id": 13,
+          "texto": "Para saber cuánto tienes debes contarlo",
+          "respuestaCorrecta": "CASA"
+        },
+        {
+          "id": 14,
+          "texto": "Sabes exactamente cuánto tienes",
+          "respuestaCorrecta": "CAJA"
+        },
+        {
+          "id": 15,
+          "texto": "Puedes revisar cuando ahorraste",
+          "respuestaCorrecta": "CAJA"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "¿QUÉ ES EL GASTO HORMIGA?",
+      "imagenes": "/images/10/15.png",
+      "explicacion": {
+        "introduccion": "El gasto hormiga es cuando compras cositas pequeñas todos los días y parece que no cuestan mucho... ¡pero si las juntas, ¡sí es bastante dinero!",
+        "analogia": "Se llama así porque es como las hormiguitas: una sola no pesa casi nada, pero muchas juntas pueden cargar cosas muy grandes.",
+        "ejemploGrafico": {
+          "dulce": 10,
+          "helado": 15,
+          "diario": 25,
+          "semana": 175,
+          "mes": 750
+        },
+        "impacto": "¡Eso ya alcanza para ropa nueva, zapatos o guardarlo para algo importante!",
+        "reflexion": "No está mal comprar cosas que te gustan, pero si gastas poquito todos los días sin darte cuenta, después puede faltarte dinero para algo más grande que sí quieres de verdad.",
+        "ejemploAhorro": "Si ahorras $20 diarios en lugar de gastarlos, en un mes tendrás $600. Así pronto podrás lograr tu meta."
+      },
+      "reto": {
+        "subtitulo": "El enemigo invisible: los gastos hormiga",
+        "descripcion": "No siempre perdemos dinero en compras grandes. A veces gastamos poco muchas veces.",
+        "instruccion": "Anota tus gastos pequeños de una semana.",
+        "dias": [
+          { "id": "lunes", "dia": "Lunes" },
+          { "id": "martes", "dia": "Martes" },
+          { "id": "miercoles", "dia": "Miércoles" },
+          { "id": "jueves", "dia": "Jueves" },
+          { "id": "viernes", "dia": "Viernes" },
+          { "id": "sabado", "dia": "Sábado" },
+          { "id": "domingo", "dia": "Domingo" }
+        ],
+        "imagenes": "/images/10/16.png"
+      }
+    },
+    {
+      "id": 9,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "VALOR COOPERATIVO: DEMOCRACIA",
+      "imagen": "/images/10/18.png",
+      "seccionInformativa": {
+        "subtitulo": "¿Qué es la democracia?",
+        "descripcion": "La democracia es una forma de tomar decisiones en grupo y en Caja Popular Cerano.",
+        "derechosTitulo": "Significa que todas las personas tienen derecho a:",
+        "derechos": [
+          "Expresar sus ideas.",
+          "Escuchar a los demás.",
+          "Participar.",
+          "Votar.",
+          "Respetar los resultados."
+        ],
+        "conclusion": "En la democracia nadie decide por todos. Las decisiones se toman considerando la opinión de muchas personas.",
+        "imagen": "/images/10/19.png"
+      },
+      "actividad": {
+        "titulo": "Descifra el Mensaje Secreto",
+        "pista": "Cuando guardo dinero hoy, me ayuda a sentirme tranquilo en el futuro.",
+        "mensajeRespuesta": "AHORRO HOY ES LA SEGURIDAD DE MAÑANA",
+        "palabras": [
+          {
+            "id": 1,
+            "numeros": [1, 8, 16, 19, 19, 16],
+            "palabraCorrecta": "AHORRO"
+          },
+          {
+            "id": 2,
+            "numeros": [8, 16, 26],
+            "palabraCorrecta": "HOY"
+          },
+          {
+            "id": 3,
+            "numeros": [5, 20],
+            "palabraCorrecta": "ES"
+          },
+          {
+            "id": 4,
+            "numeros": [12, 1],
+            "palabraCorrecta": "LA"
+          },
+          {
+            "id": 5,
+            "numeros": [20, 5, 7, 22, 19, 9, 4, 1, 4],
+            "palabraCorrecta": "SEGURIDAD"
+          },
+          {
+            "id": 6,
+            "numeros": [4, 5],
+            "palabraCorrecta": "DE"
+          },
+          {
+            "id": 7,
+            "numeros": [13, 1, 15, 1, 14, 1],
+            "palabraCorrecta": "MAÑANA"
+          }
+        ]
+      }
+    },
+    {
+      "id": 10,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "LA DEMOCRACIA EN NUESTRA VIDA DIARIA",
+      "subtitulo": "Aunque parezca sorprendente, la democracia está presente en muchos momentos.",
+      "ejemplosVidaDiaria": {
+        "titulo": "Por ejemplo:",
+        "puntos": [
+          "Cuando el grupo elige un representante.",
+          "Cuando los amigos deciden qué juego realizar.",
+          "Cuando la familia decide a dónde ir el fin de semana.",
+          "Cuando se organiza una actividad y todos participan con ideas."
+        ]
+      },
+      "seccionCooperativa": {
+        "titulo": "Democracia en la Cooperativa",
+        "descripcion": "La cooperativa cree en la democracia porque todos los socios tienen derecho a participar.",
+        "subtitulo": "En la cooperativa:",
+        "puntos": [
+          "Cada socio tiene voz.",
+          "Cada socio puede opinar.",
+          "Las decisiones importantes se toman en conjunto.",
+          "Se busca el beneficio de toda la comunidad."
+        ],
+        "fraseClave": "\"Una persona, un voto.\"",
+        "explicacionFrase": "No importa cuánto dinero tenga una persona, todas las opiniones tienen el mismo valor.",
+        "imagen": "/images/10/20.png"
+      }
+    },
+    {
+      "id": 11,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "RETO: EL ROMPECABEZAS DE LA DEMOCRACIA",
+      "instruccion": "Pide ayuda a un adulto y ordena las piezas del rompecabezas hasta completar la imagen de la asamblea.",
+      "imagenCompleta": "/images/10/21.png",
+      "filas": 3,
+      "columnas": 4
+    },
+    {
+      "id": 12,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "HISTORIA",
+      "escenas": [
+        "/images/10/25.png",
+        "/images/10/23.png",
+        "/images/10/24.png",
+        "/images/10/26.png",
+        "/images/10/27.png",
+        "/images/10/28.png",
+        "/images/10/29.png",
+        "/images/10/30.png",
+        "/images/10/31.png"
+      ]
+    },
+    {
+      "id": 13,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "ACTIVIDAD: ¿QUÉ HARÍAS TÚ?",
+      "subtitulo": "Lee cada situación y responde.",
+      "preguntas": [
+        {
+          "id": 1,
+          "situacion": "Tu grupo quiere elegir una actividad para celebrar el fin de curso. ¿Qué sería más democrático?",
+          "opciones": [
+            { "letra": "A", "texto": "Que una sola persona decida.", "esCorrecta": false },
+            { "letra": "B", "texto": "Que todos participen y voten.", "esCorrecta": true }
+          ]
+        },
+        {
+          "id": 2,
+          "situacion": "Durante una votación tu opción no ganó. ¿Qué debes hacer?",
+          "opciones": [
+            { "letra": "A", "texto": "Molestarme porque no ganó mi idea.", "esCorrecta": false },
+            { "letra": "B", "texto": "Respetar la decisión y seguir participando.", "esCorrecta": true }
+          ]
+        },
+        {
+          "id": 3,
+          "situacion": "Un compañero quiere dar una opinión diferente. ¿Qué harías?",
+          "opciones": [
+            { "letra": "A", "texto": "Escucharlo con respeto.", "esCorrecta": true },
+            { "letra": "B", "texto": "Interrumpirlo.", "esCorrecta": false }
+          ]
+        }
+      ],
+      "seccionVotacionFamiliar": {
+        "titulo": "Votación familiar",
+        "instruccion": "Realiza una votación en casa.",
+        "temas": ["Película para ver.", "Juego para realizar.", "Actividad familiar.", "Otro:"]
+      },
+      "reflexionFinal": [
+        "La democracia nos enseña que todas las personas tienen algo valioso que aportar.",
+        "Cuando participamos, escuchamos y respetamos las opiniones de los demás, podemos tomar mejores decisiones para todos.",
+        "Así como en una cooperativa cada socio tiene voz y voto, en nuestra escuela, familia y comunidad también podemos participar para construir un mejor futuro.",
+        "La democracia no es solo votar; es participar, escuchar y respetar."
+      ]
+    },
+    {
+      "id": 14,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "ACTIVIDAD 14: ENCUENTRA LAS 5 DIFERENCIAS",
+      "subtitulo": "Observa con atención ambas imágenes y marca las 5 diferencias.",
+      "imagenOriginal": "/images/10/33.png",
+      "imagenModificada": "/images/10/34.png",
+      "diferencias": [
+        { "id": 1, "x": 50, "y": 12, "radio": 6, "descripcion": "Logo amarillo en la gorra" },
+        { "id": 2, "x": 47, "y": 25, "radio": 5, "descripcion": "Detalle en el pelo" },
+        { "id": 3, "x": 50, "y": 40, "radio": 6, "descripcion": "Sonrisa" },
+        { "id": 4, "x": 38, "y": 87, "radio": 6, "descripcion": "Líneas naranjas en el tenis" },
+        { "id": 5, "x": 52, "y": 70, "radio": 6, "descripcion": "Ventana en el cuerpo del avión" }
+      ]
+    }
   ]
 }

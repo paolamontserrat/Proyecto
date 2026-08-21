@@ -3,8 +3,7 @@ import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-// Animaciones suaves y consistentes con el resto de las actividades,
-// más una animación de "flip" para las tarjetas de descubrimiento.
+// Animaciones suaves y consistentes con el resto de las actividades
 const estilosAnimacion = `
 @keyframes floatSoft {
   0%, 100% { transform: translateY(0px); }
