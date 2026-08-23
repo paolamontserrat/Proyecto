@@ -1,12 +1,6 @@
 import { useState, useCallback } from 'react';
 import { supabase } from '../../supabaseClient';
 
-const NOMBRES_INSIGNIA = {
-  primeros_pasos: { nombre: 'Primeros pasos', emoji: '🥇', descripcion: '5 actividades completadas' },
-  explorador: { nombre: 'Explorador', emoji: '🧭', descripcion: '10 actividades completadas' },
-  experto: { nombre: 'Experto ahorrador', emoji: '🌟', descripcion: '20 actividades completadas' },
-};
-
 export function useGamificacion(userId) {
   const [celebracion, setCelebracion] = useState(null);
 
@@ -18,17 +12,10 @@ export function useGamificacion(userId) {
       p_actividad_id: actividadId,
     });
 
-    if (error || !data?.ok || !data.nuevo) {
-      return { nuevo: false };
-    }
+    if (error || !data?.ok || !data.nuevo) return { nuevo: false };
 
     if (data.insignia_nueva) {
-      const info = NOMBRES_INSIGNIA[data.insignia_nueva] || {
-        nombre: data.insignia_nueva,
-        emoji: '🏅',
-        descripcion: '',
-      };
-      setCelebracion({ tipo: 'insignia', ...info, estrellas: data.estrellas });
+      setCelebracion({ tipo: 'insignia', ...data.insignia_nueva, estrellas: data.estrellas });
     } else {
       setCelebracion({ tipo: 'estrella', estrellas: data.estrellas, racha: data.racha });
     }

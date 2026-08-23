@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 
 import actividades05 from "../../features/0-5/actividades/actividades";
 import actividades6 from "../../features/6/actividades/actividades";
@@ -18,12 +18,14 @@ import actividades16 from "../../features/16/actividades/actividades";
 import Footer from "../Footer";
 import CapturarCoordenadas from "./CapturarCoordenadas";
 import ModalActividadCompletada from "../gamificacion/ModalActividadCompletada";
+import MapaActividades from "../gamificacion/MapaActividades";
 import { useGamificacion } from "../gamificacion/Gamificacion";
 import { supabase } from "../../supabaseClient";
 
 const ContenedorActividades = () => {
   const { rango } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   const [data, setData] = useState(null);
 
@@ -42,6 +44,7 @@ const ContenedorActividades = () => {
     const guardado = parseInt(localStorage.getItem(progresoKey));
     return isNaN(guardado) ? 1 : guardado;
   });
+  const [pasoVisible, setPasoVisible] = useState(pasoActual);
 
   const actividadesPorRango = {
     "0-5": actividades05,
@@ -76,7 +79,7 @@ const ContenedorActividades = () => {
   // =========================
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [pasoActual]);
+  }, [pasoVisible]);
 
   // =========================
   // SINCRONIZAR PROGRESO (SUPABASE + LOCAL)
@@ -92,23 +95,39 @@ const ContenedorActividades = () => {
           .eq("usuario_id", userId)
           .eq("completada", true);
 
-        if (!progreso || progreso.length === 0) {
-          setPasoActual(1);
-          localStorage.setItem(progresoKey, 1);
-          return;
+        const completados = new Set(
+          (progreso || []).map((p) => String(p.actividad_id)),
+        );
+
+        // Recorre las actividades EN ORDEN y se detiene en la primera
+        // que no esté completada, sin importar si hay huecos o ids
+        // no consecutivos en la base de datos.
+        let frontera = 1;
+        for (let i = 0; i < actividades.length; i++) {
+          const idPosicion = String(actividades[i]?.id ?? i + 1);
+          if (completados.has(idPosicion)) {
+            frontera = i + 2;
+          } else {
+            break;
+          }
         }
 
-        const max = Math.max(...progreso.map((p) => p.actividad_id));
-        const siguiente = max + 1;
+        setPasoActual(frontera);
+        localStorage.setItem(progresoKey, frontera);
 
-        setPasoActual(siguiente);
-        localStorage.setItem(progresoKey, siguiente);
+        const deseado = parseInt(searchParams.get("paso"));
+        if (!isNaN(deseado) && deseado >= 1 && deseado <= frontera) {
+          setPasoVisible(deseado);
+        } else {
+          setPasoVisible(frontera);
+        }
       } catch (err) {
         console.warn("Sync error:", err);
       }
     };
 
     sync();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, rango]);
 
   // =========================
@@ -119,7 +138,7 @@ const ContenedorActividades = () => {
     actividades.length || 0,
   );
 
-  const pasoSeguro = Math.min(pasoActual, totalPasos || 1);
+  const pasoSeguro = Math.min(pasoVisible, totalPasos || 1);
 
   // =========================
   // GUARDAR PROGRESO
@@ -134,59 +153,62 @@ const ContenedorActividades = () => {
           actividad_id: idActividad,
           completada: true,
         },
-        {
-          onConflict: "usuario_id,actividad_id",
-        },
+        { onConflict: "usuario_id,actividad_id" },
       );
     } catch {}
   };
 
+  // Avanza solo la vista; si estaba en la frontera, ahí sí mueve el progreso real
+  const avanzarVista = () => {
+    const siguiente = pasoVisible + 1;
+    setPasoVisible(siguiente);
+    if (pasoVisible === pasoActual) {
+      setPasoActual(siguiente);
+      localStorage.setItem(progresoKey, siguiente);
+    }
+  };
+
   // =========================
-  // AVANZAR (ahora pasa por gamificación)
+  // TERMINAR PASO (pasa por gamificación solo si es frontera y nueva)
   // =========================
-  const avanzar = async () => {
-    const actividadActual = actividades[pasoSeguro - 1];
-    const idReal = actividadActual?.id || pasoSeguro;
+  const terminarPaso = async () => {
+    const actividadObj = actividades[pasoSeguro - 1];
+    const idReal = actividadObj?.id || pasoSeguro;
 
     await guardarProgreso(idReal);
 
     if (userId === "anon") {
-      const siguiente = pasoActual + 1;
-      setPasoActual(siguiente);
-      localStorage.setItem(progresoKey, siguiente);
+      avanzarVista();
       return;
     }
 
+    const esFrontera = pasoVisible === pasoActual;
     const resultado = await registrarActividad(idReal);
 
-    if (!resultado.nuevo) {
-      // Ya había dado estrella antes: avanza directo, sin modal ni sonido
-      const siguiente = pasoActual + 1;
-      setPasoActual(siguiente);
-      localStorage.setItem(progresoKey, siguiente);
+    if (!resultado.nuevo || !esFrontera) {
+      avanzarVista();
     }
-    // Si sí es nueva, el avance ocurre en continuarDespuesDeCelebracion,
-    // cuando el niño cierra el modal de celebración
+    // si es frontera y es nueva, el avance ocurre al cerrar el modal de celebración
   };
 
   const continuarDespuesDeCelebracion = () => {
     cerrarCelebracion();
-    const siguiente = pasoActual + 1;
-    setPasoActual(siguiente);
-    localStorage.setItem(progresoKey, siguiente);
+    avanzarVista();
   };
 
   // =========================
   // RETROCEDER
   // =========================
   const retroceder = () => {
-    if (pasoActual > 1) {
-      const anterior = pasoActual - 1;
-      setPasoActual(anterior);
-      localStorage.setItem(progresoKey, anterior);
+    if (pasoVisible > 1) {
+      setPasoVisible(pasoVisible - 1);
     } else {
-      navigate("/");
+      navigate(`/dashboard/${rango}`);
     }
+  };
+
+  const irANodo = (n) => {
+    if (n <= pasoActual) setPasoVisible(n);
   };
 
   // =========================
@@ -203,7 +225,7 @@ const ContenedorActividades = () => {
   // =========================
   // FINAL
   // =========================
-  if (pasoActual > totalPasos) {
+  if (pasoVisible > totalPasos) {
     return (
       <div
         className="min-h-screen pb-12"
@@ -234,6 +256,7 @@ const ContenedorActividades = () => {
             <button
               onClick={() => {
                 setPasoActual(1);
+                setPasoVisible(1);
                 localStorage.setItem(progresoKey, 1);
               }}
               className="bg-gray-200 text-alianza-azul px-8 py-4 rounded-full font-black w-full md:w-auto"
@@ -271,12 +294,24 @@ const ContenedorActividades = () => {
       }}
     >
       <main className="container mx-auto px-4">
+        {userId !== "anon" && (
+          <div className="pt-4">
+            <MapaActividades
+              totalPasos={totalPasos}
+              pasoActual={pasoActual}
+              pasoVisible={pasoVisible}
+              onSeleccionar={irANodo}
+              variante="horizontal"
+            />
+          </div>
+        )}
+
         {DEBUG_COORDENADAS ? (
-          <CapturarCoordenadas imagen={`/images/${rango}/20.png`} total={6} />
+          <CapturarCoordenadas imagen="/images/10/35.png" total={6} />
         ) : (
           <ActividadActual
             data={pData}
-            onComplete={avanzar}
+            onComplete={terminarPaso}
             onBack={retroceder}
             userId={userId}
             rango={rango}

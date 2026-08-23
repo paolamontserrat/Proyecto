@@ -4,6 +4,7 @@ import { PiggyBank, Gamepad2, LogOut } from "lucide-react";
 import Footer from "../components/Footer";
 import AvisoDiplomas from "../components/AvisoDiplomas";
 import ProgresoAventura from "../components/gamificacion/ProgresoAventura";
+import MapaAventuraDashboard from "../components/gamificacion/MapaAventuraDashboard";
 
 const Dashboard = () => {
   const { rango } = useParams();
@@ -138,6 +139,9 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+      <div className="px-6">
+          <MapaAventuraDashboard rango={rango} />
+        </div>
 
       {/* MENÚ */}
       <div className="px-6 mt-8 grid grid-cols-1 gap-4">
@@ -157,7 +161,6 @@ const Dashboard = () => {
             </span>
           </div>
         </button>
-
         <button
           onClick={() => navigate(`/actividades/${rango}`)}
           className="h-28 w-full rounded-3xl overflow-hidden shadow-lg relative group transition hover:scale-[1.01]"

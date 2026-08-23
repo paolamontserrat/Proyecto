@@ -29,7 +29,7 @@ const CapturarCoordenadas = ({ imagen = `/images/9-12/3.png`, total = 5 }) => {
 
       <div className="relative">
         <img
-          src={imagen = `/images/9-12/3.png`}
+          src={imagen = `/images/10/35.png`}
           onClick={handleClick}
           className="w-[300px] cursor-crosshair"
         />

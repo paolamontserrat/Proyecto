@@ -14,10 +14,15 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
   const mazeCanvasRef = useRef(null);
   const containerRef = useRef(null);
   const snapshotRef = useRef(null);
+  const puntoInicioRef = useRef(null);
+  const [colorDebug, setColorDebug] = useState(null);
 
-  // Dimensiones base del lienzo interno
-  const BASE_WIDTH = 800;
-  const BASE_HEIGHT = 1000;
+  // ⚠️ IMPORTANTE: estas dimensiones ahora coinciden EXACTAMENTE con el
+  // tamaño natural del archivo /images/10/35.png (587x607). Así lo que
+  // se ve en pantalla y lo que se analiza para detectar la pared son
+  // siempre el mismo pixel — sin estiramientos que desalineen todo.
+  const BASE_WIDTH = 587;
+  const BASE_HEIGHT = 607;
 
   const [scale, setScale] = useState(1);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -44,23 +49,63 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
   const userId = getUser()?.id || "anon";
   const storageKey = `act04-${rango}-${userId}-${data?.id || "default"}`;
 
-  // Coordenadas basadas en un canvas de 800x1000
+  // Coordenadas recalculadas con un único factor de escala uniforme
+  // (587/300 = 1.9567) a partir de tus 6 puntos capturados. Ya no hay
+  // distorsión entre eje X y eje Y.
   const zonas = {
-    // Opción 1: Entrada superior (Flecha hacia abajo sobre el laberinto) -> Meta: $2,800
     opcion1: {
-      inicio: { x: 200, y: 50, w: 100, h: 80 },
-      meta: { x: 620, y: 100, w: 120, h: 80 },
+      inicio: { x: 141, y: 18, w: 70, h: 70 },
+      meta: { x: 405, y: 35, w: 70, h: 70 },
     },
-    // Opción 2: Entrada izquierda ($300 al mes) -> Meta: $1,800 (Abajo)
     opcion2: {
-      inicio: { x: 120, y: 640, w: 100, h: 80 },
-      meta: { x: 420, y: 920, w: 120, h: 80 },
+      inicio: { x: 96, y: 341, w: 70, h: 70 },
+      meta: { x: 296, y: 525, w: 70, h: 70 },
     },
-    // Opción 3: Entrada derecha ($25 semanales) -> Meta: $1,300 (Izquierda)
     opcion3: {
-      inicio: { x: 580, y: 440, w: 100, h: 80 },
-      meta: { x: 120, y: 500, w: 100, h: 80 },
+      inicio: { x: 401, y: 245, w: 70, h: 70 },
+      meta: { x: 71, y: 276, w: 70, h: 70 },
     },
+  };
+
+  // ⚠️ MODO DEPURACIÓN: actívalo, dibuja sobre una pared real, y verás
+  // en pantalla el color exacto bajo el cursor para calibrar si hace falta.
+  const DEBUG_COLOR = true;
+
+  const AZUL_PARED = { r: 59, g: 58, b: 167 };
+  const TOLERANCIA = 90;
+
+  // Ya no debería necesitarse una zona de gracia tan grande, porque la
+  // detección ahora es precisa. Se deja un margen pequeño de todos modos.
+  const DISTANCIA_GRACIA = 20;
+
+  const esPared = (r, g, b) => {
+    const distancia = Math.sqrt(
+      (r - AZUL_PARED.r) ** 2 +
+        (g - AZUL_PARED.g) ** 2 +
+        (b - AZUL_PARED.b) ** 2,
+    );
+    return distancia < TOLERANCIA;
+  };
+
+  // Promedia un pequeño bloque de pixeles en vez de leer solo uno, para
+  // que el antialiasing de los bordes de la pared no dé falsos positivos
+  // ni falsos negativos.
+  const colorPromedio = (ctx, x, y) => {
+    const tam = 3;
+    const datos = ctx.getImageData(
+      Math.max(0, Math.round(x) - 1),
+      Math.max(0, Math.round(y) - 1),
+      tam,
+      tam,
+    ).data;
+    let r = 0, g = 0, b = 0, n = 0;
+    for (let i = 0; i < datos.length; i += 4) {
+      r += datos[i];
+      g += datos[i + 1];
+      b += datos[i + 2];
+      n++;
+    }
+    return { r: r / n, g: g / n, b: b / n };
   };
 
   const guardarTodo = async (state) => {
@@ -76,7 +121,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
           datos_actividad: state,
           completada: state.terminado,
         },
-        { onConflict: "usuario_id,actividad_id" }
+        { onConflict: "usuario_id,actividad_id" },
       );
       setSyncStatus("saved");
     } catch (err) {
@@ -109,9 +154,12 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
       img.onload = async () => {
         const mazeCanvas = mazeCanvasRef.current;
         if (!mazeCanvas) return;
-        const mazeCtx = mazeCanvas.getContext("2d");
+        const mazeCtx = mazeCanvas.getContext("2d", {
+          willReadFrequently: true,
+        });
         mazeCanvas.width = BASE_WIDTH;
         mazeCanvas.height = BASE_HEIGHT;
+        // Se dibuja al tamaño NATURAL de la imagen, sin estirar.
         mazeCtx.drawImage(img, 0, 0, BASE_WIDTH, BASE_HEIGHT);
 
         if (userId !== "anon" && data?.id) {
@@ -126,14 +174,19 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
           setSyncStatus("saved");
           if (db?.datos_actividad) {
             restaurar(db.datos_actividad);
-            localStorage.setItem(storageKey, JSON.stringify(db.datos_actividad));
+            localStorage.setItem(
+              storageKey,
+              JSON.stringify(db.datos_actividad),
+            );
             return;
           }
         }
 
         const local = localStorage.getItem(storageKey);
         if (local) {
-          try { restaurar(JSON.parse(local)); } catch {}
+          try {
+            restaurar(JSON.parse(local));
+          } catch {}
         }
       };
     };
@@ -153,7 +206,9 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
   if (!data) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-lg font-bold text-slate-600 animate-pulse">Cargando actividad...</p>
+        <p className="text-lg font-bold text-slate-600 animate-pulse">
+          Cargando actividad...
+        </p>
       </div>
     );
   }
@@ -174,7 +229,11 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
   const dentro = (x, y, z) =>
     x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h;
 
-  const guardar = (estadoComp = completadas, textoRespuesta = quienAhorraMas, fin = terminado) => {
+  const guardar = (
+    estadoComp = completadas,
+    textoRespuesta = quienAhorraMas,
+    fin = terminado,
+  ) => {
     if (!canvasRef.current) return;
     const imagen = canvasRef.current.toDataURL();
     guardarTodo({
@@ -209,6 +268,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     }
 
     setCaminoActual(idCamino);
+    puntoInicioRef.current = { x, y };
     const ctx = getCtx();
     if (!ctx) return;
     snapshotRef.current = ctx.getImageData(0, 0, BASE_WIDTH, BASE_HEIGHT);
@@ -224,13 +284,25 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     if (!ctx) return;
     const esTouch = e.type.includes("touch");
 
+    // ⚠️ La detección de "chocar con la pared" solo aplica en dispositivos
+    // sin pantalla táctil (mouse). En celulares/tablets queda deshabilitada
+    // a propósito, porque dibujar con el dedo es mucho menos preciso.
     if (!esTouch && mazeCanvasRef.current) {
-      const mazeCtx = mazeCanvasRef.current.getContext("2d");
-      const pixel = mazeCtx.getImageData(x, y, 1, 1).data;
-      const [r, g, b] = pixel;
+      const mazeCtx = mazeCanvasRef.current.getContext("2d", {
+        willReadFrequently: true,
+      });
+      const { r, g, b } = colorPromedio(mazeCtx, x, y);
 
-      // Detección de paredes azules en la imagen
-      if (b > 110 && r < 100 && g < 100) {
+      if (DEBUG_COLOR) {
+        setColorDebug({ x: Math.round(x), y: Math.round(y), r: Math.round(r), g: Math.round(g), b: Math.round(b) });
+      }
+
+      const inicio = puntoInicioRef.current;
+      const distanciaDesdeInicio = inicio
+        ? Math.hypot(x - inicio.x, y - inicio.y)
+        : DISTANCIA_GRACIA + 1;
+
+      if (distanciaDesdeInicio > DISTANCIA_GRACIA && esPared(r, g, b)) {
         if (snapshotRef.current) {
           ctx.putImageData(snapshotRef.current, 0, 0);
         } else {
@@ -247,7 +319,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
 
     ctx.lineTo(x, y);
     ctx.strokeStyle = "#f59e0b";
-    ctx.lineWidth = esTouch ? 12 : 8;
+    ctx.lineWidth = esTouch ? 8 : 5;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.stroke();
@@ -258,7 +330,8 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
       setCaminoActual(null);
       setIsDrawing(false);
 
-      const todosCaminos = nuevoEstado.opcion1 && nuevoEstado.opcion2 && nuevoEstado.opcion3;
+      const todosCaminos =
+        nuevoEstado.opcion1 && nuevoEstado.opcion2 && nuevoEstado.opcion3;
       const finalizado = todosCaminos && quienAhorraMas.trim().length > 0;
 
       if (todosCaminos) {
@@ -282,7 +355,8 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
   const handleTextoChange = (e) => {
     const val = e.target.value;
     setQuienAhorraMas(val);
-    const todosCaminos = completadas.opcion1 && completadas.opcion2 && completadas.opcion3;
+    const todosCaminos =
+      completadas.opcion1 && completadas.opcion2 && completadas.opcion3;
     const finalizado = todosCaminos && val.trim().length > 0;
     setTerminado(finalizado);
     guardar(completadas, val, finalizado);
@@ -297,19 +371,20 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     setTerminado(false);
     snapshotRef.current = null;
     localStorage.removeItem(storageKey);
-    guardarTodo({ imagen: null, completadas: nuevo, quienAhorraMas: "", terminado: false });
+    guardarTodo({
+      imagen: null,
+      completadas: nuevo,
+      quienAhorraMas: "",
+      terminado: false,
+    });
   };
 
-  const continuar = async () => {
-    guardar(completadas, quienAhorraMas, true);
-    if (onComplete) onComplete();
-  };
-
-  const preguntaAnalisis = data?.preguntas?.find((p) => p.id === "quienAhorraMas");
+  const preguntaAnalisis = data?.preguntas?.find(
+    (p) => p.id === "quienAhorraMas",
+  );
 
   return (
     <LayoutActividad fondo={fondoImg}>
-      {/* NAVEGACIÓN */}
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={onBack}
@@ -317,6 +392,18 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
         >
           ← Regresar
         </button>
+
+        <span className="text-sm font-medium">
+          {syncStatus === "saving" && (
+            <span className="text-yellow-500">⏳ Guardando…</span>
+          )}
+          {syncStatus === "saved" && (
+            <span className="text-green-500">✅ Guardado</span>
+          )}
+          {syncStatus === "error" && (
+            <span className="text-red-500">❌ Error al guardar</span>
+          )}
+        </span>
 
         <button
           onClick={() => navigate(`/dashboard/${rango}`)}
@@ -328,8 +415,6 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
 
       <div className="max-w-4xl mx-auto space-y-8 pb-12">
         <div className="bg-white rounded-[35px] shadow-2xl border-4 border-amber-400 p-6 md:p-8 space-y-8">
-          
-          {/* ENCABEZADO */}
           <div className="text-center space-y-2">
             <h1 className="text-2xl md:text-4xl font-black text-sky-950">
               {data?.titulo}
@@ -341,17 +426,20 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
             )}
           </div>
 
-          {/* SECCIÓN TEÓRICA */}
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-sky-100 p-5 rounded-2xl border-2 border-sky-300 flex items-center gap-4">
-                <span className="w-10 h-10 bg-sky-900 text-white font-black rounded-full flex items-center justify-center shrink-0 text-xl">1</span>
+                <span className="w-10 h-10 bg-sky-900 text-white font-black rounded-full flex items-center justify-center shrink-0 text-xl">
+                  1
+                </span>
                 <p className="font-extrabold text-sky-950 text-base md:text-lg">
                   {data?.seccion1?.casoSofía}
                 </p>
               </div>
               <div className="bg-sky-100 p-5 rounded-2xl border-2 border-sky-300 flex items-center gap-4">
-                <span className="w-10 h-10 bg-sky-900 text-white font-black rounded-full flex items-center justify-center shrink-0 text-xl">2</span>
+                <span className="w-10 h-10 bg-sky-900 text-white font-black rounded-full flex items-center justify-center shrink-0 text-xl">
+                  2
+                </span>
                 <p className="font-extrabold text-sky-950 text-base md:text-lg">
                   {data?.seccion1?.casoCarlos}
                 </p>
@@ -360,13 +448,16 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
 
             <div className="bg-amber-50 p-6 rounded-2xl border-2 border-amber-300 space-y-3">
               <label className="block font-black text-sky-950 text-lg">
-                {preguntaAnalisis?.pregunta || "Después de varios meses, ¿Quién tendrá mucho más dinero ahorrado en la cooperativa? y ¿Por qué?"}
+                {preguntaAnalisis?.pregunta ||
+                  "Después de varios meses, ¿Quién tendrá mucho más dinero ahorrado en la cooperativa? y ¿Por qué?"}
               </label>
               <textarea
                 rows={3}
                 value={quienAhorraMas}
                 onChange={handleTextoChange}
-                placeholder={preguntaAnalisis?.placeholder || "Escribe aquí tu análisis..."}
+                placeholder={
+                  preguntaAnalisis?.placeholder || "Escribe aquí tu análisis..."
+                }
                 className="w-full p-4 rounded-xl border-2 border-amber-300 bg-white font-medium text-slate-800 focus:outline-none focus:ring-4 focus:ring-amber-200"
               />
             </div>
@@ -378,7 +469,9 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                 </div>
                 <div className="space-y-2 text-sky-950 font-black text-lg md:text-2xl">
                   <p>{data?.seccion1?.mensajeClave?.linea1}</p>
-                  <p className="text-amber-600">{data?.seccion1?.mensajeClave?.linea2}</p>
+                  <p className="text-amber-600">
+                    {data?.seccion1?.mensajeClave?.linea2}
+                  </p>
                   {data?.seccion1?.mensajeClave?.fraseLibreta && (
                     <span className="inline-block bg-amber-200 text-amber-900 text-sm font-bold px-3 py-1 rounded-md mt-2">
                       💡 {data.seccion1.mensajeClave.fraseLibreta}
@@ -399,32 +492,47 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
 
           <hr className="border-t-2 border-amber-200 my-6" />
 
-          {/* SECCIÓN LABERINTO */}
           <div className="space-y-6">
             <h2 className="text-center text-xl md:text-3xl font-black text-sky-950">
               {data?.seccion2?.tituloActividad}
             </h2>
 
-            {/* CONTENEDOR CON RELACIÓN DE ASPECTO 4:5 PARA COINCIDIR CON 800x1000 */}
-            <div className="w-full max-w-[700px] mx-auto">
+            <div className="w-full max-w-[587px] mx-auto">
               <div
                 ref={containerRef}
-                className="relative w-full aspect-[4/5] bg-sky-50 rounded-2xl overflow-hidden border-2 border-sky-300 shadow-inner select-none touch-none"
+                className="relative w-full bg-sky-50 rounded-2xl overflow-hidden border-2 border-sky-300 shadow-inner select-none touch-none"
+                style={{ aspectRatio: `${BASE_WIDTH} / ${BASE_HEIGHT}` }}
               >
                 {mensaje && (
                   <div className="absolute z-20 top-3 left-1/2 -translate-x-1/2 bg-sky-900 text-amber-300 font-black text-sm md:text-base px-6 py-2 rounded-full shadow-xl border-2 border-amber-400 text-center">
                     {mensaje}
                   </div>
                 )}
+                {DEBUG_COLOR && colorDebug && (
+                  <div className="absolute z-20 bottom-3 left-3 bg-black/80 text-white text-xs font-mono px-3 py-2 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className="w-4 h-4 rounded border border-white/50 inline-block"
+                        style={{
+                          backgroundColor: `rgb(${colorDebug.r},${colorDebug.g},${colorDebug.b})`,
+                        }}
+                      />
+                      r:{colorDebug.r} g:{colorDebug.g} b:{colorDebug.b}
+                    </div>
+                    <div className="text-white/60">
+                      x:{colorDebug.x} y:{colorDebug.y}
+                    </div>
+                  </div>
+                )}
 
-                {/* Imagen ajustada con object-contain para evitar cortes */}
+                {/* Ahora la imagen ocupa exactamente el mismo espacio que
+                    el canvas de análisis, sin letterboxing ni distorsión. */}
                 <img
                   src={laberintoImg}
                   alt="Laberinto"
-                  className="absolute inset-0 w-full h-full object-contain pointer-events-none"
+                  className="absolute inset-0 w-full h-full pointer-events-none"
                 />
 
-                {/* Canvas de trazado */}
                 <canvas
                   ref={canvasRef}
                   width={BASE_WIDTH}
@@ -442,7 +550,6 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
               </div>
             </div>
 
-            {/* ACCIONES */}
             <div className="flex justify-center gap-5 pt-4">
               <button
                 onClick={reiniciar}
@@ -451,15 +558,19 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                 Reiniciar
               </button>
               <button
-                        type="button"
-                        onClick={onComplete}
-                        className="w-full sm:w-2/3 py-4 rounded-full font-black text-xl sm:text-2xl shadow-xl transition-all bg-amber-400 text-blue-950 hover:bg-amber-300 hover:scale-105 active:scale-95 uppercase tracking-wider cursor-pointer"
-                    >
-                        Continuar
-                    </button>
+                type="button"
+                disabled={!terminado}
+                onClick={onComplete}
+                className={`w-full sm:w-2/3 py-4 rounded-full font-black text-xl sm:text-2xl shadow-xl transition-all uppercase tracking-wider ${
+                  terminado
+                    ? "bg-amber-400 text-blue-950 hover:bg-amber-300 hover:scale-105 active:scale-95 cursor-pointer"
+                    : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+              >
+                Continuar
+              </button>
             </div>
           </div>
-
         </div>
       </div>
     </LayoutActividad>
