@@ -34,6 +34,7 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
   });
 
   const [loading, setLoading] = useState(true);
+  const [finalizando, setFinalizando] = useState(false);
 
   // =========================
   // DEBOUNCE SAVE (CLAVE)
@@ -56,6 +57,18 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
       d4: Array.isArray(state.dibujos?.d4) ? state.dibujos.d4 : [],
     },
   });
+
+  const calcularCompletada = (limpio) =>
+    Boolean(
+      (limpio.seleccion !== "" || limpio.otro.trim() !== "") &&
+      limpio.dibujos.d1.length > 0 &&
+      limpio.dibujos.d2.length > 0 &&
+      limpio.dibujos.d3.length > 0 &&
+      limpio.dibujos.d4.length > 0 &&
+      limpio.respuestas.r1.trim() &&
+      limpio.respuestas.r2.trim() &&
+      limpio.respuestas.r3.trim(),
+    );
 
   // =========================
   // LOAD
@@ -90,27 +103,60 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
   }, [userId, actividadId]);
 
   // =========================
-  // SAVE CENTRALIZADO (IMPORTANTE)
+  // SAVE CENTRALIZADO (DEBOUNCED) - para guardado mientras se escribe/dibuja
   // =========================
-  const guardar = useCallback((state) => {
-    if (userId === "anon" || !actividadId) return;
+  const guardar = useCallback(
+    (state) => {
+      if (userId === "anon" || !actividadId) return;
 
-    const limpio = limpiar(state);
+      const limpio = limpiar(state);
+      const completada = calcularCompletada(limpio);
 
-    const completada =
-      (limpio.seleccion !== "" || limpio.otro.trim() !== "") &&
-      limpio.dibujos.d1.length > 0 &&
-      limpio.dibujos.d2.length > 0 &&
-      limpio.dibujos.d3.length > 0 &&
-      limpio.dibujos.d4.length > 0 &&
-      limpio.respuestas.r1.trim() &&
-      limpio.respuestas.r2.trim() &&
-      limpio.respuestas.r3.trim();
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
 
-    if (saveTimeout.current) clearTimeout(saveTimeout.current);
+      saveTimeout.current = setTimeout(async () => {
+        if (isSaving.current) return;
+        isSaving.current = true;
 
-    saveTimeout.current = setTimeout(async () => {
-      if (isSaving.current) return;
+        try {
+          await supabase.from("progreso_actividades").upsert(
+            {
+              usuario_id: userId,
+              actividad_id: actividadId,
+              datos_actividad: limpio,
+              completada,
+            },
+            {
+              onConflict: "usuario_id,actividad_id",
+            },
+          );
+        } catch (err) {
+          console.warn(err);
+        } finally {
+          isSaving.current = false;
+        }
+      }, 300);
+    },
+    [userId, actividadId],
+  );
+
+  // =========================
+  // SAVE INMEDIATO (sin debounce) - para usar justo antes de salir/continuar
+  // =========================
+  // FIX: antes, al dar clic en "¡Continuar!" se llamaba directo a onComplete
+  // sin esperar el guardado agendado por el debounce (300ms). Si el último
+  // cambio (típicamente la última pregunta/dibujo) ocurría justo antes del
+  // clic, ese cambio se perdía. Ahora se hace un guardado inmediato con el
+  // estado actual antes de avanzar.
+  const guardarInmediato = useCallback(
+    async (state) => {
+      if (userId === "anon" || !actividadId) return;
+
+      if (saveTimeout.current) clearTimeout(saveTimeout.current);
+
+      const limpio = limpiar(state);
+      const completada = calcularCompletada(limpio);
+
       isSaving.current = true;
 
       try {
@@ -123,15 +169,16 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
           },
           {
             onConflict: "usuario_id,actividad_id",
-          }
+          },
         );
       } catch (err) {
         console.warn(err);
       } finally {
         isSaving.current = false;
       }
-    }, 300);
-  }, [userId, actividadId]);
+    },
+    [userId, actividadId],
+  );
 
   // =========================
   // HANDLERS
@@ -206,6 +253,25 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
     respuestas.r3.trim();
 
   // =========================
+  // CONTINUAR (con flush inmediato antes de avanzar)
+  // =========================
+  const handleContinuar = async () => {
+    if (!isValid || finalizando) return;
+
+    setFinalizando(true);
+
+    await guardarInmediato({
+      seleccion,
+      otro,
+      respuestas,
+      dibujos,
+    });
+
+    setFinalizando(false);
+    onComplete();
+  };
+
+  // =========================
   // LOADING
   // =========================
   if (loading) {
@@ -218,21 +284,24 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
 
   return (
     <LayoutActividad fondo={data?.recursos?.fondo}>
-
       {/* HEADER */}
       <div className="flex justify-between items-center mb-4">
-        <button onClick={onBack} className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold">
+        <button
+          onClick={onBack}
+          className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold"
+        >
           ← Regresar
         </button>
 
-        <button onClick={() => navigate(`/dashboard/${rango}`)}
-          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold">
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold"
+        >
           🏠 Inicio
         </button>
       </div>
 
       <div className="bg-white/90 p-6 md:p-10 rounded-[2rem] border-4 border-alianza-amarillo">
-
         {/* TÍTULO */}
         <h2 className="text-2xl md:text-4xl font-black text-alianza-azul text-center mb-2">
           {data.titulo}
@@ -274,16 +343,15 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
         <TipoDibujar
           userId={userId}
           actividadId={actividadId}
-          gestionarPropio={false}          
-          valorInicial={dibujos.d1}        
-          canalId="d1"                     
+          gestionarPropio={false}
+          valorInicial={dibujos.d1}
+          canalId="d1"
           value={dibujos.d1}
           onChange={({ dataDibujo }) => handleDibujo("d1", dataDibujo)}
         />
 
-         {/* TIPS */}
+        {/* TIPS */}
         <div className="flex flex-col md:flex-row gap-4 mb-8 mt-10">
-
           <div className="flex-1">
             <div className="bg-alianza-azul p-4 rounded-t-2xl">
               <h3 className="text-alianza-amarillo font-black">
@@ -302,12 +370,10 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
             src={data.recursos.imagenDerecha}
             className="w-32 md:w-40 object-contain"
           />
-
         </div>
 
         {data?.frases?.map((f, i) => (
           <div key={i} className="text-center mt-8">
-
             <p className="font-black mb-2">{f}</p>
 
             <input
@@ -319,9 +385,9 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
             <TipoDibujar
               userId={userId}
               actividadId={actividadId}
-              gestionarPropio={false}                    // ← añadir
-              valorInicial={dibujos[`d${i + 2}`]}        // ← añadir
-              canalId={`d${i + 2}`}                      // ← añadir
+              gestionarPropio={false}
+              valorInicial={dibujos[`d${i + 2}`]}
+              canalId={`d${i + 2}`}
               value={dibujos[`d${i + 2}`]}
               onChange={({ dataDibujo }) =>
                 handleDibujo(`d${i + 2}`, dataDibujo)
@@ -332,17 +398,20 @@ const Act09 = ({ data, onBack, onComplete, rango }) => {
 
         {/* BOTÓN */}
         <button
-          onClick={onComplete}
-          disabled={!isValid}
+          onClick={handleContinuar}
+          disabled={!isValid || finalizando}
           className={`w-full mt-8 py-4 rounded-full font-black text-xl ${
-            isValid
+            isValid && !finalizando
               ? "bg-alianza-amarillo text-alianza-azul"
               : "bg-gray-300 text-gray-500"
           }`}
         >
-          {isValid ? "¡Continuar!" : "Completa la actividad"}
+          {finalizando
+            ? "Guardando…"
+            : isValid
+              ? "¡Continuar!"
+              : "Completa la actividad"}
         </button>
-
       </div>
     </LayoutActividad>
   );

@@ -4,8 +4,6 @@ import TipoDibujar from "../../../components/actividades/tipos/TipoDibujar";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-// Animaciones propias en CSS (evita depender de framer-motion, que el
-// componente original importaba como "motion" sin declararlo).
 const estilosAnimacion = `
 @keyframes floatCoin {
   0%, 100% { transform: translateY(0px); }
@@ -30,15 +28,28 @@ const estilosAnimacion = `
 }
 `;
 
+// Semanas que se usan para proyectar el ahorro
+const SEMANAS_POR_MES = 4;
+const SEMANAS_9_MESES = SEMANAS_POR_MES * 9; // 36 semanas
+
+const calcularPlan = (semanaStr) => {
+  const semana = parseFloat(semanaStr) || 0;
+  const mes = semana * SEMANAS_POR_MES;
+  const nueveMeses = semana * SEMANAS_9_MESES;
+
+  return {
+    ahorroSemana: semanaStr,
+    ahorroMes: semanaStr.trim() !== "" ? String(mes) : "",
+    ahorro9Meses: semanaStr.trim() !== "" ? String(nueveMeses) : "",
+  };
+};
+
 const Act07 = ({ data, onComplete, onBack, rango }) => {
   const navigate = useNavigate();
 
   const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
   const userId = usuario?.id ?? "anon";
 
-  // =========================
-  // STATE
-  // =========================
   const [plan, setPlan] = useState({
     ahorroSemana: "",
     ahorroMes: "",
@@ -62,9 +73,6 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     plan.ahorro9Meses.trim() !== "" &&
     (tieneDibujo || hasData);
 
-  // =========================
-  // LOAD
-  // =========================
   useEffect(() => {
     if (userId === "anon") {
       setLoading(false);
@@ -83,7 +91,9 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
         const info = db.datos_actividad;
 
         if (info.plan) {
-          setPlan(info.plan);
+          // Re-calcula mes/9meses aunque vengan guardados, por si en algún
+          // momento se ajustan las constantes de arriba.
+          setPlan(calcularPlan(info.plan.ahorroSemana || ""));
         }
 
         if (isValidDibujo(info.dibujo)) {
@@ -99,9 +109,6 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     cargar();
   }, [userId, data.id]);
 
-  // =========================
-  // SAVE
-  // =========================
   const saveToSupabase = useCallback(
     async (planData, dibujo) => {
       if (userId === "anon") return;
@@ -146,19 +153,14 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     [saveToSupabase],
   );
 
-  // =========================
-  // INPUTS
-  // =========================
-  const handleChange = (field, value) => {
-    const newPlan = { ...plan, [field]: value };
-
-    setPlan(newPlan);
-    scheduleSave(newPlan, dibujoData);
+  // Solo existe este handler ahora: cambiar "por semana" recalcula
+  // automáticamente mes y 9 meses.
+  const handleChangeSemana = (value) => {
+    const nuevoPlan = calcularPlan(value);
+    setPlan(nuevoPlan);
+    scheduleSave(nuevoPlan, dibujoData);
   };
 
-  // =========================
-  // DIBUJO
-  // =========================
   const handleDibujoChange = useCallback(
     ({ tieneDibujo: td, dataDibujo }) => {
       const limpio = isValidDibujo(dataDibujo) ? dataDibujo : [];
@@ -173,18 +175,12 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     [plan, scheduleSave],
   );
 
-  // =========================
-  // FINALIZAR
-  // =========================
   const finalizar = () => {
     if (!isValid) return;
     saveToSupabase(plan, dibujoData);
     onComplete();
   };
 
-  // =========================
-  // UI
-  // =========================
   if (loading) {
     return (
       <LayoutActividad fondo={data.recursos?.fondo}>
@@ -200,7 +196,6 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     <LayoutActividad fondo={data.recursos?.fondo}>
       <style>{estilosAnimacion}</style>
 
-      {/* HEADER */}
       <div className="flex justify-between items-center mb-4">
         <button
           onClick={onBack}
@@ -218,21 +213,15 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
       </div>
 
       <div className="bg-white p-6 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl">
-        {/* TITULO */}
         <div className="flex items-center justify-center gap-3 mb-8">
           {data.recursos?.imgCaja && (
-            <img
-              src={data.recursos.imgCaja}
-              alt=""
-              className="w-12 md:w-16"
-            />
+            <img src={data.recursos.imgCaja} alt="" className="w-12 md:w-16" />
           )}
           <h1 className="text-center text-2xl md:text-4xl font-black text-alianza-azul">
             {data.titulo}
           </h1>
         </div>
 
-        {/* PLAN DE AHORRO */}
         <div className="bg-gradient-to-br from-blue-50 to-yellow-50 border-2 border-alianza-amarillo rounded-2xl p-5 md:p-7 mb-8">
           <h3 className="text-center text-xl md:text-2xl font-black text-alianza-azul mb-6">
             {data.plan.titulo}
@@ -246,61 +235,48 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
             />
           </div>
 
-          {/* INPUTS */}
           <div className="space-y-5">
-            <div className="flex flex-col md:flex-row md:items-center gap-2 bg-white/70 rounded-xl p-3">
+            {/* ÚNICO CAMPO EDITABLE */}
+            <div className="flex flex-col md:flex-row md:items-center gap-2 bg-white rounded-xl p-3 border-2 border-alianza-azul">
               <span className="font-bold text-gray-800 md:min-w-[220px]">
                 {data.plan.etiquetas.semana}
               </span>
               <div className="flex items-center gap-2">
-                <span className="font-black text-alianza-azul text-lg">
-                  $
-                </span>
+                <span className="font-black text-alianza-azul text-lg">$</span>
                 <input
                   value={plan.ahorroSemana}
-                  onChange={(e) => handleChange("ahorroSemana", e.target.value)}
+                  onChange={(e) => handleChangeSemana(e.target.value)}
                   inputMode="decimal"
                   className="w-32 border-b-4 border-alianza-amarillo bg-transparent outline-none text-center text-lg font-black"
                   placeholder="0"
+                  autoFocus
                 />
               </div>
             </div>
 
+            {/* CALCULADO AUTOMÁTICAMENTE */}
             <div className="flex flex-col md:flex-row md:items-center gap-2 bg-white/70 rounded-xl p-3">
               <span className="font-bold text-gray-800 md:min-w-[220px]">
                 {data.plan.etiquetas.mes}
               </span>
               <div className="flex items-center gap-2">
-                <span className="font-black text-alianza-azul text-lg">
-                  $
+                <span className="font-black text-alianza-azul text-lg">$</span>
+                <span className="w-32 text-center text-lg font-black text-green-700">
+                  {plan.ahorroMes || 0}
                 </span>
-                <input
-                  value={plan.ahorroMes}
-                  onChange={(e) => handleChange("ahorroMes", e.target.value)}
-                  inputMode="decimal"
-                  className="w-32 border-b-4 border-alianza-amarillo bg-transparent outline-none text-center text-lg font-black"
-                  placeholder="0"
-                />
               </div>
             </div>
 
+            {/* CALCULADO AUTOMÁTICAMENTE */}
             <div className="flex flex-col md:flex-row md:items-center gap-2 bg-white/70 rounded-xl p-3">
               <span className="font-bold text-gray-800 md:min-w-[220px]">
                 {data.plan.etiquetas.meses9}
               </span>
               <div className="flex items-center gap-2">
-                <span className="font-black text-alianza-azul text-lg">
-                  $
+                <span className="font-black text-alianza-azul text-lg">$</span>
+                <span className="w-32 text-center text-lg font-black text-green-700">
+                  {plan.ahorro9Meses || 0}
                 </span>
-                <input
-                  value={plan.ahorro9Meses}
-                  onChange={(e) =>
-                    handleChange("ahorro9Meses", e.target.value)
-                  }
-                  inputMode="decimal"
-                  className="w-32 border-b-4 border-alianza-amarillo bg-transparent outline-none text-center text-lg font-black"
-                  placeholder="0"
-                />
               </div>
             </div>
           </div>
@@ -315,7 +291,6 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
           </div>
         </div>
 
-        {/* ACTIVIDAD DE DIBUJO */}
         <div className="bg-sky-50 border-2 border-sky-200 rounded-2xl p-5 md:p-7 mb-8">
           <h3 className="text-center text-xl md:text-2xl font-black text-alianza-azul mb-2">
             {data.actividadFinal.titulo}
@@ -331,7 +306,6 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
           />
         </div>
 
-        {/* BOTÓN PASAPORTE */}
         <button
           onClick={() => navigate(`/pasaporte/${rango}`)}
           className="bg-alianza-azul text-white px-8 py-4 rounded-full font-black text-lg transition-transform duration-300 hover:scale-105 mb-6 w-full"
@@ -339,7 +313,6 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
           {data.actividadFinal.boton}
         </button>
 
-        {/* INDICADOR DE GUARDADO */}
         <div className="h-6 text-center mb-2">
           {syncStatus === "saving" && (
             <span className="text-sm font-bold text-gray-500 animate-fade-in-up">
@@ -358,7 +331,6 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
           )}
         </div>
 
-        {/* FINALIZAR */}
         <button
           onClick={finalizar}
           disabled={!isValid}

@@ -3,7 +3,6 @@ import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-// Animaciones suaves, consistentes con el resto de las actividades.
 const estilosAnimacion = `
 @keyframes floatSoft {
   0%, 100% { transform: translateY(0px); }
@@ -46,6 +45,12 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
   const [resultado, setResultado] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Feedback detallado, solo visible después de dar clic en "Validar".
+  const [validado, setValidado] = useState(false);
+  const [incorrectos, setIncorrectos] = useState(new Set());
+  const [sinResponder, setSinResponder] = useState(new Set());
+  const [reflexionCompleta, setReflexionCompleta] = useState(false);
+
   const aplicarInfo = (info) => {
     setSituaciones(info.situaciones || mezclar(data.situaciones));
     setMarcadas(info.marcadas || {});
@@ -68,7 +73,6 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
         if (!error && db?.datos_actividad) {
           const info = db.datos_actividad;
           aplicarInfo(info);
-          // Supabase manda: se reescribe localStorage con lo guardado en la BD
           localStorage.setItem(storageKey, JSON.stringify(info));
           cargadoDesdeSupabase = true;
         }
@@ -116,20 +120,41 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
     guardar();
   }, [situaciones, marcadas, reflexion, resultado]);
 
+  const seleccionar = (id, valor) => {
+    setMarcadas((prev) => ({ ...prev, [id]: valor }));
+    setValidado(false); // al cambiar una respuesta, se ocultan las marcas viejas
+  };
+
+  const cambiarReflexion = (campo, valor) => {
+    setReflexion((prev) => ({ ...prev, [campo]: valor }));
+    setValidado(false);
+  };
+
   const validar = () => {
-    let correcto = true;
+    const incorrectosNuevos = new Set();
+    const sinResponderNuevos = new Set();
+
     situaciones.forEach((s) => {
-      if (marcadas[s.id] !== s.correcta) correcto = false;
+      if (!marcadas[s.id]) {
+        sinResponderNuevos.add(s.id);
+      } else if (marcadas[s.id] !== s.correcta) {
+        incorrectosNuevos.add(s.id);
+      }
     });
 
-    if (
-      reflexion.r1.trim().length < 3 ||
-      reflexion.r2.trim().length < 3 ||
-      reflexion.r3.trim().length < 3
-    ) {
-      correcto = false;
-    }
-    setResultado(correcto);
+    const reflexionOk =
+      reflexion.r1.trim().length >= 3 &&
+      reflexion.r2.trim().length >= 3 &&
+      reflexion.r3.trim().length >= 3;
+
+    const tablaCorrecta =
+      incorrectosNuevos.size === 0 && sinResponderNuevos.size === 0;
+
+    setIncorrectos(incorrectosNuevos);
+    setSinResponder(sinResponderNuevos);
+    setReflexionCompleta(reflexionOk);
+    setValidado(true);
+    setResultado(tablaCorrecta && reflexionOk);
   };
 
   const reiniciar = () => {
@@ -137,9 +162,12 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
     setMarcadas({});
     setReflexion(reflexionVacia);
     setResultado(null);
+    setValidado(false);
+    setIncorrectos(new Set());
+    setSinResponder(new Set());
+    setReflexionCompleta(false);
   };
 
-  // Renderiza un párrafo de la conclusión respetando negritas/cursivas del JSON
   const renderParrafo = (partes, i) => (
     <p key={i} className="text-white text-lg md:text-xl">
       {partes.map((parte, j) => {
@@ -161,6 +189,9 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
       </LayoutActividad>
     );
   }
+
+  // Cuenta rápida para el mensaje final
+  const totalIncorrectas = incorrectos.size + sinResponder.size;
 
   return (
     <LayoutActividad fondo={data.recursos.fondo}>
@@ -184,12 +215,10 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
       </div>
 
       <div className="bg-white/90 rounded-[2rem] border-4 border-alianza-amarillo shadow-2xl p-6 md:p-10">
-        {/* TITULO */}
         <h1 className="text-center text-3xl md:text-5xl font-black text-alianza-azul mb-8">
           {data.titulo}
         </h1>
 
-        {/* INSTRUCCIONES */}
         <div className="mb-8">
           <h3 className="font-black text-xl text-alianza-azul mb-2">
             {data.instrucciones.titulo}
@@ -203,89 +232,123 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
           </p>
         </div>
 
-        {/* TABLA DE SITUACIONES */}
-        <div className="overflow-auto mb-10">
+        {/* TABLA DE SITUACIONES, con feedback visual por fila */}
+        <div className="overflow-auto mb-3">
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-blue-100">
-                <th className="border p-3 text-left">
-                  {data.columnaSituacion}
-                </th>
-                <th className="border p-3 text-center text-yellow-600">
-                  {data.columnaCasa}
-                </th>
-                <th className="border p-3 text-center text-green-600">
-                  {data.columnaCaja}
-                </th>
+                <th className="border p-3 text-left">{data.columnaSituacion}</th>
+                <th className="border p-3 text-center text-yellow-600">{data.columnaCasa}</th>
+                <th className="border p-3 text-center text-green-600">{data.columnaCaja}</th>
+                {validado && <th className="border p-3 text-center w-14"></th>}
               </tr>
             </thead>
 
             <tbody>
-              {situaciones.map((item) => (
-                <tr key={item.id}>
-                  <td className="border p-3">{item.texto}</td>
+              {situaciones.map((item) => {
+                const esIncorrecta = validado && incorrectos.has(item.id);
+                const noRespondida = validado && sinResponder.has(item.id);
+                const esCorrecta = validado && !esIncorrecta && !noRespondida;
 
-                  <td className="border text-center">
-                    <input
-                      type="radio"
-                      name={`op-${item.id}`}
-                      checked={marcadas[item.id] === "Casa"}
-                      onChange={() =>
-                        setMarcadas((prev) => ({
-                          ...prev,
-                          [item.id]: "Casa",
-                        }))
-                      }
-                    />
-                  </td>
+                const filaClase = esIncorrecta
+                  ? "bg-red-50"
+                  : noRespondida
+                    ? "bg-amber-50"
+                    : esCorrecta
+                      ? "bg-green-50"
+                      : "";
 
-                  <td className="border text-center">
-                    <input
-                      type="radio"
-                      name={`op-${item.id}`}
-                      checked={marcadas[item.id] === "Caja"}
-                      onChange={() =>
-                        setMarcadas((prev) => ({
-                          ...prev,
-                          [item.id]: "Caja",
-                        }))
-                      }
-                    />
-                  </td>
-                </tr>
-              ))}
+                return (
+                  <tr key={item.id} className={filaClase}>
+                    <td className="border p-3">
+                      {item.texto}
+                      {esIncorrecta && (
+                        <p className="text-xs text-red-600 font-bold mt-1">
+                          Respuesta correcta: {item.correcta}
+                        </p>
+                      )}
+                      {noRespondida && (
+                        <p className="text-xs text-amber-600 font-bold mt-1">
+                          Falta responder
+                        </p>
+                      )}
+                    </td>
+
+                    <td className="border text-center">
+                      <input
+                        type="radio"
+                        name={`op-${item.id}`}
+                        checked={marcadas[item.id] === "Casa"}
+                        onChange={() => seleccionar(item.id, "Casa")}
+                      />
+                    </td>
+
+                    <td className="border text-center">
+                      <input
+                        type="radio"
+                        name={`op-${item.id}`}
+                        checked={marcadas[item.id] === "Caja"}
+                        onChange={() => seleccionar(item.id, "Caja")}
+                      />
+                    </td>
+
+                    {validado && (
+                      <td className="border text-center text-xl">
+                        {esCorrecta && "✅"}
+                        {esIncorrecta && "❌"}
+                        {noRespondida && "⚠️"}
+                      </td>
+                    )}
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
 
+        {validado && totalIncorrectas > 0 && (
+          <p className="text-center text-red-600 font-bold mb-8">
+            {totalIncorrectas} {totalIncorrectas === 1 ? "fila necesita" : "filas necesitan"} tu atención — revisa las marcadas en rojo o amarillo arriba.
+          </p>
+        )}
+
         {/* REFLEXIONA */}
-        <div className="bg-lime-100 rounded-3xl p-6 mb-8">
-          <h3 className="font-black text-2xl text-center text-alianza-azul mb-6">
+        <div
+          className={`rounded-3xl p-6 mb-8 transition-colors ${
+            validado && !reflexionCompleta ? "bg-amber-100 border-2 border-amber-400" : "bg-lime-100"
+          }`}
+        >
+          <h3 className="font-black text-2xl text-center text-alianza-azul mb-2">
             {data.reflexiona.titulo}
           </h3>
+          {validado && !reflexionCompleta && (
+            <p className="text-center text-amber-700 font-bold text-sm mb-4">
+              Completa las 3 respuestas (mínimo 3 caracteres cada una) para poder continuar.
+            </p>
+          )}
 
           <div className="space-y-5">
-            {data.reflexiona.preguntas.map((pregunta, i) => (
-              <div key={i}>
-                <p className="font-bold mb-2">{pregunta}</p>
-                <input
-                  type="text"
-                  value={reflexion[`r${i + 1}`]}
-                  onChange={(e) =>
-                    setReflexion((prev) => ({
-                      ...prev,
-                      [`r${i + 1}`]: e.target.value,
-                    }))
-                  }
-                  className="w-full border-2 rounded-full p-3 bg-white"
-                  placeholder={data.reflexiona.placeholder}
-                />
-              </div>
-            ))}
+            {data.reflexiona.preguntas.map((pregunta, i) => {
+              const campo = `r${i + 1}`;
+              const faltaEsta = validado && reflexion[campo].trim().length < 3;
+              return (
+                <div key={i}>
+                  <p className="font-bold mb-2">{pregunta}</p>
+                  <input
+                    type="text"
+                    value={reflexion[campo]}
+                    onChange={(e) => cambiarReflexion(campo, e.target.value)}
+                    className={`w-full border-2 rounded-full p-3 bg-white ${
+                      faltaEsta ? "border-amber-500" : ""
+                    }`}
+                    placeholder={data.reflexiona.placeholder}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* IMAGEN */}
         <div className="flex justify-center mb-10">
           <img
             src={data.recursos.flecha}
@@ -294,28 +357,27 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
           />
         </div>
 
-        {/* CONCLUSION */}
         <div className="bg-alianza-azul rounded-3xl p-6 md:p-8 mb-8 space-y-3 shadow-xl">
           <h3 className="font-black text-2xl text-alianza-amarillo text-center mb-4">
             {data.conclusion.titulo}
           </h3>
-          {data.conclusion.parrafos.map((partes, i) =>
-            renderParrafo(partes, i),
-          )}
+          {data.conclusion.parrafos.map((partes, i) => renderParrafo(partes, i))}
         </div>
 
-        {/* RESULTADO */}
         {resultado !== null && (
           <div
             className={`mb-6 text-center text-2xl font-black animate-fade-in-up ${
               resultado ? "text-green-600" : "text-red-600"
             }`}
           >
-            {resultado ? data.resultado.exito : data.resultado.error}
+            {resultado
+              ? data.resultado.exito
+              : totalIncorrectas > 0
+                ? "❌ Revisa las filas marcadas en la tabla."
+                : "❌ Completa las 3 preguntas de reflexión."}
           </div>
         )}
 
-        {/* BOTONES */}
         <div className="flex flex-wrap gap-4">
           <button
             onClick={validar}

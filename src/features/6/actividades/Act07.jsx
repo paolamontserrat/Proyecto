@@ -86,6 +86,17 @@ const handlePuzzleComplete = () => {
 };
 
   // =========================
+  //  REINICIAR (desde Act07, ya que PuzzleImagen queda oculto al completar)
+  // =========================
+  const handleReiniciar = async () => {
+    localStorage.removeItem(storageKey);
+    setPuzzleCompletado(false);
+    setHasData(false);
+
+    await syncAll({ completado: false });
+  };
+
+  // =========================
   // CONTINUAR
   // =========================
   const handleContinuar = () => {
@@ -94,7 +105,6 @@ const handlePuzzleComplete = () => {
       completado: true
     };
 
-    localStorage.removeItem(storageKey);
     syncAll(finalState);
 
     onComplete();
@@ -200,16 +210,37 @@ const handlePuzzleComplete = () => {
             className="w-52 md:w-72 mx-auto rounded-2xl shadow-lg mb-6"
           />
 
-          <PuzzleImagen
-            imagen={data.recursos.imagenInferior}
-            storageKey={`act07-${rango}-${data.id}-${userId}`}
-            onCompletePuzzle={handlePuzzleComplete}
-          />
+          {puzzleCompletado ? (
+            <div className="relative inline-block">
+              <img
+                src={data.recursos.imagenInferior}
+                className="w-64 md:w-80 mx-auto rounded-2xl shadow-lg border-4 border-green-400"
+              />
+              <div className="absolute -top-3 -right-3 bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-black shadow-lg text-lg">
+                ✓
+              </div>
+            </div>
+          ) : (
+            <PuzzleImagen
+              imagen={data.recursos.imagenInferior}
+              storageKey={`act07-${rango}-${data.id}-${userId}`}
+              onCompletePuzzle={handlePuzzleComplete}
+            />
+          )}
 
           {puzzleCompletado && (
-            <p className="text-green-600 font-black text-xl mt-6">
-              🎉 ¡EXCELENTE TARBAJO YA LO COMPLETASTE!
-            </p>
+            <>
+              <p className="text-green-600 font-black text-xl mt-6">
+                🎉 ¡EXCELENTE TARBAJO YA LO COMPLETASTE!
+              </p>
+
+              <button
+                onClick={handleReiniciar}
+                className="bg-red-500 text-white px-6 py-3 rounded-full font-black mt-6 hover:scale-105 transition"
+              >
+                Reiniciar
+              </button>
+            </>
           )}
 
         </div>

@@ -65,16 +65,6 @@ const Dashboard = () => {
         </button>
       </div>
 
-      {/* AVISO DE DIPLOMAS PENDIENTES */}
-      <div className="px-6 mt-4">
-        <AvisoDiplomas />
-      </div>
-
-      {/* 🚀 PROGRESO DE AVENTURA */}
-      <div className="px-6">
-        <ProgresoAventura rango={rango} />
-      </div>
-
       {/* PORTADA */}
       <div className="px-6 mt-2">
         <div className="w-full py-8 bg-white/60 rounded-[2rem] shadow-lg overflow-hidden flex items-center justify-center">
@@ -84,6 +74,15 @@ const Dashboard = () => {
             className="w-[85%] h-auto object-contain drop-shadow-md"
           />
         </div>
+      </div>
+      {/* AVISO DE DIPLOMAS PENDIENTES */}
+      <div className="px-6 mt-4">
+        <AvisoDiplomas />
+      </div>
+
+      {/* 🚀 PROGRESO DE AVENTURA */}
+      <div className="px-6">
+        <ProgresoAventura rango={rango} />
       </div>
 
       {/* BIENVENIDA */}

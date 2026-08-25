@@ -20,11 +20,25 @@ const TipoDibujar = ({
   const containerRef = useRef(null);
   const debounceRef = useRef(null);
 
-  const channelRef = useRef(null); // 🔥 FIX REALTIME
+  const channelRef = useRef(null);
   const isHydrating = useRef(false);
   const isSaving = useRef(false);
   const localPaths = useRef([]);
   const yaHidrato = useRef(false);
+
+  // FIX: se congela el valor de "valorInicial" tal como llegó en el
+  // PRIMER render. Antes el efecto de hidratación dependía de
+  // "valorInicial" y "notify" (ambos cambian de identidad en cada
+  // render del padre, aunque el contenido real no cambie). Para
+  // canales que empiezan vacíos (como "d4" en Act09), eso hacía que
+  // el efecto se re-ejecutara en cada tecla/trazo del formulario, y
+  // en cuanto detectaba el primer trazo del usuario, volvía a
+  // ejecutar applyPaths() — clearCanvas + reload — justo mientras el
+  // usuario seguía dibujando, tirando cualquier trazo hecho durante
+  // esa ventana de ~300ms. Ahora la hidratación solo lee el valor
+  // que había AL MONTAR y nunca se vuelve a disparar por cambios
+  // posteriores del padre.
+  const valorInicialAlMontar = useRef(valorInicial);
 
   const [scale, setScale] = useState(1);
   const [color, setColor] = useState("#2D3748");
@@ -119,19 +133,21 @@ const TipoDibujar = ({
   );
 
   // =========================
-  // CARGA INICIAL
+  // CARGA INICIAL — CORRE UNA SOLA VEZ AL MONTAR
   // =========================
   useEffect(() => {
     if (yaHidrato.current) return;
 
     // 🔹 MODO CONTROLADO POR PADRE (Act09)
     if (!gestionarPropio) {
-      const saved = Array.isArray(valorInicial) ? valorInicial : [];
+      const saved = Array.isArray(valorInicialAlMontar.current)
+        ? valorInicialAlMontar.current
+        : [];
 
       localPaths.current = saved;
+      yaHidrato.current = true; // ya sea que hubiera algo que restaurar o no
 
       if (saved.length > 0) {
-        yaHidrato.current = true;
         setTimeout(() => applyPaths(saved), 200);
       }
 
@@ -162,7 +178,11 @@ const TipoDibujar = ({
     };
 
     load();
-  }, [userId, actividadId, gestionarPropio, valorInicial, applyPaths, notify]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Se ejecuta intencionalmente una sola vez al montar: la hidratación
+    // inicial no debe repetirse por cambios de identidad en "notify" o
+    // "valorInicial" causados por re-renders del padre.
+  }, []);
 
   // =========================
   // REALTIME FIXADO (SIN DUPLICADOS)
@@ -174,7 +194,6 @@ const TipoDibujar = ({
     const channelName =
       `tipod-${actividadId}-${userId}${canalId ? `-${canalId}` : ""}`;
 
-    // 🔥 LIMPIEZA FORZADA
     if (channelRef.current) {
       supabase.removeChannel(channelRef.current);
       channelRef.current = null;
@@ -275,7 +294,6 @@ const TipoDibujar = ({
       className="w-full border-4 rounded-2xl overflow-hidden bg-white relative"
       style={{ height: `${VIRTUAL_H * scale}px` }}
     >
-      {/* COLORES */}
       <div className="absolute top-2 left-2 z-10 flex gap-2 flex-wrap">
         {colores.map((c) => (
           <button
@@ -291,7 +309,6 @@ const TipoDibujar = ({
         ))}
       </div>
 
-      {/* BORRAR */}
       <button
         onClick={clear}
         className="absolute top-2 right-2 z-10 bg-red-100 text-red-600 px-3 py-1 rounded-full text-xs font-bold"
@@ -299,7 +316,6 @@ const TipoDibujar = ({
         🗑 Borrar
       </button>
 
-      {/* CANVAS */}
       <div
         style={{
           width: `${VIRTUAL_W}px`,

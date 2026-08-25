@@ -4,6 +4,22 @@ import TipoDibujar from "../../../components/actividades/tipos/TipoDibujar";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
+// Semanas que se usan para proyectar el ahorro (igual que en Act07)
+const SEMANAS_POR_MES = 4;
+const SEMANAS_9_MESES = SEMANAS_POR_MES * 9; // 36 semanas
+
+const calcularPlan = (semanaStr) => {
+  const semana = parseFloat(semanaStr) || 0;
+  const mes = semana * SEMANAS_POR_MES;
+  const nueveMeses = semana * SEMANAS_9_MESES;
+
+  return {
+    ahorroSemana: semanaStr,
+    ahorroMes: semanaStr.trim() !== "" ? String(mes) : "",
+    ahorro9Meses: semanaStr.trim() !== "" ? String(nueveMeses) : "",
+  };
+};
+
 const Act05 = ({ data, onComplete, onBack, rango }) => {
   const navigate = useNavigate();
 
@@ -57,7 +73,9 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
         const info = db.datos_actividad;
 
         if (info.plan) {
-          setPlan(info.plan);
+          // Re-calcula mes/9meses aunque vengan guardados, por si en algún
+          // momento se ajustan las constantes de arriba (igual que Act07).
+          setPlan(calcularPlan(info.plan.ahorroSemana || ""));
         }
 
         if (isValidDibujo(info.dibujo)) {
@@ -118,13 +136,12 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
   }, [saveToSupabase]);
 
   // =========================
-  // INPUTS (igual Act02)
+  // INPUT (solo "por semana" es editable; mes y 9 meses se calculan solos)
   // =========================
-  const handleChange = (field, value) => {
-    const newPlan = { ...plan, [field]: value };
-
-    setPlan(newPlan);
-    scheduleSave(newPlan, dibujoData);
+  const handleChangeSemana = (value) => {
+    const nuevoPlan = calcularPlan(value);
+    setPlan(nuevoPlan);
+    scheduleSave(nuevoPlan, dibujoData);
   };
 
   // =========================
@@ -231,44 +248,39 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
 
         {/* INPUTS */}
         <div className="space-y-5">
-            {/* Si ahorro cada semana */}
+            {/* Si ahorro cada semana — ÚNICO CAMPO EDITABLE */}
             <div className="flex flex-col md:flex-row md:items-center gap-2">
               <span className="font-bold text-gray-800 md:min-w-[220px]">Si ahorro cada semana:</span>
               <div className="flex items-center gap-2">
                 <span className="font-black text-alianza-azul text-lg">$</span>
                 <input
                   value={plan.ahorroSemana}
-                  onChange={(e) => handleChange("ahorroSemana", e.target.value)}
+                  onChange={(e) => handleChangeSemana(e.target.value)}
+                  inputMode="decimal"
                   className="w-32 border-b-4 border-alianza-amarillo bg-transparent outline-none text-center text-lg font-black"
                   placeholder="0"
                 />
              </div>
           </div>
 
-        {/* Al mes tendré */}
+        {/* Al mes tendré — CALCULADO AUTOMÁTICAMENTE */}
             <div className="flex flex-col md:flex-row md:items-center gap-2">
               <span className="font-bold text-gray-800 md:min-w-[220px]">Al mes tendré:</span>
               <div className="flex items-center gap-2">
                 <span className="font-black text-alianza-azul text-lg">$</span>
-                <input
-                  value={plan.ahorroMes}
-                  onChange={(e) => handleChange("ahorroMes", e.target.value)}
-                  className="w-32 border-b-4 border-alianza-amarillo bg-transparent outline-none text-center text-lg font-black"
-                  placeholder="0"
-                />
+                <span className="w-32 text-center text-lg font-black text-green-700">
+                  {plan.ahorroMes || 0}
+                </span>
               </div>
             </div>
-        {/* En 9 meses */}
+        {/* En 9 meses — CALCULADO AUTOMÁTICAMENTE */}
             <div className="flex flex-col md:flex-row md:items-center gap-2">
               <span className="font-bold text-gray-800 md:min-w-[220px]">En 9 meses:</span>
               <div className="flex items-center gap-2">
                 <span className="font-black text-alianza-azul text-lg">$</span>
-                <input
-                  value={plan.ahorro9Meses}
-                  onChange={(e) => handleChange("ahorro9Meses", e.target.value)}
-                  className="w-32 border-b-4 border-alianza-amarillo bg-transparent outline-none text-center text-lg font-black"
-                  placeholder="0"
-                />
+                <span className="w-32 text-center text-lg font-black text-green-700">
+                  {plan.ahorro9Meses || 0}
+                </span>
               </div>
             </div>
         </div>

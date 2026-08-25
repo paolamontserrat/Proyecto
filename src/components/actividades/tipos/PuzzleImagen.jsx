@@ -14,24 +14,33 @@ const PuzzleImagen = ({
   const [completado, setCompletado] = useState(false);
 
   // =========================
-  // SIEMPRE INICIA VACÍO VISUALMENTE
+  // RESTAURA ARMADO SI YA ESTABA COMPLETADO,
+  // SOLO MEZCLA UNO NUEVO SI NO LO ESTABA
   // =========================
   useEffect(() => {
     const guardado = localStorage.getItem(storageKey);
+    let yaCompletado = false;
 
     if (guardado) {
       const datos = JSON.parse(guardado);
-
-      // SOLO guardamos estado lógico (no reconstruimos tablero visual)
-      setCompletado(datos.completado || false);
+      yaCompletado = datos.completado || false;
+      setCompletado(yaCompletado);
     }
 
-    // SIEMPRE NUEVO PUZZLE VISUAL
-    const piezas = [...Array(9)].map((_, i) => i);
-    const mezcladas = [...piezas].sort(() => Math.random() - 0.5);
+    if (yaCompletado) {
+      // Si ya estaba completado, el tablero final SIEMPRE es la
+      // identidad (pieza i en la casilla i) — no hace falta guardar
+      // posiciones, basta con reconstruirlo así.
+      setTablero([...Array(9)].map((_, i) => i));
+      setPiezasDisponibles([]);
+    } else {
+      // Solo si NO estaba completado se genera un puzzle nuevo mezclado.
+      const piezas = [...Array(9)].map((_, i) => i);
+      const mezcladas = [...piezas].sort(() => Math.random() - 0.5);
 
-    setPiezasDisponibles(mezcladas);
-    setTablero(Array(9).fill(null));
+      setPiezasDisponibles(mezcladas);
+      setTablero(Array(9).fill(null));
+    }
 
   }, [storageKey]);
 
@@ -93,14 +102,12 @@ const PuzzleImagen = ({
   return (
     <div className="flex flex-col items-center gap-6">
 
-      {/* SIEMPRE VISIBLE (NO DESAPARECE) */}
       <div className={`px-5 py-2 rounded-full font-bold text-white ${
         completado ? "bg-green-500" : "bg-yellow-500"
       }`}>
         {completado ? "✅ Completado" : "🧩 Arma el rompecabezas"}
       </div>
 
-      {/* TABLERO */}
       <div className="grid grid-cols-3 gap-1 bg-blue-700 p-2 rounded-2xl">
 
         {[...Array(9)].map((_, i) => (
@@ -129,7 +136,6 @@ const PuzzleImagen = ({
         ))}
       </div>
 
-      {/* PIEZAS */}
       {!completado && (
         <div className="grid grid-cols-3 gap-2">
           {piezasDisponibles.map(p => (
@@ -155,7 +161,6 @@ const PuzzleImagen = ({
         </div>
       )}
 
-      {/* BOTÓN */}
       <button
         onClick={reiniciar}
         className="bg-red-500 text-white px-6 py-3 rounded-full font-black"

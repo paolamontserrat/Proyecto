@@ -254,11 +254,7 @@ const ContenedorActividades = () => {
             </button>
 
             <button
-              onClick={() => {
-                setPasoActual(1);
-                setPasoVisible(1);
-                localStorage.setItem(progresoKey, 1);
-              }}
+              onClick={() => setPasoVisible(1)}
               className="bg-gray-200 text-alianza-azul px-8 py-4 rounded-full font-black w-full md:w-auto"
             >
               Repasar actividades

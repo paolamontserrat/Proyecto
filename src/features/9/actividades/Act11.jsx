@@ -9,6 +9,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
 
   const imgRef = useRef(null);
   const saveTimer = useRef(null);
+  const despedidaRef = useRef(null);
 
   const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
   const userId = usuario?.id ?? "anon";
@@ -59,6 +60,27 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
   }, [actividadId, userId]);
 
   // =========================
+  // SCROLL AUTOMÁTICO A LA DESPEDIDA
+  // =========================
+  // Antes el mensaje de completado quedaba hasta abajo de la tarjeta y
+  // pasaba desapercibido si no hacías scroll. Ahora, en cuanto
+  // "mostrarFinal" pasa a true, se hace scroll suave hasta esa sección
+  // automáticamente. El setTimeout da tiempo a que el bloque termine de
+  // montarse/animarse antes de calcular su posición.
+  useEffect(() => {
+    if (mostrarFinal && despedidaRef.current) {
+      const t = setTimeout(() => {
+        despedidaRef.current.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 150);
+
+      return () => clearTimeout(t);
+    }
+  }, [mostrarFinal]);
+
+  // =========================
   // SAVE SUPABASE (DEBOUNCE) - igual que Act09
   // =========================
   const saveToSupabase = useCallback(
@@ -97,28 +119,30 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
   // =========================
   // ESCALA
   // =========================
-  // IMPORTANTE: las coordenadas de "diferencias" se capturaron sobre una
-  // imagen de referencia de 300px de ancho, exactamente igual que en
-  // Act09. Por eso "original" debe ser 300, no 1024 — si no, el scale
-  // calculado queda mal y los círculos/clics no coinciden con la imagen.
-  // Igual que en Act09: ambas imágenes (A y B) comparten el mismo ref,
-  // así que basta con medir una de las dos (siempre queda apuntando a
-  // la última imagen montada en el map, algo consistente en cualquier
-  // tamaño de pantalla).
-  useEffect(() => {
-    const updateScale = () => {
-      if (!imgRef.current) return;
+  const updateScale = useCallback(() => {
+    if (!imgRef.current) return;
 
-      const displayedWidth = imgRef.current.clientWidth;
-      const originalWidth = 300;
+    const displayedWidth = imgRef.current.clientWidth;
+    const originalWidth = 300;
 
+    if (displayedWidth > 0) {
       setScale(displayedWidth / originalWidth);
-    };
-
-    updateScale();
-    window.addEventListener("resize", updateScale);
-    return () => window.removeEventListener("resize", updateScale);
+    }
   }, []);
+
+  useEffect(() => {
+    updateScale();
+
+    const ro = new ResizeObserver(() => updateScale());
+    if (imgRef.current) ro.observe(imgRef.current);
+
+    window.addEventListener("resize", updateScale);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", updateScale);
+    };
+  }, [updateScale]);
 
   // =========================
   // CLICK EN LA IMAGEN
@@ -152,14 +176,9 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
       setEncontradas(nuevas);
       setCompletado(terminado);
 
-      // Antes llamaba a "guardar(...)", una función que no existía en
-      // ningún lado del archivo y hacía que esto truene en silencio.
       scheduleSave(nuevas, terminado);
 
       if (terminado) {
-        // Al completar dentro de la misma sesión, se muestra la pantalla
-        // de despedida de inmediato (antes solo aparecía si recargabas
-        // la página después de haber terminado).
         setMostrarFinal(true);
       }
 
@@ -254,6 +273,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
                 <img
                   ref={imgRef}
                   src={img}
+                  onLoad={updateScale}
                   onClick={handleClick}
                   className="w-[300px] md:w-[450px] rounded-2xl shadow-xl cursor-pointer select-none"
                 />
@@ -290,37 +310,54 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
           </button>
         </div>
 
-        {/* DESPEDIDA: aparece debajo del juego dentro de la misma tarjeta,
-            en vez de reemplazar la pantalla completa. */}
+        {/* DESPEDIDA: ahora con scroll automático (ver useEffect de arriba)
+            y una entrada más llamativa: pop con rebote + borde con brillo
+            pulsante, para que no pase desapercibida. */}
         {mostrarFinal && (
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center mt-10 pt-10 border-t-4 border-yellow-200"
+            ref={despedidaRef}
+            initial={{ opacity: 0, y: 40, scale: 0.85 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
+            className="text-center mt-10 pt-10 border-t-4 border-yellow-300 relative"
           >
-            <h2 className="text-4xl font-black text-alianza-azul mb-8">
-              🎉 {data.despedida.titulo || "¡Felicidades!"}
-            </h2>
-
-            <div className="space-y-3 mb-8">
-              {data.despedida.mensaje.map((linea, i) => (
-                <p key={i} className="text-xl font-bold text-gray-700">
-                  {linea}
-                </p>
-              ))}
-            </div>
-
-            <img
-              src={data.despedida.imagen1}
-              className="mx-auto w-72 mb-10"
-            />
-
-            <button
-              onClick={onComplete}
-              className="bg-yellow-400 hover:scale-105 transition px-10 py-4 rounded-full font-black text-xl"
+            <motion.div
+              animate={{ boxShadow: [
+                "0 0 0px rgba(250,204,21,0.6)",
+                "0 0 40px rgba(250,204,21,0.6)",
+                "0 0 0px rgba(250,204,21,0.6)",
+              ] }}
+              transition={{ duration: 1.8, repeat: 3 }}
+              className="rounded-[2.5rem] p-6"
             >
-              Finalizar Pasaporte
-            </button>
+              <motion.h2
+                animate={{ scale: [1, 1.08, 1] }}
+                transition={{ duration: 0.9, repeat: 2 }}
+                className="text-5xl font-black text-alianza-azul mb-8"
+              >
+                🎉 {data.despedida.titulo || "¡Felicidades!"}
+              </motion.h2>
+
+              <div className="space-y-3 mb-8">
+                {data.despedida.mensaje.map((linea, i) => (
+                  <p key={i} className="text-xl font-bold text-gray-700">
+                    {linea}
+                  </p>
+                ))}
+              </div>
+
+              <img
+                src={data.despedida.imagen1}
+                className="mx-auto w-72 mb-10"
+              />
+
+              <button
+                onClick={onComplete}
+                className="bg-yellow-400 hover:scale-105 transition px-10 py-4 rounded-full font-black text-xl shadow-lg"
+              >
+                Finalizar Pasaporte
+              </button>
+            </motion.div>
           </motion.div>
         )}
       </div>
