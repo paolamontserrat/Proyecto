@@ -63,6 +63,7 @@ function Login() {
     limpiarMensajes();
 
     const socioLimpio = numeroSocio.trim().toUpperCase();
+
     if (!/^[A-Z0-9]{8,10}$/.test(socioLimpio)) {
       setError("El número de socio debe tener entre 8 y 10 dígitos");
       return;
@@ -70,22 +71,24 @@ function Login() {
 
     setCargando(true);
 
-    const { data, error: dbError } = await supabase
-      .from("usuarios")
-      .select("nombre, activado")
-      .eq("numero_socio", socioLimpio)
-      .maybeSingle();
+    const { data, error: rpcError } = await supabase.rpc(
+      "verificar_numero_socio",
+      {
+        p_numero_socio: socioLimpio,
+      },
+    );
 
     setCargando(false);
 
-    if (dbError) {
+    if (rpcError) {
+      console.error("Error verificar_numero_socio:", rpcError);
       setError(
         "Ocurrió un problema al verificar tu número de socio. Intenta de nuevo.",
       );
       return;
     }
 
-    if (!data) {
+    if (!data?.ok) {
       setError("No encontramos ese número de socio. Verifica con tu sucursal.");
       return;
     }

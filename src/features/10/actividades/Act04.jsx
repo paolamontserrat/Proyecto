@@ -98,7 +98,10 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
       tam,
       tam,
     ).data;
-    let r = 0, g = 0, b = 0, n = 0;
+    let r = 0,
+      g = 0,
+      b = 0,
+      n = 0;
     for (let i = 0; i < datos.length; i += 4) {
       r += datos[i];
       g += datos[i + 1];
@@ -294,7 +297,13 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
       const { r, g, b } = colorPromedio(mazeCtx, x, y);
 
       if (DEBUG_COLOR) {
-        setColorDebug({ x: Math.round(x), y: Math.round(y), r: Math.round(r), g: Math.round(g), b: Math.round(b) });
+        setColorDebug({
+          x: Math.round(x),
+          y: Math.round(y),
+          r: Math.round(r),
+          g: Math.round(g),
+          b: Math.round(b),
+        });
       }
 
       const inicio = puntoInicioRef.current;
@@ -496,6 +505,11 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
             <h2 className="text-center text-xl md:text-3xl font-black text-sky-950">
               {data?.seccion2?.tituloActividad}
             </h2>
+            <p className="text-center text-xs md:text-sm text-gray-500 font-semibold mb-3">
+              💡 En pantallas táctiles el juego es más flexible. Para más
+              dificultad —donde tocar la pared sí te hace perder— juega desde
+              una computadora con mouse.
+            </p>
 
             <div className="w-full max-w-[587px] mx-auto">
               <div

@@ -40,10 +40,8 @@ const navigate = useNavigate();
 // GUARDADO GLOBAL
 // =========================
 const guardarTodo = async (state) => {
-  // LOCAL
   localStorage.setItem(key, JSON.stringify(state));
 
-  // SUPABASE
   if (userId !== "anon") {
     try {
       await supabase.from('progreso_actividades').upsert(
@@ -53,7 +51,7 @@ const guardarTodo = async (state) => {
           datos_actividad: state,
           completada: state.terminado,
         },
-        { onConflict: 'usuario_id,actividad_id' }   // ← sin espacio
+        { onConflict: 'usuario_id,actividad_id' }
       );
     } catch {
       console.warn("Offline → se sincronizará después");
@@ -97,14 +95,13 @@ useEffect(() => {
         if (t) setTerminado(true);
       };
 
-      // 1. SUPABASE (fuente de verdad, multi-dispositivo)
       if (userId !== "anon") {
         const { data: db } = await supabase
           .from('progreso_actividades')
           .select('datos_actividad')
           .eq('usuario_id', userId)
           .eq('actividad_id', data.id)
-          .maybeSingle();            // ← maybeSingle en lugar de single
+          .maybeSingle();
 
         if (db?.datos_actividad) {
           aplicarEstado(db.datos_actividad);
@@ -113,7 +110,6 @@ useEffect(() => {
         }
       }
 
-      // 2. LOCAL (fallback para anónimos o sin conexión)
       const local = localStorage.getItem(key);
       if (local) {
         try { aplicarEstado(JSON.parse(local)); } catch { /* corrupto */ }
@@ -187,6 +183,17 @@ useEffect(() => {
     const { x, y } = getCoords(e);
     const ctx = getCtx();
 
+    // =========================
+    // DETECCIÓN DE DIFICULTAD SEGÚN ENTRADA (touch vs mouse)
+    // =========================
+    // "esTouch" se calcula por CADA evento de dibujo, no una sola vez por
+    // dispositivo. Esto es intencional: en pantallas táctiles híbridas
+    // (laptops con touch), si el usuario dibuja con el dedo (touchmove) el
+    // choque contra la pared se ignora — es más difícil controlar el trazo
+    // con el dedo, así que no se penaliza. Si dibuja con el mouse
+    // (mousemove), sí se evalúa el choque contra la pared, aumentando la
+    // dificultad real del laberinto. No cambiar esto a una detección fija
+    // de "tipo de dispositivo": rompería el caso híbrido.
     const esTouch = e.type.includes('touch');
 
     if (!esTouch) {
@@ -261,6 +268,15 @@ useEffect(() => {
       <div className="bg-white p-4 rounded-2xl border-4 border-yellow-400 max-w-4xl mx-auto">
 
         <h2 className="text-xl font-bold text-center mb-2">{data.titulo}</h2>
+
+        {/* Aviso de dificultad: en táctil el choque contra la pared no
+            cuenta (para no penalizar la falta de precisión del dedo), así
+            que se avisa al usuario cómo aumentar el reto. */}
+        <p className="text-center text-xs md:text-sm text-gray-500 font-semibold mb-3">
+          💡 En pantallas táctiles el juego es más flexible. Para más
+          dificultad —donde tocar la pared sí te hace perder— juega desde
+          una computadora con mouse.
+        </p>
 
         <div ref={containerRef} className="w-full">
           <div className="relative" style={{ height: BASE_HEIGHT * scale }}>

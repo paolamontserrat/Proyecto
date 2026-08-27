@@ -26,31 +26,16 @@ function AdminUsuarios() {
   const cargarUsuarios = useCallback(async () => {
     setCargando(true);
 
-    let query = supabase
-      .from("usuarios")
-      .select(
-        "id, numero_socio, nombre, edad, nivel, activado, bloqueado, rol",
-        { count: "exact" },
-      )
-      .neq("rol", "admin")
-      .order("fecha_registro", { ascending: false });
+    const { data } = await supabase.rpc("admin_listar_usuarios", {
+      p_busqueda: busqueda.trim() || null,
+      p_nivel: filtroNivel !== "todos" ? filtroNivel : null,
+      p_estado: filtroEstado !== "todos" ? filtroEstado : null,
+      p_pagina: pagina,
+      p_por_pagina: POR_PAGINA,
+    });
 
-    if (busqueda.trim()) {
-      const termino = busqueda.trim();
-      query = query.or(
-        `numero_socio.ilike.%${termino}%,nombre.ilike.%${termino}%`,
-      );
-    }
-    if (filtroNivel !== "todos") query = query.eq("nivel", filtroNivel);
-    if (filtroEstado === "activados") query = query.eq("activado", true);
-    if (filtroEstado === "pendientes") query = query.eq("activado", false);
-    if (filtroEstado === "bloqueados") query = query.eq("bloqueado", true);
-
-    const desde = pagina * POR_PAGINA;
-    const { data, count } = await query.range(desde, desde + POR_PAGINA - 1);
-
-    setUsuarios(data || []);
-    setTotal(count || 0);
+    setUsuarios(data?.usuarios || []);
+    setTotal(data?.total || 0);
     setCargando(false);
   }, [busqueda, filtroNivel, filtroEstado, pagina]);
 
@@ -184,7 +169,11 @@ function AdminUsuarios() {
 
             {usuarios.map((u) => (
               <tr key={u.id} className="border-t">
-                <td className="p-3 font-mono">{u.numero_socio}</td>
+                <td className="p-3 font-mono">
+                  {u.numero_socio.slice(0, 2)}
+                  {"•".repeat(Math.max(0, u.numero_socio.length - 4))}
+                  {u.numero_socio.slice(-2)}
+                </td>
                 <td className="p-3">{u.nombre}</td>
                 <td className="p-3">{u.edad}</td>
                 <td className="p-3">{u.nivel}</td>

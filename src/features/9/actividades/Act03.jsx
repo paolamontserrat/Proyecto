@@ -432,6 +432,11 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
           <p className="text-center text-gray-600 mb-6">
             Une cada fruta con su canasta correspondiente.
           </p>
+          <p className="text-center text-xs md:text-sm text-gray-500 font-semibold mb-3">
+            💡 En pantallas táctiles el juego es más flexible. Para más
+            dificultad —donde tocar la pared sí te hace perder— juega desde una
+            computadora con mouse.
+          </p>
 
           {/* INDICADORES */}
           <div className="flex justify-center gap-6 mb-5">
