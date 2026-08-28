@@ -81,9 +81,9 @@ const Dashboard = () => {
       </div>
 
       {/* 🚀 PROGRESO DE AVENTURA */}
-      <div className="px-6">
+      {/* <div className="px-6">
         <ProgresoAventura rango={rango} />
-      </div>
+      </div> */}
 
       {/* BIENVENIDA */}
       <div className="px-6 mt-6">
@@ -138,9 +138,6 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-      <div className="px-6">
-          <MapaAventuraDashboard rango={rango} />
-        </div>
 
       {/* MENÚ */}
       <div className="px-6 mt-8 grid grid-cols-1 gap-4">
@@ -176,6 +173,11 @@ const Dashboard = () => {
             </span>
           </div>
         </button>
+      </div>
+
+     {/* MENÚ Y MAPA */}
+      <div className="px-6 mt-8">
+        <MapaAventuraDashboard rango={rango} info={info} />
       </div>
 
       <Footer />

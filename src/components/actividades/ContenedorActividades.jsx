@@ -7,7 +7,7 @@ import actividades7 from "../../features/7/actividades/actividades";
 import actividades8 from "../../features/8/actividades/actividades";
 import actividades9 from "../../features/9/actividades/actividades";
 import actividades10 from "../../features/10/actividades/actividades";
-// import actividades11 from "../../features/11/actividades/actividades";
+import actividades11 from "../../features/11/actividades/actividades";
 // import actividades12 from "../../features/12/actividades/actividades";
 import actividades13 from "../../features/13/actividades/actividades";
 // import actividades14 from "../../features/14/actividades/actividades";
@@ -53,7 +53,7 @@ const ContenedorActividades = () => {
     8: actividades8,
     9: actividades9,
     10: actividades10,
-    // 11: actividades11,
+    11: actividades11,
     // 12: actividades12,
     13: actividades13,
     // 14: actividades14,

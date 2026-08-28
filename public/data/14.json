@@ -6,6 +6,7 @@
     "portada": "/images/14/Inicio.png",
     "imgAhorro": "/images/0-5/6.png",
     "imgJuegos": "/images/0-5/16.png",
+    "imgMapa": "/images/mapa-aventura.png",
     "paginas": [
         {
         "id": 1,

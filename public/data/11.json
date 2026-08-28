@@ -31,5 +31,695 @@
         "Tus papás pueden obtener un esquema de crédito atractivo."
       ]
     }
+  ],
+  "pasos": [
+    {
+      "id": 1,
+      "fondo": "/images/11/Fondo.png",
+      "titulo": "EL USO DEL DINERO",
+      "imagen_moneda_carro": "/images/11/2.png",
+      "seccionInformativa": {
+        "introduccion": "El dinero puede gastarse inmediatamente o puede convertirse en una herramienta para alcanzar objetivos más importantes.",
+        "subtitulo": "Las personas que administran bien su dinero suelen hacer lo siguiente:",
+        "puntos": [
+          "Planificar.",
+          "Ahorrar en la cooperativa.",
+          "Establecer prioridades.",
+          "Tomar decisiones pensando en su futuro."
+        ],
+        "imagen_moneda_monta":"/images/11/4.png"
+      },
+      "seccionInteractiva": {
+        "titulo": "Reflexiona con Alianzito",
+        "instrucciones": "Imagina que recibes $500 en tu cumpleaños. ¿Cómo los utilizarías?",
+        "presupuestoTotal": 500,
+        "campos": [
+          {
+            "id": "gastaria",
+            "concepto": "GASTARÍA",
+            "placeholder": "Monto en $"
+          },
+          {
+            "id": "ahorraria",
+            "concepto": "AHORRARÍA",
+            "placeholder": "Monto en $"
+          },
+          {
+            "id": "compraria",
+            "concepto": "COMPRARÍA",
+            "placeholder": "Monto en $"
+          }
+        ],
+        "imagen_alianzito": "/images/11/1.png"
+      }
+    },
+    {
+      "id": "2",
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "CONOCENOS",
+      "secciones": {
+        "cuentaAhorro": {
+          "mensajeCaja": "En CAJA POPULAR CERANO existen opciones para que los niños y jóvenes aprendan a administrar su dinero y puedan cumplir sus metas.",
+          "tituloCuenta": "Cuenta de ahorro",
+          "logoClub": "/images/10/5.png",
+          "descripcion": "Es una cuenta donde puedes guardar tu dinero, aprender a manejarlo y disponer de él cuando lo necesites, siempre con el acompañamiento de tus padres o tutores.",
+          "ejemploLabel": "Ejemplo:",
+          "ejemploTexto": "“Puedo ahorrar para una salida, un regalo, un material escolar o una meta que tenga a corto plazo.”",
+          "imagenPlazo": "/images/10/6.png"
+        },
+        "creciendoJuntos": {
+          "logoSubcuenta": "/images/10/7.png",
+          "tituloSubcuenta": "Subcuenta “Creciendo Juntos”",
+          "descripcion": "Es una opción especial para ahorrar pensando en metas importantes de largo plazo. La idea es que el dinero que se guarda ahí pueda crecer mientras tú también creces.",
+          "caracteristicas": [
+            "Está diseñada para ayudarte a cumplir metas futuras.",
+            "El ahorro permanece protegido hasta que estés en el programa.",
+            "No puedes retirar el dinero antes, porque está pensado para construir un proyecto a futuro y saldrías del programa.",
+            "Te ayuda a desarrollar el hábito de ahorrar desde pequeño."
+          ],
+          "imagenPlazo": "/images/10/8.png",
+          "ejemplosMetas": "/images/10/36.png"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "fondo": "/images/11/Fondo.png",
+      "titulo": "DISEÑA TU PROYECTO PERSONAL",
+      "seccionInteractiva": {
+        "tituloPrincipal": "Diseña tu proyecto personal:",
+        "preguntas": [
+          {
+            "id": "meta",
+            "enunciado": "Mi meta para este año es:",
+            "tipo": "text",
+            "placeholder": "Escribe tu meta aquí..."
+          },
+          {
+            "id": "importancia",
+            "enunciado": "¿Por qué es importante?",
+            "tipo": "text",
+            "placeholder": "Explica por qué es importante..."
+          },
+          {
+            "id": "dinero",
+            "enunciado": "¿Cuánto dinero necesito?",
+            "tipo": "number",
+            "placeholder": "Monto en $"
+          },
+          {
+            "id": "ahorro_mensual",
+            "enunciado": "¿Cuánto debo ahorrar al mes para lograrlo?",
+            "tipo": "number",
+            "placeholder": "Monto en $"
+          }
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "fondo": "/images/11/Fondo.png",
+      "titulo": "EL COSTO DE MIS DECISIONES",
+      "seccionInteractiva": {
+        "tituloPrincipal": "Simulador de Decisiones Financieras",
+        "introduccion": {
+          "texto": "Cada decisión tiene consecuencias. Cuando gastamos dinero en algo, dejamos de utilizarlo en otra cosa. A esto se le llama elegir. Las metas importantes necesitan organización.",
+          "puntosClave": [
+            "Dónde estamos.",
+            "A dónde queremos llegar.",
+            "Qué debemos hacer para poder llegar."
+          ],
+          "imagenPersonaje": "/images/11/32.png"
+        },
+        "configuracion": {
+          "vidasIniciales": 3,
+          "montoInicial": 1000,
+          "tiempoLimiteSegundos": 10
+        },
+        "metas": [
+          {
+            "id": "consola",
+            "nombre": "Comprar una consola",
+            "monto": 1500,
+            "imagen": "/images/11/16.png"
+          },
+          {
+            "id": "bicicleta",
+            "nombre": "Comprar una bicicleta",
+            "monto": 1800,
+            "imagen": "/images/11/13.png"
+          },
+          {
+            "id": "tableta",
+            "nombre": "Comprar tableta",
+            "monto": 2000,
+            "imagen": "/images/11/17.png"
+          },
+          {
+            "id": "patin",
+            "nombre": "Comprar patín eléctrico",
+            "monto": 2500,
+            "imagen": "/images/11/12.png"
+          },
+          {
+            "id": "futbol",
+            "nombre": "Comprar balón y tacos de fútbol",
+            "monto": 500,
+            "imagen": "/images/11/14.png"
+          },
+          {
+            "id": "bolsa",
+            "nombre": "Comprar bolsa",
+            "monto": 800,
+            "imagen": "/images/11/23.png"
+          },
+          {
+            "id": "esmaltes",
+            "nombre": "Comprar esmaltes de uñas",
+            "monto": 200,
+            "imagen": "/images/11/24.png"
+          },
+          {
+            "id": "slime",
+            "nombre": "Comprar slime",
+            "monto": 100,
+            "imagen": "/images/11/28.png"
+          },
+          {
+            "id": "celular",
+            "nombre": "Comprar celular",
+            "monto": 1000,
+            "imagen": "/images/11/18.png"
+          }
+        ],
+        "escenarios": [
+          {
+            "id": "escenario_1",
+            "titulo": "¡Encontraste unos audífonos que te encantan!",
+            "descripcion": "Cuestan $800.",
+            "imagen": "/images/11/20.png",
+            "tieneTiempo": true,
+            "tiempo": 15,
+            "opciones": [
+              {
+                "id": "comprar_audifonos",
+                "texto": "COMPRAR AUDÍFONOS ($800)",
+                "costo": 800,
+                "esAhorro": false,
+                "perderVida": true,
+                "mensaje": "¡Los audífonos son tuyos! Pero gastaste $800 y tu meta final se aleja.",
+                "siguienteEscenario": "escenario_2"
+              },
+              {
+                "id": "ahorrar_audifonos",
+                "texto": "AHORRAR",
+                "costo": 0,
+                "esAhorro": true,
+                "perderVida": false,
+                "mensaje": "¡Buena decisión! Conservaste tu dinero. Tu meta está cada vez más cerca.",
+                "siguienteEscenario": "escenario_2"
+              }
+            ]
+          },
+          {
+            "id": "escenario_2",
+            "titulo": "¡Viste una gorra muy genial!",
+            "descripcion": "Tiene un costo de $300 en la tienda.",
+            "imagen": "/images/11/26.png",
+            "tieneTiempo": true,
+            "tiempo": 15,
+            "opciones": [
+              {
+                "id": "comprar_gorra",
+                "texto": "COMPRAR GORRA ($300)",
+                "costo": 300,
+                "esAhorro": false,
+                "perderVida": true,
+                "mensaje": "Compraste la gorra, pero usaste dinero que tenías destinado a tu meta.",
+                "siguienteEscenario": "escenario_3"
+              },
+              {
+                "id": "ahorrar_gorra",
+                "texto": "AHORRAR",
+                "costo": 0,
+                "esAhorro": true,
+                "perderVida": false,
+                "mensaje": "¡Bien pensado! Decidiste no comprar la gorra y mantener tu dinero a salvo.",
+                "siguienteEscenario": "escenario_3"
+              }
+            ]
+          },
+          {
+            "id": "escenario_3",
+            "titulo": "¡Una funda genial para tu celular!",
+            "descripcion": "Un amigo te vende una funda personalizada por $150.",
+            "imagen": "/images/11/29.png",
+            "tieneTiempo": true,
+            "tiempo": 15,
+            "opciones": [
+              {
+                "id": "comprar_funda",
+                "texto": "COMPRAR FUNDA ($150)",
+                "costo": 150,
+                "esAhorro": false,
+                "perderVida": true,
+                "mensaje": "Tu celular luce genial, pero gastaste $150 que podrías haber guardado.",
+                "siguienteEscenario": "escenario_4"
+              },
+              {
+                "id": "ahorrar_funda",
+                "texto": "AHORRAR",
+                "costo": 0,
+                "esAhorro": true,
+                "perderVida": false,
+                "mensaje": "¡Excelente! Tu celular actual funciona bien y priorizaste tu ahorro.",
+                "siguienteEscenario": "escenario_4"
+              }
+            ]
+          },
+          {
+            "id": "escenario_4",
+            "titulo": "¡Un llavero de juguete coleccionable!",
+            "descripcion": "Viste un llavero llamativo afuera de la escuela por $50.",
+            "imagen": "/images/11/27.png",
+            "tieneTiempo": true,
+            "tiempo": 15,
+            "opciones": [
+              {
+                "id": "comprar_llavero",
+                "texto": "COMPRAR LLAVERO ($50)",
+                "costo": 50,
+                "esAhorro": false,
+                "perderVida": true,
+                "mensaje": "Es un detalle pequeño, pero los pequeños desembolsos suman y restan a tu meta.",
+                "siguienteEscenario": "escenario_5"
+              },
+              {
+                "id": "ahorrar_llavero",
+                "texto": "AHORRAR LOS $50",
+                "costo": 0,
+                "esAhorro": true,
+                "perderVida": false,
+                "mensaje": "¡Bien hecho! Evitaste una compra por impulso.",
+                "siguienteEscenario": "escenario_5"
+              }
+            ]
+          },
+          {
+            "id": "escenario_5",
+            "titulo": "¡Antojos por la tarde!",
+            "descripcion": "¿Quieres comprar papitas y refresco por $80?",
+            "imagen": "/images/11/19.png",
+            "tieneTiempo": true,
+            "tiempo": 15,
+            "opciones": [
+              {
+                "id": "comprar_papas",
+                "texto": "COMPRAR PAPITAS/REFRESCO ($80)",
+                "costo": 80,
+                "esAhorro": false,
+                "perderVida": true,
+                "mensaje": "Gastaste $80 en antojos rápidos. Cuidado con los pequeños gastos.",
+                "siguienteEscenario": "escenario_6"
+              },
+              {
+                "id": "ahorrar_papas",
+                "texto": "AHORRAR LOS $80",
+                "costo": 0,
+                "esAhorro": true,
+                "perderVida": false,
+                "mensaje": "¡Decidiste evitar los antojos para acercarte más a tu objetivo!",
+                "siguienteEscenario": "escenario_6"
+              }
+            ]
+          },
+          {
+            "id": "escenario_6",
+            "titulo": "¡Antojos en el recreo!",
+            "descripcion": "¿Deseas gastar $100 en donas con tus amigos o mantener tu ahorro?",
+            "imagen": "/images/11/21.png",
+            "tieneTiempo": true,
+            "tiempo": 15,
+            "opciones": [
+              {
+                "id": "comprar_antojos",
+                "texto": "COMPRAR DONAS ($100)",
+                "costo": 100,
+                "esAhorro": false,
+                "perderVida": true,
+                "mensaje": "Gastaste $100. Tu meta tardará más en llegar.",
+                "siguienteEscenario": "evaluacion"
+              },
+              {
+                "id": "ahorrar_antojos",
+                "texto": "AHORRAR",
+                "costo": 0,
+                "esAhorro": true,
+                "perderVida": false,
+                "mensaje": "¡Excelente constancia! Mantienes tu dinero para lograr tu meta.",
+                "siguienteEscenario": "evaluacion"
+              }
+            ]
+          }
+        ],
+        "resultados": {
+          "victoria": {
+            "titulo": "¡META CONSEGUIDA!",
+            "mensajeExito": "¡Felicidades! Lograste mantener tu ahorro y tomar decisiones correctas sin agotar tu dinero."
+          },
+          "derrota": {
+            "titulo": "¡SE ACABARON TUS VIDAS O DINERO!",
+            "mensajeFallo": "Agotaste tu dinero o tus vidas debido a decisiones impulsivas. ¡Recuerda que cada gasto te aleja de tu meta!"
+          }
+        }
+      }
+    },
+    {
+      "id": "5",
+      "titulo": "¿Dónde crece mejor mi dinero?",
+      "fondo": "/images/11/Fondo.png",
+      "seccionInteractiva": {
+        "introduccion": {
+          "texto": "Existen diferentes maneras de guardar dinero. Algunas son más seguras que otras. La cooperativa te ayuda a proteger y administrar mejor tu dinero.",
+          "imagenPersonaje": "/images/11/51.png"
+        },
+        "instruccion": "Analiza las opciones escribe tu respuesta:",
+        "tablaComparativa": {
+          "columnas": ["SITUACIÓN", "VENTAJAS", "RIESGOS"],
+          "filas": [
+            {
+              "id": "casa",
+              "situacion": "GUARDAR DINERO EN CASA",
+              "ventajasPlaceholder": "Escribe las ventajas de guardar dinero en casa...",
+              "riesgosPlaceholder": "Escribe los riesgos de guardar dinero en casa..."
+            },
+            {
+              "id": "cuenta",
+              "situacion": "GUARDAR DINERO EN UNA CUENTA DE AHORRO",
+              "ventajasPlaceholder": "Escribe las ventajas de guardar dinero en una cuenta de ahorro...",
+              "riesgosPlaceholder": "Escribe los riesgos de guardar dinero en una cuenta de ahorro..."
+            }
+          ]
+        },
+        "conclusion": {
+          "titulo": "CONCLUSIÓN",
+          "puntos": [
+            "En casa mi dinero puede correr riesgos.",
+            "En la Caja mi dinero está protegido, registrado y puede crecer.",
+            "Ser inteligente no es esconder el dinero.",
+            "Es saber dónde está más seguro."
+          ]
+        },
+        "juegoCifrado": {
+          "titulo": "Descifra el Mensaje Secreto",
+          "mapaCodigo": {
+            "a": "Y", "b": "Z", "c": "A", "d": "B", "e": "C", "f": "D", "g": "E", "h": "F",
+            "i": "G", "j": "H", "k": "I", "l": "J", "m": "K", "n": "L",
+            "o": "M", "p": "N", "q": "O", "r": "P", "s": "Q", "t": "R",
+            "u": "S", "v": "T", "w": "U", "x": "V", "y": "W", "z": "X"
+          },
+          "palabrasCifradas": [
+            ["g", "n"],
+            ["c", "j", "q", "t", "t", "q"],
+            ["f", "g"],
+            ["j", "q", "a"],
+            ["g", "u"],
+            ["g", "n"],
+            ["h", "w", "v", "w", "t", "q"]
+          ],
+          "pista": "Guardar un poco de dinero hoy puede ayudarte a cumplir tus sueños mañana.",
+          "respuestaEsperada": "EL AHORRO DE HOY ES EL FUTURO"
+        }
+      }
+    },
+    {
+      "id": "6",
+      "titulo": "MISIÓN: DETECTIVES DEL RIESGO",
+      "fondo": "/images/11/Fondo.png",
+      "instrucción": "Lee cada situación y selecciona si consideras que es una Decisión buena o Decisión mala:",
+        "situaciones": [
+          {
+            "id": "1",
+            "texto": "Comprar un jugo todos los días aunque puedas llevar agua de casa.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "2",
+            "texto": "Apagar la luz cuando sales de una habitación.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "3",
+            "texto": "Dejar la llave abierta mientras te cepillas los dientes.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "4",
+            "texto": "Cuidar tu mochila y útiles para que duren todo el ciclo escolar.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "5",
+            "texto": "Comprar una camiseta nueva aunque ya tengas varias que casi no usas.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "6",
+            "texto": "Llevar lunch de casa en lugar de comprar comida todos los días.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "7",
+            "texto": "Comprar una nueva funda para celular cada vez que aparece un diseño que te gusta.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "8",
+            "texto": "Aceptar una bolsa de plástico cuando compras en el supermercado.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "9",
+            "texto": "Separar botellas, latas y papel para reciclarlos.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "10",
+            "texto": "Tirar comida que no terminaste porque ya no tienes ganas de comerla.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "11",
+            "texto": "Guardar parte de tu dinero cada vez que recibes domingo.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "12",
+            "texto": "Plantar y cuidar un árbol en tu escuela o comunidad.",
+            "respuestaCorrecta": "Decisión buena"
+          }
+        ]
+    },
+    {
+      "id": 7,
+      "fondo": "/images/11/Fondo.png",
+      "titulo": "¿QUÉ ES EL GASTO HORMIGA?",
+      "imagenes": "/images/10/15.png",
+      "explicacion": {
+        "introduccion": "El gasto hormiga es cuando compras cositas pequeñas todos los días y parece que no cuestan mucho... ¡pero si las juntas, ¡sí es bastante dinero!",
+        "analogia": "Se llama así porque es como las hormiguitas: una sola no pesa casi nada, pero muchas juntas pueden cargar cosas muy grandes.",
+        "ejemploGrafico": {
+          "dulce": 10,
+          "helado": 15,
+          "diario": 25,
+          "semana": 175,
+          "mes": 750
+        },
+        "impacto": "¡Eso ya alcanza para ropa nueva, zapatos o guardarlo para algo importante!",
+        "reflexion": "No está mal comprar cosas que te gustan, pero si gastas poquito todos los días sin darte cuenta, después puede faltarte dinero para algo más grande que sí quieres de verdad.",
+        "ejemploAhorro": "Si ahorras $20 diarios en lugar de gastarlos, en un mes tendrás $600. Así pronto podrás lograr tu meta."
+      },
+      "reto": {
+        "subtitulo": "El enemigo invisible: los gastos hormiga",
+        "descripcion": "No siempre perdemos dinero en compras grandes. A veces gastamos poco muchas veces.",
+        "instruccion": "Anota tus gastos pequeños de una semana.",
+        "dias": [
+          { "id": "lunes", "dia": "Lunes" },
+          { "id": "martes", "dia": "Martes" },
+          { "id": "miercoles", "dia": "Miércoles" },
+          { "id": "jueves", "dia": "Jueves" },
+          { "id": "viernes", "dia": "Viernes" },
+          { "id": "sabado", "dia": "Sábado" },
+          { "id": "domingo", "dia": "Domingo" }
+        ],
+        "imagenes": "/images/10/16.png"
+      }
+    },
+    {
+      "id": "8",
+      "titulo": "VALOR COOPERATIVO: IGUALDAD",
+      "subtitulo": "Todos tenemos el mismo valor en Caja Popular Cerano",
+      "fondo": "/images/11/Fondo.png",
+      "imagenPortada": "/images/11/34.png",
+      "secciones": [
+        {
+          "id": "definicion",
+          "titulo": "¿Qué es la igualdad?",
+          "descripcion": "La igualdad significa que todas las personas merecen ser tratadas con respeto y tener las mismas oportunidades para participar, aprender y desarrollarse. Ser diferentes no significa que unas personas valgan más que otras.",
+          "subtituloPuntos": "Cada persona tiene:",
+          "puntos": [
+            "Ideas diferentes.",
+            "Habilidades diferentes.",
+            "Gustos diferentes.",
+            "Experiencias diferentes."
+          ],
+          "pieDePagina": "Pero todas merecen el mismo respeto y consideración.",
+          "imagen": "/images/11/35.png"
+        },
+        {
+          "id": "vida_diaria",
+          "titulo": "La igualdad en nuestra vida diaria",
+          "subtituloPuntos": "La igualdad está presente cuando:",
+          "puntos": [
+            "Escuchamos las opiniones de todos.",
+            "Permitimos que todos participen en los juegos.",
+            "Damos las mismas oportunidades para aprender.",
+            "Respetamos las diferencias de los demás.",
+            "Tratamos a nuestros compañeros con respeto."
+          ]
+        },
+        {
+          "id": "cooperativa",
+          "titulo": "La igualdad en Caja Popular Cerano",
+          "descripcion": "La cooperativa promueve la igualdad porque todos los socios y menores ahorradores tienen los mismos derechos y responsabilidades.",
+          "bloque1": {
+            "subtitulo": "En la cooperativa:",
+            "puntos": [
+              "Todas las personas son importantes.",
+              "Todas pueden participar.",
+              "Todas tienen derecho a ser escuchadas.",
+              "Todas pueden aportar ideas."
+            ]
+          },
+          "bloque2": {
+            "subtitulo": "No importa:",
+            "puntos": [
+              "La edad.",
+              "El lugar donde viven.",
+              "Su ocupación.",
+              "Cuánto dinero tenga."
+            ]
+          },
+          "pieDePagina": "Todas las personas tienen el mismo valor dentro de Caja Popular Cerano."
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "fondo": "/images/11/Fondo.png",
+      "titulo": "HISTORIA",
+      "imagenes":[
+        "/images/11/36.png",
+        "/images/11/37.png",
+        "/images/11/38.png",
+        "/images/11/39.png",
+        "/images/11/40.png",
+        "/images/11/41.png",
+        "/images/11/42.png",
+        "/images/11/43.png",
+        "/images/11/44.png",
+        "/images/11/45.png",
+        "/images/11/46.png",
+        "/images/11/47.png"
+      ]
+    },
+    {
+      "id": "10",
+      "titulo": "¿POR QUÉ ES IMPORTANTE LA IGUALDAD?",
+      "subtitulo": "La igualdad nos ayuda a:",
+      "fondo": "/images/11/Fondo.png",
+      "puntosInformativos": [
+        "Sentirnos valorados.",
+        "Trabajar mejor en equipo.",
+        "Aprender de otras personas.",
+        "Crear ambientes de respeto.",
+        "Construir comunidades más justas."
+      ],
+      "instrucciones": "Marca con una X únicamente las situaciones que representan igualdad:",
+      "opciones": [
+        {
+          "id": "1",
+          "texto": "Escuchar las opiniones de todos.",
+          "esCorrecta": true
+        },
+        {
+          "id": "2",
+          "texto": "Dejar fuera a un compañero por ser diferente.",
+          "esCorrecta": false
+        },
+        {
+          "id": "3",
+          "texto": "Dar oportunidad de participar a todos.",
+          "esCorrecta": true
+        },
+        {
+          "id": "4",
+          "texto": "Burlarse de alguien por cometer un error.",
+          "esCorrecta": false
+        },
+        {
+          "id": "5",
+          "texto": "Respetar las ideas de los demás.",
+          "esCorrecta": true
+        },
+        {
+          "id": "6",
+          "texto": "Ayudar a que todos se sientan incluidos.",
+          "esCorrecta": true
+        }
+      ]
+    },
+    {
+      "id": "11",
+      "titulo": "ACTIVIDAD: NO ROMPAS LA ALCANCÍA",
+      "instrucciones": "Descubre las palabras secretas seleccionando las letras. ¡Cuidado! Si cometes 5 errores la alcancía se romperá por completo.",
+      "fondo": "/images/11/Fondo.png",
+      "maxErrores": 4,
+      "imagenesPuerco": {
+        "0": "/images/11/52.png",
+        "1": "/images/11/53.png",
+        "2": "/images/11/54.png",
+        "3": "/images/11/55.png",
+        "4": "/images/11/56.png"
+      },
+      "palabras": [
+        {
+          "id": "1",
+          "pista": "Plan para organizar el dinero.",
+          "respuesta": "PRESUPUESTO"
+        },
+        {
+          "id": "2",
+          "pista": "Lugar seguro donde se guarda el dinero.",
+          "respuesta": "CAJA POPULAR CERANO"
+        }
+      ],
+      "reflexionFinal": "La igualdad nos enseña que todas las personas tienen algo valioso que aportar. Aunque seamos diferentes, todos merecemos respeto, oportunidades y participación. En una cooperativa, en la escuela y en la familia, la igualdad ayuda a construir comunidades más fuertes, unidas y justas."
+    },
+    {
+      "id": 12,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "ENCUENTRA LAS 5 DIFERENCIAS",
+      "subtitulo": "Observa con atención ambas imágenes y marca las 5 diferencias.",
+      "imagenOriginal": "/images/10/33.png",
+      "imagenModificada": "/images/10/34.png",
+      "diferencias": [
+        { "id": 1, "x": 50, "y": 12, "radio": 6, "descripcion": "Logo amarillo en la gorra" },
+        { "id": 2, "x": 47, "y": 25, "radio": 5, "descripcion": "Detalle en el pelo" },
+        { "id": 3, "x": 50, "y": 40, "radio": 6, "descripcion": "Sonrisa" },
+        { "id": 4, "x": 38, "y": 87, "radio": 6, "descripcion": "Líneas naranjas en el tenis" },
+        { "id": 5, "x": 52, "y": 70, "radio": 6, "descripcion": "Ventana en el cuerpo del avión" }
+      ]
+    }
   ]
 }

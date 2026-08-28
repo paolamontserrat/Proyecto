@@ -6,6 +6,7 @@
   "portada": "/images/10/Inicio.png",
   "imgAhorro": "/images/0-5/6.png",
   "imgJuegos": "/images/0-5/16.png",
+  "imgMapa": "/images/mapa-aventura.png",
   "paginas": [
     {
       "id": 1,
@@ -417,7 +418,7 @@
         "imagen": "/images/10/19.png"
       },
       "actividad": {
-        "titulo": "Descifra el Mensaje Secreto",
+        "titulo": "DESIFRA EL MENSAJE SECRETO",
         "pista": "Cuando guardo dinero hoy, me ayuda a sentirme tranquilo en el futuro.",
         "mensajeRespuesta": "AHORRO HOY ES LA SEGURIDAD DE MAÑANA",
         "palabras": [
@@ -491,7 +492,7 @@
     {
       "id": 11,
       "fondo": "/images/10/Fondo.png",
-      "titulo": "RETO: EL ROMPECABEZAS DE LA DEMOCRACIA",
+      "titulo": "EL ROMPECABEZAS DE LA DEMOCRACIA",
       "instruccion": "Pide ayuda a un adulto y ordena las piezas del rompecabezas hasta completar la imagen de la asamblea.",
       "imagenCompleta": "/images/10/21.png",
       "filas": 3,
@@ -516,7 +517,7 @@
     {
       "id": 13,
       "fondo": "/images/10/Fondo.png",
-      "titulo": "ACTIVIDAD: ¿QUÉ HARÍAS TÚ?",
+      "titulo": "¿QUÉ HARÍAS TÚ?",
       "subtitulo": "Lee cada situación y responde.",
       "preguntas": [
         {
@@ -559,7 +560,7 @@
     {
       "id": 14,
       "fondo": "/images/10/Fondo.png",
-      "titulo": "ACTIVIDAD 14: ENCUENTRA LAS 5 DIFERENCIAS",
+      "titulo": "ENCUENTRA LAS 5 DIFERENCIAS",
       "subtitulo": "Observa con atención ambas imágenes y marca las 5 diferencias.",
       "imagenOriginal": "/images/10/33.png",
       "imagenModificada": "/images/10/34.png",

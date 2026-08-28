@@ -97,7 +97,7 @@ function MapaActividades({ totalPasos, pasoActual, pasoVisible, onSeleccionar, v
   };
 
   return (
-    <div className="bg-transparent rounded-3xl p-4 max-h-[700px] overflow-y-auto">
+    <div className="bg-transparent rounded-3xl p-4 max-h-[1100px] overflow-y-auto">
       <div className="flex flex-col items-center gap-6 py-2">
         {nodos.map((n, i) => (
           <div key={n} className="relative" style={{ transform: `translateX(${offsetX(i)}px)` }}>
