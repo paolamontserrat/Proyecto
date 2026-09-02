@@ -28,6 +28,10 @@ function ModalUsuario({ usuario, onClose, onGuardado }) {
       setError('La edad debe estar entre 0 y 17');
       return;
     }
+    if (correo.trim() && !/^\S+@\S+\.\S+$/.test(correo.trim())) {
+      setError('El correo no parece válido');
+      return;
+    }
 
     setCargando(true);
 
@@ -36,6 +40,7 @@ function ModalUsuario({ usuario, onClose, onGuardado }) {
         p_numero_socio: socioLimpio,
         p_nombre: nombre.trim(),
         p_edad: Number(edad),
+        p_correo: correo.trim() || null,
       });
 
       setCargando(false);
@@ -113,14 +118,18 @@ function ModalUsuario({ usuario, onClose, onGuardado }) {
 
           <div>
             <label className="block text-xs font-semibold text-gray-500 mb-1">
-              Correo de contacto <span className="text-gray-300 font-normal">(opcional)</span>
+              Correo de contacto <span className="text-gray-300 font-normal">(opcional, pero recomendado)</span>
             </label>
             <input
               type="email"
               value={correo}
               onChange={(e) => setCorreo(e.target.value)}
+              placeholder="ejemplo@correo.com"
               className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-alianza-azul"
             />
+            <p className="text-[11px] text-gray-400 mt-1">
+              Se usa para avisarle por correo cuando gane un diploma.
+            </p>
           </div>
 
           {error && <p className="text-red-500 text-sm">{error}</p>}

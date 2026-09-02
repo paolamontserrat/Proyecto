@@ -7,8 +7,6 @@ const ITEMS = [
   { to: '/admin/ahorros', label: 'Ahorros y sellos', icon: PiggyBank },
   { to: '/admin/ciclos', label: 'Ciclos', icon: Award },
   { to: '/admin/actividades', label: 'Actividades', icon: ListChecks },
-  //{ to: '/admin/contenido', label: 'Contenido', icon: FileText },
-  { to: '/admin/insignias', label: 'Insignias', icon: Award },
   { to: '/admin/configuracion', label: 'Ajustes', icon: Settings },
 ];
 

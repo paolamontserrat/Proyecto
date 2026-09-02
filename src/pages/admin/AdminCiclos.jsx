@@ -17,11 +17,8 @@ function AdminCiclos() {
       return;
     }
 
-    const ids = [...new Set(ciclosData.map((c) => c.usuario_id))];
-    const { data: usuariosData } = await supabase
-      .from('usuarios')
-      .select('id, nombre, numero_socio, correo_contacto')
-      .in('id', ids);
+    const ids = [...new Set(ciclosData.map((c) => Number(c.usuario_id)))];
+    const { data: usuariosData } = await supabase.rpc('usuarios_publicos_por_ids', { p_ids: ids });
 
     const mapaUsuarios = Object.fromEntries((usuariosData || []).map((u) => [String(u.id), u]));
 
@@ -76,7 +73,6 @@ function AdminCiclos() {
               <tr><td colSpan={5} className="p-4 text-center text-gray-400">Nadie ha completado 2 ciclos todavía</td></tr>
             )}
             {ciclos.map((c, i) => {
-              const beca = beneficios[`${c.usuario_id}-${c.anio_inicio}-beca`];
               const credito = beneficios[`${c.usuario_id}-${c.anio_inicio}`];
               const becaEntregada = credito?.tipo === 'beca' && credito?.entregado;
               const creditoEntregado = credito?.tipo === 'credito' && credito?.entregado;
@@ -93,10 +89,7 @@ function AdminCiclos() {
                     {becaEntregada ? (
                       <span className="text-green-600 text-xs font-semibold">Entregado</span>
                     ) : (
-                      <button
-                        onClick={() => marcarEntregado(c.usuario_id, c.anio_inicio, 'beca')}
-                        className="text-alianza-azul text-xs font-semibold"
-                      >
+                      <button onClick={() => marcarEntregado(c.usuario_id, c.anio_inicio, 'beca')} className="text-alianza-azul text-xs font-semibold">
                         Marcar entregado
                       </button>
                     )}
@@ -105,10 +98,7 @@ function AdminCiclos() {
                     {creditoEntregado ? (
                       <span className="text-green-600 text-xs font-semibold">Entregado</span>
                     ) : (
-                      <button
-                        onClick={() => marcarEntregado(c.usuario_id, c.anio_inicio, 'credito')}
-                        className="text-alianza-azul text-xs font-semibold"
-                      >
+                      <button onClick={() => marcarEntregado(c.usuario_id, c.anio_inicio, 'credito')} className="text-alianza-azul text-xs font-semibold">
                         Marcar entregado
                       </button>
                     )}

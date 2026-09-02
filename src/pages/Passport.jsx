@@ -89,18 +89,18 @@ const Passport = () => {
   // Sonidos de gamificación
   // =========================
   useEffect(() => {
-  if (mostrarDiploma) {
-    const audio = new Audio('/sounds/diploma.mp3');
-    audio.play().catch(() => {});
-  }
-}, [mostrarDiploma]);
+    if (mostrarDiploma) {
+      const audio = new Audio("/sounds/diploma.mp3");
+      audio.play().catch(() => {});
+    }
+  }, [mostrarDiploma]);
 
-useEffect(() => {
-  if (mostrarSello) {
-    const audio = new Audio("/sounds/sello.mp3");
-    audio.play().catch(() => {});
-  }
-}, [mostrarSello]);
+  useEffect(() => {
+    if (mostrarSello) {
+      const audio = new Audio("/sounds/sello.mp3");
+      audio.play().catch(() => {});
+    }
+  }, [mostrarSello]);
 
   // =========================
   // 🔥 FONDO POR RANGO
@@ -180,6 +180,23 @@ useEffect(() => {
     if (data.diploma_nuevo) {
       setMostrarDiploma(true);
       cargarDiplomas();
+
+      const { data: usuarioDb } = await supabase.rpc(
+        "obtener_correo_para_notificar",
+        { p_usuario_id: userId },
+      );
+
+      if (usuarioDb?.correo_contacto) {
+        const { data: envio, error: envioError } =
+          await supabase.functions.invoke("enviar-diploma-email", {
+            body: {
+              correo: usuarioDb.correo_contacto,
+              nombre: usuarioDb.nombre,
+              numeroDiploma: data.numero_diploma,
+            },
+          });
+        if (!envioError && envio?.ok) setCorreoEnviado(true);
+      }
     }
   };
 
@@ -339,17 +356,14 @@ useEffect(() => {
 
       {/* ⚠️ LEYENDA DE HONESTIDAD */}
       <div className="max-w-3xl mx-auto bg-amber-50 border-2 border-amber-300 rounded-2xl px-5 py-4 mb-6 flex items-center gap-4 shadow-md">
-        {/* Imagen */}
         <img
           src="/images/6/16.png"
           alt="Acude a tu sucursal"
           className="w-24 h-20 object-contain shrink-0"
         />
 
-        {/* Icono de advertencia */}
         <span className="text-4xl shrink-0">⚠️</span>
 
-        {/* Texto */}
         <p className="text-base md:text-lg text-amber-900 leading-relaxed font-semibold">
           <span className="font-black text-amber-950 text-lg md:text-xl">
             ¡Importante!

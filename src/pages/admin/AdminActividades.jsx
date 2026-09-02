@@ -2,6 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabaseClient';
 import { RANGOS } from '../../constants/rangos';
 
+// Mismo enmascarado que ya usamos en el resto del panel
+const enmascarar = (numero) => {
+  if (!numero) return "";
+  return `${numero.slice(0, 2)}${"•".repeat(Math.max(0, numero.length - 4))}${numero.slice(-2)}`;
+};
+
 function AdminActividades() {
   const [rango, setRango] = useState(RANGOS[0]);
   const [totalActividades, setTotalActividades] = useState(null);
@@ -26,11 +32,12 @@ function AdminActividades() {
 
     setTotalActividades(total);
 
-    const { data: usuariosData } = await supabase
-      .from('usuarios')
-      .select('id, nombre, numero_socio')
-      .eq('nivel', rango)
-      .neq('rol', 'admin');
+    // Antes hacía .from('usuarios').select(...) directo — eso quedó
+    // bloqueado cuando cerramos la política de lectura pública de
+    // 'usuarios'. Ahora pasa por la función RPC correspondiente.
+    const { data: usuariosData } = await supabase.rpc('admin_usuarios_por_rango', {
+      p_rango: rango,
+    });
 
     if (!usuariosData || usuariosData.length === 0) {
       setUsuarios([]);
@@ -175,7 +182,7 @@ function AdminActividades() {
                     <p className="font-semibold">{u.nombre}</p>
 
                     <p className="text-gray-400 font-mono text-xs">
-                      {u.numero_socio}
+                      {enmascarar(u.numero_socio)}
                     </p>
                   </td>
 

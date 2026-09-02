@@ -17,8 +17,14 @@ const MESES = [
   "Diciembre",
 ];
 
+// Mismo enmascarado que ya usamos en AdminUsuarios.jsx
+const enmascarar = (numero) => {
+  if (!numero) return "";
+  return `${numero.slice(0, 2)}${"•".repeat(Math.max(0, numero.length - 4))}${numero.slice(-2)}`;
+};
+
 function AdminAhorros() {
-  const [tab, setTab] = useState("buscar"); // 'buscar' | 'sellos' | 'retos'
+  const [tab, setTab] = useState("buscar"); // 'buscar' | 'sellos' | 'diplomas'
 
   return (
     <div>
@@ -73,23 +79,13 @@ function TabHistorial() {
   const cargarUsuarios = useCallback(async () => {
     setCargando(true);
 
-    let query = supabase
-      .from("usuarios")
-      .select("id, numero_socio, nombre, nivel")
-      .neq("rol", "admin")
-      .order("nombre");
-
-    if (busqueda.trim()) {
-      query = query.or(
-        `numero_socio.ilike.%${busqueda.trim()}%,nombre.ilike.%${busqueda.trim()}%`,
-      );
-    }
-
-    const { data } = await query.limit(100);
+    const { data } = await supabase.rpc("admin_buscar_usuarios", {
+      p_busqueda: busqueda.trim() || null,
+    });
     setUsuarios(data || []);
 
     if (data && data.length > 0) {
-      const ids = data.map((u) => String(u.id));
+      const ids = data.map((u) => u.id);
       const { data: sellosData } = await supabase
         .from("sellos_digitales")
         .select("usuario_id")
@@ -227,7 +223,7 @@ function TabHistorial() {
                   <td className="p-3">
                     <p className="font-semibold">{u.nombre}</p>
                     <p className="text-gray-500 font-mono text-xs">
-                      {u.numero_socio} · {u.nivel}
+                      {enmascarar(u.numero_socio)} · {u.nivel}
                     </p>
                   </td>
                   <td className="p-3 text-center font-semibold">
@@ -255,7 +251,8 @@ function TabHistorial() {
                   {seleccionado.nombre}
                 </p>
                 <p className="text-xs text-gray-500 font-mono">
-                  {seleccionado.numero_socio} · Rango {seleccionado.nivel}
+                  {enmascarar(seleccionado.numero_socio)} · Rango{" "}
+                  {seleccionado.nivel}
                 </p>
               </div>
               <button
@@ -397,11 +394,11 @@ function TabSellos() {
         return;
       }
 
-      const ids = [...new Set(data.map((s) => s.usuario_id))];
-      const { data: usuariosData } = await supabase
-        .from("usuarios")
-        .select("id, nombre, numero_socio")
-        .in("id", ids);
+      const ids = [...new Set(data.map((s) => Number(s.usuario_id)))];
+      const { data: usuariosData } = await supabase.rpc(
+        "usuarios_publicos_por_ids",
+        { p_ids: ids },
+      );
 
       const mapaUsuarios = Object.fromEntries(
         (usuariosData || []).map((u) => [String(u.id), u]),
@@ -461,7 +458,7 @@ function TabSellos() {
                 <td className="p-3">
                   {s.usuario?.nombre || "—"}{" "}
                   <span className="text-gray-400 font-mono text-xs">
-                    {s.usuario?.numero_socio}
+                    {enmascarar(s.usuario?.numero_socio)}
                   </span>
                 </td>
                 <td className="p-3">
@@ -481,7 +478,7 @@ function TabSellos() {
 }
 
 // =====================================================
-// TAB 3: Retos (fechas) y diplomas pendientes de entregar
+// TAB 3: Diplomas pendientes de entregar
 // =====================================================
 function TabDiplomas() {
   const [pendientes, setPendientes] = useState([]);
@@ -502,19 +499,25 @@ function TabDiplomas() {
       return;
     }
 
-    const ids = [...new Set(data.map((d) => d.usuario_id))];
-    const { data: usuariosData } = await supabase
-      .from("usuarios")
-      .select("id, nombre, numero_socio")
-      .in("id", ids);
+    const ids = [...new Set(data.map((d) => Number(d.usuario_id)))];
+    const { data: usuariosData } = await supabase.rpc(
+      "usuarios_publicos_por_ids",
+      { p_ids: ids },
+    );
 
-    const mapaUsuarios = Object.fromEntries((usuariosData || []).map((u) => [String(u.id), u]));
+    const mapaUsuarios = Object.fromEntries(
+      (usuariosData || []).map((u) => [String(u.id), u]),
+    );
 
-    setPendientes(data.map((d) => ({ ...d, usuario: mapaUsuarios[d.usuario_id] })));
+    setPendientes(
+      data.map((d) => ({ ...d, usuario: mapaUsuarios[d.usuario_id] })),
+    );
     setCargando(false);
   }, []);
 
-  useEffect(() => { cargar(); }, [cargar]);
+  useEffect(() => {
+    cargar();
+  }, [cargar]);
 
   const marcarEntregado = async (usuarioId, numero) => {
     await supabase.rpc("admin_marcar_diploma_entregado", {
@@ -537,26 +540,43 @@ function TabDiplomas() {
         </thead>
         <tbody>
           {cargando && (
-            <tr><td colSpan={4} className="p-4 text-center text-gray-400">Cargando...</td></tr>
-          )}
-          {!cargando && pendientes.length === 0 && (
-            <tr><td colSpan={4} className="p-4 text-center text-gray-400">No hay diplomas pendientes</td></tr>
-          )}
-          {pendientes.map((p, i) => (
-            <tr key={i} className="border-t">
-              <td className="p-3">{p.usuario?.nombre} <span className="text-gray-400 font-mono text-xs">{p.usuario?.numero_socio}</span></td>
-              <td className="p-3">Diploma #{p.numero}</td>
-              <td className="p-3 text-gray-500">{new Date(p.fecha_generado).toLocaleDateString()}</td>
-              <td className="p-3">
-                <button
-                  onClick={() => marcarEntregado(p.usuario_id, p.numero)}
-                  className="text-green-600 text-xs font-semibold"
-                >
-                  Marcar entregado
-                </button>
+            <tr>
+              <td colSpan={4} className="p-4 text-center text-gray-400">
+                Cargando...
               </td>
             </tr>
-          ))}
+          )}
+          {!cargando && pendientes.length === 0 && (
+            <tr>
+              <td colSpan={4} className="p-4 text-center text-gray-400">
+                No hay diplomas pendientes
+              </td>
+            </tr>
+          )}
+          {pendientes.map((p, i) => {
+            return (
+              <tr key={i} className="border-t">
+                <td className="p-3">
+                  {p.usuario?.nombre}{" "}
+                  <span className="text-gray-400 font-mono text-xs">
+                    {enmascarar(p.usuario?.numero_socio)}
+                  </span>
+                </td>
+                <td className="p-3">Diploma #{p.numero}</td>
+                <td className="p-3 text-gray-500">
+                  {new Date(p.fecha_generado).toLocaleDateString()}
+                </td>
+                <td className="p-3">
+                  <button
+                    onClick={() => marcarEntregado(p.usuario_id, p.numero)}
+                    className="text-green-600 text-xs font-semibold"
+                  >
+                    Marcar entregado
+                  </button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
