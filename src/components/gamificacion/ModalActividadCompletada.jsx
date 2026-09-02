@@ -5,7 +5,9 @@ function ModalActividadCompletada({ celebracion, onContinuar }) {
   useEffect(() => {
     if (celebracion) {
       const audio = new Audio('/sounds/completada.mp3');
-      audio.play().catch(() => {});
+      audio.play().catch((error) => {
+  console.error("Error reproduciendo sonido:", error);
+});
     }
   }, [celebracion]);
 
