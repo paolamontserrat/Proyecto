@@ -32,5 +32,411 @@
         "Tus papás pueden obtener un esquema de crédito atractivo."
       ]
     }
+  ],
+  "pasos": [
+    {
+      "id": "1",
+      "fondo": "/images/12/Fondo.png",
+      "titulo": "EL USO DEL DINERO",
+      "imagen_moneda_carro": "/images/12/5.png",
+      "seccionInformativa": {
+        "introduccion": "El dinero puede desaparecer en un segundo, o puede convertirse en tu mejor herramienta para conseguir lo que de verdad te propongas.",
+        "previo": "A los 12 años, ya estás listo para dejar de solo guardar monedas y empezar a armar una verdadera estrategia.",
+        "subtitulo": "Los jóvenes que saben manejar su dinero hacen cuatro cosas clave:",
+        "puntos": [
+          {
+            "id": 1,
+            "titulo": "PLANIFICAR",
+            "texto": "Arman un plan antes de gastar un solo peso.",
+            "imagen": "/images/12/57.png"
+          },
+          {
+            "id": 2,
+            "titulo": "AHORRAR EN SERIO",
+            "texto": "Usan las opciones de la cooperativa para que su dinero esté seguro y crezca.",
+            "imagen": "/images/12/58.png"
+          },
+          {
+            "id": 3,
+            "titulo": "PONER PRIORIDADES",
+            "texto": "Saben qué es lo más importante y qué puede esperar.",
+            "imagen": "/images/12/59.png"
+          },
+          {
+            "id": 4,
+            "titulo": "PENSAR A FUTURO",
+            "texto": "Toman decisiones hoy que su \"yo\" del mañana les va a agradecer.",
+            "imagen": "/images/12/60.png"
+          }
+        ],
+        "imagen_moneda_monta": "/images/12/6.png"
+      },
+      "seccionInteractiva": {
+        "titulo": "El Reto de los $500",
+        "introduccion": "Imagina que cumples 12 años y te regalan $500. Además, sabes que durante el año podrías conseguir unos $100 al mes (por tus propios méritos, domingos o tareas especiales).",
+        "instruccion": "Para no gastártelo todo en un videojuego o en antojos que se acaban en un día, los expertos recomiendan la Regla 50-30-20 (un presupuesto inteligente). Divide tus primeros $500 en esta tabla:",
+        "montoInicial": 500,
+        "filas": [
+          {
+            "id": "ahorro",
+            "categoria": "Ahorro a Largo Plazo",
+            "subtexto": "(Tus metas más grandes)",
+            "porcentaje": 50,
+            "montoEsperado": 250
+          },
+          {
+            "id": "gustos",
+            "categoria": "Tus Gustos / Metas Cortas",
+            "subtexto": "(Lo que quieres comprar pronto)",
+            "porcentaje": 30,
+            "montoEsperado": 150
+          },
+          {
+            "id": "compartir",
+            "categoria": "Causa Social o Compartir",
+            "subtexto": "(Apoyar en casa o a un amigo)",
+            "porcentaje": 20,
+            "montoEsperado": 100
+          }
+        ],
+        "imagen_alianzito": "/images/12/1.png"
+      }
+    },
+    {
+      "id": "2",
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "CONOCENOS",
+      "secciones": {
+        "cuentaAhorro": {
+          "mensajeCaja": "En CAJA POPULAR CERANO existen opciones para que los niños y jóvenes aprendan a administrar su dinero y puedan cumplir sus metas.",
+          "tituloCuenta": "Cuenta de ahorro",
+          "logoClub": "/images/10/5.png",
+          "descripcion": "Es una cuenta donde puedes guardar tu dinero, aprender a manejarlo y disponer de él cuando lo necesites, siempre con el acompañamiento de tus padres o tutores.",
+          "ejemploLabel": "Ejemplo:",
+          "ejemploTexto": "“Puedo ahorrar para una salida, un regalo, un material escolar o una meta que tenga a corto plazo.”",
+          "imagenPlazo": "/images/10/6.png"
+        },
+        "creciendoJuntos": {
+          "logoSubcuenta": "/images/10/7.png",
+          "tituloSubcuenta": "Subcuenta “Creciendo Juntos”",
+          "descripcion": "Es una opción especial para ahorrar pensando en metas importantes de largo plazo. La idea es que el dinero que se guarda ahí pueda crecer mientras tú también creces.",
+          "caracteristicas": [
+            "Está diseñada para ayudarte a cumplir metas futuras.",
+            "El ahorro permanece protegido hasta que estés en el programa.",
+            "No puedes retirar el dinero antes, porque está pensado para construir un proyecto a futuro y saldrías del programa.",
+            "Te ayuda a desarrollar el hábito de ahorrar desde pequeño."
+          ],
+          "imagenPlazo": "/images/10/8.png",
+          "ejemplosMetas": "/images/10/36.png"
+        }
+      }
+    },
+    {
+      "id": "3",
+      "fondo": "/images/12/Fondo.png",
+      "titulo": "DISEÑA TU PROYECTO FINANCIERO",
+      "instrucciones": "Elige una meta que de verdad te emocione para este año y haz los cálculos matemáticos para lograrla:",
+      "imagen_alianzito": "/images/12/10.png",
+      "preguntas": {
+        "p1": "1. Mi meta es:",
+        "p2": "2. ¿Por qué es importante para mí?",
+        "p3": "3. ¿Cuánto dinero necesito en total?",
+        "p4": "4. ¿En cuántos meses lo quiero lograr?",
+        "p5": "5. Haz la cuenta (Monto total entre número de meses) / Tengo que ahorrar al mes la cantidad de: $"
+      }
+    },
+    {
+      "id": "4",
+      "fondo": "/images/12/Fondo.png",
+      "titulo": "El Costo de Oportunidad: ",
+      "introduccion": "En el mundo de las finanzas existe algo llamado Costo de Oportunidad. Significa que cada vez que eliges comprar algo, estás renunciando a otra cosa. Si te gastas $100 en papitas y refrescos esta semana, el \"costo\" es el cómic o el accesorio para tu bici que ya no pudiste comprar.",
+      "imagen_alianzito_pensando": "/images/12/10.png",
+      "imagen_monedas_vs": "/images/12/12.png",
+      "seccionComparativa": {
+        "subtitulo": "Por eso, dónde guardas tu dinero cambia por completo el juego. Analiza estas opciones:",
+        "tituloTabla": "Tabla de Riesgos y Ventajas:",
+        "opciones": [
+          {
+            "id": "casa",
+            "lugar": "Guardarlo en casa",
+            "subtexto": "(En tu cuarto o una alcancía)",
+            "imagen": "/images/12/23.png",
+            "ventajas": [
+              "Lo tienes a la mano cuando quieras.",
+              "No tienes que hacer trámites."
+            ],
+            "riesgos": [
+              "Te lo puedes gastar por impulso.",
+              "Se puede perder o te lo pueden robar.",
+              "Sufre por la inflación: El dinero guardado en casa pierde valor y cada año te alcanza para menos cosas."
+            ]
+          },
+          {
+            "id": "cooperativa",
+            "lugar": "En Caja Popular Cerano",
+            "subtexto": "(Cuenta o Subcuenta)",
+            "imagen": "/images/12/24.png",
+            "ventajas": [
+              "Está 100% seguro contra robos o pérdidas.",
+              "Evita que te lo gastes en tentaciones.",
+              "Empiezas a crear tu historial en la cooperativa."
+            ],
+            "riesgos": [
+              "Tienes que ir a la cooperativa o seguir un proceso para retirarlo.",
+              "Requiere paciencia y respetar los plazos que elegiste."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "5",
+      "titulo": "¿Dónde crece mejor mi dinero?",
+      "fondo": "/images/11/Fondo.png",
+      "seccionInteractiva": {
+        "introduccion": {
+          "texto": "Existen diferentes maneras de guardar dinero. Algunas son más seguras que otras. La cooperativa te ayuda a proteger y administrar mejor tu dinero.",
+          "imagenPersonaje": "/images/11/51.png"
+        },
+        "instruccion": "Analiza las opciones escribe tu respuesta:",
+        "tablaComparativa": {
+          "columnas": ["SITUACIÓN", "VENTAJAS", "RIESGOS"],
+          "filas": [
+            {
+              "id": "casa",
+              "situacion": "GUARDAR DINERO EN CASA",
+              "ventajasPlaceholder": "Escribe las ventajas de guardar dinero en casa...",
+              "riesgosPlaceholder": "Escribe los riesgos de guardar dinero en casa..."
+            },
+            {
+              "id": "cuenta",
+              "situacion": "GUARDAR DINERO EN UNA CUENTA DE AHORRO",
+              "ventajasPlaceholder": "Escribe las ventajas de guardar dinero en una cuenta de ahorro...",
+              "riesgosPlaceholder": "Escribe los riesgos de guardar dinero en una cuenta de ahorro..."
+            }
+          ]
+        },
+        "conclusion": {
+          "titulo": "CONCLUSIÓN",
+          "puntos": [
+            "En casa mi dinero puede correr riesgos.",
+            "En la Caja mi dinero está protegido, registrado y puede crecer.",
+            "Ser inteligente no es esconder el dinero.",
+            "Es saber dónde está más seguro."
+          ]
+        },
+        "juegoCifrado": {
+          "titulo": "Descifra el Mensaje Secreto",
+          "mapaCodigo": {
+            "a": "X", "b": "Y", "c": "Z", "d": "A", "e": "B", "f": "C", "g": "D", "h": "E",
+            "i": "F", "j": "G", "k": "H", "l": "I", "m": "J", "n": "K",
+            "o": "L", "p": "M", "q": "N", "r": "O", "s": "P", "t": "Q",
+            "u": "R", "v": "S", "w": "T", "x": "U", "y": "V", "z": "W"
+          },
+          "palabrasCifradas": [
+            ["h", "o"],
+            ["s", "o", "d", "q", "l","i","l","f","d","u"],
+            ["k", "r", "b"],
+            ["h", "v"],
+            ["d", "v", "h", "j", "x","u","d","u"],
+            ["h","o"],
+            ["h", "a", "l", "w", "r"],
+            ["i", "x", "w", "x", "u", "r"]
+          ],
+          "pista": "Lo que decidas hacer hoy con tus monedas va a construir tus grandes éxitos mañana."
+        }
+      }
+    },
+    {
+      "id": "6",
+      "titulo": "MISIÓN: DETECTIVES DEL RIESGO",
+      "fondo": "/images/11/Fondo.png",
+      "instrucción": "Lee cada situación y selecciona si consideras que es una Decisión buena o Decisión mala:",
+        "situaciones": [
+          {
+            "id": "1",
+            "texto": "Comprar un jugo todos los días aunque puedas llevar agua de casa.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "2",
+            "texto": "Apagar la luz cuando sales de una habitación.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "3",
+            "texto": "Dejar la llave abierta mientras te cepillas los dientes.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "4",
+            "texto": "Cuidar tu mochila y útiles para que duren todo el ciclo escolar.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "5",
+            "texto": "Comprar una camiseta nueva aunque ya tengas varias que casi no usas.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "6",
+            "texto": "Llevar lunch de casa en lugar de comprar comida todos los días.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "7",
+            "texto": "Comprar una nueva funda para celular cada vez que aparece un diseño que te gusta.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "8",
+            "texto": "Aceptar una bolsa de plástico cuando compras en el supermercado.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "9",
+            "texto": "Separar botellas, latas y papel para reciclarlos.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "10",
+            "texto": "Tirar comida que no terminaste porque ya no tienes ganas de comerla.",
+            "respuestaCorrecta": "Decisión mala"
+          },
+          {
+            "id": "11",
+            "texto": "Guardar parte de tu dinero cada vez que recibes domingo.",
+            "respuestaCorrecta": "Decisión buena"
+          },
+          {
+            "id": "12",
+            "texto": "Plantar y cuidar un árbol en tu escuela o comunidad.",
+            "respuestaCorrecta": "Decisión buena"
+          }
+        ]
+    },
+    {
+      "id": "7",
+      "fondo": "/images/12/Fondo.png",
+      "titulo": "VALOR COOPERATIVO: SOLIDARIDAD",
+      "seccionIntro": {
+        "titulo": "¿Qué es la Solidaridad de verdad?",
+        "imagen_manos": "/images/12/22.png",
+        "descripcion": "A los 12 años, la solidaridad no es solo ser buena onda o darle una moneda a alguien en la calle. En una cooperativa, la solidaridad significa trabajar en equipo por el bien común. Es entender que nos va mejor cuando nos apoyamos mutuamente que cuando cada quien jala para su propio lado. Cuando la gente se une de forma solidaria, logran cosas gigantes que una sola persona jamás podría hacer sola."
+      },
+      "seccionVivir": {
+        "titulo": "¿Cómo se vive la Solidaridad en Caja Popular Cerano?",
+        "descripcion": "La cooperativa no es un banco común donde los dueños ricos se quedan con las ganancias. Las cooperativas existen gracias al apoyo mutuo. Se nota en esto:",
+        "imagen_banco_vs": "/images/12/25.png"
+      },
+      "puntosClave": [
+        {
+          "numero": "1",
+          "titulo": "Tu ahorro ayuda a los demás:",
+          "descripcion": "El dinero que tú guardas en tu cuenta no se queda ahí congelado. La cooperativa lo usa de forma responsable para dar préstamos o apoyar los proyectos de otras familias y socios de tu comunidad. ¡Tu ahorro ayuda a que tu entorno crezca!",
+          "imagen": "/images/12/26.png"
+        },
+        {
+          "numero": "2",
+          "titulo": "Aquí todos ganan:",
+          "descripcion": "El objetivo de la cooperativa es que a todos los socios y menores ahorradores les vaya bien. La fuerza de todo el grupo unido es lo que protege y ayuda a progresar a cada uno de sus miembros.",
+          "imagen": "/images/12/27.png"
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "fondo": "/images/12/Fondo.png",
+      "titulo": "Caso de Estudio: El Torneo de la Secundaria",
+      "pasos": [
+        {
+          "id": "problema",
+          "texto": "En una secundaria, el comité de alumnos quería armar un torneo de robótica, pero tenían un problemón: quedaba muy poco tiempo y varios estudiantes no tenían dinero para pagar la inscripción o los materiales de sus prototipos.",
+          "imagen": "/images/12/17.png"
+        },
+        {
+          "id": "solucion",
+          "texto": "En lugar de competir de forma egoísta para ver quién ganaba solo, el grupo decidió aplicar la solidaridad. Los alumnos que eran cracks programando armaron talleres después de clases para ayudar a los que iban más atrasados. Además, hicieron un centro de acopio de motores y piezas usadas para compartirlas con quienes no tenían materiales.",
+          "imagen": "/images/12/18.png"
+        },
+        {
+          "id": "resultado",
+          "texto": "Al final, gracias a que compartieron sus conocimientos y sus herramientas, todos los equipos pudieron competir con éxito.",
+          "conclusion": "Conclusión: El verdadero éxito se alcanza cuando nadie se queda atrás y todos nos apoyamos.",
+          "imagen": "/images/12/19.png"
+        }
+      ]
+    },
+    {
+      "id": "9",
+      "fondo": "/images/12/Fondo.png",
+      "titulo": "Zona de Crítica: ¿Es Solidaridad o no?",
+      "instrucciones": "Selecciona si es (Verdadero) o (Falso) según corresponda antes de que se agote el tiempo:",
+      "tiempoPorPregunta": 8,
+      "preguntas": [
+        {
+          "id": 1,
+          "afirmacion": "Cuando ahorro en la cooperativa, mi dinero trabaja de forma solidaria apoyando los proyectos de mi comunidad.",
+          "respuestaCorrecta": true
+        },
+        {
+          "id": 2,
+          "afirmacion": "En un grupo cooperativo, lo único que importa es que yo gane dinero, aunque a mis compañeros les vaya mal.",
+          "respuestaCorrecta": false
+        },
+        {
+          "id": 3,
+          "afirmacion": "Compartir lo que sé con un compañero al que le cuesta trabajo la materia es una acción solidaria que fortalece al grupo.",
+          "respuestaCorrecta": true
+        },
+        {
+          "id": 4,
+          "afirmacion": "Hacer los trabajos escolares completamente solo y no ayudar a nadie es la mejor forma de aplicar los valores de Caja Popular Cerano.",
+          "respuestaCorrecta": false
+        }
+      ]
+    },
+    {
+      "id": "10",
+      "titulo": "ACTIVIDAD: NO ROMPAS LA ALCANCÍA",
+      "instrucciones": "Descubre las palabras secretas seleccionando las letras. ¡Cuidado! Si cometes 5 errores la alcancía se romperá por completo.",
+      "fondo": "/images/12/Fondo.png",
+      "maxErrores": 4,
+      "imagenesPuerco": {
+        "0": "/images/12/52.png",
+        "1": "/images/12/53.png",
+        "2": "/images/12/54.png",
+        "3": "/images/12/55.png",
+        "4": "/images/12/56.png"
+      },
+      "palabras": [
+        {
+          "id": "1",
+          "pista": " Lo que dejas ir o a lo que renuncias cada vez que eliges gastar tu dinero en otra cosa.",
+          "respuesta": "COSTO DE OPORTUNIDAD"
+        },
+        {
+          "id": "2",
+          "pista": "Valor cooperativo que nos enseña a unirnos, colaborar y darnos la mano para cumplir metas juntos.",
+          "respuesta": "SOLIDARIDAD"
+        }
+      ],
+      "reflexionFinal": "Ser inteligente con el dinero no te hace egoísta; al contrario, planiﬁcar bien tus ﬁnanzas y ser solidario en Caja Popular Cerano te da el poder de construir un gran futuro para ti y para los que te rodean."
+    },
+    {
+      "id": 11,
+      "fondo": "/images/10/Fondo.png",
+      "titulo": "ENCUENTRA LAS 5 DIFERENCIAS",
+      "subtitulo": "Observa con atención ambas imágenes y marca las 5 diferencias.",
+      "imagenOriginal": "/images/12/0.png",
+      "imagenModificada": "/images/12/21.png",
+      "diferencias": [
+        { "id": 1, "x": 42, "y": 88, "radio": 6, "descripcion": "Linea del teni" },
+        { "id": 2, "x": 58, "y": 80, "radio": 5, "descripcion": "Lineas de las calcetas" },
+        { "id": 3, "x": 54, "y": 15, "radio": 6, "descripcion": "Moneda Alianza" },
+        { "id": 4, "x": 40, "y": 30, "radio": 6, "descripcion": "Puntitos en los lentes" },
+        { "id": 5, "x": 30, "y": 63, "radio": 6, "descripcion": "Moneda en mochila" }
+      ]
+    }
   ]
 }

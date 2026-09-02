@@ -45,13 +45,13 @@ function MapaAventuraDashboard({ rango, info }) {
         <img
           src={info?.imgMapa || '/images/mapa-aventura.png'}
           className="w-full h-full object-cover object-top transition group-hover:scale-105"
-          alt="Mapa de tu aventura"
+          alt="Mapa de aventura"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-alianza-azul/80 via-alianza-azul/60 to-alianza-azul/30 flex items-center justify-center gap-3 px-6">
           <BookOpen className="text-white shrink-0" size={32} />
           <div className="flex flex-col items-start justify-center">
             <span className="text-white text-xl md:text-2xl font-black uppercase leading-tight">
-              Mapa de tu aventura
+              Mapa de aventura
             </span>
           </div>
         </div>
