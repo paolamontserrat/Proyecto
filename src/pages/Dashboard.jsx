@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { PiggyBank, Gamepad2, LogOut } from "lucide-react";
 import Footer from "../components/Footer";
 import AvisoDiplomas from "../components/AvisoDiplomas";
+import AvisoRetos from "../components/AvisoRetos";
 import ProgresoAventura from "../components/gamificacion/ProgresoAventura";
 import MapaAventuraDashboard from "../components/gamificacion/MapaAventuraDashboard";
 
@@ -78,6 +79,9 @@ const Dashboard = () => {
       {/* AVISO DE DIPLOMAS PENDIENTES */}
       <div className="px-6 mt-4">
         <AvisoDiplomas />
+      </div>
+      <div className="px-6 mt-4">
+        <AvisoRetos />
       </div>
 
       {/* 🚀 PROGRESO DE AVENTURA */}

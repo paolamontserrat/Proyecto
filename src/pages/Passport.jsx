@@ -5,6 +5,11 @@ import Footer from "../components/Footer";
 import Confetti from "../components/Confetti";
 import PasaporteSellos from "../components/PasaporteSellos";
 import PasaporteDiplomas from "../components/PasaporteDiplomas";
+import ModalReto from "../components/ModalReto";
+import ModalMeta from "../components/ModalMeta";
+import SeccionRetos from "../components/SeccionRetos";
+import AlcanciaMonedas from "../components/AlcanciaMonedas";
+import { registrarProgreso } from "../registrarProgreso";
 
 const Passport = () => {
   const navigate = useNavigate();
@@ -52,6 +57,14 @@ const Passport = () => {
   const [mostrarDiploma, setMostrarDiploma] = useState(false);
   const [misDiplomas, setMisDiplomas] = useState([]);
   const [misSellos, setMisSellos] = useState([]);
+
+  // 🪙 RETOS: cola de retos recién completados (por si se completa más de uno
+  // en el mismo depósito) y una "key" para forzar a SeccionRetos a releer
+  // progreso/alcancía/meta después de cada depósito.
+  const [colaRetos, setColaRetos] = useState([]);
+  const [refreshRetosKey, setRefreshRetosKey] = useState(0);
+  // 🎯 META: se muestra en el instante en que se completa (no al abrir la tarjeta)
+  const [metaCompletadaInfo, setMetaCompletadaInfo] = useState(null);
 
   const cargarDiplomas = useCallback(async () => {
     if (userId === "anon") return;
@@ -201,6 +214,25 @@ const Passport = () => {
   };
 
   // =========================
+  // 🪙 RETOS Y META PERSONAL (progreso automático por depósito)
+  // =========================
+  const verificarRetosYMeta = async (monto) => {
+    if (userId === "anon") return;
+
+    const resultado = await registrarProgreso(userId, monto);
+
+    if (resultado.retosCompletados.length > 0) {
+      setColaRetos((prev) => [...prev, ...resultado.retosCompletados]);
+    }
+    // La meta ya no se detecta al abrir la tarjeta: si el RPC dice que se
+    // completó justo con este depósito, mostramos el modal de una vez.
+    if (resultado.metaCompletada) {
+      setMetaCompletadaInfo(resultado.metaCompletada);
+    }
+    setRefreshRetosKey((k) => k + 1);
+  };
+
+  // =========================
   // 🔥 VALIDACIÓN
   // =========================
   const validar = () => {
@@ -228,6 +260,8 @@ const Passport = () => {
       lista.length === 0 ||
       Date.now() - lista[lista.length - 1]?.id > 604800000;
 
+    const esNuevoDeposito = !formData.id;
+
     const nuevoItem = {
       ...formData,
       id: formData.id || Date.now(),
@@ -249,6 +283,12 @@ const Passport = () => {
       0,
     );
     await verificarSello(mesExpandido, anioActual, totalMes);
+
+    // Solo cuenta como progreso de retos/meta cuando es un depósito NUEVO
+    // (no cuando se edita uno ya existente), para no sumar montos de más.
+    if (esNuevoDeposito) {
+      await verificarRetosYMeta(Number(formData.monto));
+    }
 
     setShowForm(false);
     setFormData({ fecha: "", monto: "", id: null });
@@ -340,19 +380,26 @@ const Passport = () => {
         </p>
       </div>
 
-      {/* 🏅 VITRINA DE SELLOS Y DIPLOMAS */}
-      <div className="max-w-3xl mx-auto flex flex-col md:flex-row gap-4 mb-4 px-2 md:px-0">
-        <div className="w-full md:w-1/2">
-          <PasaporteSellos
-            ahorros={ahorros}
-            mesActual={nombreMesActual}
-            sellosReales={misSellos}
-          />
+      {/* 🐷 ALCANCÍA — banner fijo y llamativo */}
+      {userId !== "anon" && (
+        <div className="max-w-3xl mx-auto mb-4 px-2 md:px-0">
+          <AlcanciaMonedas usuarioId={userId} />
         </div>
-        <div className="w-full md:w-1/2">
-          <PasaporteDiplomas diplomas={misDiplomas} />
-        </div>
+      )}
+
+      {/* 🏅 TARJETAS: SELLOS, DIPLOMAS, META Y RETOS */}
+      <div className="max-w-3xl mx-auto grid grid-cols-2 gap-4 mb-6 px-2 md:px-0">
+        <PasaporteSellos
+          ahorros={ahorros}
+          mesActual={nombreMesActual}
+          sellosReales={misSellos}
+        />
+        <PasaporteDiplomas diplomas={misDiplomas} />
+        {userId !== "anon" && (
+          <SeccionRetos key={refreshRetosKey} usuarioId={userId} />
+        )}
       </div>
+
 
       {/* ⚠️ LEYENDA DE HONESTIDAD */}
       <div className="max-w-3xl mx-auto bg-amber-50 border-2 border-amber-300 rounded-2xl px-5 py-4 mb-6 flex items-center gap-4 shadow-md">
@@ -538,6 +585,32 @@ const Passport = () => {
             </button>
           </div>
         </div>
+      )}
+
+      {/* 🪙 RETO DE AHORRO CUMPLIDO (uno por uno, si se completó más de uno) */}
+      {colaRetos.length > 0 && (
+        <ModalReto
+          titulo={colaRetos[0].titulo}
+          monedas={colaRetos[0].monedas}
+          onClose={() => setColaRetos((prev) => prev.slice(1))}
+        />
+      )}
+
+      {/* 🎯 META PERSONAL CUMPLIDA — sale de inmediato, en el depósito que la completa */}
+      {metaCompletadaInfo && (
+        <ModalMeta
+          descripcion={metaCompletadaInfo.descripcion}
+          onClose={async () => {
+            await supabase.rpc("marcar_meta_notificada", { p_meta_id: metaCompletadaInfo.id });
+            setMetaCompletadaInfo(null);
+            setRefreshRetosKey((k) => k + 1);
+          }}
+          onCrearOtraMeta={async () => {
+            await supabase.rpc("marcar_meta_notificada", { p_meta_id: metaCompletadaInfo.id });
+            setMetaCompletadaInfo(null);
+            setRefreshRetosKey((k) => k + 1);
+          }}
+        />
       )}
 
       <Footer />

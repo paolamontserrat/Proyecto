@@ -14,6 +14,7 @@ import AdminCiclos from './pages/admin/AdminCiclos';
 import AdminConfiguracion from './pages/admin/AdminConfiguracion';
 import AdminContenido from './pages/admin/AdminContenido';
 import AdminActividades from './pages/admin/AdminActividades';
+import AdminRetos from './pages/admin/AdminRetos';
 
 
 
@@ -41,6 +42,7 @@ function App() {
           <Route path="configuracion" element={<AdminConfiguracion />} />   
           <Route path="contenido" element={<AdminContenido />} />
           <Route path="actividades" element={<AdminActividades />} />
+          <Route path="retos" element={<AdminRetos />} />
         </Route>
 
         {/* 🔐 protegidas */}

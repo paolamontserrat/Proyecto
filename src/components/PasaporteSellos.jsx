@@ -1,3 +1,5 @@
+import TarjetaVistosa from "./TarjetaVistosa";
+
 const MESES = [
   "Enero","Febrero","Marzo","Abril","Mayo","Junio",
   "Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"
@@ -8,14 +10,7 @@ function PasaporteSellos({ ahorros, mesActual, sellosReales = [] }) {
   const totalGanados = sellosReales.length;
 
   return (
-    <div className="w-full bg-white rounded-3xl p-4 shadow-lg border-2 border-alianza-amarillo/40">
-      <div className="flex items-center justify-between mb-3">
-        <p className="text-sm font-black text-alianza-azul">🏅 Tus sellos del año</p>
-        <span className="bg-alianza-azul text-white text-xs font-bold px-2.5 py-1 rounded-full">
-          {totalGanados}/12
-        </span>
-      </div>
-
+    <TarjetaVistosa emoji="🏅" titulo="Sellos" resumen={`${totalGanados}/12`} color="amarillo">
       <div className="grid grid-cols-4 gap-3">
         {MESES.map((mes, i) => {
           const total = (ahorros[mes] || []).reduce((s, a) => s + Number(a.monto), 0);
@@ -56,7 +51,7 @@ function PasaporteSellos({ ahorros, mesActual, sellosReales = [] }) {
           );
         })}
       </div>
-    </div>
+    </TarjetaVistosa>
   );
 }
 
