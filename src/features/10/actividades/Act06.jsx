@@ -51,11 +51,14 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                         .eq("actividad_id", config.id)
                         .maybeSingle();
 
-                    if (progreso?.datos_actividad?.respuestas) {
-                        setRespuestas(progreso.datos_actividad.respuestas);
+                    const dbRespuestas = progreso?.datos_actividad?.respuestas;
+                    
+                    // VALIDACIÓN: Asegurar que sea un arreglo de 5 elementos
+                    if (Array.isArray(dbRespuestas) && dbRespuestas.length === 5) {
+                        setRespuestas(dbRespuestas);
                         localStorage.setItem(
                             storageKey,
-                            JSON.stringify({ respuestas: progreso.datos_actividad.respuestas })
+                            JSON.stringify({ respuestas: dbRespuestas })
                         );
                         return;
                     }
@@ -71,9 +74,12 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                     const parsed = JSON.parse(guardado);
                     if (Array.isArray(parsed.respuestas) && parsed.respuestas.length === 5) {
                         setRespuestas(parsed.respuestas);
+                    } else {
+                        setRespuestas(["", "", "", "", ""]);
                     }
                 } catch (e) {
                     console.error("Error al cargar progreso local", e);
+                    setRespuestas(["", "", "", "", ""]);
                 }
             }
         };
@@ -91,7 +97,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     };
 
     // Validar que los 5 campos tengan texto escrito (sin contar espacios vacíos)
-    const estanTodasCompletas = respuestas.every((res) => res.trim().length > 0);
+    const estanTodasCompletas = Array.isArray(respuestas) && respuestas.every((res) => typeof res === "string" && res.trim().length > 0);
 
     const handleReset = () => {
         const vacio = ["", "", "", "", ""];

@@ -194,13 +194,11 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
     };
 
     const handleContinue = async () => {
-        const payloadFinal = {
-            ...formulario,
-            leido: true,
-            fechaCompleto: new Date().toISOString()
-        };
-        await syncDB(payloadFinal);
-        if (onComplete) onComplete();
+        await syncDB(formulario, true);
+
+        if (onComplete) {
+            onComplete(formulario); 
+        }
     };
 
     const estaFormularioValido = validarFormulario(formulario);

@@ -511,7 +511,7 @@ const Act04 = ({ data, onBack, onComplete, rango }) => {
         {resultado !== null && (
           <div
             className={`mb-6 text-center text-2xl font-black animate-fade-in-up ${
-              resultado ? "text-green-600" : "text-red-600"
+              resultado ? "text-blue-600" : "text-red-600"
             }`}
           >
             {resultado
@@ -530,7 +530,7 @@ const Act04 = ({ data, onBack, onComplete, rango }) => {
         <div className="flex flex-wrap gap-4">
           <button
             onClick={validar}
-            className="flex-1 bg-green-500 text-white py-4 rounded-full font-black transition-transform duration-300 hover:scale-105"
+            className="flex-1 bg-blue-500 text-white py-4 rounded-full font-black transition-transform duration-300 hover:scale-105"
           >
             {data.botones.validar}
           </button>

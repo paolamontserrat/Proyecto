@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
@@ -10,24 +10,47 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
     const imagenes = config.imagenes || [];
     const solucionGrid = config.solucionGrid || [];
 
-    // Inicializar el estado de la cuadrícula del usuario vacía
+    //Pistas
+    const casillasPista = useMemo(() => [
+        { r: 2, c: 15 },
+        { r: 2, c: 6 },
+        { r: 3, c: 1 },
+        { r: 5, c: 21 },
+        { r: 11, c: 0 },
+        { r: 7, c: 5 },
+        { r: 0, c: 12}
+    ], []);
+
+    // Función para aplicar las pistas al estado del grid
+    const aplicarPistasAGrid = (baseGrid) => {
+        if (!solucionGrid.length) return baseGrid;
+        return baseGrid.map((row, r) =>
+            row.map((val, c) => {
+                const esPista = casillasPista.some(p => p.r === r && p.c === c);
+                return esPista ? solucionGrid[r][c] : val;
+            })
+        );
+    };
+
+    // Estado inicial de la cuadrícula
     const [userGrid, setUserGrid] = useState(() => {
         if (solucionGrid.length > 0) {
-            return solucionGrid.map(row => row.map(() => ""));
+            const vacio = solucionGrid.map(row => row.map(() => ""));
+            return aplicarPistasAGrid(vacio);
         }
         return [];
     });
 
     const inputsRef = useRef({});
 
-    // Si el JSON tarda en cargar o se actualiza, volvemos a generar la estructura vacía
     useEffect(() => {
         if (solucionGrid.length > 0 && userGrid.length === 0) {
-            setUserGrid(solucionGrid.map(row => row.map(() => "")));
+            const vacio = solucionGrid.map(row => row.map(() => ""));
+            setUserGrid(aplicarPistasAGrid(vacio));
         }
-    }, [config.id, solucionGrid]);
+    }, [config.id, solucionGrid, userGrid.length]);
 
-    // --- Persistencia de Datos (Supabase + LocalStorage) ---
+    // --- Persistencia ---
     const getUser = () => {
         try {
             return JSON.parse(localStorage.getItem("usuario"));
@@ -39,12 +62,11 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act05-${rango}-${userId}`;
 
-    // Cargar progreso guardado al iniciar
     useEffect(() => {
         const cargarProgreso = async () => {
             if (userId !== "anon" && config.id) {
                 try {
-                    const { data: progreso, error } = await supabase
+                    const { data: progreso } = await supabase
                         .from("progreso_actividades")
                         .select("datos_actividad, completada")
                         .eq("usuario_id", userId)
@@ -52,32 +74,29 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                         .maybeSingle();
 
                     if (progreso) {
-                        // CASO A: Ya estaba completado en la nube
                         if (progreso.completada || progreso.datos_actividad?.completado) {
                             setUserGrid(solucionGrid);
                             localStorage.setItem(storageKey, JSON.stringify({ grid: solucionGrid }));
                             return;
                         }
 
-                        // CASO B: Hay un progreso intermedio guardado
                         if (progreso.datos_actividad?.grid) {
                             const dbGrid = progreso.datos_actividad.grid;
                             if (
                                 dbGrid.length === solucionGrid.length &&
                                 dbGrid.every((row, i) => row.length === solucionGrid[i].length)
                             ) {
-                                setUserGrid(dbGrid);
+                                setUserGrid(aplicarPistasAGrid(dbGrid));
                                 localStorage.setItem(storageKey, JSON.stringify({ grid: dbGrid }));
                                 return;
                             }
                         }
                     }
                 } catch (err) {
-                    console.warn("Error cargando progreso de Supabase, intentando local...", err);
+                    console.warn("Error cargando progreso...", err);
                 }
             }
 
-            // Fallback al LocalStorage
             const guardado = localStorage.getItem(storageKey);
             if (guardado) {
                 try {
@@ -87,9 +106,10 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                         parsed.grid.length === solucionGrid.length &&
                         parsed.grid.every((row, i) => row.length === solucionGrid[i].length)
                     ) {
-                        setUserGrid(parsed.grid);
+                        setUserGrid(aplicarPistasAGrid(parsed.grid));
                     } else {
-                        setUserGrid(solucionGrid.map(row => row.map(() => "")));
+                        const vacio = solucionGrid.map(row => row.map(() => ""));
+                        setUserGrid(aplicarPistasAGrid(vacio));
                         localStorage.removeItem(storageKey);
                     }
                 } catch (e) {
@@ -102,11 +122,18 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
     }, [config.id, solucionGrid, userId]);
 
     // ==========================================
-    // CÁLCULO DINÁMICO DE NÚMEROS DE LAS PISTAS
+    // 2. CÁLCULO DINÁMICO MULTI-NÚMERO (SOLUCIONA SOBREPOSICIÓN)
     // ==========================================
-    const mapaNumerosCeldas = {};
+    const mapaNumerosCeldas = useMemo(() => {
+        const mapa = {};
+        if (!solucionGrid.length) return mapa;
 
-    if (solucionGrid.length > 0) {
+        const agregarNumero = (r, c, num) => {
+            const key = `${r}-${c}`;
+            if (!mapa[key]) mapa[key] = [];
+            if (!mapa[key].includes(num)) mapa[key].push(num);
+        };
+
         pistas.horizontales?.forEach((p) => {
             const palabra = p.palabra;
             let encontrada = false;
@@ -115,7 +142,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                 for (let c = 0; c <= solucionGrid[r].length - palabra.length; c++) {
                     const segmento = solucionGrid[r].slice(c, c + palabra.length).join("");
                     if (segmento === palabra) {
-                        mapaNumerosCeldas[`${r}-${c}`] = p.numero;
+                        agregarNumero(r, c, p.numero);
                         encontrada = true;
                         break;
                     }
@@ -135,7 +162,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                         segmento += solucionGrid[r + k][c];
                     }
                     if (segmento === palabra) {
-                        mapaNumerosCeldas[`${r}-${c}`] = p.numero;
+                        agregarNumero(r, c, p.numero);
                         encontrada = true;
                         break;
                     }
@@ -143,7 +170,9 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                 if (encontrada) break;
             }
         });
-    }
+
+        return mapa;
+    }, [solucionGrid, pistas]);
 
     const handleInputChange = (r, c, val) => {
         const upperVal = val.toUpperCase().slice(-1);
@@ -184,7 +213,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
     const handleReset = () => {
         if (solucionGrid.length === 0) return;
         const vacio = solucionGrid.map(row => row.map(() => ""));
-        setUserGrid(vacio);
+        setUserGrid(aplicarPistasAGrid(vacio));
         localStorage.removeItem(storageKey);
     };
 
@@ -259,14 +288,12 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
 
                 {/* Contenedor del Crucigrama */}
                 <div className="relative w-full flex justify-center py-4 mb-12">
-                    {/* Imagen única flotante (Billete) */}
                     {imagenes[0] && (
                         <div className="hidden xl:block absolute right-[-2%] bottom-[-40px] w-48 animate-float-slow select-none z-10">
                             <img src={`${imagenes[0]}`} alt="Ilustración billete" className="w-full h-auto object-contain filter drop-shadow-md" />
                         </div>
                     )}
 
-                    {/* El Tablero del Crucigrama (25 Columnas) */}
                     <div
                         className="grid gap-[1px] xs:gap-[2px] p-2 sm:p-5 bg-yellow-400 rounded-3xl shadow-2xl border-4 border-yellow-500 w-full max-w-full relative z-0"
                         style={{
@@ -278,7 +305,10 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                                 const esCasilleroValido = char !== "";
                                 const letraUsuario = userGrid[r]?.[c] || "";
                                 const esCorrecto = letraUsuario === char && esCasilleroValido;
-                                const numeroPista = mapaNumerosCeldas[`${r}-${c}`];
+                                
+                                // Evaluamos si es una letra regalo/pista predeterminada
+                                const esPistaFija = casillasPista.some(p => p.r === r && p.c === c);
+                                const numerosPista = mapaNumerosCeldas[`${r}-${c}`] || [];
 
                                 if (!esCasilleroValido) {
                                     return (
@@ -294,10 +324,17 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                                         key={`${r}-${c}`}
                                         className="relative w-full aspect-square"
                                     >
-                                        {numeroPista && (
-                                            <span className="absolute top-[0.5px] left-[1px] text-[5px] xxs:text-[6px] xs:text-[7px] sm:text-[9px] font-black text-blue-700 z-10 pointer-events-none select-none leading-none">
-                                                {numeroPista}
-                                            </span>
+                                        {numerosPista.length > 0 && (
+                                            <div className="absolute top-[0.5px] left-[1px] flex flex-col leading-none z-10 pointer-events-none select-none">
+                                                {[...numerosPista].reverse().map((num) => (
+                                                    <span 
+                                                        key={num} 
+                                                        className="text-[4px] xxs:text-[5px] xs:text-[6px] sm:text-[8px] font-black text-blue-700"
+                                                    >
+                                                        {num}
+                                                    </span>
+                                                ))}
+                                            </div>
                                         )}
                                         <input
                                             ref={(el) => (inputsRef.current[`${r}-${c}`] = el)}
@@ -305,14 +342,16 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                                             maxLength={1}
                                             value={letraUsuario}
                                             onChange={(e) => handleInputChange(r, c, e.target.value)}
-                                            disabled={esCorrecto}
+                                            disabled={esCorrecto || esPistaFija}
                                             className={`
                                                 w-full h-full text-center font-black uppercase rounded-[2px] sm:rounded-md
                                                 transition-all border shadow-inner focus:outline-none focus:ring-1 focus:ring-blue-500
                                                 text-[8px] xxs:text-[9px] xs:text-[11px] sm:text-base border-gray-300
-                                                ${esCorrecto
-                                                    ? "bg-blue-600 border-yellow-600 text-white font-black cursor-not-allowed scale-95"
-                                                    : "bg-white text-blue-900 focus:bg-amber-100"
+                                                ${esPistaFija
+                                                    ? "bg-amber-200 text-blue-900 border-amber-400 font-black cursor-not-allowed"
+                                                    : esCorrecto
+                                                        ? "bg-blue-600 border-yellow-600 text-white font-black cursor-not-allowed scale-95"
+                                                        : "bg-white text-blue-900 focus:bg-amber-100"
                                                 }
                                             `}
                                         />
@@ -323,7 +362,6 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 </div>
 
-                {/* Vista responsiva de la imagen en pantallas pequeñas */}
                 {imagenes[0] && (
                     <div className="flex xl:hidden gap-4 justify-center items-center flex-wrap mb-8">
                         <img
@@ -335,8 +373,6 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto mt-6">
-
-                    {/* Pistas Horizontales */}
                     <div className="bg-sky-50 border-2 border-sky-100 rounded-3xl p-6 shadow-sm">
                         <h3 className="font-extrabold text-blue-900 text-xl mb-4 flex items-center gap-2">
                             <span>➡️</span> Horizontales
@@ -351,7 +387,6 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                         </div>
                     </div>
 
-                    {/* Pistas Verticales */}
                     <div className="bg-orange-50 border-2 border-orange-100 rounded-3xl p-6 shadow-sm">
                         <h3 className="font-extrabold text-amber-800 text-xl mb-4 flex items-center gap-2">
                             <span>⬇️</span> Verticales
@@ -365,10 +400,8 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                             ))}
                         </div>
                     </div>
-
                 </div>
 
-                {/* Fila de Botones de Control */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-10">
                     <button
                         onClick={handleReset}

@@ -246,17 +246,16 @@
       },
       "imagenExtra": "/images/0-5/19.png",
       "actividad": {
-        "titulo": "Encuentra las diferencias",
+        "titulo": "Encuentra las 6 diferencias",
         "imagenA": "/images/0-5/20.png",
         "imagenB": "/images/0-5/22.png",
         "totalDiferencias": 6,
         "diferencias": [
-          { "x": 214, "y": 30, "radio": 30 },
-          { "x": 207, "y": 107, "radio": 30 },
-          { "x": 222, "y": 149, "radio": 30 },
-          { "x": 171, "y": 220, "radio": 30 },
-          { "x": 69, "y": 68, "radio": 30 },
-          { "x": 13, "y": 74, "radio": 30 }
+          { "x": 68, "y": 16, "radio": 7, "descripción": "Manzana" },
+          { "x": 70, "y": 60, "radio": 6, "descripción": "Sonrisa" },
+          { "x": 64, "y": 48, "radio": 6, "descripción": "Ojo" },
+          { "x": 25, "y": 32, "radio": 7, "descripción": "Diferencia 4" },
+          { "x": 12, "y": 30, "radio": 8, "descripción": "cola" }
         ]
       }
     },

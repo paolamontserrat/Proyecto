@@ -110,7 +110,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                         <p className="text-xl sm:text-2xl font-black text-sky-900">
                             {secciones.introduccion.titulo}
                         </p>
-                        <div className="bg-amber-400 text-blue-950 font-black text-xl sm:text-3xl md:text-4xl py-3 px-4 sm:px-6 rounded-2xl sm:rounded-full inline-block shadow-sm max-w-full break-words leading-tight">
+                        <div className="bg-amber-400 text-blue-950 font-black text-xl sm:text-2xl md:text-3xl py-3 px-4 sm:px-6 rounded-2xl sm:rounded-full inline-block shadow-sm max-w-full break-words leading-tight">
                             {secciones.introduccion.subtitulo}
                         </div>
                         {secciones.introduccion.imagen && (

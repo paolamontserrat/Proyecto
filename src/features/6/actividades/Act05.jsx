@@ -298,6 +298,12 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
         </button>
         </div>
 
+        <div className="md:flex-row w-full mb-8 justify-content-center text-center">
+          <span className="text-alianza-azul font-black text-lg mb-2 ">
+            {data.actividadFinal.texto}
+          </span>
+        </div>
+
         <TipoDibujar
           userId={userId}
           actividadId={data.id}

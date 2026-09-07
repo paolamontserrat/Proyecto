@@ -4,7 +4,7 @@ import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-// ─── Dimensiones virtuales fijas (misma estrategia que TipoDibujar) ─────────
+// ─── Dimensiones virtuales fijas ─────────────────────────────────────────────
 const VIRTUAL_W = 1000;
 const VIRTUAL_H = 700;
 const SAVE_DEBOUNCE = 500;
@@ -20,43 +20,52 @@ const Act01 = ({ data, onComplete, rango, onBack }) => {
 
   // ── Refs ──────────────────────────────────────────────────────────────────
   const canvasRef      = useRef(null);
-  const containerRef   = useRef(null);   // 🔥 para medir el ancho real
+  const containerRef   = useRef(null);
   const saveTimer      = useRef(null);
   const isSaving       = useRef(false);
-  const isHydrating    = useRef(false);  // 🔥 bloquea guardado mientras carga paths
+  const isHydrating    = useRef(false);
   const localPaths     = useRef([]);
 
   // ── Estado ────────────────────────────────────────────────────────────────
-  const [scale,          setScale]          = useState(1);           // 🔥 escala responsiva
+  const [scale,          setScale]          = useState(1);
   const [paths,          setPaths]          = useState([]);
   const [color,          setColor]          = useState("#FFB300");
   const [loading,        setLoading]        = useState(true);
   const [nombre,         setNombre]         = useState("");
   const [nombreGuardado, setNombreGuardado] = useState(false);
   const [syncStatus,     setSyncStatus]     = useState("idle");
+  const [hasData,        setHasData]        = useState(false);
 
   const colores = ["#FF0000", "#FFB300", "#00FF00", "#0000FF", "#FF00FF", "#FFFF"];
-// 2. Agregar estado hasData junto a los otros estados
-const [hasData, setHasData] = useState(false);
 
-// 3. Actualizar isValid
-const isValid = (paths.length > 0 || hasData) && nombreGuardado;
+  const isValid = (paths.length > 0 || hasData) && nombreGuardado;
+
   // =========================================================================
-  //  ESCALA RESPONSIVA — igual que TipoDibujar
+  //  ESCALA RESPONSIVA (CORREGIDA CON ONLOAD Y RETARDO INICIAL)
   // =========================================================================
-  useEffect(() => {
-    const updateScale = () => {
-      if (!containerRef.current) return;
-      setScale(containerRef.current.offsetWidth / VIRTUAL_W);
-    };
- 
-    updateScale();
-    window.addEventListener("resize", updateScale);
-    return () => window.removeEventListener("resize", updateScale);
+  const updateScale = useCallback(() => {
+    if (!containerRef.current) return;
+    const currentWidth = containerRef.current.offsetWidth;
+    if (currentWidth > 0) {
+      setScale(currentWidth / VIRTUAL_W);
+    }
   }, []);
 
+  useEffect(() => {
+    updateScale();
+
+    // Re-calcula tras un breve tiempo para asegurar el renderizado completo del layout
+    const timer = setTimeout(updateScale, 100);
+
+    window.addEventListener("resize", updateScale);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", updateScale);
+    };
+  }, [updateScale]);
+
   // =========================================================================
-  //  APLICAR PATHS AL CANVAS (bloquea onStroke mientras hidrata)
+  //  APLICAR PATHS AL CANVAS
   // =========================================================================
   const applyPathsToCanvas = useCallback(async (newPaths) => {
     if (!canvasRef.current) return;
@@ -94,8 +103,6 @@ const isValid = (paths.length > 0 || hasData) && nombreGuardado;
       const savedPaths  = Array.isArray(saved?.dibujo) ? saved.dibujo : [];
       const savedNombre = saved?.nombre ?? "";
 
-      
-
       if (savedPaths.length > 0) {
         setHasData(true); 
         localPaths.current = savedPaths;
@@ -108,10 +115,10 @@ const isValid = (paths.length > 0 || hasData) && nombreGuardado;
     };
 
     load();
-  }, [userId, data.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [userId, data.id, applyPathsToCanvas]);
 
   // =========================================================================
-  //  REALTIME — otro dispositivo del mismo usuario
+  //  REALTIME
   // =========================================================================
   useEffect(() => {
     if (userId === "anon") return;
@@ -124,7 +131,7 @@ const isValid = (paths.length > 0 || hasData) && nombreGuardado;
           filter: `usuario_id=eq.${userId}` },
         (payload) => {
           if (isSaving.current) return;
-          if (payload.new?.actividad_id !== actividadId) return;
+          if (payload.new?.actividad_id !== data.id) return;
 
           const incoming = payload.new?.datos_actividad;
           if (!incoming) return;
@@ -171,10 +178,10 @@ const isValid = (paths.length > 0 || hasData) && nombreGuardado;
   }, [userId, data.id]);
 
   // =========================================================================
-  //  STROKE — igual que TipoDibujar: bloquea si está hidratando
+  //  STROKE
   // =========================================================================
   const handleStroke = useCallback(async () => {
-    if (isHydrating.current) return;   // 🔥 CLAVE: evita guardar trazos fantasma
+    if (isHydrating.current) return;
     if (!canvasRef.current) return;
 
     const exported = await canvasRef.current.exportPaths();
@@ -237,12 +244,6 @@ const isValid = (paths.length > 0 || hasData) && nombreGuardado;
         <button onClick={() => navigate(`/dashboard/${rango}`)} className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold shadow">
           🏠 Inicio
         </button>
-
-        <span className="text-sm font-medium">
-          {syncStatus === "saving" && <span className="text-yellow-500">⏳ Guardando…</span>}
-          {syncStatus === "saved"  && <span className="text-green-500">✅ Guardado</span>}
-          {syncStatus === "error"  && <span className="text-red-500">❌ Error al guardar</span>}
-        </span>
       </div>
 
       <div className="bg-white/90 p-5 md:p-8 rounded-3xl shadow-lg mb-6 text-center" translate="no">
@@ -251,13 +252,8 @@ const isValid = (paths.length > 0 || hasData) && nombreGuardado;
         <img src={data.recursos.procesoAhorro} className="w-full max-w-md mx-auto mb-4" alt="proceso" />
       </div>
 
-        
-
-
-      {/* ── CARD PRINCIPAL (mismo diseño que el original) ── */}
       <div className="bg-white p-5 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl" translate="no">
 
-        {/* Título de actividad */}
         <h3 className="text-lg md:text-xl font-black text-center text-alianza-azul mb-4">
           {data.actividad}
         </h3>
@@ -278,25 +274,23 @@ const isValid = (paths.length > 0 || hasData) && nombreGuardado;
           ))}
         </div>
 
-        {/* ── CANVAS con sistema de escala virtual (igual que TipoDibujar) ── */}
+        {/* CANVAS con sistema de escala corregido */}
         <div
           ref={containerRef}
           className="relative w-full border-4 border-gray-200 rounded-2xl mb-4 bg-white overflow-hidden"
-          style={{ height: `${VIRTUAL_H * scale}px` }}   // 🔥 altura que escala con el ancho real
+          style={{ height: `${VIRTUAL_H * scale}px` }}
         >
-          {/* Capa de escala: mantiene coordenadas virtuales exactas */}
           <div
             style={{
               width:           `${VIRTUAL_W}px`,
               height:          `${VIRTUAL_H}px`,
-              transform:       `scale(${scale})`,          // 🔥 escala uniforme
-              transformOrigin: "top left",                  // 🔥 ancla en esquina
+              transform:       `scale(${scale})`,
+              transformOrigin: "top left",
               position:        "absolute",
               top: 0,
               left: 0,
             }}
           >
-            {/* Canvas de dibujo */}
             <ReactSketchCanvas
               ref={canvasRef}
               width={`${VIRTUAL_W}px`}
@@ -308,9 +302,9 @@ const isValid = (paths.length > 0 || hasData) && nombreGuardado;
               style={{ position: "absolute", inset: 0, zIndex: 5 }}
             />
 
-            {/* Imagen del cochinito encima del canvas */}
             <img
               src={data.recursos?.cochinitoColorear}
+              onLoad={updateScale}
               className="absolute inset-0 w-full h-full object-contain pointer-events-none"
               style={{ zIndex: 10 }}
               alt="cochinito para colorear"
@@ -339,9 +333,9 @@ const isValid = (paths.length > 0 || hasData) && nombreGuardado;
           {nombreGuardado ? (
             <div
               onClick={() => setNombreGuardado(false)}
-              className="p-3 border-2 border-green-500 bg-green-50 rounded-xl text-center cursor-pointer"
+              className="p-3 border-2 border-blue-500 bg-blue-50 rounded-xl text-center cursor-pointer"
             >
-              <p className="font-bold text-green-700">¡Hola, {nombre}! 👋</p>
+              <p className="font-bold text-blue-700">¡Hola, {nombre}! 👋</p>
               <span className="text-xs text-gray-400">(toca para editar)</span>
             </div>
           ) : (

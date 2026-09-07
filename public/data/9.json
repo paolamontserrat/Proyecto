@@ -209,9 +209,14 @@
       },
       "instrucciones": {
         "titulo": "INSTRUCCIONES",
-        "texto": "Lee cada situación y marca",
-        "resaltado": "X",
-        "textoFinal": "con una  en la columna correcta:"
+        "resaltado0":"¡Conviértete en un detective! ",
+        "texto": "Lee cada situación y ",
+        "resaltado": "selecciona",
+        "texto2": "si sucede cuando guardas tu dinero en ",
+        "resaltado2": "CASA ",
+        "texto3": "o en la ",
+        "resaltado3": "CAJA POPULAR ",
+        "textoFinal": "Descubre en qué lugar tu dinero está más seguro."
       },
       "columnaSituacion": "Situación:",
       "columnaCasa": "CASA",

@@ -224,9 +224,20 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
             {data.instrucciones.titulo}
           </h3>
           <p className="text-lg">
+            <span className="font-black text-blue-500">
+              {data.instrucciones.resaltado0}
+            </span>{" "}
             {data.instrucciones.texto}{" "}
             <span className="font-black text-red-500">
               {data.instrucciones.resaltado}
+            </span>{" "}
+            {data.instrucciones.texto2}{" "}
+            <span className="font-black text-yellow-600">
+              {data.instrucciones.resaltado2}
+            </span>{" "}
+            {data.instrucciones.texto3}{" "}
+            <span className="font-black text-blue-600">
+              {data.instrucciones.resaltado3}
             </span>{" "}
             {data.instrucciones.textoFinal}
           </p>
@@ -239,7 +250,7 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
               <tr className="bg-blue-100">
                 <th className="border p-3 text-left">{data.columnaSituacion}</th>
                 <th className="border p-3 text-center text-yellow-600">{data.columnaCasa}</th>
-                <th className="border p-3 text-center text-green-600">{data.columnaCaja}</th>
+                <th className="border p-3 text-center text-blue-600">{data.columnaCaja}</th>
                 {validado && <th className="border p-3 text-center w-14"></th>}
               </tr>
             </thead>
@@ -255,7 +266,7 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
                   : noRespondida
                     ? "bg-amber-50"
                     : esCorrecta
-                      ? "bg-green-50"
+                      ? "bg-blue-50"
                       : "";
 
                 return (
@@ -367,7 +378,7 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
         {resultado !== null && (
           <div
             className={`mb-6 text-center text-2xl font-black animate-fade-in-up ${
-              resultado ? "text-green-600" : "text-red-600"
+              resultado ? "text-blue-600" : "text-red-600"
             }`}
           >
             {resultado
@@ -381,7 +392,7 @@ const Act05 = ({ data, onBack, onComplete, rango }) => {
         <div className="flex flex-wrap gap-4">
           <button
             onClick={validar}
-            className="flex-1 bg-green-500 text-white py-4 rounded-full font-black transition-transform duration-300 hover:scale-105"
+            className="flex-1 bg-blue-500 text-white py-4 rounded-full font-black transition-transform duration-300 hover:scale-105"
           >
             {data.botones.validar}
           </button>

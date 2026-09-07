@@ -52,14 +52,14 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                         .maybeSingle();
 
                     if (progreso) {
-                        // CASO A: Ya estaba completado en la nube (con versión vieja o nueva)
+                        // CASO A: Ya estaba completado en la nube
                         if (progreso.completada || progreso.datos_actividad?.completado) {
                             setUserGrid(solucionGrid);
                             localStorage.setItem(storageKey, JSON.stringify({ grid: solucionGrid }));
                             return;
                         }
 
-                        // CASO B: Hay un progreso intermedio del tablero guardado
+                        // CASO B: Hay un progreso intermedio guardado
                         if (progreso.datos_actividad?.grid) {
                             const dbGrid = progreso.datos_actividad.grid;
                             if (
@@ -77,7 +77,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                 }
             }
 
-            // Fallback al LocalStorage del dispositivo
+            // Fallback al LocalStorage
             const guardado = localStorage.getItem(storageKey);
             if (guardado) {
                 try {
@@ -102,11 +102,18 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
     }, [config.id, solucionGrid, userId]);
 
     // ==========================================
-    // CÁLCULO DINÁMICO DE NÚMEROS DE LAS PISTAS
+    // CÁLCULO DINÁMICO MULTI-NÚMERO (SOPORTA CRUCES DE PISTAS)
     // ==========================================
-    const mapaNumerosCeldas = {};
+    const mapaNumerosCeldas = React.useMemo(() => {
+        const mapa = {};
+        if (!solucionGrid.length) return mapa;
 
-    if (solucionGrid.length > 0) {
+        const agregarNumero = (r, c, num) => {
+            const key = `${r}-${c}`;
+            if (!mapa[key]) mapa[key] = [];
+            if (!mapa[key].includes(num)) mapa[key].push(num);
+        };
+
         pistas.horizontales?.forEach((p) => {
             const palabra = p.palabra;
             let encontrada = false;
@@ -115,7 +122,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                 for (let c = 0; c <= solucionGrid[r].length - palabra.length; c++) {
                     const segmento = solucionGrid[r].slice(c, c + palabra.length).join("");
                     if (segmento === palabra) {
-                        mapaNumerosCeldas[`${r}-${c}`] = p.numero;
+                        agregarNumero(r, c, p.numero);
                         encontrada = true;
                         break;
                     }
@@ -135,7 +142,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                         segmento += solucionGrid[r + k][c];
                     }
                     if (segmento === palabra) {
-                        mapaNumerosCeldas[`${r}-${c}`] = p.numero;
+                        agregarNumero(r, c, p.numero);
                         encontrada = true;
                         break;
                     }
@@ -143,7 +150,9 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                 if (encontrada) break;
             }
         });
-    }
+
+        return mapa;
+    }, [solucionGrid, pistas]);
 
     const handleInputChange = (r, c, val) => {
         const upperVal = val.toUpperCase().slice(-1);
@@ -278,7 +287,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                     )}
 
                     {imagenes[2] && (
-                        <div className="hidden xl:block absolute right-[1%] bottom-[-80px] w-40 animate-float-slow select-none z-10">
+                        <div className="hidden xl:block absolute right-[1%] bottom-[-108px] w-40 animate-float-slow select-none z-10">
                             <img src={`${imagenes[3]}`} alt="Billete portafolios" className="w-full h-auto object-contain filter drop-shadow-md" />
                         </div>
                     )}
@@ -295,7 +304,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                                 const esCasilleroValido = char !== "";
                                 const letraUsuario = userGrid[r]?.[c] || "";
                                 const esCorrecto = letraUsuario === char && esCasilleroValido;
-                                const numeroPista = mapaNumerosCeldas[`${r}-${c}`];
+                                const numerosPista = mapaNumerosCeldas[`${r}-${c}`] || [];
 
                                 if (!esCasilleroValido) {
                                     return (
@@ -311,10 +320,17 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                                         key={`${r}-${c}`} 
                                         className="relative w-full aspect-square"
                                     >
-                                        {numeroPista && (
-                                            <span className="absolute top-[0.5px] left-[1px] text-[5px] xxs:text-[6px] xs:text-[7px] sm:text-[9px] font-black text-blue-700 z-10 pointer-events-none select-none leading-none">
-                                                {numeroPista}
-                                            </span>
+                                        {numerosPista.length > 0 && (
+                                            <div className="absolute top-[0.5px] left-[1px] flex flex-col leading-none z-10 pointer-events-none select-none">
+                                                {numerosPista.map((num) => (
+                                                    <span 
+                                                        key={num} 
+                                                        className="text-[4px] xxs:text-[5px] xs:text-[6px] sm:text-[8px] font-black text-blue-700"
+                                                    >
+                                                        {num}
+                                                    </span>
+                                                ))}
+                                            </div>
                                         )}
                                         <input
                                             ref={(el) => (inputsRef.current[`${r}-${c}`] = el)}

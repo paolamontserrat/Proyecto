@@ -283,7 +283,7 @@
       "id": 7,
       "fondo": "/images/10/Fondo.png",
       "titulo": "MISIÓN: DETECTIVES DEL RIESGO",
-      "instrucciones": "Lee cada situación y marca con una X en la columna correcta:",
+      "instrucciones": "Existen dos formas de guardar tu dinero: en CASA o en la CAJA. Analiza las siguientes situaciones y marca con una X el lugar al que corresponde cada una",
       "columnas": ["CASA", "CAJA"],
       "situaciones": [
         {

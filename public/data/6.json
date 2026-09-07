@@ -12,7 +12,7 @@
       "id": 1,
       "tipo": "bienvenida",
       "titulo": "¡Bienvenido a tu aventura del ahorro!",
-      "intro": "En este pasaporte aprenderás:\u00BFQué es ahorrar?\u00BFCómo hacer crecer tu dinero?\u00BFCómo cumplir tus metas?\u00BFCómo tu Caja te ayuda a lograrlo?\nEn la Caja, tu esfuerzo cuenta.",
+      "intro": "En este pasaporte aprenderás: \u00BFQué es ahorrar? \u00BFCómo hacer crecer tu dinero? \u00BFCómo cumplir tus metas? \u00BFCómo tu Caja te ayuda a lograrlo? \nEn la Caja, tu esfuerzo cuenta.",
       "secciones": [
         {
           "subtitulo": "PROGRAMA CRECIENDO JUNTOS",
@@ -122,6 +122,7 @@
         "Cuando hay una meta, el ahorro tiene sentido."
         ]
     },
+    "instruccion": "Ayuda a tu hijo a responder estas preguntas y dibujar su meta de ahorro.",
     "actividad": "Dibuja tu meta",
     "preguntas": [
         "¿Qué quiero lograr?",
@@ -189,6 +190,7 @@
     "id": 7,
     "titulo": "Decisiones inteligentes",
     "actividad": "Arma el rompecabezas",
+    "instruccion": "Selecciona una imagen y hazle click al lugar correcto para armar el rompecabezas.",
     "recursos": {
         "fondo": "/images/6/Fondo1.png",
         "dulces": "/images/6/26.png",

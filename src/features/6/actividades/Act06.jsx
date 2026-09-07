@@ -179,7 +179,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
 
           <button
             onClick={validar}
-            className="flex-1 bg-green-500 text-white py-2 rounded-full font-bold"
+            className="flex-1 bg-blue-500 text-white py-2 rounded-full font-bold"
           >
             Validar
           </button>
@@ -196,7 +196,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
         {/* RESULTADO */}
         {resultado !== null && (
           <div className={`text-center font-black mb-6 text-lg ${
-            resultado ? 'text-green-600' : 'text-red-600'
+            resultado ? 'text-blue-600' : 'text-red-600'
           }`}>
             {resultado
               ? '¡Muy bien! 👏'

@@ -183,12 +183,6 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
           ← Regresar
         </button>
 
-        <span className="text-sm font-medium">
-          {syncStatus === "saving" && <span className="text-yellow-500">⏳ Guardando…</span>}
-          {syncStatus === "saved" && <span className="text-green-500">✅ Guardado</span>}
-          {syncStatus === "error" && <span className="text-red-500">❌ Error</span>}
-        </span>
-
         <button
           onClick={() => navigate(`/dashboard/${rango}`)}
           className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold"
@@ -215,6 +209,11 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
           </div>
         </div>
 
+        <div className="flex flex-col md:flex-row gap-4 mb-8 text-center">
+          <span className="text-alianza-azul font-black text-lg mb-2">
+            {data.instruccion}
+          </span>
+        </div>
         {/* DIBUJO (IMPORTANTE: igual que Act02) */}
         <TipoDibujar
           userId={userId}

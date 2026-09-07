@@ -196,27 +196,25 @@ const handlePuzzleComplete = () => {
             PUZZLE
         ========================= */}
         <div className="text-center mb-10">
-
           <h3 className="text-xl md:text-2xl font-black text-alianza-azul mb-4">
             {data.actividad}
           </h3>
-
-          <p className="font-bold text-gray-700 mb-4">
-            Observa la imagen y arma el rompecabezas
-          </p>
 
           <img
             src={data.recursos.imagenPrincipal}
             className="w-52 md:w-72 mx-auto rounded-2xl shadow-lg mb-6"
           />
+          <p className="font-bold text-gray-700 mb-4">
+            {data.instruccion}
+          </p>
 
           {puzzleCompletado ? (
             <div className="relative inline-block">
               <img
                 src={data.recursos.imagenInferior}
-                className="w-64 md:w-80 mx-auto rounded-2xl shadow-lg border-4 border-green-400"
+                className="w-64 md:w-80 mx-auto rounded-2xl shadow-lg border-4 border-blue-400"
               />
-              <div className="absolute -top-3 -right-3 bg-green-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-black shadow-lg text-lg">
+              <div className="absolute -top-3 -right-3 bg-blue-500 text-white rounded-full w-10 h-10 flex items-center justify-center font-black shadow-lg text-lg">
                 ✓
               </div>
             </div>
@@ -230,7 +228,7 @@ const handlePuzzleComplete = () => {
 
           {puzzleCompletado && (
             <>
-              <p className="text-green-600 font-black text-xl mt-6">
+              <p className="text-blue-600 font-black text-xl mt-6">
                 🎉 ¡EXCELENTE TARBAJO YA LO COMPLETASTE!
               </p>
 
