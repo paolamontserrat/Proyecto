@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import Confetti from './Confetti';
-
+// Modal que se muestra cuando el usuario completa un reto.
 function ModalReto({ titulo, monedas, onClose }) {
+  // Reproduce un sonido de felicitación al montar el componente.
   useEffect(() => {
     const audio = new Audio('/sounds/moneda.mp3');
     audio.play().catch(() => {});
@@ -16,8 +17,9 @@ function ModalReto({ titulo, monedas, onClose }) {
           ¡Reto cumplido!
         </h3>
         <p className="text-gray-500 text-sm mb-1">{titulo}</p>
+        // Muestra la cantidad de monedas obtenidas
         <p className="text-alianza-amarillo font-black text-lg mb-4">
-          +{monedas} moneda{monedas > 1 ? 's' : ''} 🪙
+          +{monedas} moneda{monedas > 1 ? 's' : ''} 🪙 
         </p>
 
         <button

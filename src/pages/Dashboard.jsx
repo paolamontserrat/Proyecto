@@ -80,11 +80,12 @@ const Dashboard = () => {
       <div className="px-6 mt-4">
         <AvisoDiplomas />
       </div>
+      {/* AVISO DE RETOS PENDIENTES */}
       <div className="px-6 mt-4">
         <AvisoRetos />
       </div>
 
-      {/* 🚀 PROGRESO DE AVENTURA */}
+      {/* PROGRESO DE AVENTURA */}
       {/* <div className="px-6">
         <ProgresoAventura rango={rango} />
       </div> */}

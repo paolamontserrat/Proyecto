@@ -20,7 +20,7 @@ function TarjetaKPI({ titulo, valor, subtitulo, color = "text-alianza-azul" }) {
     </div>
   );
 }
-
+// Componente de administración para mostrar el dashboard con KPIs, gráficos y últimos registros de usuarios.
 function AdminDashboard() {
   const anioActualReal = new Date().getFullYear();
   const AÑOS_DISPONIBLES = [anioActualReal - 2, anioActualReal - 1, anioActualReal, anioActualReal + 1];
@@ -29,6 +29,7 @@ function AdminDashboard() {
   const [filtroRango, setFiltroRango] = useState("todos");
   const [filtroAnio, setFiltroAnio] = useState(anioActualReal);
 
+  // Estado para almacenar los KPIs, reglas de negocio, datos por rango y mes, y últimos registros de usuarios.
   const [kpis, setKpis] = useState({
     totalUsuarios: 0, activados: 0, pendientes: 0, bloqueados: 0,
     pendientesAntiguos: 0, ahorroTotal: 0, sellosAnio: 0, sellosEsteMes: 0,
@@ -40,6 +41,7 @@ function AdminDashboard() {
   const [datosPorMes, setDatosPorMes] = useState([]);
   const [ultimosRegistros, setUltimosRegistros] = useState([]);
 
+  // Función para cargar los datos del dashboard desde Supabase según los filtros de rango y año seleccionados.
   const cargarDashboard = useCallback(async () => {
     setCargando(true);
 
@@ -99,6 +101,7 @@ function AdminDashboard() {
       elegiblesCiclo = elegiblesCiclo.filter((c) => idsRango.includes(c.usuario_id));
     }
 
+    // Crea un conteo de usuarios por rango para mostrar en el gráfico de barras.
     const conteoRango = Object.fromEntries(RANGOS.map((r) => [r, 0]));
     (statsUsuarios?.por_rango || []).forEach((item) => {
       if (item.nivel && conteoRango[item.nivel] !== undefined) conteoRango[item.nivel] = item.total;
@@ -117,6 +120,7 @@ function AdminDashboard() {
     });
     setDatosPorMes(MESES.map((m) => ({ mes: m.slice(0, 3), ahorro: conteoMes[m] })));
 
+    // Crea un mapa de configuración para obtener las reglas de negocio actuales.
     const mapaConfig = Object.fromEntries((configRes.data || []).map((c) => [c.clave, c.valor]));
     setReglas({
       monto: mapaConfig["monto_minimo_sello"] || "—",

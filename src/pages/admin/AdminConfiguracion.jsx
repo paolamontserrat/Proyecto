@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabaseClient';
 
+// Componente de administración para configurar reglas de ahorro y gamificación.
 function AdminConfiguracion() {
   return (
     <div>
@@ -15,9 +16,7 @@ function AdminConfiguracion() {
   );
 }
 
-// =====================================================
 // Reglas del ahorro (monto por sello, sellos por diploma, etc.)
-// =====================================================
 function SeccionReglasAhorro() {
   const [items, setItems] = useState([]);
   const [editando, setEditando] = useState(null);
@@ -81,9 +80,8 @@ function SeccionReglasAhorro() {
   );
 }
 
-// =====================================================
+
 // Insignias (umbral de estrellas necesarias para cada una)
-// =====================================================
 function SeccionInsignias() {
   const [insignias, setInsignias] = useState([]);
   const [cargando, setCargando] = useState(true);

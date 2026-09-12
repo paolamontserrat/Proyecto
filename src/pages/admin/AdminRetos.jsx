@@ -10,7 +10,7 @@ const VACIO = {
   fecha_fin: "",
   recompensa_monedas: 1,
 };
-
+// Función para calcular el estado de un reto según su fecha de inicio, fecha de fin y si está activo.
 const calcularEstado = (reto) => {
   const hoy = new Date().toISOString().slice(0, 10);
   if (!reto.activo) return { label: "Inactivo", color: "bg-gray-300 text-gray-700" };
@@ -18,7 +18,7 @@ const calcularEstado = (reto) => {
   if (hoy > reto.fecha_fin) return { label: "Vencido", color: "bg-gray-200 text-gray-600" };
   return { label: "Vigente", color: "bg-green-100 text-green-700" };
 };
-
+// Componente de administración para mostrar, crear, editar y eliminar retos de ahorro.
 const AdminRetos = () => {
   const [retos, setRetos] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -90,6 +90,7 @@ const AdminRetos = () => {
     cargarRetos();
   };
 
+  // Función para alternar el estado activo/inactivo de un reto y refrescar la lista de retos.
   const alternarActivo = async (reto) => {
     await supabase.from("retos").update({ activo: !reto.activo }).eq("id", reto.id);
     cargarRetos();

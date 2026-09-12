@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import Footer from '../components/Footer';
 
+// Página para recuperar la contraseña de un usuario mediante su número de socio y pregunta de seguridad.
 function RecuperarPassword() {
   const [paso, setPaso] = useState('socio'); // 'socio' | 'responder'
   const [numeroSocio, setNumeroSocio] = useState('');
@@ -16,6 +17,7 @@ function RecuperarPassword() {
 
   const navigate = useNavigate();
 
+  // Función para manejar la búsqueda de la pregunta de seguridad basada en el número de socio.
   const handleBuscar = async (e) => {
     e.preventDefault();
     setError('');
@@ -44,7 +46,8 @@ function RecuperarPassword() {
     setPregunta(data.pregunta);
     setPaso('responder');
   };
-
+  
+  // Función para manejar el restablecimiento de la contraseña.
   const handleRestablecer = async (e) => {
     e.preventDefault();
     setError('');
@@ -58,6 +61,7 @@ function RecuperarPassword() {
       return;
     }
 
+    // Llama a la función remota en Supabase para restablecer la contraseña.
     setCargando(true);
     const { data, error: rpcError } = await supabase.rpc('recuperar_password', {
       p_numero_socio: numeroSocio.trim().toUpperCase(),

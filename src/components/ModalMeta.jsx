@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import Confetti from './Confetti';
-
+// Modal que se muestra cuando el usuario completa una meta personal.
 function ModalMeta({ descripcion, onClose, onCrearOtraMeta }) {
+  // Reproduce un sonido de felicitación al montar el componente.
   useEffect(() => {
     const audio = new Audio('/sounds/meta_completada.mp3');
     audio.play().catch(() => {});

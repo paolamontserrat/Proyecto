@@ -6,7 +6,7 @@ import ModalConfirmar from "../../components/admin/ModalConfirmar";
 import { RANGOS } from "../../constants/rangos";
 
 const POR_PAGINA = 15;
-
+// Componente de administración para mostrar, buscar, filtrar y gestionar usuarios.
 function AdminUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [total, setTotal] = useState(0);
@@ -23,6 +23,7 @@ function AdminUsuarios() {
   const [procesandoAccion, setProcesandoAccion] = useState(false);
   const [errorAccion, setErrorAccion] = useState("");
 
+  // Función para cargar la lista de usuarios desde Supabase según los filtros y la búsqueda actual.
   const cargarUsuarios = useCallback(async () => {
     setCargando(true);
 
@@ -46,6 +47,7 @@ function AdminUsuarios() {
     setPagina(0);
   }, [busqueda, filtroNivel, filtroEstado]);
 
+  // Función para ejecutar la acción confirmada (resetear contraseña, bloquear/desbloquear o eliminar usuario) y refrescar la lista de usuarios.
   const ejecutarAccion = async () => {
     if (!confirmarAccion) return;
     setProcesandoAccion(true);
@@ -89,6 +91,7 @@ function AdminUsuarios() {
       <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
         <h1 className="text-2xl font-bold text-alianza-azul">Usuarios</h1>
         <div className="flex gap-2">
+          // Botones para abrir los modales de importar CSV y agregar un nuevo usuario.
           <button
             onClick={() => setModalImportar(true)}
             className="bg-white border border-alianza-azul text-alianza-azul px-4 py-2 rounded-lg font-semibold text-sm"
@@ -277,7 +280,8 @@ function AdminUsuarios() {
 
       {confirmarAccion && (
         <ModalConfirmar
-          titulo={
+        // Título del modal de confirmación según el tipo de acción y el estado del usuario.  
+        titulo={
             confirmarAccion.tipo === "reset"
               ? "Resetear contraseña"
               : confirmarAccion.tipo === "eliminar"
@@ -286,6 +290,7 @@ function AdminUsuarios() {
                   ? "Desbloquear usuario"
                   : "Bloquear usuario"
           }
+          // Mensaje de confirmación según el tipo de acción y el estado del usuario.
           mensaje={
             confirmarAccion.tipo === "reset"
               ? `${confirmarAccion.usuario.nombre} deberá crear una nueva contraseña la próxima vez que inicie sesión.`

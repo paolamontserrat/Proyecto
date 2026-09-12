@@ -2,18 +2,18 @@ import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabaseClient';
 import { RANGOS } from '../../constants/rangos';
 
-// Mismo enmascarado que ya usamos en el resto del panel
+// Componente de administración para mostrar el progreso de actividades de los usuarios según su rango de edad.
 const enmascarar = (numero) => {
   if (!numero) return "";
   return `${numero.slice(0, 2)}${"•".repeat(Math.max(0, numero.length - 4))}${numero.slice(-2)}`;
 };
-
 function AdminActividades() {
   const [rango, setRango] = useState(RANGOS[0]);
   const [totalActividades, setTotalActividades] = useState(null);
   const [usuarios, setUsuarios] = useState([]);
   const [cargando, setCargando] = useState(true);
 
+  // Función para cargar los datos de progreso de actividades de los usuarios según el rango seleccionado.
   const cargar = useCallback(async () => {
     setCargando(true);
 
@@ -32,9 +32,7 @@ function AdminActividades() {
 
     setTotalActividades(total);
 
-    // Antes hacía .from('usuarios').select(...) directo — eso quedó
-    // bloqueado cuando cerramos la política de lectura pública de
-    // 'usuarios'. Ahora pasa por la función RPC correspondiente.
+    // Consulta a Supabase para obtener los usuarios del rango seleccionado y su progreso en actividades completadas.
     const { data: usuariosData } = await supabase.rpc('admin_usuarios_por_rango', {
       p_rango: rango,
     });
@@ -47,6 +45,7 @@ function AdminActividades() {
 
     const ids = usuariosData.map((u) => u.id);
 
+    // Consulta a Supabase para obtener el conteo de actividades completadas por cada usuario en el rango seleccionado.
     const { data: progresoData } = await supabase
       .from('progreso_actividades')
       .select('usuario_id, completada')
@@ -59,6 +58,7 @@ function AdminActividades() {
       conteo[p.usuario_id] = (conteo[p.usuario_id] || 0) + 1;
     });
 
+    // Combina los datos de usuarios con el conteo de actividades completadas y ordena por número de actividades completadas.
     setUsuarios(
       usuariosData
         .map((u) => ({
@@ -75,6 +75,7 @@ function AdminActividades() {
     cargar();
   }, [cargar]);
 
+  // Calcula el promedio de avance de actividades completadas por los usuarios en el rango seleccionado.
   const promedio =
     usuarios.length > 0 && totalActividades
       ? Math.round(
@@ -95,6 +96,7 @@ function AdminActividades() {
       </p>
 
       <div className="flex gap-2 mb-4 flex-wrap">
+        // Botones para seleccionar el rango de edad y actualizar la vista de progreso.
         {RANGOS.map((r) => (
           <button
             key={r}
@@ -110,6 +112,7 @@ function AdminActividades() {
         ))}
       </div>
 
+      // Muestra un mensaje de error si no se pudo determinar el total de actividades desde el archivo JSON correspondiente al rango seleccionado.
       {totalActividades === null && !cargando && (
         <div className="bg-amber-50 border border-amber-300 text-amber-700 text-sm rounded-xl p-3 mb-4">
           No pude determinar el total de actividades de la edad {rango} desde{' '}
@@ -166,6 +169,7 @@ function AdminActividades() {
               </tr>
             )}
 
+            // Muestra la lista de usuarios con su progreso en actividades completadas y un indicador visual del porcentaje de avance.
             {usuarios.map((u) => {
               const pct = totalActividades
                 ? Math.min(

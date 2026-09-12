@@ -1,28 +1,34 @@
 import { useMemo } from 'react';
 
+// Colores para el confeti.
 const COLORES = ['#1E3A8A', '#FACC15', '#22C55E', '#EF4444', '#0EA5E9', '#F97316'];
 
 function Confetti({ cantidad = 60 }) {
+  // Genera una sola vez (useMemo) la lista de "piezas" de confeti, cada una con
+  // posición, color, tamaño y velocidad de caída aleatorios, para que no se
+  // recalculen en cada render y así no se vea "saltado" el efecto.
   const piezas = useMemo(() => {
     return Array.from({ length: cantidad }).map((_, i) => ({
       id: i,
-      left: Math.random() * 100,
-      delay: Math.random() * 0.6,
-      duration: 2 + Math.random() * 1.5,
+      left: Math.random() * 100,           // posición horizontal (0-100%)
+      delay: Math.random() * 0.6,          // retraso antes de empezar a caer
+      duration: 2 + Math.random() * 1.5,   // duración de la caída
       color: COLORES[Math.floor(Math.random() * COLORES.length)],
-      size: 6 + Math.random() * 6,
-      rotate: Math.random() * 360,
+      size: 6 + Math.random() * 6,         // tamaño del papelito
+      rotate: Math.random() * 360,         // rotación inicial
     }));
   }, [cantidad]);
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-[60]">
+      {/* Animación CSS: cada papelito cae de arriba hacia abajo girando */}
       <style>{`
         @keyframes caer {
           0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
           100% { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
         }
       `}</style>
+      {/* Dibuja cada papelito con su propia posición, color y tiempos de animación */}
       {piezas.map((p) => (
         <span
           key={p.id}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabaseClient';
 
+// Componente de administración para mostrar el progreso de ciclos de los usuarios que completaron 2 años consecutivos de ahorro constante.
 function AdminCiclos() {
   const [ciclos, setCiclos] = useState([]);
   const [beneficios, setBeneficios] = useState({});
@@ -17,15 +18,18 @@ function AdminCiclos() {
       return;
     }
 
+    // Consulta a Supabase para obtener los datos públicos de los usuarios asociados a los ciclos completados.
     const ids = [...new Set(ciclosData.map((c) => Number(c.usuario_id)))];
     const { data: usuariosData } = await supabase.rpc('usuarios_publicos_por_ids', { p_ids: ids });
 
     const mapaUsuarios = Object.fromEntries((usuariosData || []).map((u) => [String(u.id), u]));
 
+    // Consulta a Supabase para obtener los beneficios asociados a los ciclos completados.
     const { data: beneficiosData } = await supabase
       .from('beneficios_ciclo')
       .select('usuario_id, anio_inicio, entregado, tipo');
 
+    // Crea un mapa de beneficios para asociar los beneficios con la información del usuario correspondiente y el año de inicio del ciclo.
     const mapaBeneficios = {};
     (beneficiosData || []).forEach((b) => {
       mapaBeneficios[`${b.usuario_id}-${b.anio_inicio}`] = b;
@@ -72,6 +76,7 @@ function AdminCiclos() {
             {!cargando && ciclos.length === 0 && (
               <tr><td colSpan={5} className="p-4 text-center text-gray-400">Nadie ha completado 2 ciclos todavía</td></tr>
             )}
+            // Muestra la lista de ciclos completados con la información del usuario, los sellos obtenidos en cada año y el estado de entrega de los beneficios asociados.
             {ciclos.map((c, i) => {
               const credito = beneficios[`${c.usuario_id}-${c.anio_inicio}`];
               const becaEntregada = credito?.tipo === 'beca' && credito?.entregado;

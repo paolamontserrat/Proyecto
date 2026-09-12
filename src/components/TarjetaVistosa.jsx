@@ -35,16 +35,18 @@ const TarjetaVistosa = ({
           </span>
         )}
       </button>
-
+      // Modal que se abre al tocar la tarjeta, mostrando el contenido adicional.
       {abierto && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-3xl w-full max-w-md max-h-[85vh] overflow-y-auto p-5 relative">
+            // Botón para cerrar el modal
             <button
               onClick={() => setAbierto(false)}
               className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-black text-lg"
             >
               ✕
             </button>
+            // Encabezado del modal con el emoji y el título de la tarjeta.
             <div className="flex items-center gap-2 mb-4">
               <span className="text-2xl">{emoji}</span>
               <h3 className="font-black text-alianza-azul uppercase">

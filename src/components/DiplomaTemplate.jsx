@@ -1,7 +1,8 @@
 import { forwardRef } from 'react';
-
+// Componente que representa la plantilla de un diploma fecha.
 const DiplomaTemplate = forwardRef(({ nombre, numero, fecha }, ref) => {
   return (
+    // Contenedor principal del diploma, con un fondo degradado y centrado.
     <div
       ref={ref}
       style={{
@@ -17,6 +18,7 @@ const DiplomaTemplate = forwardRef(({ nombre, numero, fecha }, ref) => {
         boxSizing: 'border-box',
       }}
     >
+      // Contenedor interno del diploma, con un borde y esquinas redondeadas.
       <div
         style={{
           border: '10px solid #FACC15',

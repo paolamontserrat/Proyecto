@@ -2,34 +2,38 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../supabaseClient"; // ajusta la ruta según tu proyecto
 import ModalMeta from "./ModalMeta";
 
+// Componente que muestra la meta de ahorro personal del socio y su barra de progreso.
 const MetaPersonal = ({ usuarioId }) => {
-  const [meta, setMeta] = useState(null);
-  const [cargando, setCargando] = useState(true);
-  const [mostrarForm, setMostrarForm] = useState(false);
+  const [meta, setMeta] = useState(null);           // la meta más reciente del socio (o null si nunca ha creado una)
+  const [cargando, setCargando] = useState(true);    
+  const [mostrarForm, setMostrarForm] = useState(false);   
   const [mostrarModal, setMostrarModal] = useState(false);
   const [form, setForm] = useState({ descripcion: "", monto_meta: "", fecha_prevista: "" });
 
+  // Trae de la base de datos la meta más reciente del socio, sin importar si ya la completó.
   const cargarMeta = async () => {
     setCargando(true);
-    // Siempre la más reciente, sin importar si ya se completó o no.
     const { data } = await supabase
       .from("metas_personales")
       .select("*")
       .eq("usuario_id", usuarioId)
-      .order("creada_en", { ascending: false })
+      .order("creada_en", { ascending: false }) // la más nueva primero
       .limit(1)
       .maybeSingle();
     setMeta(data || null);
     setCargando(false);
-    // Solo muestra el modal si está completada Y todavía no se le avisó.
+    // Muestra el modal de "¡meta cumplida!"
     if (data?.completada && !data?.notificada) setMostrarModal(true);
   };
 
+  // Carga la meta en cuanto se conoce el id del usuario.
   useEffect(() => {
     if (usuarioId) cargarMeta();
   }, [usuarioId]);
 
+  // Guarda una meta nueva
   const crearMeta = async () => {
+    // Validación
     if (!form.descripcion || !form.monto_meta) {
       alert("Escribe tu meta y el monto a ahorrar.");
       return;
@@ -38,15 +42,18 @@ const MetaPersonal = ({ usuarioId }) => {
       usuario_id: usuarioId,
       descripcion: form.descripcion,
       monto_meta: Number(form.monto_meta),
-      fecha_prevista: form.fecha_prevista || null,
+      fecha_prevista: form.fecha_prevista || null, // la fecha es opcional
     });
     if (error) return alert("No se pudo crear la meta: " + error.message);
+    // Limpia el formulario y lo oculta, y refresca la meta desde la base de datos.
     setForm({ descripcion: "", monto_meta: "", fecha_prevista: "" });
     setMostrarForm(false);
     setMostrarModal(false);
     cargarMeta();
   };
 
+  // Se ejecuta al cerrar el modal de felicitación: marca en la base de datos que ya se
+  // le avisó al socio (para que no vuelva a salir el modal) y refresca los datos.
   const cerrarModal = async () => {
     if (meta?.id) {
       await supabase.rpc("marcar_meta_notificada", { p_meta_id: meta.id });
@@ -55,16 +62,20 @@ const MetaPersonal = ({ usuarioId }) => {
     cargarMeta(); // refresca para que meta.notificada quede en true localmente
   };
 
+  // Mientras se consulta Supabase no se dibuja nada, para no mostrar un estado a medias.
   if (cargando) return null;
 
-  // Puede crear una meta nueva si nunca ha tenido una, o si la última ya se completó.
+  // El socio puede crear una meta nueva si nunca ha tenido una, o si la última ya se completó
   const puedeCrearNueva = !meta || meta.completada;
+
+  // Porcentaje de avance de la meta actual 
   const porcentaje = meta && !meta.completada
     ? Math.min(100, Math.round((meta.monto_actual / meta.monto_meta) * 100))
     : 0;
 
   return (
     <div>
+      {/* Formulario para crear una meta nueva */}
       {mostrarForm && (
         <div className="grid gap-3">
           <input
@@ -103,6 +114,7 @@ const MetaPersonal = ({ usuarioId }) => {
         </div>
       )}
 
+      {/* Meta activa en progreso: barra de avance */}
       {!mostrarForm && meta && !meta.completada && (
         <div>
           <p className="text-sm font-bold text-gray-700">{meta.descripcion}</p>
@@ -119,12 +131,14 @@ const MetaPersonal = ({ usuarioId }) => {
         </div>
       )}
 
+      {/* Meta ya completada: mensaje de logro */}
       {!mostrarForm && meta && meta.completada && (
         <p className="text-sm text-green-600 font-bold mb-2">
           ✅ Meta cumplida: {meta.descripcion}
         </p>
       )}
 
+      {/* Botón para crear meta nueva */}
       {!mostrarForm && puedeCrearNueva && (
         <button
           onClick={() => setMostrarForm(true)}
@@ -134,6 +148,7 @@ const MetaPersonal = ({ usuarioId }) => {
         </button>
       )}
 
+      {/* Modal de felicitación al completar la meta */}
       {mostrarModal && meta && (
         <ModalMeta
           descripcion={meta.descripcion}

@@ -3,9 +3,10 @@ import html2canvas from 'html2canvas';
 import DiplomaTemplate from './DiplomaTemplate';
 
 function ModalDiploma({ diploma, nombreUsuario, onClose, onDescargado }) {
-  const ref = useRef(null);
-  const [generando, setGenerando] = useState(false);
+  const ref = useRef(null);              
+  const [generando, setGenerando] = useState(false); 
 
+  // Convierte el DiplomaTemplate en una imagen PNG y dispara la descarga automática en el navegador
   const descargar = async () => {
     if (!ref.current) return;
     setGenerando(true);
@@ -13,13 +14,14 @@ function ModalDiploma({ diploma, nombreUsuario, onClose, onDescargado }) {
     const canvas = await html2canvas(ref.current, { scale: 2 });
     const url = canvas.toDataURL('image/png');
 
+    // Crea un enlace de descarga y lo "clickea" para forzar la descarga.
     const a = document.createElement('a');
     a.href = url;
     a.download = `diploma-${diploma.numero}.png`;
     a.click();
 
     setGenerando(false);
-    onDescargado();
+    onDescargado(); // avisa al componente padre que ya se descargó
   };
 
   return (

@@ -22,7 +22,7 @@ const enmascarar = (numero) => {
   if (!numero) return "";
   return `${numero.slice(0, 2)}${"•".repeat(Math.max(0, numero.length - 4))}${numero.slice(-2)}`;
 };
-
+// Componente de administración para ver y gestionar los ahorros, sellos y diplomas de los usuarios.
 function AdminAhorros() {
   const [tab, setTab] = useState("buscar"); // 'buscar' | 'sellos' | 'diplomas'
 
@@ -59,9 +59,7 @@ function AdminAhorros() {
   );
 }
 
-// =====================================================
 // TAB 1: Buscar usuario, ver historial, registrar/borrar depósitos
-// =====================================================
 function TabHistorial() {
   const [usuarios, setUsuarios] = useState([]);
   const [conteoSellos, setConteoSellos] = useState({});
@@ -84,6 +82,7 @@ function TabHistorial() {
     });
     setUsuarios(data || []);
 
+    // Consulta a Supabase para obtener el conteo de sellos otorgados a cada usuario en el año actual.
     if (data && data.length > 0) {
       const ids = data.map((u) => u.id);
       const { data: sellosData } = await supabase
@@ -108,12 +107,14 @@ function TabHistorial() {
     cargarUsuarios();
   }, [cargarUsuarios]);
 
+  // Función para cargar los detalles de ahorros y sellos de un usuario seleccionado.
   const cargarDetalle = useCallback(
     async (usuario) => {
       setSeleccionado(usuario);
       setMesExpandido(null);
       setAvisoEliminar(null);
 
+      // Consulta a Supabase para obtener los depósitos de ahorros del usuario seleccionado en el año actual.
       const { data: ahorroData } = await supabase
         .from("ahorros_usuario")
         .select("datos")
@@ -123,6 +124,7 @@ function TabHistorial() {
 
       setAhorros(ahorroData?.datos || {});
 
+      // Consulta a Supabase para obtener los sellos digitales del usuario seleccionado en el año actual.
       const { data: sellosData } = await supabase
         .from("sellos_digitales")
         .select("mes, anio")
@@ -366,9 +368,7 @@ function TabHistorial() {
   );
 }
 
-// =====================================================
 // TAB 2: Todos los sellos otorgados
-// =====================================================
 function TabSellos() {
   const [sellos, setSellos] = useState([]);
   const [filtroMes, setFiltroMes] = useState("todos");
@@ -378,6 +378,7 @@ function TabSellos() {
     const cargar = async () => {
       setCargando(true);
 
+      // Consulta a Supabase para obtener los sellos digitales, con opción de filtrar por mes.
       let query = supabase
         .from("sellos_digitales")
         .select("usuario_id, mes, anio, monto_acumulado, fecha_sello")
@@ -393,7 +394,7 @@ function TabSellos() {
         setCargando(false);
         return;
       }
-
+// Consulta a Supabase para obtener los datos públicos de los usuarios asociados a los sellos obtenidos.
       const ids = [...new Set(data.map((s) => Number(s.usuario_id)))];
       const { data: usuariosData } = await supabase.rpc(
         "usuarios_publicos_por_ids",
@@ -477,9 +478,7 @@ function TabSellos() {
   );
 }
 
-// =====================================================
 // TAB 3: Diplomas pendientes de entregar
-// =====================================================
 function TabDiplomas() {
   const [pendientes, setPendientes] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -505,6 +504,7 @@ function TabDiplomas() {
       { p_ids: ids },
     );
 
+    // Crea un mapa de usuarios para asociar los diplomas con la información del usuario correspondiente.
     const mapaUsuarios = Object.fromEntries(
       (usuariosData || []).map((u) => [String(u.id), u]),
     );
@@ -519,6 +519,7 @@ function TabDiplomas() {
     cargar();
   }, [cargar]);
 
+  // Función para marcar un diploma como entregado en la base de datos y refrescar la lista de diplomas pendientes.
   const marcarEntregado = async (usuarioId, numero) => {
     await supabase.rpc("admin_marcar_diploma_entregado", {
       p_usuario_id: usuarioId,

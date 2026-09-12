@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import TarjetaVistosa from './TarjetaVistosa';
 import ModalDiploma from './ModalDiploma';
-
+// Componente que muestra los diplomas obtenidos por el usuario en un formato vistoso.
 function PasaporteDiplomas({ diplomas }) {
-  const [diplomaAbierto, setDiplomaAbierto] = useState(null);
+  const [diplomaAbierto, setDiplomaAbierto] = useState(null);// Estado para controlar qué diploma está abierto en el modal.
   const usuario = JSON.parse(localStorage.getItem('usuario') || 'null');
 
   const total = diplomas?.length || 0;
@@ -15,6 +15,7 @@ function PasaporteDiplomas({ diplomas }) {
       ) : (
         <div className="flex flex-wrap gap-3">
           {diplomas.map((d) => (
+            // Botón que representa cada diploma, al tocarlo se abre un modal con más detalles.
             <button
               key={d.numero}
               onClick={() => setDiplomaAbierto(d)}
@@ -27,7 +28,7 @@ function PasaporteDiplomas({ diplomas }) {
           ))}
         </div>
       )}
-
+       // Modal que se muestra cuando el usuario toca un diploma para ver más detalles.
       {diplomaAbierto && (
         <ModalDiploma
           diploma={diplomaAbierto}

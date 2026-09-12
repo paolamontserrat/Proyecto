@@ -4,7 +4,6 @@ import { supabase } from "../supabaseClient";
 import Footer from "../components/Footer";
 
 // Preguntas de seguridad sugeridas para la activación de cuenta.
-// Puedes editar esta lista libremente.
 const PREGUNTAS_SEGURIDAD = [
   "¿Cuál es el nombre de tu mascota?",
   "¿Cuál es tu color favorito?",
@@ -33,6 +32,7 @@ function Login() {
 
   const limpiarMensajes = () => setError("");
 
+  // Guarda la sesión del usuario en el localStorage para mantenerlo logueado.
   const guardarSesion = (data) => {
     localStorage.removeItem("usuario");
     localStorage.setItem(
@@ -47,6 +47,7 @@ function Login() {
     );
   };
 
+  // Resetea el formulario y vuelve a la pantalla inicial para ingresar otro número de socio.
   const volverInicio = () => {
     setPaso("socio");
     setPassword("");
@@ -55,9 +56,7 @@ function Login() {
     limpiarMensajes();
   };
 
-  // =========================
-  // PASO 1: Verificar número de socio
-  // =========================
+  // Verificar número de socio y determinar si es primer ingreso o login normal.
   const handleContinuar = async (e) => {
     e.preventDefault();
     limpiarMensajes();
@@ -71,15 +70,16 @@ function Login() {
 
     setCargando(true);
 
+    // Llama a la función remota en Supabase para verificar el número de socio.
     const { data, error: rpcError } = await supabase.rpc(
       "verificar_numero_socio",
       {
         p_numero_socio: socioLimpio,
       },
     );
-
+    
     setCargando(false);
-
+    // Manejo de errores y actualización del estado según la respuesta de la función remota.
     if (rpcError) {
       console.error("Error verificar_numero_socio:", rpcError);
       setError(
@@ -87,23 +87,22 @@ function Login() {
       );
       return;
     }
-
+    
     if (!data?.ok) {
       setError("No encontramos ese número de socio. Verifica con tu sucursal.");
       return;
     }
-
+    // Si el socio existe, se guarda su nombre y se determina si es primer ingreso o login normal.
     setNombreUsuario(data.nombre || "");
     setPaso(data.activado ? "login" : "activar");
   };
 
-  // =========================
-  // PASO 2A: Activar cuenta (primer ingreso)
-  // =========================
+  // Activar cuenta (primer ingreso)
   const handleActivar = async (e) => {
     e.preventDefault();
     limpiarMensajes();
 
+    // Validaciones de contraseña y respuesta a la pregunta de seguridad.
     if (password.length < 4) {
       setError("La contraseña debe tener al menos 4 caracteres");
       return;
@@ -123,6 +122,7 @@ function Login() {
 
     setCargando(true);
 
+    //Llama a la función remota en Supabase para activar la cuenta del usuario.
     const { data, error: rpcError } = await supabase.rpc("activar_cuenta", {
       p_numero_socio: numeroSocio.trim().toUpperCase(),
       p_password: password,
@@ -139,13 +139,12 @@ function Login() {
       return;
     }
 
+    // Si la activación fue exitosa, se guarda la sesión y se navega al dashboard correspondiente.
     guardarSesion(data);
     navigate(data.rol === "admin" ? "/admin" : `/dashboard/${data.nivel}`);
   };
 
-  // =========================
-  // PASO 2B: Login normal
-  // =========================
+  // Login normal
   const handleLogin = async (e) => {
     e.preventDefault();
     limpiarMensajes();
@@ -202,7 +201,7 @@ function Login() {
             </p>
           </div>
 
-          {/* PASO 1: NÚMERO DE SOCIO */}
+          {/* NÚMERO DE SOCIO */}
           {paso === "socio" && (
             <form onSubmit={handleContinuar} className="space-y-4">
               <input
@@ -228,7 +227,7 @@ function Login() {
             </form>
           )}
 
-          {/* PASO 2A: ACTIVAR CUENTA */}
+          {/* ACTIVAR CUENTA */}
           {paso === "activar" && (
             <form onSubmit={handleActivar} className="space-y-4">
               <input
@@ -288,7 +287,7 @@ function Login() {
             </form>
           )}
 
-          {/* PASO 2B: LOGIN NORMAL */}
+          {/* LOGIN NORMAL */}
           {paso === "login" && (
             <form onSubmit={handleLogin} className="space-y-4">
               <input

@@ -12,7 +12,6 @@ import AdminUsuarios from './pages/admin/AdminUsuarios';
 import AdminAhorros from './pages/admin/AdminAhorros';
 import AdminCiclos from './pages/admin/AdminCiclos';
 import AdminConfiguracion from './pages/admin/AdminConfiguracion';
-import AdminContenido from './pages/admin/AdminContenido';
 import AdminActividades from './pages/admin/AdminActividades';
 import AdminRetos from './pages/admin/AdminRetos';
 
@@ -23,7 +22,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 🔓 pública */}
+        {/* pública */}
         <Route path="/" element={<Login />} />
         <Route path="/recuperar-password" element={<RecuperarPassword />} />
         <Route
@@ -40,12 +39,11 @@ function App() {
           <Route path="ahorros" element={<AdminAhorros />} />
           <Route path="ciclos" element={<AdminCiclos />} />
           <Route path="configuracion" element={<AdminConfiguracion />} />   
-          <Route path="contenido" element={<AdminContenido />} />
           <Route path="actividades" element={<AdminActividades />} />
           <Route path="retos" element={<AdminRetos />} />
         </Route>
 
-        {/* 🔐 protegidas */}
+        {/* protegidas */}
         <Route
           path="/dashboard/:rango"
           element={

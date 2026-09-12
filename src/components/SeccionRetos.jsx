@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { CheckCircle2, X } from "lucide-react";
-import { supabase } from "../supabaseClient"; // ajusta la ruta según tu proyecto
+import { supabase } from "../supabaseClient"; 
 import TarjetaVistosa from "./TarjetaVistosa";
 import MetaPersonal from "./MetaPersonal";
 
-// Uso: <SeccionRetos usuarioId={usuario.id} /> dentro de Pasaporte.jsx
-// Nota: la alcancía ya NO vive aquí, se muestra como banner fijo en Passport.jsx
 
 const acortar = (texto, max = 22) =>
   !texto ? "" : texto.length > max ? texto.slice(0, max - 1) + "…" : texto;
@@ -32,7 +30,6 @@ const SeccionRetos = ({ usuarioId }) => {
     setCargando(true);
 
     // Se asegura de que el usuario esté inscrito en todos los retos activos
-    // antes de leerlos (por si el enrolamiento automático no lo alcanzó).
     await supabase.rpc("asegurar_retos_usuario", { p_usuario_id: usuarioId });
 
     const [{ data: retosData }, { data: metaData }] = await Promise.all([
