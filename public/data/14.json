@@ -11,8 +11,8 @@
         {
         "id": 1,
         "tipo": "bienvenida",
-        "titulo": "¡Bienvenido al pasaporte del Ahorrador Joven!",
-        "intro": "Aquí no solo vas a aprender a guardar dinero, vas a aprender a tomar decisiones inteligentes que te acerquen a lo que realmente quieres lograr.",
+        "titulo": "¡BIENVENIDO A TU PASAPORTE FINANCIERO!",
+        "intro": "Tienes dinero, tienes opciones y todos los días tomas decisiones.\n Algunas te acercan a lo que quieres. Otras pueden alejarte. \n ¿Estás listo para descubrir qué tan buen estratega eres con tu dinero?",
         "secciones": [
             {
             "subtitulo": "PROGRAMA CRECIENDO JUNTOS",
@@ -31,6 +31,676 @@
             "Puedes recibir incentivos de apoyo escolar (si no eres beneficiario de Impulso a la Educación).",
             "Tus papás pueden obtener un esquema de crédito atractivo."
         ]
+        }
+    ],
+    "pasos":[
+        {
+        "id": "1",
+        "fondo": "/images/14/Fondo141.jpeg",
+        "enfoque": "Aprendo a tomar mejores decisiones",
+        "regla": {
+            "numero": "REGLA #1",
+            "titulo": "¿LO NECESITO O LO QUIERO?",
+            "subtitulo": "DEFINE LO QUE NECESITAS ANTES DE DECIDIR.",
+            "descripcion": "Una buena decisión comienza con una buena pregunta. Antes de tomar una decisión financiera, es importante identificar qué necesitas realmente y qué quieres solucionar. No todo lo que queremos comprar es algo que necesitamos en ese momento."
+        },
+        "importancia": {
+            "titulo": "Importancia",
+            "texto": "Distinguir entre una necesidad y un deseo ayuda a priorizar nuestro dinero y evita gastar en cosas que podemos esperar o que realmente no necesitamos."
+        },
+        "actividad": {
+            "titulo": "Compra inteligente",
+            "escenario": "Quieres comprar unos audífonos. Tienes $1,000.",
+            "pregunta": "¿Cuál elegirías?",
+            "opciones": [
+            {
+                "id": "A",
+                "precio": 450,
+                "calidad": "Buena calidad",
+                "duracion": "6 meses de duración",
+                "garantia": "Sin garantía",
+                "incluye": "Sin accesorios adicionales"
+            },
+            {
+                "id": "B",
+                "precio": 700,
+                "calidad": "Muy buena calidad",
+                "duracion": "2 años de duración",
+                "garantia": "1 año de garantía",
+                "incluye": "Audífonos base"
+            },
+            {
+                "id": "C",
+                "precio": 900,
+                "calidad": "Excelente calidad",
+                "duracion": "3 años de duración",
+                "garantia": "6 meses de garantía",
+                "incluye": "Incluye accesorios"
+            }
+            ],
+            "argumentacion": {
+            "instruccion": "Argumenta tu decisión: Selecciona los aspectos que más influyeron en tu elección:",
+            "criterios": [
+                { "id": "precio", "etiqueta": "Precio" },
+                { "id": "calidad", "etiqueta": "Calidad" },
+                { "id": "garantia", "etiqueta": "Garantía" },
+                { "id": "duracion", "etiqueta": "Duración" },
+                { "id": "lo_que_incluye", "etiqueta": "Lo que incluye" },
+                { "id": "dinero_sobrante", "etiqueta": "Dinero que me queda" }
+            ],
+            "reflexion": "Tu decisión importa más que encontrar la opción más barata."
+            }
+        },
+        "tipFinanciero": {
+            "titulo": "Tip financiero",
+            "texto": "Antes de decidir, conoce muy bien tus opciones. Tomar una buena decisión financiera implica analizar diferentes opciones antes de elegir.",
+            "habilidad": "Detectar antes de decidir"
+        },
+        "imagenes": {
+            "alianzito": "/images/13/7.png",
+            "billete": "/images/13/10.png"
+        }
+        },
+        {
+            "id": "2",
+            "fondo": "/images/14/Fondo141.jpeg",
+            "enfoque": "Presupuesto y Control de Gastos",
+            "regla": {
+                "numero": "REGLA #2",
+                "titulo": "SOBREVIVE AL FIN DE SEMANA",
+                "subtitulo": "Para tomar una buena decisión financiera: REVISA CUÁNTO PUEDES GASTAR",
+                "descripcion": "Antes de gastar, revisa cuánto dinero tienes disponible y cuánto puedes utilizar sin quedarte sin dinero para otras cosas. Tener dinero no significa que tengamos que gastarlo todo."
+            },
+            "importancia": {
+                "titulo": "Importancia",
+                "texto": "Conocer nuestros límites nos ayuda a evitar gastar de más, conservar dinero para otras necesidades y estar preparados para algún gasto inesperado."
+            },
+            "imagenes": {
+                "alianzito": "/images/13/7.png",
+                "billete": "/images/13/27.png"
+            },
+            "actividad": {
+                "titulo": "Llegar con vida al fin de semana",
+                "alerta": "¡ALERTA! Tienes solamente $800, tu objetivo es llegar al fin de semana con dinero suficiente para enfrentar cualquier imprevisto.",
+                "pregunta": "¿Crees poder lograrlo?",
+                "presupuestoInicial": 800,
+                "eventos": [
+                {
+                    "id": 1,
+                    "titulo": "EVENTO 1",
+                    "descripcion": "Encuentras en oferta algo que desde hace tiempo querías.",
+                    "costo": 250
+                },
+                {
+                    "id": 2,
+                    "titulo": "EVENTO 2",
+                    "descripcion": "Se reúnen todos tus amigos y te invitan a comer.",
+                    "costo": 150
+                },
+                {
+                    "id": 3,
+                    "titulo": "EVENTO 3",
+                    "descripcion": "Encuentras una promoción de una sudadera que querías.",
+                    "costo": 200
+                },
+                {
+                    "id": 4,
+                    "titulo": "EVENTO 4",
+                    "descripcion": "Necesitas llegar a tu casa y tu única opción es moverte en autobús.",
+                    "costo": 100
+                },
+                {
+                    "id": 5,
+                    "titulo": "EVENTO SORPRESA",
+                    "descripcion": "¡Oh no! Tus audífonos se descompusieron y los necesitas para una actividad escolar, pero tienen un costo de reparación.",
+                    "costo": 150
+                }
+                ],
+                "resultados": {
+                "completado": {
+                    "titulo": "¡MISIÓN COMPLETADA!",
+                    "mensaje": "¡Lograste administrar tu dinero correctamente y cubrir tus imprevistos!"
+                },
+                "casi": {
+                    "titulo": "¡CASI LO LOGRAS!",
+                    "mensaje": "Llegaste al final pero con muy poco margen de maniobra. ¡Un ajuste más y lo dominas!"
+                },
+                "gameOver": {
+                    "titulo": "¡GAME OVER!",
+                    "mensaje": "Te quedaste sin fondos antes de cubrir tus gastos necesarios o imprevistos."
+                }
+                }
+            },
+            "tipFinanciero": {
+                "titulo": "Tip Financiero",
+                "texto": "Antes de gastar, revisa cuánto dinero tienes disponible y cuánto necesitarás después. No gastes todo de una vez: deja un margen para imprevistos.",
+                "habilidad": "Control de gastos e Imprevistos"
+            }
+        },
+        {
+        "id": "3",
+        "fondo": "/images/14/Fondo141.jpeg",
+        "enfoque": "Investigación y Verificación Financiera",
+        "regla": {
+            "numero": "REGLA #3",
+            "titulo": "NO TE CREAS TODO LO QUE VES",
+            "subtitulo": "Para tomar una buena decisión financiera: INVESTIGA ANTES DE ELEGIR",
+            "descripcion": "La mejor decisión se toma con información, no con suposiciones. Significa buscar información y comprobar que sea confiable antes de tomar una decisión. Lo que vemos en redes sociales, escuchamos de otras personas o encontramos en internet no siempre cuenta toda la historia."
+        },
+        "importancia": {
+            "titulo": "Importancia",
+            "texto": "Tener información suficiente nos permite evitar engaños, descubrir opciones y tomar decisiones con mayor seguridad, en lugar de decidir basándonos únicamente en una opinión o impresión."
+        },
+        "imagenes": {
+            "alianzito": "/images/13/6.png",
+            "billete": "/images/13/19.png"
+        },
+        "actividad": {
+            "titulo": "Mito o Realidad",
+            "indicacion": "Analiza cada una de las siguientes afirmaciones y decide si se trata de un Mito o una Realidad.",
+            "preguntas": [
+            {
+                "id": 1,
+                "afirmacion": "Ahorrar significa dejar de disfrutar el dinero.",
+                "respuestaCorrecta": "MITO",
+                "explicacion": "Ahorrar no significa dejar de disfrutar tu dinero. Significa separar una parte para algo que quieres o necesitas en el futuro, mientras utilizas otra parte para disfrutar hoy. Ahorrar también es darte la oportunidad de cumplir tus metas."
+            },
+            {
+                "id": 2,
+                "afirmacion": "Si algo está en oferta y lo compro, significa que estoy ahorrando.",
+                "respuestaCorrecta": "MITO",
+                "explicacion": "Si compras algo que no necesitabas, gastar menos de lo que costaba originalmente no significa que hayas ahorrado. Primero pregunta: ¿Lo necesitaba antes de ver la oferta?"
+            },
+            {
+                "id": 3,
+                "afirmacion": "Guardar pequeñas cantidades de dinero pueden ayudarme a conseguir una meta.",
+                "respuestaCorrecta": "REALIDAD",
+                "explicacion": "No necesitas ahorrar grandes cantidades para comenzar. Pequeñas cantidades, cuando las guardas con constancia, pueden ayudarte a alcanzar una meta. No pienses 'es poquito, no sirve'. Piensa: 'poquito + constancia = progreso'."
+            },
+            {
+                "id": 4,
+                "afirmacion": "Si muchas personas recomiendan algo en redes sociales, significa que es una buena compra.",
+                "respuestaCorrecta": "MITO",
+                "explicacion": "Que muchas personas recomienden algo en redes sociales no significa que sea la mejor opción para ti. Antes de comprar, revisa la información, compara opciones y piensa si realmente lo necesitas. No compres solo porque está de moda. Investiga primero y decide después."
+            },
+            {
+                "id": 5,
+                "afirmacion": "Antes de tomar una decisión financiera, es muy importante verificar la información.",
+                "respuestaCorrecta": "REALIDAD",
+                "explicacion": "Antes de tomar una decisión con tu dinero, es importante verificar que la información sea verdadera y confiable. No todo lo que ves en internet, escuchas de alguien o encuentras en redes sociales es necesariamente cierto."
+            }
+            ]
+        },
+        "tipFinanciero": {
+            "titulo": "Tip Financiero",
+            "texto": "Siempre investiga y cuestiona la información antes de gastar o invertir tu dinero. La información confiable es tu mejor herramienta financiera.",
+            "habilidad": "Criterio e Investigación Financiera"
+        }
+        },
+        {
+        "id": "4",
+        "fondo": "/images/14/Fondo141.jpeg",
+        "enfoque": "Comparación y Evaluación de Opciones",
+        "regla": {
+            "numero": "REGLA #4",
+            "titulo": "ELIGE TU CAMINO",
+            "subtitulo": "Para tomar una buena decisión financiera: COMPARA TUS OPCIONES",
+            "descripcion": "Elegir mejor es mirar más de una posibilidad. Quiere decir que tenemos que observar diferentes alternativas antes de elegir. Podemos fijarnos en lo que ofrece cada opción, cuánto gastaremos y qué beneficios obtenemos."
+        },
+        "importancia": {
+            "titulo": "Importancia",
+            "texto": "Comparar nos permite descubrir que no siempre existe una sola forma de conseguir lo que queremos y nos ayuda a elegir la alternativa que mejor se adapte a nuestras necesidades y posibilidades."
+        },
+        "imagenes": {
+            "alianzito": "/images/13/6.png",
+            "billete": "/images/13/26.png"
+        },
+        "actividad": {
+            "titulo": "¿Qué camino eliges?",
+            "presupuestoInicial": 600,
+            "indicacion": "Tienes $600 para disfrutar este fin de semana. Analiza las tres opciones y elige la que prefieras.",
+            "caminos": [
+            {
+                "id": "A",
+                "nombre": "CAMINO A — “EL PLAN COMPLETO”",
+                "desglose": [
+                { "concepto": "Comida", "costo": 200 },
+                { "concepto": "Cine", "costo": 150 },
+                { "concepto": "Transporte", "costo": 100 }
+                ],
+                "totalGasto": 450,
+                "reflexion": "¡Elegiste disfrutar al máximo! Gastaste más, pero pudiste realizar varias actividades. Comparar también es encontrar otras formas de disfrutar."
+            },
+            {
+                "id": "B",
+                "nombre": "CAMINO B — “PLAN TRANQUILO”",
+                "desglose": [
+                { "concepto": "Comida", "costo": 150 },
+                { "concepto": "Renta de videojuego o película", "costo": 100 },
+                { "concepto": "Snacks", "costo": 50 }
+                ],
+                "totalGasto": 300,
+                "reflexion": "¡Elegiste cuidar más tu dinero! Te divertiste y conservaste una buena parte de tu dinero. ¡Buen equilibrio!"
+            },
+            {
+                "id": "C",
+                "nombre": "CAMINO C — “DIVERSIÓN AL AIRE LIBRE”",
+                "desglose": [
+                { "concepto": "Comida", "costo": 100 },
+                { "concepto": "Actividad", "costo": 200 },
+                { "concepto": "Transporte", "costo": 100 }
+                ],
+                "totalGasto": 400,
+                "reflexion": "¡Elegiste un punto medio! Disfrutaste sin gastar demasiado. Comparar opciones te ayuda a encontrar alternativas."
+            }
+            ]
+        },
+        "reflexionFinal": "No siempre existe una única opción correcta. Lo importante es conocer tus alternativas antes de elegir.",
+        "tipFinanciero": {
+            "titulo": "Tip Financiero",
+            "texto": "Comparar diferentes opciones te ayuda a elegir la que mejor se adapta a tus necesidades y a tu dinero.",
+            "habilidad": "Comparación y Toma de Decisiones"
+        }
+        },
+        {
+        "id": "5",
+        "fondo": "/images/14/Fondo141.jpeg",
+        "enfoque": "Evaluación de Valor y Calidad sobre Precio",
+        "regla": {
+            "numero": "REGLA #5",
+            "titulo": "EL PRECIO NO LO ES TODO",
+            "subtitulo": "Para tomar una buena decisión financiera: PIENSA MÁS ALLÁ DEL PRECIO",
+            "descripcion": "Lo que cuesta no siempre es lo que vale. El precio nos dice cuánto dinero vamos a pagar, pero no nos dice todo sobre una decisión. También podemos considerar la calidad, cuánto tiempo lo utilizaremos, qué beneficios nos ofrece y si realmente lo necesitamos."
+        },
+        "importancia": {
+            "titulo": "Importancia",
+            "texto": "Pensar más allá del precio nos ayuda a evitar decisiones basadas únicamente en 'está barato' o 'está caro' y a preguntarnos si realmente estamos obteniendo algo que vale la pena por nuestro dinero. El precio NO SIEMPRE determina nuestra mejor opción."
+        },
+        "imagenes": {
+            "alianzito": "/images/13/6.png",
+            "billete": "/images/13/19.png"
+        },
+        "actividad": {
+            "titulo": "Colecciona buenas decisiones",
+            "indicacion": "Analiza cada situación y decide si es una Decisión Inteligente (Canasto de la Luz) o una Decisión Impulsiva (Canasto de la Oscuridad).",
+            "decisiones": [
+            {
+                "id": 1,
+                "persona": "Jessica",
+                "descripcion": "Jessica decidió comprar una chamarra que le gustó solo porque estaba en oferta.",
+                "tipoCorrecto": "IMPULSIVA",
+                "explicacion": "Comprar solo porque algo está en oferta suele ser una compra impulsiva si realmente no se necesitaba."
+            },
+            {
+                "id": 2,
+                "persona": "Manuel",
+                "descripcion": "Manuel decidió comprarse unos tenis con el dinero que le sobró después de cumplir con sus deberes.",
+                "tipoCorrecto": "INTELIGENTE",
+                "explicacion": "Priorizar primero los deberes y usar el sobrante planificado para un gusto es una decisión balanceada e inteligente."
+            },
+            {
+                "id": 3,
+                "persona": "Camila",
+                "descripcion": "Camila decidió comprarse un celular de $12,000 por encima de uno de $7,000 porque tenía mejor cámara que ella necesitaba.",
+                "tipoCorrecto": "INTELIGENTE",
+                "explicacion": "Evaluar los beneficios adicionales (como la cámara) y decidir pagar por mayor utilidad según tus necesidades es pensar más allá del precio."
+            },
+            {
+                "id": 4,
+                "persona": "Rodrigo",
+                "descripcion": "Rodrigo encontró unos audífonos a mitad de precio, pero antes de comprarlos revisó su calidad, garantía y cuánto tiempo podría utilizarlos.",
+                "tipoCorrecto": "INTELIGENTE",
+                "explicacion": "Investigar la calidad y durabilidad antes de gastar asegura que la oferta realmente valga la pena."
+            },
+            {
+                "id": 5,
+                "persona": "Diego",
+                "descripcion": "Diego compró una consola de videojuegos nueva porque sus amigos la tenían, a pesar de que la suya aún funcionaba correctamente.",
+                "tipoCorrecto": "IMPULSIVA",
+                "explicacion": "Gastar dinero por presión social o moda cuando lo que tienes funciona bien es una decisión impulsiva."
+            },
+            {
+                "id": 6,
+                "persona": "Camila",
+                "descripcion": "Camila decidió esperarse 2 semanas para comprar unas botas que le gustaron, para asegurarse de que la compra no afectase su presupuesto.",
+                "tipoCorrecto": "INTELIGENTE",
+                "explicacion": "Darse un tiempo de espera evita gastos por impulso y protege la estabilidad del presupuesto."
+            }
+            ]
+        },
+        "mensajesFinales": {
+            "excelente": "¡Felicidades! Tienes una excelente visión financiera y sabes distinguir perfectamente entre compras valiosas e impulsivas.",
+            "regular": "¡Buen intento! Estás aprendiendo a evaluar mejor tus opciones. Recuerda siempre analizar el valor real antes de gastar."
+        },
+        "tipFinanciero": {
+            "titulo": "Tip Financiero",
+            "texto": "No te dejes llevar por el momento. Pensar antes de gastar te ayuda a tomar decisiones que realmente te beneficien.",
+            "habilidad": "Criterio de Valor y Calidad"
+        }
+        },
+        {
+        "id": "6",
+        "fondo": "/images/14/Fondo141.jpeg",
+        "enfoque": "Control de Impulsos y Análisis de Decisiones",
+        "regla": {
+            "numero": "REGLA #6",
+            "titulo": "¡NO COMPRES TODAVÍA!",
+            "subtitulo": "Para tomar una buena decisión financiera: NO DECIDAS POR IMPULSO",
+            "descripcion": "Si tus emociones deciden por ti, tu dinero puede pagar las consecuencias. Una decisión impulsiva ocurre cuando actuamos sin detenernos a pensar. Las emociones, las ofertas, las tendencias o la presión de otras personas pueden hacer que queramos comprar algo inmediatamente."
+        },
+        "importancia": {
+            "titulo": "Importancia",
+            "texto": "Hacer una pausa antes de gastar nos da tiempo para preguntarnos si realmente lo queremos, lo necesitamos y podemos pagarlo, evitando compras de las que podríamos arrepentirnos después."
+        },
+        "imagenes": {
+            "alianzito": "/images/13/9.png",
+            "billete": "/images/13/21.png",
+            "billete2": "/images/13/26.png",
+            "alianzito2": "/images/13/7.png"
+        },
+        "actividad": {
+            "titulo": "Crucigrama Financiero",
+            "indicacion": "Encuentra y completa las palabras clave en el crucigrama utilizando las pistas horizontales y verticales.",
+            "solucionGrid": [
+                ["", "", "", "A", "", "", "", "", "", "", "", ""],
+                ["", "", "", "N", "", "", "", "", "", "", "", ""],
+                ["", "", "", "A", "", "", "A", "", "", "", "", ""],
+                ["", "", "", "L", "", "", "H", "", "", "", "", ""],
+                ["D", "E", "C", "I", "S", "I", "O", "N", "", "", "", ""],
+                ["", "", "", "S", "", "", "R", "", "", "", "", ""],
+                ["", "", "", "I", "", "", "R", "", "", "", "", ""],
+                ["", "", "", "S", "", "", "O", "P", "C", "I", "O", "N"],
+                ["", "", "", "", "", "", "", "", "", "N", "", ""],
+                ["", "", "", "", "", "R", "I", "E", "S", "G", "O", ""],
+                ["", "", "", "", "", "", "", "", "", "R", "", "G"],
+                ["", "", "", "", "", "", "", "", "M", "E", "T", "A"],
+                ["", "", "", "", "", "", "", "", "", "S", "", "S"],
+                ["", "", "", "", "", "", "", "", "", "O", "", "T"],
+                ["", "", "", "", "", "", "", "", "", "", "", "O"]
+            ],
+            "pistas": {
+                "horizontales": [
+                    {
+                    "numero": 1,
+                    "palabra": "DECISION",
+                    "pista": "Elección que hacemos entre diferentes opciones.",
+                    "fila": 0,
+                    "col": 0
+                    },
+                    {
+                    "numero": 2,
+                    "palabra": "OPCION",
+                    "pista": "Cada una de las alternativas que podemos considerar.",
+                    "fila": 2,
+                    "col": 2
+                    },
+                    {
+                    "numero": 3,
+                    "palabra": "RIESGO",
+                    "pista": "Posibilidad de que ocurra algo que afecte nuestra decisión.",
+                    "fila": 4,
+                    "col": 0
+                    },
+                    {
+                    "numero": 4,
+                    "palabra": "META",
+                    "pista": "Aquello que queremos alcanzar y que puede orientar nuestras decisiones.",
+                    "fila": 6,
+                    "col": 3
+                    }
+                ],
+                "verticales": [
+                    {
+                    "numero": 5,
+                    "palabra": "AHORRO",
+                    "pista": "Dinero que reservamos para utilizarlo después.",
+                    "fila": 0,
+                    "col": 6
+                    },
+                    {
+                    "numero": 6,
+                    "palabra": "INGRESO",
+                    "pista": "Dinero que recibimos.",
+                    "fila": 1,
+                    "col": 4
+                    },
+                    {
+                    "numero": 7,
+                    "palabra": "GASTO",
+                    "pista": "Dinero que utilizamos para adquirir algo.",
+                    "fila": 3,
+                    "col": 1
+                    },
+                    {
+                    "numero": 8,
+                    "palabra": "ANALISIS",
+                    "pista": "Revisar información antes de elegir.",
+                    "fila": 0,
+                    "col": 8
+                    }
+                ]
+            }
+        },
+        "tipFinanciero": {
+            "titulo": "Tip Financiero",
+            "texto": "Antes de gastar por emoción o presión, haz una pausa y piensa si realmente es una buena decisión.",
+            "habilidad": "Autocontrol y Reflexión Financiera"
+        }
+        },
+        {
+        "id": "7",
+        "fondo": "/images/14/Fondo141.jpeg",
+        "enfoque": "Análisis de Consecuencias y Pensamiento Crítico",
+        "regla": {
+            "numero": "REGLA #7",
+            "titulo": "DETECTIVE FINANCIERO",
+            "subtitulo": "Para tomar una buena decisión financiera: PIENSA EN LAS CONSECUENCIAS",
+            "descripcion": "Toda decisión tiene un antes y un después. Cada decisión que tomamos con nuestro dinero puede tener un efecto después. Gastar, ahorrar o comprar algo puede cambiar cuánto dinero tendremos disponible para otras cosas. Antes de elegir, piensa: ¿qué puede pasar después de esta decisión?"
+        },
+        "importancia": {
+            "titulo": "Importancia",
+            "texto": "Mirar más allá del momento nos ayuda a anticipar problemas, aprovechar oportunidades y evitar decisiones que puedan afectar nuestras metas o nuestro dinero más adelante."
+        },
+        "imagenes": [
+            "/images/13/11.png",
+            "/images/13/27.png"
+        ],
+        "actividad": {
+            "titulo": "El Detective de Mentiras",
+            "indicacion": "En cada ronda se presentan 3 afirmaciones: 2 son verdades y 1 es una mentira. Haz clic sobre la afirmación que consideres que es la MENTIRA."
+        },
+        "rondas": [
+            {
+            "id": 1,
+            "titulo": "Ronda 1",
+            "opciones": [
+                {
+                "id": "A",
+                "texto": "Si gastas todo tu dinero hoy, podrías no tener suficiente para un imprevisto.",
+                "esMentira": false
+                },
+                {
+                "id": "B",
+                "texto": "Si una compra parece pequeña, nunca tendrá consecuencias importantes.",
+                "esMentira": true
+                },
+                {
+                "id": "C",
+                "texto": "Pensar antes de gastar puede ayudarte a evitar arrepentimientos.",
+                "esMentira": false
+                }
+            ]
+            },
+            {
+            "id": 2,
+            "titulo": "Ronda 2",
+            "opciones": [
+                {
+                "id": "A",
+                "texto": "Ahorrar para una meta puede ayudarte a evitar gastar ese dinero en otras cosas.",
+                "esMentira": false
+                },
+                {
+                "id": "B",
+                "texto": "Una decisión de hoy puede afectar tus planes de mañana.",
+                "esMentira": false
+                },
+                {
+                "id": "C",
+                "texto": "Una decisión financiera solo afecta el momento en que la tomas.",
+                "esMentira": true
+                }
+            ]
+            },
+            {
+            "id": 3,
+            "titulo": "Ronda 3",
+            "opciones": [
+                {
+                "id": "A",
+                "texto": "Pensar en las consecuencias significa no gastar nunca.",
+                "esMentira": true
+                },
+                {
+                "id": "B",
+                "texto": "Comprar algo que no necesitas puede reducir el dinero que tienes disponible después.",
+                "esMentira": false
+                },
+                {
+                "id": "C",
+                "texto": "Considerar qué puede pasar después ayuda a tomar decisiones más responsables.",
+                "esMentira": false
+                }
+            ]
+            },
+            {
+            "id": 4,
+            "titulo": "Ronda 4",
+            "opciones": [
+                {
+                "id": "A",
+                "texto": "El ahorro depende de la constancia, no de ganar mucho dinero.",
+                "esMentira": false
+                },
+                {
+                "id": "B",
+                "texto": "Comprar criptomonedas virales en internet te asegura hacerte rico en una semana.",
+                "esMentira": true
+                },
+                {
+                "id": "C",
+                "texto": "El interés compuesto hace que tu dinero gane más dinero con el paso del tiempo.",
+                "esMentira": false
+                }
+            ]
+            }
+        ],
+        "tipFinanciero": {
+            "titulo": "Tip Financiero",
+            "texto": "Antes de decidir, piensa qué puede pasar después. Una buena decisión también considera sus consecuencias.",
+            "habilidad": "Pensamiento Crítico y Evaluación de Impacto"
+        }
+        },
+        {
+        "id": "8",
+        "fondo": "/images/14/Fondo141.jpeg",
+        "enfoque": "Visión de Futuro y Metas Financieras",
+        "regla": {
+            "numero": "REGLA #8",
+            "titulo": "EL CAMINO AL FUTURO",
+            "subtitulo": "Para tomar una buena decisión financiera: ELIGE PENSANDO EN TU FUTURO",
+            "descripcion": "La mejor decisión es la que mejor te ayuda a llegar a donde quieres. Nuestras decisiones de hoy pueden influir en lo que podremos hacer mañana. Elegir pensando en el futuro significa considerar nuestras metas y lo que queremos conseguir antes de tomar una decisión."
+        },
+        "importancia": {
+            "titulo": "Importancia",
+            "texto": "Pensar en nuestras metas nos ayuda a tomar decisiones que nos acerquen a lo que queremos lograr, en lugar de gastar o elegir solamente pensando en el momento."
+        },
+        "imagenes": [
+            "/images/13/9.png",
+            "/images/13/26.png"
+        ],
+        "actividad": {
+            "titulo": "Elige tu Destino Financiero",
+            "indicacion": "Alianzito necesita llegar al destino que asegura su futuro. Evalúa cada una de las 4 rutas disponibles y selecciona cuál es la única ruta correcta para avanzar."
+        },
+        "rutas": [
+            {
+            "id": "ruta_1",
+            "texto": "Gastar todo mi dinero hoy en lo que me guste",
+            "esCorrecto": false,
+            "retroalimentacion": "⚠️ ¡Cuidado! Gastar todo tu dinero te deja sin recursos ante imprevistos y te aleja de tus metas de futuro."
+            },
+            {
+            "id": "ruta_2",
+            "texto": "Pienso antes de comprar y considero mis metas",
+            "esCorrecto": true,
+            "retroalimentacion": "🌟 ¡Destino Correcto! Evaluar y reflexionar antes de gastar asegura que construyas el futuro que deseas."
+            },
+            {
+            "id": "ruta_3",
+            "texto": "No ahorrar nada para mis metas de mañana",
+            "esCorrecto": false,
+            "retroalimentacion": "⚠️ ¡Atención! Sin ahorro, tus planes futuros quedan bloqueados y dependerás únicamente del día a día."
+            },
+            {
+            "id": "ruta_4",
+            "texto": "Comprar sin investigar ni comparar opciones",
+            "esCorrecto": false,
+            "retroalimentacion": "⚠️ ¡Cuidado! Comprar por impulso sin comparar suele costar más caro y provocar arrepentimientos."
+            }
+        ],
+        "tipFinanciero": {
+            "titulo": "Tip Financiero",
+            "texto": "Cada decisión puede acercarte o alejarte de tus metas. ¡Piensa antes de elegir!",
+            "habilidad": "Planificación y Visión a Largo Plazo"
+        }
+        },
+        {
+        "id": "9",
+        "fondo": "/images/14/Fondo141.jpeg",
+        "enfoque": "Cierre, Reflexión y Compromiso Financiero",
+        "regla": {
+            "numero": "APARTADO FINAL",
+            "titulo": "MI COMPROMISO FINANCIERO",
+            "subtitulo": "Toma el control de tus decisiones",
+            "descripcion": "Tomar una buena decisión financiera no significa elegir siempre lo más barato o dejar de gastar. Significa detenerte, pensar, informarte y elegir de manera consciente. Cada decisión que tomas con tu dinero puede acercarte o alejarte de lo que quieres lograr."
+        },
+        "imagenes": [
+            "/images/13/12.png",
+            "/images/13/19.png"
+        ],
+        "reglasDisponibles": [
+            { "id": 1, "titulo": "Regla #1: Detente y Piensa" },
+            { "id": 2, "titulo": "Regla #2: Compara Opciones" },
+            { "id": 3, "titulo": "Regla #3: Investiga Antes de Comprar" },
+            { "id": 4, "titulo": "Regla #4: Ahorra con Propósito" },
+            { "id": 5, "titulo": "Regla #5: Cuida tu Dinero" },
+            { "id": 6, "titulo": "Regla #6: ¡No Compres Todavía! (Control de Impulsos)" },
+            { "id": 7, "titulo": "Regla #7: Detective Financiero (Piensa en las Consecuencias)" },
+            { "id": 8, "titulo": "Regla #8: El Camino al Futuro (Elige Pensando en tu Futuro)" }
+        ],
+        "listaCompromisos": [
+            "Pensaré antes de realizar una compra.",
+            "Compararé mis opciones antes de elegir.",
+            "Investigaré antes de comprar.",
+            "Intentaré ahorrar una parte del dinero que reciba.",
+            "Evitaré gastar solo por impulso.",
+            "Pensaré en las consecuencias de mis decisiones.",
+            "Cuidaré mejor mi dinero."
+        ],
+        "habilidades": [
+            { "id": "pensar", "emoji": "🛑", "texto": "Pensar antes de comprar." },
+            { "id": "comparar", "emoji": "⚖️", "texto": "Comparar opciones." },
+            { "id": "investigar", "emoji": "🔎", "texto": "Investigar." },
+            { "id": "ahorrar", "emoji": "💰", "texto": "Ahorrar." },
+            { "id": "impulsos", "emoji": "🧠", "texto": "Evitar compras impulsivas." },
+            { "id": "consecuencias", "emoji": "🔮", "texto": "Pensar en las consecuencias." },
+            { "id": "futuro", "emoji": "🚀", "texto": "Pensar en el futuro." }
+        ],
+        "mensajeFinal": {
+            "titulo": "¡Compromiso aceptado!",
+            "recordatorio": "Recuerda: una buena decisión financiera comienza contigo. Ahora tienes las herramientas para tomar decisiones más inteligentes, responsables y pensadas para tu futuro."
+        }
         }
     ]
 }

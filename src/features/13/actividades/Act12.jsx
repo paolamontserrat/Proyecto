@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
@@ -10,10 +10,33 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
     const imagenes = config.imagenes || [];
     const solucionGrid = config.solucionGrid || [];
 
+    //Pistas
+        const casillasPista = useMemo(() => [
+            { r: 2, c: 4 },
+            { r: 1, c: 9 },
+            { r: 7, c: 1 },
+            { r: 9, c: 12 },
+            { r: 11, c: 14 },
+            { r: 13, c: 15 },
+            { r: 14, c: 6}
+        ], []);
+    
+        // Función para aplicar las pistas al estado del grid
+        const aplicarPistasAGrid = (baseGrid) => {
+            if (!solucionGrid.length) return baseGrid;
+            return baseGrid.map((row, r) =>
+                row.map((val, c) => {
+                    const esPista = casillasPista.some(p => p.r === r && p.c === c);
+                    return esPista ? solucionGrid[r][c] : val;
+                })
+            );
+        };
+
     // Inicializar el estado de la cuadrícula del usuario vacía
     const [userGrid, setUserGrid] = useState(() => {
         if (solucionGrid.length > 0) {
             return solucionGrid.map(row => row.map(() => ""));
+            return aplicarPistasAGrid(vacio);
         }
         return [];
     });
@@ -23,9 +46,10 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
     // Si el JSON tarda en cargar o se actualiza, volvemos a generar la estructura vacía
     useEffect(() => {
         if (solucionGrid.length > 0 && userGrid.length === 0) {
-            setUserGrid(solucionGrid.map(row => row.map(() => "")));
+            const vacio = solucionGrid.map(row => row.map(() => ""));
+            setUserGrid(aplicarPistasAGrid(vacio));
         }
-    }, [config.id, solucionGrid]);
+    }, [config.id, solucionGrid, userGrid.length]);
 
     // --- Persistencia de Datos (Supabase + LocalStorage) ---
     const getUser = () => {
@@ -66,7 +90,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                                 dbGrid.length === solucionGrid.length &&
                                 dbGrid.every((row, i) => row.length === solucionGrid[i].length)
                             ) {
-                                setUserGrid(dbGrid);
+                                setUserGrid(aplicarPistasAGrid(dbGrid));
                                 localStorage.setItem(storageKey, JSON.stringify({ grid: dbGrid }));
                                 return;
                             }
@@ -87,9 +111,10 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                         parsed.grid.length === solucionGrid.length &&
                         parsed.grid.every((row, i) => row.length === solucionGrid[i].length)
                     ) {
-                        setUserGrid(parsed.grid);
+                        setUserGrid(aplicarPistasAGrid(parsed.grid));
                     } else {
-                        setUserGrid(solucionGrid.map(row => row.map(() => "")));
+                        const vacio = solucionGrid.map(row => row.map(() => ""));
+                        setUserGrid(aplicarPistasAGrid(vacio));
                         localStorage.removeItem(storageKey);
                     }
                 } catch (e) {
@@ -193,7 +218,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
     const handleReset = () => {
         if (solucionGrid.length === 0) return;
         const vacio = solucionGrid.map(row => row.map(() => ""));
-        setUserGrid(vacio);
+        setUserGrid(aplicarPistasAGrid(vacio));
         localStorage.removeItem(storageKey);
     };
 
@@ -304,6 +329,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                                 const esCasilleroValido = char !== "";
                                 const letraUsuario = userGrid[r]?.[c] || "";
                                 const esCorrecto = letraUsuario === char && esCasilleroValido;
+                                const esPistaFija = casillasPista.some(p => p.r === r && p.c === c);
                                 const numerosPista = mapaNumerosCeldas[`${r}-${c}`] || [];
 
                                 if (!esCasilleroValido) {
@@ -338,12 +364,14 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                                             maxLength={1}
                                             value={letraUsuario}
                                             onChange={(e) => handleInputChange(r, c, e.target.value)}
-                                            disabled={esCorrecto}
+                                            disabled={esCorrecto||esPistaFija}
                                             className={`
                                                 w-full h-full text-center font-black uppercase rounded-[2px] sm:rounded-md
                                                 transition-all border shadow-inner focus:outline-none focus:ring-1 focus:ring-blue-500
                                                 text-[8px] xxs:text-[9px] xs:text-[11px] sm:text-base border-gray-300
-                                                ${esCorrecto 
+                                                ${esPistaFija
+                                                    ? "bg-blue-600 border-yellow-600 text-white font-black cursor-not-allowed scale-95"
+                                                    :esCorrecto 
                                                     ? "bg-blue-600 border-yellow-600 text-white font-black cursor-not-allowed scale-95" 
                                                     : "bg-white text-blue-900 focus:bg-amber-100"
                                                 }

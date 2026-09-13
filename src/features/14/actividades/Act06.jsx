@@ -3,25 +3,18 @@ import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 import { useNavigate } from "react-router-dom";
 
-const Act05 = ({ data, onComplete, onBack, rango }) => {
+const Act06 = ({ data, onComplete, onBack, rango }) => {
     const navigate = useNavigate();
     const config = data || {};
-    const pistas = config.pistas || { horizontales: [], verticales: [] };
-    const imagenes = config.imagenes || [];
-    const solucionGrid = config.solucionGrid || [];
+    const pistas = config.actividad.pistas || { horizontales: [], verticales: [] };
+    const solucionGrid = config.actividad.solucionGrid || [];
 
-    //Pistas
+    // Casillas con letras pista/regalo opcionales
     const casillasPista = useMemo(() => [
-        { r: 2, c: 15 },
-        { r: 2, c: 6 },
-        { r: 3, c: 1 },
-        { r: 5, c: 21 },
-        { r: 11, c: 0 },
-        { r: 7, c: 5 },
-        { r: 0, c: 12}
+        { r: 4, c: 0 }, // D en DECISION
+        { r: 2, c: 6 }  // A en AHORRO
     ], []);
 
-    // Función para aplicar las pistas al estado del grid
     const aplicarPistasAGrid = (baseGrid) => {
         if (!solucionGrid.length) return baseGrid;
         return baseGrid.map((row, r) =>
@@ -32,7 +25,6 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
         );
     };
 
-    // Estado inicial de la cuadrícula
     const [userGrid, setUserGrid] = useState(() => {
         if (solucionGrid.length > 0) {
             const vacio = solucionGrid.map(row => row.map(() => ""));
@@ -50,7 +42,6 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
         }
     }, [config.id, solucionGrid, userGrid.length]);
 
-    // --- Persistencia ---
     const getUser = () => {
         try {
             return JSON.parse(localStorage.getItem("usuario"));
@@ -60,7 +51,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
     };
 
     const userId = getUser()?.id || "anon";
-    const storageKey = `act05-${rango}-${userId}`;
+    const storageKey = `act06-${rango}-${userId}`;
 
     useEffect(() => {
         const cargarProgreso = async () => {
@@ -119,11 +110,9 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
         };
 
         cargarProgreso();
-    }, [config.id, solucionGrid, userId]);
+    }, [config.id, solucionGrid, userId, storageKey]);
 
-    // ==========================================
-    // 2. CÁLCULO DINÁMICO MULTI-NÚMERO (SOLUCIONA SOBREPOSICIÓN)
-    // ==========================================
+    // Mapeo automático de números de inicio de palabra
     const mapaNumerosCeldas = useMemo(() => {
         const mapa = {};
         if (!solucionGrid.length) return mapa;
@@ -248,6 +237,8 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
         );
     }
 
+    const numCols = solucionGrid[0]?.length || 12;
+
     return (
         <LayoutActividad fondo={config.fondo}>
             <style>{`
@@ -260,6 +251,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
+            {/* Navegación Superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -275,38 +267,83 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                 </button>
             </div>
 
-            <div className="bg-white p-4 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl relative overflow-visible" translate="no">
+            {/* Tarjeta Principal */}
+            <div className="bg-white p-4 md:p-8 rounded-3xl border-4 border-alianza-azul shadow-2xl relative overflow-visible" translate="no">
 
-                <div className="text-center mb-6">
-                    <h1 className="font-extrabold text-blue-900 leading-tight text-2xl md:text-4xl">
-                        {config.titulo || "Alianzito eres muy inteligente"}
-                    </h1>
-                    <p className="text-gray-600 font-semibold mt-1">
-                        {config.subtitulo || "Resuelve el crucigrama sobre finanzas y ahorro usando las pistas"}
+                {/* ENCABEZADO Y REGLA */}
+                <div className="bg-amber-50 p-5 md:p-6 rounded-3xl border-2 border-amber-100 text-center space-y-3 relative mb-6">
+                    <span className="bg-sky-400 text-yellow-950 text-xs md:text-sm font-black px-4 py-1.5 rounded-full uppercase tracking-wider inline-block">
+                        {config.enfoque}
+                    </span>
+
+                    <div className="flex flex-col md:flex-row items-center justify-center gap-6 pt-2">
+                        {config.imagenes?.alianzito && (
+                            <img
+                                src={config.imagenes.alianzito}
+                                alt="Alianzito"
+                                className="w-32 h-32 md:w-40 md:h-40 object-contain drop-shadow-lg animate-float-slow"
+                            />
+                        )}
+                        <div className="space-y-1 text-center md:text-left">
+                            <h1 className="font-extrabold text-yellow-900 text-xl md:text-3xl uppercase tracking-wide">
+                                {config.regla?.numero}: {config.regla?.titulo}
+                            </h1>
+                            <p className="text-sky-600 font-extrabold text-base md:text-lg">
+                                "{config.regla?.subtitulo}"
+                            </p>
+                        </div>
+                    </div>
+
+                    <p className="text-gray-700 font-medium text-sm md:text-base leading-relaxed max-w-2xl mx-auto pt-2">
+                        {config.regla?.descripcion}
                     </p>
                 </div>
 
-                {/* Contenedor del Crucigrama */}
-                <div className="relative w-full flex justify-center py-4 mb-12">
-                    {imagenes[0] && (
-                        <div className="hidden xl:block absolute right-[-2%] bottom-[-40px] w-48 animate-float-slow select-none z-10">
-                            <img src={`${imagenes[0]}`} alt="Ilustración billete" className="w-full h-auto object-contain filter drop-shadow-md" />
+                <div className="bg-amber-50 border-2 border-amber-200 p-5 rounded-3xl flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                        {config.imagenes?.billete && (
+                            <img
+                                src={config.imagenes.billete}
+                                alt="Ilustración"
+                                className="w-20 h-20 md:w-24 md:h-24 object-contain animate-bounce-gentle animate-float-slow"
+                            />
+                        )}
+                        <div>
+                            <h2 className="text-yellow-900 font-black text-lg md:text-xl uppercase">
+                                {config.actividad?.titulo}
+                            </h2>
+                            <p className="text-gray-600 font-bold text-xs md:text-sm">
+                                {config.actividad?.indicacion}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* CUADRÍCULA CRUCIGRAMA */}
+                <div className="relative w-full flex justify-center py-4 mb-8">
+                    {config.imagenes.billete2 && (
+                        <div className="absolute left-[70%] bottom-[70%] w-44 animate-float-slow select-none z-10">
+                            <img src={`${config.imagenes.billete2}`} alt="Billete saltando cuerda" className="w-full h-auto object-contain filter drop-shadow-md" />
+                        </div>
+                    )}
+
+                    {config.imagenes.alianzito2 && (
+                        <div className="absolute left-[5%] bottom-[50px] w-40 animate-float-slow select-none z-10">
+                            <img src={`${config.imagenes.alianzito2}`} alt="Alianzito celular" className="w-full h-auto object-contain filter drop-shadow-md" />
                         </div>
                     )}
 
                     <div
-                        className="grid gap-[1px] xs:gap-[2px] p-2 sm:p-5 bg-yellow-400 rounded-3xl shadow-2xl border-4 border-yellow-500 w-full max-w-full relative z-0"
+                        className="grid gap-[2px] sm:gap-[3px] p-3 sm:p-5 bg-sky-400 rounded-3xl shadow-2xl border-4 border-sky-500 max-w-xl w-full"
                         style={{
-                            gridTemplateColumns: "repeat(25, minmax(0, 1fr))"
+                            gridTemplateColumns: `repeat(${numCols}, minmax(0, 1fr))`
                         }}
                     >
                         {solucionGrid.map((row, r) =>
-                            row.slice(0, 25).map((char, c) => {
+                            row.map((char, c) => {
                                 const esCasilleroValido = char !== "";
                                 const letraUsuario = userGrid[r]?.[c] || "";
                                 const esCorrecto = letraUsuario === char && esCasilleroValido;
-                                
-                                // Evaluamos si es una letra regalo/pista predeterminada
                                 const esPistaFija = casillasPista.some(p => p.r === r && p.c === c);
                                 const numerosPista = mapaNumerosCeldas[`${r}-${c}`] || [];
 
@@ -325,11 +362,11 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                                         className="relative w-full aspect-square"
                                     >
                                         {numerosPista.length > 0 && (
-                                            <div className="absolute top-[0.5px] left-[1px] flex flex-col leading-none z-10 pointer-events-none select-none">
+                                            <div className="absolute top-[1px] left-[2px] flex flex-col leading-none z-10 pointer-events-none select-none">
                                                 {[...numerosPista].reverse().map((num) => (
-                                                    <span 
-                                                        key={num} 
-                                                        className="text-[4px] xxs:text-[5px] xs:text-[6px] sm:text-[8px] font-black text-blue-700"
+                                                    <span
+                                                        key={num}
+                                                        className="text-[7px] xs:text-[9px] sm:text-[11px] font-black text-yellow-800"
                                                     >
                                                         {num}
                                                     </span>
@@ -344,14 +381,14 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                                             onChange={(e) => handleInputChange(r, c, e.target.value)}
                                             disabled={esCorrecto || esPistaFija}
                                             className={`
-                                                w-full h-full text-center font-black uppercase rounded-[2px] sm:rounded-md
-                                                transition-all border shadow-inner focus:outline-none focus:ring-1 focus:ring-blue-500
-                                                text-[8px] xxs:text-[9px] xs:text-[11px] sm:text-base border-gray-300
+                                                w-full h-full text-center font-black uppercase rounded-md
+                                                transition-all border shadow-inner focus:outline-none focus:ring-2 focus:ring-yellow-500
+                                                text-xs xs:text-sm sm:text-lg border-gray-300
                                                 ${esPistaFija
-                                                    ? "bg-blue-600 border-yellow-600 text-white font-black cursor-not-allowed scale-95"
+                                                    ? "bg-yellow-600 border-blue-500 text-white font-black cursor-not-allowed scale-95"
                                                     : esCorrecto
-                                                        ? "bg-blue-600 border-yellow-600 text-white font-black cursor-not-allowed scale-95"
-                                                        : "bg-white text-blue-900 focus:bg-amber-100"
+                                                        ? "bg-yellow-600 border-blue-500 text-white font-black cursor-not-allowed scale-95"
+                                                        : "bg-white text-yellow-900 focus:bg-sky-100"
                                                 }
                                             `}
                                         />
@@ -362,50 +399,65 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 </div>
 
-                {imagenes[0] && (
-                    <div className="flex xl:hidden gap-4 justify-center items-center flex-wrap mb-8">
-                        <img
-                            src={`${imagenes[0]}`}
-                            alt="Ilustración móvil"
-                            className="w-20 sm:w-28 h-auto object-contain animate-float-slow select-none filter drop-shadow-md"
-                        />
-                    </div>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto mt-6">
-                    <div className="bg-sky-50 border-2 border-sky-100 rounded-3xl p-6 shadow-sm">
-                        <h3 className="font-extrabold text-blue-900 text-xl mb-4 flex items-center gap-2">
+                {/* BLOQUE DE PISTAS HORIZONTALES Y VERTICALES */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-6">
+                    <div className="bg-amber-50 border-2 border-amber-200 rounded-3xl p-5 shadow-sm">
+                        <h3 className="font-extrabold text-yellow-900 text-lg md:text-xl mb-3 flex items-center gap-2">
                             <span>➡️</span> Horizontales
                         </h3>
-                        <div className="space-y-4 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
                             {pistas.horizontales?.map((item) => (
-                                <div key={item.numero} className="text-sm md:text-base bg-white/60 p-3 rounded-xl border border-sky-100">
-                                    <span className="font-black text-amber-600 mr-2 text-base">{item.numero}.</span>
-                                    <span className="text-gray-700 font-semibold">{item.pista}</span>
+                                <div key={item.numero} className="text-xs md:text-sm bg-white p-3 rounded-2xl border border-amber-100 shadow-xs">
+                                    <span className="font-black text-sky-600 mr-2 text-base">{item.numero}.</span>
+                                    <span className="text-gray-700 font-bold">{item.pista}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
 
-                    <div className="bg-orange-50 border-2 border-orange-100 rounded-3xl p-6 shadow-sm">
-                        <h3 className="font-extrabold text-amber-800 text-xl mb-4 flex items-center gap-2">
+                    <div className="bg-sky-50 border-2 border-sky-200 rounded-3xl p-5 shadow-sm">
+                        <h3 className="font-extrabold text-sky-900 text-lg md:text-xl mb-3 flex items-center gap-2">
                             <span>⬇️</span> Verticales
                         </h3>
-                        <div className="space-y-4 max-h-[320px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
                             {pistas.verticales?.map((item) => (
-                                <div key={item.numero} className="text-sm md:text-base bg-white/60 p-3 rounded-xl border border-orange-100">
-                                    <span className="font-black text-amber-600 mr-2 text-base">{item.numero}.</span>
-                                    <span className="text-gray-700 font-semibold">{item.pista}</span>
+                                <div key={item.numero} className="text-xs md:text-sm bg-white p-3 rounded-2xl border border-sky-100 shadow-xs">
+                                    <span className="font-black text-sky-600 mr-2 text-base">{item.numero}.</span>
+                                    <span className="text-gray-700 font-bold">{item.pista}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-10">
+                {/* TIP FINANCIERO AL RELLENAR CORRECTAMENTE */}
+                {estaCompletoYCorrecto() && (
+                    <div className="space-y-6 mt-8 animate-fade-in pt-4 border-t-2 border-amber-100">
+                        <div className="bg-sky-50 border-4 border-sky-400 p-6 rounded-3xl text-center space-y-2 shadow-xl">
+                            <h2 className="text-2xl md:text-3xl font-black text-sky-900 uppercase">
+                                ¡Crucigrama Resuelto! 🎉
+                            </h2>
+                            <p className="text-base md:text-lg font-bold text-sky-950 max-w-xl mx-auto">
+                                Excelente análisis. Has identificado los conceptos clave para pausar las compras impulsivas.
+                            </p>
+                        </div>
+
+                        <div className="bg-amber-20 p-6 rounded-3xl border-2 border-amber-200 space-y-3">
+                            <span className="bg-yellow-600 text-amber-300 font-black text-xs md:text-sm px-3 py-1 rounded-full uppercase">
+                                💡 {config.tipFinanciero?.titulo}
+                            </span>
+                            <p className="text-gray-800 font-extrabold text-base md:text-lg leading-relaxed">
+                                "{config.tipFinanciero?.texto}"
+                            </p>
+                        </div>
+                    </div>
+                )}
+
+                {/* BOTONES DE ACCIÓN */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8">
                     <button
                         onClick={handleReset}
-                        className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-98 transition-all"
+                        className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-95 transition-all"
                     >
                         Reiniciar
                     </button>
@@ -416,7 +468,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                         className={`py-4 rounded-full font-black text-xl shadow-lg transition-all ${
                             !estaCompletoYCorrecto()
                                 ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-60"
-                                : "bg-alianza-amarillo text-alianza-azul hover:scale-102 active:scale-98"
+                                : "bg-alianza-amarillo text-alianza-azul hover:scale-105 active:scale-95"
                         }`}
                     >
                         Continuar
@@ -428,4 +480,4 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
     );
 };
 
-export default Act05;
+export default Act06;
