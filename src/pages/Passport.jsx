@@ -796,7 +796,7 @@ const Passport = () => {
             </h3>
 
             <p className="text-gray-600 mt-2">
-              Completaste 3 sellos más. Acude a tu sucursal por tu recompensa.
+              Completaste 3 sellos más. Descarga tu diploma en la sección de diplomas.
             </p>
 
             <button

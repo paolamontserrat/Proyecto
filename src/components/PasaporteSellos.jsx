@@ -12,7 +12,7 @@ function PasaporteSellos({ ahorros, mesActual, sellosReales = [] }) {
   return (
     <TarjetaVistosa emoji="🏅" titulo="Sellos" resumen={`${totalGanados}/12`} color="amarillo">
       <div className="grid grid-cols-4 gap-3">
-        // Muestra los sellos de cada mes, indicando si el usuario los ha conseguido, si es el mes actual o si aún no los ha conseguido.
+        {/* Muestra los sellos de cada mes, indicando si el usuario los ha conseguido, si es el mes actual o si aún no los ha conseguido. */}
         {MESES.map((mes, i) => {
           const total = (ahorros[mes] || []).reduce((s, a) => s + Number(a.monto), 0);
           const conseguido = sellosReales.some((s) => s.mes === mes);
@@ -21,7 +21,7 @@ function PasaporteSellos({ ahorros, mesActual, sellosReales = [] }) {
 
           return (
             <div key={mes} className="flex flex-col items-center">
-              // Muestra un círculo que indica si el usuario ha conseguido el sello
+              {/* Muestra un círculo que indica si el usuario ha conseguido el sello */}
               <div
                 title={`${mes}: $${total}`}
                 className={`w-14 h-14 rounded-full flex items-center justify-center text-2xl border-4 transition-transform ${
@@ -34,7 +34,7 @@ function PasaporteSellos({ ahorros, mesActual, sellosReales = [] }) {
               >
                 {conseguido ? '🏅' : esActual ? '⏳' : ''}
               </div>
-              // Muestra la abreviatura del mes y un indicador de progreso
+              {/* Muestra la abreviatura del mes y un indicador de progreso */}
               <span
                 className={`text-xs mt-1.5 font-bold ${
                   conseguido ? 'text-alianza-azul' : esActual ? 'text-alianza-azul' : 'text-gray-400'
@@ -44,7 +44,7 @@ function PasaporteSellos({ ahorros, mesActual, sellosReales = [] }) {
               </span>
               {esActual && !conseguido && (
                 <div className="w-12 h-1.5 bg-gray-200 rounded-full mt-1 overflow-hidden">
-                  // Muestra una barra de progreso que indica cuánto ha ahorrado el usuario en el mes actual
+                  {/* Muestra una barra de progreso que indica cuánto ha ahorrado el usuario en el mes actual */}
                   <div
                     className="h-full bg-alianza-azul transition-all"
                     style={{ width: `${progreso}%` }}

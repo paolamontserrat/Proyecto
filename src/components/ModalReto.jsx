@@ -17,7 +17,7 @@ function ModalReto({ titulo, monedas, onClose }) {
           ¡Reto cumplido!
         </h3>
         <p className="text-gray-500 text-sm mb-1">{titulo}</p>
-        // Muestra la cantidad de monedas obtenidas
+        {/* Muestra la cantidad de monedas obtenidas */}
         <p className="text-alianza-amarillo font-black text-lg mb-4">
           +{monedas} moneda{monedas > 1 ? 's' : ''} 🪙 
         </p>

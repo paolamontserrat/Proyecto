@@ -28,7 +28,7 @@ function PasaporteDiplomas({ diplomas }) {
           ))}
         </div>
       )}
-       // Modal que se muestra cuando el usuario toca un diploma para ver más detalles.
+       {/* Modal que se muestra cuando el usuario toca un diploma para ver más detalles. */}
       {diplomaAbierto && (
         <ModalDiploma
           diploma={diplomaAbierto}

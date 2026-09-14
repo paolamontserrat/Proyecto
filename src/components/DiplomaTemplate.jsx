@@ -18,7 +18,7 @@ const DiplomaTemplate = forwardRef(({ nombre, numero, fecha }, ref) => {
         boxSizing: 'border-box',
       }}
     >
-      // Contenedor interno del diploma, con un borde y esquinas redondeadas.
+      {/* Contenedor interno del diploma, con un borde y esquinas redondeadas. */}
       <div
         style={{
           border: '10px solid #FACC15',
