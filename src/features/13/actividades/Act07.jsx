@@ -19,52 +19,35 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act07-${rango}-${userId}`;
 
-    const guardar = async () => {
-        localStorage.setItem(storageKey, JSON.stringify({}));
-
-        if (userId !== "anon" && config.id) {
+    const handleContinue = async () => {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
                 await supabase
                     .from("progreso_actividades")
                     .upsert(
                         {
                             usuario_id: userId,
-                            actividad_id: config.id,
-                            datos_actividad: {},
+                            actividad_id: data.id,
+                            datos_actividad: payload,
                             completada: true,
                         },
                         {
                             onConflict: "usuario_id,actividad_id",
                         }
                     );
-            } catch {
-                console.warn("Offline, se sincroniza después");
+            } catch (err) {
+                console.warn("Offline, guardado localmente", err);
             }
         }
-    };
-
-    // Guardar progreso automáticamente al entrar al cómic
-    useEffect(() => {
-        guardar();
-    }, [config.id]);
-
-    // Re-intentar guardar si vuelve el internet
-    useEffect(() => {
-        const handleOnline = () => guardar();
-        window.addEventListener("online", handleOnline);
-        return () => {
-            window.removeEventListener("online", handleOnline);
-        };
-    }, [config.id]);
-
-    const handleContinue = async () => {
-        await guardar();
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Barra de navegación superior */}
+            {/* Barra de navegacion superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -83,15 +66,15 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
             {/* Tarjeta de Contenido Principal */}
             <div className="bg-white p-4 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl" translate="no">
                 
-                {/* Título Principal */}
+                {/* Titulo Principal */}
                 <h1
                     className="text-center font-extrabold text-blue-900 mb-8"
                     style={{ fontSize: "clamp(1.5rem, 3vw, 2.5rem)" }}
                 >
-                    {config.titulo || "¡Hora del Cómic! Lee la siguiente historia:"}
+                    {config.titulo || "¡Hora del Comic! Lee la siguiente historia:"}
                 </h1>
 
-                {/* Contenedor del Cómic*/}
+                {/* Contenedor del Comic*/}
                 <div className="flex flex-col items-center gap-6 max-w-2xl mx-auto">
                     {paginas.map((imagen, index) => (
                         <div 
@@ -100,7 +83,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
                         >
                             <img
                                 src={`${imagen}`}
-                                alt={`Capítulo del Cómic - Parte ${index + 1}`}
+                                alt={`Capitulo del Comic - Parte ${index + 1}`}
                                 className="w-full h-auto object-contain rounded-xl select-none"
                                 loading="lazy" 
                             />

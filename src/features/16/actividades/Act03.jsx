@@ -19,29 +19,33 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
 
     const handleContinue = async () => {
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: { leido: true },
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
                 console.warn("Offline, guardado localmente", err);
             }
         }
-        
-        localStorage.setItem(`act3-${rango}-${userId}`, JSON.stringify({ completada: true }));
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Animación flotante para las imágenes */}
             <style>{`
                 @keyframes float-slow {
                     0%, 100% { transform: translateY(0px) rotate(0deg); }
@@ -52,7 +56,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Barra superior de navegación */}
+            {/* Barra superior de navegacion */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -83,7 +87,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                     {secciones.map((s) => {
                         const esAzul = s.numero === 1 || s.numero === 3;
                         
-                        // Tamaño de imagen personalizado (más grande para la 2 y la 3)
+                        // Tamaño de imagen personalizado
                         const tamanoImagen = (s.numero === 2 || s.numero === 3) 
                             ? "w-52 md:w-64" 
                             : "w-40 md:w-48";
@@ -97,7 +101,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                                         : "bg-amber-50/90 text-amber-950 border-amber-300"
                                 }`}
                             >
-                                {/* Círculo con número indicador */}
+                                {/* Circulo con número indicador */}
                                 <div className={`absolute -left-3 -top-3 w-12 h-12 rounded-full flex items-center justify-center font-black text-2xl shadow-md border-2 ${
                                     esAzul 
                                         ? "bg-sky-400 text-white border-sky-100" 
@@ -173,7 +177,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                                         <div className="md:col-span-4 flex justify-center items-center">
                                             <img
                                                 src={s.imagen}
-                                                alt={`Ilustración ${s.titulo}`}
+                                                alt={`Ilustracion ${s.titulo}`}
                                                 className={`${tamanoImagen} h-auto object-contain drop-shadow-lg animate-float-slow select-none`}
                                             />
                                         </div>
@@ -184,7 +188,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                     })}
                 </div>
 
-                {/* Botón de Finalización */}
+                {/* Boton de Finalizacion */}
                 <div className="pt-6 text-center">
                     <button
                         onClick={handleContinue}

@@ -42,7 +42,6 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
         ahorro_mensual: ""
     });
 
-    // --- Persistencia ---
     const getUser = () => {
         try {
             return JSON.parse(localStorage.getItem("usuario"));

@@ -19,47 +19,28 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act4-${rango}-${userId}`;
 
-    // Cargar progreso previo
-    useEffect(() => {
-        const cargarProgreso = async () => {
-            if (userId !== "anon" && config.id) {
-                try {
-                    const { data: progreso } = await supabase
-                        .from("progreso_actividades")
-                        .select("completada")
-                        .eq("usuario_id", userId)
-                        .eq("actividad_id", config.id)
-                        .maybeSingle();
-
-                    if (progreso) return;
-                } catch (err) {
-                    console.warn("Error cargando progreso de Supabase, intentando local...", err);
-                }
-            }
-        };
-
-        cargarProgreso();
-    }, [config.id, userId]);
-
     const handleContinue = async () => {
-        const payload = { leido: true, fechaCompleto: new Date().toISOString() };
-
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: payload,
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
-                console.warn("Offline, progreso guardado localmente", err);
+                console.warn("Offline, guardado localmente", err);
             }
         }
-
         localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
@@ -83,7 +64,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4 max-w-4xl mx-auto px-2">
                 <button
                     onClick={onBack}
@@ -116,7 +97,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                     )}
                 </div>
 
-                {/* HISTORIA - PASOS DE SOFÍA */}
+                {/* HISTORIA - PASOS DE SOFIA */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Paso 1: El Sueño */}
                     {secInicio.id && (
@@ -137,7 +118,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                         </div>
                     )}
 
-                    {/* Paso 2: La Tentación */}
+                    {/* Paso 2: La Tentacion */}
                     {secConflicto.id && (
                         <div className="bg-amber-50 p-5 rounded-3xl border-2 border-amber-200 flex flex-col items-center text-center space-y-3">
                             <h2 className="text-xl font-black text-amber-600 uppercase">
@@ -156,7 +137,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                         </div>
                     )}
 
-                    {/* Paso 3: Decisión de Ahorrar */}
+                    {/* Paso 3: Decision de Ahorrar */}
                     {secDecision.id && (
                         <div className="bg-sky-50 p-5 rounded-3xl border-2 border-sky-200 flex flex-col items-center text-center space-y-3">
                             <h2 className="text-xl font-black text-blue-900 uppercase">
@@ -200,7 +181,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                     )}
                 </div>
 
-                {/* SECCIÓN CONCLUSIÓN / CÓMO LO LOGRÓ */}
+                {/* SECCION CONCLUSION / COMO LO LOGRO */}
                 {secConclusion.id && (
                     <div className="bg-blue-900 text-white p-6 sm:p-8 rounded-3xl shadow-xl space-y-6">
                         <div className="flex flex-col md:flex-row items-center justify-center gap-6">
@@ -230,7 +211,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* BOTÓN CONTINUAR */}
+                {/* BOTON CONTINUAR */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

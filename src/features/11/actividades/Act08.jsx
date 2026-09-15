@@ -18,47 +18,29 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act08-${rango}-${userId}`;
 
-    // Registrar la visualización/lectura
-    useEffect(() => {
-        const registrarLectura = async () => {
-            localStorage.setItem(storageKey, JSON.stringify({ leido: true }));
-
-            if (userId !== "anon" && config.id) {
-                try {
-                    await supabase.from("progreso_actividades").upsert(
+    const handleContinue = async () => {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
+            try {
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
                         {
                             usuario_id: userId,
-                            actividad_id: config.id,
-                            datos_actividad: { leido: true },
+                            actividad_id: data.id,
+                            datos_actividad: payload,
                             completada: true,
                         },
-                        { onConflict: "usuario_id,actividad_id" }
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
                     );
-                } catch (err) {
-                    console.warn("Error al registrar lectura en Supabase", err);
-                }
-            }
-        };
-
-        registrarLectura();
-    }, [config.id, userId, storageKey]);
-
-    const handleContinue = async () => {
-        if (userId !== "anon" && config.id) {
-            try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: { completado: true },
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
             } catch (err) {
-                console.warn("Offline, progreso guardado localmente", err);
+                console.warn("Offline, guardado localmente", err);
             }
         }
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -66,7 +48,7 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Navegación superior */}
+            {/* Navegacion superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -136,7 +118,7 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
                                 </ul>
                             )}
 
-                            {/* Bloques Especiales para Sección Cooperativa */}
+                            {/* Bloques Especiales para Seccion Cooperativa */}
                             {sec.bloque1 && (
                                 <div className="bg-blue-900 text-white p-5 rounded-2xl space-y-2 mt-4">
                                     <h3 className="font-bold text-alianza-amarillo text-lg md:text-xl">{sec.bloque1.subtitulo}</h3>
@@ -174,7 +156,7 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
                     ))}
                 </div>
 
-                {/* Botón de Continuar Centrado */}
+                {/* Boton de Continuar Centrado */}
                 <div className="flex justify-center max-w-xs mx-auto mt-8">
                     <button
                         onClick={handleContinue}

@@ -21,49 +21,31 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
     const userId = user?.id;
     const storageKey = `act01-${rango}-${userId || 'anon'}-${actividadId}`;
 
-    // Cargar progreso desde Supabase
-    useEffect(() => {
-        const cargarProgreso = async () => {
-            if (userId && actividadId) {
-                try {
-                    const { data: progreso } = await supabase
-                        .from('progreso_actividades')
-                        .select('completada')
-                        .eq('usuario_id', userId)
-                        .eq('actividad_id', actividadId)
-                        .maybeSingle();
-
-                    if (progreso) return;
-                } catch (err) {
-                    console.warn("Error cargando progreso de Supabase:", err);
-                }
-            }
-        };
-
-        cargarProgreso();
-    }, [actividadId, userId]);
 
     const handleContinue = async () => {
-        const payload = { leido: true, fechaCompleto: new Date().toISOString() };
-
-        if (userId && actividadId) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from('progreso_actividades').upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: actividadId,
-                        datos_actividad: payload,
-                        completada: true,
-                    },
-                    { onConflict: 'usuario_id,actividad_id' }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
-                console.warn("Error guardando progreso en Supabase:", err);
+                console.warn("Offline, guardado localmente", err);
             }
         }
-
         localStorage.setItem(storageKey, JSON.stringify(payload));
-        if (onComplete) onComplete();
+        onComplete();
     };
 
     return (
@@ -86,7 +68,7 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* NAVEGACIÓN SUPERIOR */}
+            {/* NAVEGACION SUPERIOR */}
             <div className="flex justify-between items-center mb-6 max-w-4xl mx-auto px-2">
                 <button
                     onClick={onBack}
@@ -107,7 +89,7 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
                 className="bg-white/95 p-4 sm:p-8 md:p-10 rounded-3xl border-4 border-amber-400 shadow-2xl max-w-4xl mx-auto space-y-10 box-border overflow-hidden"
                 translate="no"
             >
-                {/* TÍTULO PRINCIPAL */}
+                {/* TITULO PRINCIPAL */}
                 {config.titulo && (
                     <div className="text-center px-2">
                         <h1 className="text-xl sm:text-3xl md:text-4xl font-black text-blue-950 break-words leading-tight">
@@ -236,7 +218,7 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* BOTÓN CONTINUAR */}
+                {/* BOTON CONTINUAR */}
                 <div className="pt-4 text-center">
                     <button
                         type="button"

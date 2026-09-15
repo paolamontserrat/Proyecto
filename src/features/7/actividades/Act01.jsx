@@ -19,47 +19,28 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act1-${rango}-${userId}`;
 
-    // Cargar progreso guardado desde Supabase o LocalStorage
-    useEffect(() => {
-        const cargarProgreso = async () => {
-            if (userId !== "anon" && config.id) {
-                try {
-                    const { data: progreso } = await supabase
-                        .from("progreso_actividades")
-                        .select("completada")
-                        .eq("usuario_id", userId)
-                        .eq("actividad_id", config.id)
-                        .maybeSingle();
-
-                    if (progreso) return;
-                } catch (err) {
-                    console.warn("Error cargando progreso de Supabase, intentando local...", err);
-                }
-            }
-        };
-
-        cargarProgreso();
-    }, [config.id, userId]);
-
     const handleContinue = async () => {
-        const payload = { leido: true, fechaCompleto: new Date().toISOString() };
-
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: payload,
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
-                console.warn("Offline, progreso guardado localmente", err);
+                console.warn("Offline, guardado localmente", err);
             }
         }
-
         localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
@@ -89,7 +70,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4 max-w-4xl mx-auto px-2">
                 <button
                     onClick={() => navigate(`/dashboard/${rango}`)}
@@ -104,7 +85,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                 className="bg-white p-4 sm:p-6 md:p-10 rounded-3xl border-4 border-amber-400 shadow-2xl max-w-4xl mx-auto space-y-10 min-w-0 box-border overflow-hidden"
                 translate="no"
             >
-                {/* SECCIÓN 1: BIENVENIDA */}
+                {/* SECCION 1: BIENVENIDA */}
                 <div className="flex flex-col items-center text-center space-y-4">
                     <div className="relative w-full max-w-md h-56 sm:h-64 flex justify-center items-center">
                         {sec1.imagenes?.[0] && (
@@ -149,7 +130,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                         {sec1.introduccion}
                     </p>
                 </div>
-                {/* SECCIÓN 2: DEFINICIÓN Y EJEMPLO */}
+                {/* SECCION 2: DEFINICION Y EJEMPLO */}
                 <div className="space-y-6">
                     <div className="flex flex-col md:flex-row items-center gap-6 bg-sky-50 p-4 sm:p-6 rounded-3xl border-2 border-sky-200">
                         {sec2.imagenes?.[0] && (
@@ -189,7 +170,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 </div>
 
-                {/* SECCIÓN 3: PROCESO */}
+                {/* SECCION 3: PROCESO */}
                 <div className="bg-gradient-to-b from-sky-50 to-amber-50 p-5 sm:p-8 rounded-3xl border-2 border-amber-300 text-center space-y-6">
                     <div className="flex flex-col items-center justify-center gap-4">
                         {sec3.imagenes?.[0] && (
@@ -213,7 +194,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                     </p>
                 </div>
 
-                {/* SECCIÓN 4: RESUMEN Y PASOS */}
+                {/* SECCION 4: RESUMEN Y PASOS */}
                 <div className="bg-sky-50 p-5 sm:p-8 rounded-3xl border-3 border-sky-300 text-center space-y-6">
                     <div>
                         <h2 className="text-2xl sm:text-3xl font-black text-blue-900 uppercase">
@@ -242,7 +223,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 </div>
 
-                {/* BOTÓN CONTINUAR */}
+                {/* BOTON CONTINUAR */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

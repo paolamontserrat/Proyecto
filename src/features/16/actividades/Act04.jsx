@@ -19,23 +19,28 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
 
     const handleContinue = async () => {
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: { leido: true },
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
                 console.warn("Offline, guardado localmente", err);
             }
         }
-        
-        localStorage.setItem(`act3-${rango}-${userId}`, JSON.stringify({ completada: true }));
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -51,7 +56,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación superior */}
+            {/* Navegacion superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -85,7 +90,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                             <div className="md:col-span-5 flex justify-center order-2 md:order-1">
                                 <img 
                                     src={pasos[0].imagen} 
-                                    alt="Ilustración Paso 1" 
+                                    alt="Ilustracion Paso 1" 
                                     className="w-full max-w-[240px] md:max-w-[280px] h-auto object-contain drop-shadow-xl animate-float-slow select-none"
                                 />
                             </div>
@@ -171,7 +176,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                             <div className="md:col-span-5 flex justify-center">
                                 <img 
                                     src={pasos[1].imagen} 
-                                    alt="Ilustración Paso 2" 
+                                    alt="Ilustracion Paso 2" 
                                     className="w-full max-w-[240px] md:max-w-[280px] h-auto object-contain drop-shadow-xl animate-float-slow select-none"
                                 />
                             </div>
@@ -188,7 +193,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                             <div className="md:col-span-5 flex justify-center order-2 md:order-1">
                                 <img 
                                     src={pasos[2].imagen} 
-                                    alt="Ilustración Paso 3" 
+                                    alt="Ilustracion Paso 3" 
                                     className="w-full max-w-[240px] md:max-w-[280px] h-auto object-contain drop-shadow-xl animate-float-slow select-none"
                                 />
                             </div>
@@ -235,7 +240,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                                     </div>
                                 </div>
 
-                                {/* Tabla de Distribución */}
+                                {/* Tabla de Distribucion */}
                                 <div className="bg-white rounded-2xl p-4 border-2 border-sky-200 shadow-sm space-y-3">
                                     <div className="grid grid-cols-2 text-center font-black text-sm text-sky-900 border-b border-sky-100 pb-2">
                                         <span>Categoría</span>
@@ -264,7 +269,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                                     )}
                                 </div>
 
-                                {/* Post-it Reflexión Final */}
+                                {/* Post-it Reflexion Final */}
                                 {pasos[3].reflexion && (
                                     <div className="bg-amber-300 text-blue-950 p-5 rounded-2xl shadow-md border-2 border-amber-400 rotate-1 space-y-2">
                                         {pasos[3].reflexion.map((ref, idx) => (
@@ -280,7 +285,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                             <div className="md:col-span-5 flex justify-center">
                                 <img 
                                     src={pasos[3].imagen} 
-                                    alt="Ilustración Paso 4" 
+                                    alt="Ilustracion Paso 4" 
                                     className="w-full max-w-[250px] md:max-w-[300px] h-auto object-contain drop-shadow-xl animate-float-slow select-none"
                                 />
                             </div>
@@ -289,7 +294,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* Botón Finalizar */}
+                {/* Boton Finalizar */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

@@ -20,53 +20,35 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act6-${rango}-${userId}`;
 
-    useEffect(() => {
-        const cargarProgreso = async () => {
-            if (userId !== "anon" && config.id) {
-                try {
-                    const { data: progreso } = await supabase
-                        .from("progreso_actividades")
-                        .select("completada")
-                        .eq("usuario_id", userId)
-                        .eq("actividad_id", config.id)
-                        .maybeSingle();
-
-                    if (progreso) return;
-                } catch (err) {
-                    console.warn("Error cargando progreso de Supabase:", err);
-                }
-            }
-        };
-
-        cargarProgreso();
-    }, [config.id, userId]);
-
     const handleContinue = async () => {
-        const payload = { leido: true, fechaCompleto: new Date().toISOString() };
-
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: payload,
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
-                console.warn("Error guardando avance local/Supabase", err);
+                console.warn("Offline, guardado localmente", err);
             }
         }
-
         localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4 max-w-4xl mx-auto px-2">
                 <button
                     onClick={onBack}
@@ -87,7 +69,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                 className="bg-white p-4 sm:p-6 md:p-10 rounded-3xl border-4 border-amber-400 shadow-2xl max-w-4xl mx-auto space-y-8 min-w-0 box-border"
                 translate="no"
             >
-                {/* ILUSTRACIÓN CABECERA */}
+                {/* ILUSTRACION CABECERA */}
                 {definicion.imagenCabecera && (
                     <div className="flex justify-center">
                         <img
@@ -98,7 +80,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* CONCEPTO / DEFINICIÓN */}
+                {/* CONCEPTO / DEFINICION */}
                 <div className="bg-sky-50 p-6 sm:p-8 rounded-3xl border-2 border-sky-200 text-center space-y-4">
                     <h1 className="text-3xl sm:text-4xl font-black text-blue-900 uppercase">
                         {config.titulo}
@@ -137,7 +119,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* BOTÓN CONTINUAR */}
+                {/* BOTON CONTINUAR */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

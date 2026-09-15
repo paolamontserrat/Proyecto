@@ -131,6 +131,17 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
         );
     };
 
+    const handleReset = async () => {
+        const estadoInicial = {
+            meta: "",
+            costo: "",
+            falta: "",
+            fechaLimite: "",
+            cuota: ""
+        };
+        setRespuestas(estadoInicial);
+    };
+
     const handleContinue = async () => {
         if (!estaCompleto()) return;
 
@@ -299,17 +310,24 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                 </div>
 
                 {/* Botón de Finalización */}
-                <div className="mt-8 md:mt-10 text-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8">
+                    <button
+                        onClick={handleReset}
+                        className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-98 transition-all"
+                    >
+                        Reiniciar
+                    </button>
+
                     <button
                         onClick={handleContinue}
                         disabled={!estaCompleto()}
-                        className={`w-full md:w-2/3 py-3.5 sm:py-4 rounded-full font-black text-lg sm:text-xl shadow-lg transition-all ${
+                        className={`py-4 rounded-full font-black text-xl shadow-lg transition-all ${
                             !estaCompleto()
                                 ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-60"
-                                : "bg-alianza-amarillo text-alianza-azul hover:scale-105 active:scale-95"
+                                : "bg-alianza-amarillo text-alianza-azul hover:scale-102 active:scale-98"
                         }`}
                     >
-                        {estaCompleto() ? "Continuar" : "Selecciona fecha y completa los campos"}
+                        Continuar
                     </button>
                 </div>
 

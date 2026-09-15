@@ -226,6 +226,10 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
         localStorage.removeItem(storageKey);
     };
 
+    const handleContinue = () => {
+        onComplete();
+    };
+
     const escenarioActual = escenarios[escenarioActualIndex];
 
     return (
@@ -472,7 +476,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                     </button>
 
                     <button
-                        onClick={onComplete}
+                        onClick={handleContinue}
                         disabled={resultadoFinal !== "victoria"}
                         className={`py-4 rounded-full font-black text-xl shadow-lg transition-all ${
                             resultadoFinal !== "victoria"

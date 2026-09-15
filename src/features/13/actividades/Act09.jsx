@@ -24,52 +24,35 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act09-${rango}-${userId}`;
 
-    const guardar = async () => {
-        localStorage.setItem(storageKey, JSON.stringify({}));
-
-        if (userId !== "anon" && config.id) {
+    const handleContinue = async () => {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
                 await supabase
                     .from("progreso_actividades")
                     .upsert(
                         {
                             usuario_id: userId,
-                            actividad_id: config.id,
-                            datos_actividad: {},
+                            actividad_id: data.id,
+                            datos_actividad: payload,
                             completada: true,
                         },
                         {
                             onConflict: "usuario_id,actividad_id",
                         }
                     );
-            } catch {
-                console.warn("Offline, se sincroniza después");
+            } catch (err) {
+                console.warn("Offline, guardado localmente", err);
             }
         }
-    };
-
-    // Guardar progreso al cargar el componente
-    useEffect(() => {
-        guardar();
-    }, [config.id]);
-
-    // Intentar re-guardar si se recupera conexión a internet
-    useEffect(() => {
-        const handleOnline = () => guardar();
-        window.addEventListener("online", handleOnline);
-        return () => {
-            window.removeEventListener("online", handleOnline);
-        };
-    }, [config.id]);
-
-    const handleContinue = async () => {
-        await guardar();
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Navegación superior */}
+            {/* Navegacion superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -96,7 +79,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
                     {config.titulo || "HONESTIDAD"}
                 </h1>
 
-                {/* Bloque de Introducción */}
+                {/* Bloque de Introduccion */}
                 {config.introduccion && (
                     <div className="text-center space-y-3 max-w-3xl mx-auto mb-10">
                         <p className="text-xl md:text-2xl font-bold text-gray-800 leading-relaxed">

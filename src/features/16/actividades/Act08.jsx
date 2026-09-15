@@ -20,23 +20,28 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
 
     const handleContinue = async () => {
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: { leido: true },
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
                 console.warn("Offline, guardado localmente", err);
             }
         }
-
-        localStorage.setItem(`act8-${rango}-${userId}`, JSON.stringify({ completada: true }));
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -52,7 +57,7 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -103,11 +108,11 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 </div>
 
-                {/* BLOQUE 2: Mayor de edad & Aportación Social */}
+                {/* BLOQUE 2: Mayor de edad & Aportacion Social */}
                 <div className="bg-sky-50 rounded-3xl p-6 md:p-8 border-3 border-sky-300 shadow-md">
                     <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                         
-                        {/* Explicación Mayor de Edad */}
+                        {/* Explicacion Mayor de Edad */}
                         <div className="md:col-span-7 space-y-4 order-2 md:order-1">
                             <div className="bg-sky-600 text-white p-5 rounded-2xl shadow-md">
                                 <p className="font-black text-lg md:text-xl leading-snug">
@@ -136,7 +141,7 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 </div>
 
-                {/* Botón Continuar */}
+                {/* Boton Continuar */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

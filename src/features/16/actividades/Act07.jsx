@@ -19,23 +19,28 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
 
     const handleContinue = async () => {
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: { leido: true },
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
                 console.warn("Offline, guardado localmente", err);
             }
         }
-
-        localStorage.setItem(`act7-${rango}-${userId}`, JSON.stringify({ completada: true }));
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -51,7 +56,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -77,7 +82,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
                     </h1>
                 </div>
 
-                {/* Lista de Puntos 1 a 4 (Línea de tiempo estilizada) */}
+                {/* Lista de Puntos 1 a 4 (Linea de tiempo estilizada) */}
                 <div className="space-y-6 relative">
                     
                     {/* PASO 1 */}
@@ -178,7 +183,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
                     <div className="bg-sky-50 rounded-3xl p-6 md:p-8 shadow-sm border-2 border-sky-200">
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
                             
-                            {/* Texto e Información INE */}
+                            {/* Texto e Informacion INE */}
                             <div className="md:col-span-7 space-y-4">
                                 <div className="flex items-center gap-4">
                                     <span className="w-12 h-12 rounded-full bg-blue-600 text-white font-black text-2xl flex items-center justify-center shrink-0 shadow-md">
@@ -218,7 +223,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* Botón Continuar */}
+                {/* Boton Continuar */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

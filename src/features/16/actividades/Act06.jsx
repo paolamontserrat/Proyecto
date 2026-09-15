@@ -19,23 +19,29 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
 
     const handleContinue = async () => {
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: { leido: true },
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
                 console.warn("Offline, guardado localmente", err);
             }
         }
-
-        localStorage.setItem(`act6-${rango}-${userId}`, JSON.stringify({ completada: true }));
+    
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -51,7 +57,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -84,7 +90,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                     {puntos[0] && (
                         <div className="bg-amber-50 rounded-3xl p-6 border-2 border-amber-200 shadow-sm">
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                                {/* Círculo Imagen Izquierda */}
+                                {/* Circulo Imagen Izquierda */}
                                 <div className="md:col-span-5 flex justify-center">
                                     <div className="w-48 h-48 md:w-56 md:h-56 rounded-full bg-white border-4 border-sky-400 p-3 shadow-lg flex items-center justify-center animate-float-slow overflow-hidden">
                                         <img 
@@ -106,7 +112,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                         </div>
                     )}
 
-                    {/* PUNTO 2: Te conviertes en adulto legal en México */}
+                    {/* PUNTO 2: Te conviertes en adulto legal en Mexico */}
                     {puntos[1] && (
                         <div className="bg-sky-50 rounded-3xl p-6 border-2 border-sky-200 shadow-sm">
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
@@ -118,7 +124,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                                         </h3>
                                     </div>
                                 </div>
-                                {/* Círculo Imagen Derecha */}
+                                {/* Circulo Imagen Derecha */}
                                 <div className="md:col-span-5 order-1 md:order-2 flex justify-center">
                                     <div className="w-48 h-48 md:w-56 md:h-56 rounded-full bg-white border-4 border-amber-400 p-3 shadow-lg flex items-center justify-center animate-float-slow overflow-hidden">
                                         <img 
@@ -136,7 +142,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                     {puntos[2] && (
                         <div className="bg-amber-50 rounded-3xl p-6 border-2 border-amber-200 shadow-sm">
                             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                                {/* Círculo Imagen Izquierda */}
+                                {/* Circulo Imagen Izquierda */}
                                 <div className="md:col-span-5 flex justify-center">
                                     <div className="w-48 h-48 md:w-56 md:h-56 rounded-full bg-white border-4 border-blue-600 p-3 shadow-lg flex items-center justify-center animate-float-slow overflow-hidden">
                                         <img 
@@ -160,7 +166,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
 
                 </div>
 
-                {/* Frase de Reflexión Final */}
+                {/* Frase de Reflexion Final */}
                 {config.fraseFinal && (
                     <div className="bg-gradient-to-r  text-blue-800 p-6 rounded-2xl text-center shadow-lg border-2 border-amber-400">
                         <p className="text-lg md:text-2xl font-black italic tracking-wide">
@@ -169,7 +175,7 @@ const Act06 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* Botón Continuar */}
+                {/* Boton Continuar */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

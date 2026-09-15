@@ -19,8 +19,8 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act01-${rango}-${userId}`;
 
-    const guardar = async () => {
-        localStorage.setItem(storageKey, JSON.stringify({}));
+    const handleContinue = async () => {
+        const payload = { leido: true};
 
         if (userId !== "anon" && data?.id) {
             try {
@@ -30,33 +30,19 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                         {
                             usuario_id: userId,
                             actividad_id: data.id,
-                            datos_actividad: {},
+                            datos_actividad: payload,
                             completada: true,
                         },
                         {
                             onConflict: "usuario_id,actividad_id",
                         }
                     );
-            } catch {
-                console.warn("Offline, se sincroniza después");
+            } catch (err) {
+                console.warn("Offline, guardado localmente", err);
             }
         }
-    };
 
-    useEffect(() => {
-        guardar();
-    }, [data?.id]);
-
-    useEffect(() => {
-        const handleOnline = () => guardar();
-        window.addEventListener("online", handleOnline);
-        return () => {
-            window.removeEventListener("online", handleOnline);
-        };
-    }, [data?.id]);
-
-    const handleContinue = async () => {
-        await guardar();
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -72,7 +58,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
             
-            {/* Barra de navegación superior */}
+            {/* Barra de navegacion superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={() => navigate(`/dashboard/${rango}`)}
@@ -87,7 +73,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                 className="bg-white p-5 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl"
                 translate="no"
             >
-                {/* Título Principal */}
+                {/* Titulo Principal */}
                 <h1
                     className="text-center font-extrabold text-blue-900 mb-10"
                     style={{ fontSize: "clamp(1.8rem, 3.5vw, 2.8rem)" }}
@@ -118,9 +104,9 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                             {/* Contenedor de Columnas (Se activa si hay imagen) */}
                             <div className={`grid grid-cols-1 ${tieneImagen ? "md:grid-cols-2" : ""} gap-8 items-center`}>
                                 
-                                {/* Columna Izquierda: Información */}
+                                {/* Columna Izquierda: Informacion */}
                                 <div className="space-y-6">
-                                    {/* Descripción */}
+                                    {/* Descripcion */}
                                     <p className="text-xl text-gray-800">
                                         {contenido.descripcion}
                                     </p>
@@ -150,7 +136,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                                     <div className="w-full flex justify-center items-center p-4">
                                         <img
                                             src={paso.imagen}
-                                            alt={contenido.tituloSecundario || "Ilustración"}
+                                            alt={contenido.tituloSecundario || "Ilustracion"}
                                             className="w-64 md:w-80 object-contain animate-float filter drop-shadow-lg"
                                         />
                                     </div>
@@ -167,7 +153,7 @@ const Act01 = ({ data, onComplete, onBack, rango }) => {
                     );
                 })}
 
-                {/* Botón de continuar */}
+                {/* Boton de continuar */}
                 <button
                     onClick={handleContinue}
                     className="w-full mt-4 py-4 rounded-full font-black text-xl bg-alianza-amarillo text-alianza-azul hover:scale-102 active:scale-98 shadow-md transition-all"

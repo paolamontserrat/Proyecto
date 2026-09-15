@@ -160,7 +160,7 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4 max-w-4xl mx-auto px-2">
                 <button
                     onClick={onBack}
@@ -205,7 +205,7 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
                         className="w-full h-auto block object-cover"
                     />
 
-                    {/* Monedas pequeñas y estáticas */}
+                    {/* Monedas pequeñas y estaticas */}
                     {monedasActivas.map((moneda) => {
                         const encontrada = monedasEncontradas.includes(moneda.id);
                         return (

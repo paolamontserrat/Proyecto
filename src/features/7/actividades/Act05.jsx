@@ -49,7 +49,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
         cargarProgreso();
     }, [config.id, userId]);
 
-    // Manejar selección de imágenes
+    // Manejar selección de imagenes
     const handleSelectAction = (casoId, opcion) => {
         setRespuestasSeleccion((prev) => ({
             ...prev,
@@ -223,9 +223,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                                                 respuestasSeleccion[caso.id]?.id === opcion.id;
                                             const esCorrecta = opcion.esCorrecta;
 
-                                            // Estilos de borde dinámicos:
-                                            // Si está seleccionada y es correcta -> Borde Azul + Ring Azul
-                                            // Si está seleccionada e incorrecta -> Borde Rojo
+                                            // Estilos de borde dinamicos
                                             let borderStyle = "border-transparent hover:border-sky-300";
                                             if (esSeleccionada) {
                                                 if (esCorrecta) {

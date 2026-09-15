@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const Act05 = ({ data, onComplete, onBack, rango }) => {
     const navigate = useNavigate();
 
-    // Emojis dinámicos para los marcadores de puntos
+    // Emojis dinamicos para los marcadores de puntos
     const emojisSecciones = {
         escuela: "🏫",
         casa: "🏠",
@@ -25,10 +25,10 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act05-${rango}-${userId}`;
 
-    const guardar = async () => {
-        localStorage.setItem(storageKey, JSON.stringify({}));
-
-        if (userId !== "anon" && data.id) {
+    const handleContinue = async () => {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
                 await supabase
                     .from("progreso_actividades")
@@ -36,40 +36,24 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                         {
                             usuario_id: userId,
                             actividad_id: data.id,
-                            datos_actividad: {},
+                            datos_actividad: payload,
                             completada: true,
                         },
                         {
                             onConflict: "usuario_id,actividad_id",
                         }
                     );
-            } catch {
-                console.warn("Offline, se sincroniza después");
+            } catch (err) {
+                console.warn("Offline, guardado localmente", err);
             }
         }
-    };
-
-    // Guardar progreso al cargar el componente
-    useEffect(() => {
-        guardar();
-    }, [data.id]);
-
-    useEffect(() => {
-        const handleOnline = () => guardar();
-        window.addEventListener("online", handleOnline);
-        return () => {
-            window.removeEventListener("online", handleOnline);
-        };
-    }, [data.id]);
-
-    const handleContinue = async () => {
-        await guardar();
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
     return (
         <LayoutActividad fondo={data.fondo}>
-            {/* Navegación superior */}
+            {/* Navegacion superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -88,7 +72,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
             {/* Tarjeta de Contenido Principal */}
             <div className="bg-white p-5 md:p-8 rounded-3xl border-4 border-alianza-amarillo shadow-2xl" translate="no">
                 
-                {/* Título Principal */}
+                {/* Titulo Principal */}
                 <h1 
                     className="text-center font-black text-amber-500 mb-6 uppercase tracking-wider break-words px-2" 
                     style={{ fontSize: "clamp(1.8rem, 8vw, 3.5rem)" }}
@@ -96,7 +80,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                     {data.titulo || "RESPONSABILIDAD"}
                 </h1>
 
-                {/* Bloque de Introducción */}
+                {/* Bloque de Introduccion */}
                 {data.introduccion && (
                     <div className="text-center space-y-3 max-w-3xl mx-auto mb-10">
                         <p className="text-xl md:text-2xl font-bold text-blue-900 leading-relaxed">
@@ -108,7 +92,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* Cuadrícula de Secciones Informativas */}
+                {/* Cuadricula de Secciones Informativas */}
                 <div className="grid grid-cols-1 gap-8 max-w-4xl mx-auto">
                     
                     {/* Tarjeta: Escuela */}
@@ -187,7 +171,7 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
 
                 </div>
 
-                {/* Botón de Finalización de Lectura */}
+                {/* Boton de Finalizacion de Lectura */}
                 <div className="flex justify-center mt-10 max-w-md mx-auto">
                     <button
                         onClick={handleContinue}

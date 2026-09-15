@@ -20,34 +20,34 @@ const Act14 = ({ data, onComplete, onBack, rango }) => {
     const storageKey = `act14-${rango}-${userId}`;
 
     const handleContinue = async () => {
-        const payload = {
-            completado: true,
-            fechaCompleto: new Date().toISOString(),
-        };
-
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: payload,
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
-                console.warn("Error guardando en Supabase:", err);
+                console.warn("Offline, guardado localmente", err);
             }
         }
-
         localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-6 max-w-5xl mx-auto px-2">
                 <button
                     onClick={onBack}
@@ -94,7 +94,7 @@ const Act14 = ({ data, onComplete, onBack, rango }) => {
                                 />
                             )}
 
-                            {/* Únicamente el texto lleva fondo */}
+                            {/* Unicamente el texto lleva fondo */}
                             {item.texto && (
                                 <div className="bg-sky-100 border-3 border-sky-300 p-6 rounded-3xl shadow-md flex-1 text-center sm:text-left w-full">
                                     <p className="text-lg sm:text-xl font-black text-blue-950 leading-relaxed">
@@ -106,7 +106,7 @@ const Act14 = ({ data, onComplete, onBack, rango }) => {
                     ))}
                 </div>
 
-                {/* BOTÓN CONTINUAR */}
+                {/* BOTON CONTINUAR */}
                 <div className="flex justify-center pt-6">
                     <button
                         onClick={handleContinue}

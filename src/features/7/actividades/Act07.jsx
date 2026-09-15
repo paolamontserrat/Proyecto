@@ -81,7 +81,7 @@ const Act07 = ({ data, onComplete, onBack, rango }) => {
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4 max-w-4xl mx-auto px-2">
                 <button
                     onClick={onBack}

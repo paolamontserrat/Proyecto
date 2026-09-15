@@ -71,7 +71,7 @@ const Act13 = ({ data, onComplete, onBack, rango }) => {
         setOpcionSeleccionada(opcion);
     };
 
-    const handleReiniciar = () => {
+    const handleReset = () => {
         setOpcionSeleccionada(null);
     };
 
@@ -106,7 +106,7 @@ const Act13 = ({ data, onComplete, onBack, rango }) => {
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-6 max-w-5xl mx-auto px-2">
                 <button
                     onClick={onBack}
@@ -128,7 +128,7 @@ const Act13 = ({ data, onComplete, onBack, rango }) => {
                     {config.titulo}
                 </h1>
 
-                {/* HISTORIA - IMÁGENES COMPACTAS */}
+                {/* HISTORIA - IMAGENES COMPACTAS */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                     {historia.map((bloque, idx) => {
                         const tieneTexto = Boolean(bloque.texto);
@@ -162,7 +162,7 @@ const Act13 = ({ data, onComplete, onBack, rango }) => {
                     })}
                 </div>
 
-                {/* DINÁMICA: COMPLETAR LA FRASE */}
+                {/* DINAMICA: COMPLETAR LA FRASE */}
                 <div className="space-y-8 text-center">
                     <div className="bg-sky-100 border-3 border-sky-300 p-6 rounded-3xl space-y-3 max-w-2xl mx-auto shadow-md">
                         <h2 className="text-2xl sm:text-3xl font-black text-blue-900">
@@ -219,7 +219,7 @@ const Act13 = ({ data, onComplete, onBack, rango }) => {
                     {/* BOTONES REINICIAR Y CONTINUAR */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8">
                         <button
-                            onClick={handleReiniciar}
+                            onClick={handleReset}
                             className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-98 transition-all"
                         >
                             Reiniciar

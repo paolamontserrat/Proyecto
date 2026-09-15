@@ -155,7 +155,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
         guardarAvance(palabrasResueltas, palabraIndex, [], 0);
     };
 
-    const handleResetTotal = async () => {
+    const handleReset = async () => {
         setPalabraIndex(0);
         setLetrasUsadas([]);
         setErrores(0);
@@ -358,7 +358,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
                 {/* Botones de Control */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-6">
                     <button
-                        onClick={handleResetTotal}
+                        onClick={handleReset}
                         className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-98 transition-all"
                     >
                         Reiniciar

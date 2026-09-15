@@ -19,44 +19,30 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act02-${rango}-${userId}`;
 
-    const guardar = async () => {
-        localStorage.setItem(storageKey, JSON.stringify({}));
+    const handleContinue = async () => {
+        const payload = { leido: true};
 
         if (userId !== "anon" && data?.id) {
-        try {
-            await supabase
-            .from("progreso_actividades")
-            .upsert(
-                {
-                usuario_id: userId,
-                actividad_id: data.id,
-                datos_actividad: {},
-                completada: true,
-                },
-                {
-                onConflict: "usuario_id,actividad_id",
-                }
-            );
-        } catch {
-            console.warn("Offline, se sincroniza después");
+            try {
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
+            } catch (err) {
+                console.warn("Offline, guardado localmente", err);
+            }
         }
-        }
-    };
 
-    useEffect(() => {
-        guardar();
-    }, [data?.id]);
-
-    useEffect(() => {
-        const handleOnline = () => guardar();
-        window.addEventListener("online", handleOnline);
-        return () => {
-        window.removeEventListener("online", handleOnline);
-        };
-    }, [data?.id]);
-
-    const handleContinue = async () => {
-        await guardar();
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -72,7 +58,7 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
         
-        {/* Barra de navegación superior */}
+        {/* Barra de navegacion superior */}
         <div className="flex justify-between mb-6">
             <button
             onClick={onBack}
@@ -113,10 +99,10 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
                         >
                             <div className={`grid grid-cols-1 ${tieneImagen ? "lg:grid-cols-12" : "grid-cols-1"} gap-8 items-center`}>
                                 
-                                {/* Columna de Información */}
+                                {/* Columna de Informacion */}
                                 <div className={`space-y-6 ${tieneImagen ? "lg:col-span-7" : ""} ${tieneImagen && alternarColumnas ? "lg:order-2" : ""}`}>
                                     
-                                    {/* Encabezado con Número Gigante */}
+                                    {/* Encabezado con Numero Gigante */}
                                     <div className="flex items-center gap-4 mb-4">
                                         <span className="text-5xl md:text-7xl font-black text-sky-500 select-none leading-none">
                                             {paso.id}
@@ -126,7 +112,7 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
                                         </h2>
                                     </div>
 
-                                    {/* Descripción */}
+                                    {/* Descripcion */}
                                     <p className="text-xl text-gray-700 font-medium leading-relaxed">
                                         {contenido.descripcion}
                                     </p>
@@ -159,7 +145,7 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
                                             <div className="absolute inset-0 bg-yellow-200 rounded-full blur-3xl opacity-30 transform -translate-y-4"></div>
                                             <img
                                                 src={paso.imagen}
-                                                alt={contenido.tituloSecundario || "Ilustración del paso"}
+                                                alt={contenido.tituloSecundario || "Ilustracion del paso"}
                                                 className="w-64 md:w-80 object-contain animate-float filter drop-shadow-lg relative z-10" // Cambiado a animate-float
                                             />
                                         </div>

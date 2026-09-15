@@ -115,6 +115,17 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
 
     const formularioValido = estaValido(tablaActual) && estaValido(tablaAjustada);
 
+    const handleReset = async () => {
+        const estadoTablaInicial = {
+            ahorro: "",
+            gastos_personales: "",
+            apoyo_casa: "",
+            diversion: ""
+        };
+        setTablaActual(estadoTablaInicial);
+        setTablaAjustada(estadoTablaInicial);
+    };
+
     const handleContinue = async () => {
         if (!formularioValido) return;
 
@@ -261,17 +272,24 @@ const Act02 = ({ data, onComplete, onBack, rango }) => {
                 </div>
 
                 {/* Botón Continuar */}
-                <div className="mt-10 text-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8">
+                    <button
+                        onClick={handleReset}
+                        className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-98 transition-all"
+                    >
+                        Reiniciar
+                    </button>
+
                     <button
                         onClick={handleContinue}
                         disabled={!formularioValido}
-                        className={`w-full md:w-2/3 py-4 rounded-full font-black text-xl shadow-lg transition-all ${
+                        className={`py-4 rounded-full font-black text-xl shadow-lg transition-all ${
                             !formularioValido
                                 ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-60"
-                                : "bg-alianza-amarillo text-alianza-azul hover:scale-105 active:scale-95"
+                                : "bg-alianza-amarillo text-alianza-azul hover:scale-102 active:scale-98"
                         }`}
                     >
-                        {formularioValido ? "Continuar" : "Asigna $1,200 exactos en ambas tablas"}
+                        Continuar
                     </button>
                 </div>
 

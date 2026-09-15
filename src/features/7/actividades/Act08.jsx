@@ -8,8 +8,8 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
     const config = data || {};
     const metasIniciales = config.metas || [];
 
-    const [asignaciones, setAsignaciones] = useState({}); // { idMeta: "pequeña" | "grande" }
-    const [metaSeleccionada, setMetaSeleccionada] = useState(null); // Soporte Móvil Tap/Click
+    const [asignaciones, setAsignaciones] = useState({});
+    const [metaSeleccionada, setMetaSeleccionada] = useState(null);
 
     const getUser = () => {
         try {
@@ -45,7 +45,7 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
         cargarProgreso();
     }, [config.id, userId]);
 
-    // Asignar una meta a una categoría
+    // Asignar una meta a una categoria
     const asignarCategoria = (metaId, catId) => {
         setAsignaciones((prev) => ({
             ...prev,
@@ -124,7 +124,7 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
                 key={meta.id}
                 onClick={(e) => {
                     e.stopPropagation();
-                    // Quitar de la categoría al hacer clic/tap
+                    // Quitar de la categoria al hacer clic/tap
                     setAsignaciones((prev) => {
                         const copy = { ...prev };
                         delete copy[meta.id];
@@ -152,7 +152,7 @@ const Act08 = ({ data, onComplete, onBack, rango }) => {
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4 max-w-5xl mx-auto px-2">
                 <button
                     onClick={onBack}

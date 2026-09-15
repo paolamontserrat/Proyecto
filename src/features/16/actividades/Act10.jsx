@@ -19,23 +19,28 @@ const Act10 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
 
     const handleContinue = async () => {
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: { leido: true },
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
                 console.warn("Offline, guardado localmente", err);
             }
         }
-
-        localStorage.setItem(`act10-${rango}-${userId}`, JSON.stringify({ completada: true }));
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -51,7 +56,7 @@ const Act10 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -77,7 +82,7 @@ const Act10 = ({ data, onComplete, onBack, rango }) => {
                     </h1>
                 </div>
 
-                {/* Grid de 9 Imágenes (3x3) con mayor separación entre columnas */}
+                {/* Grid de 9 Imagenes (3x3) con mayor separacion entre columnas */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-y-8 gap-x-8 md:gap-x-12 lg:gap-x-16 justify-items-center items-center py-6">
                     {imagenes.map((imgUrl, index) => (
                         <div 
@@ -93,7 +98,7 @@ const Act10 = ({ data, onComplete, onBack, rango }) => {
                     ))}
                 </div>
 
-                {/* Botón Continuar */}
+                {/* Boton Continuar */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

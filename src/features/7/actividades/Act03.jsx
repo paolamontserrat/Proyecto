@@ -19,52 +19,33 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act3-${rango}-${userId}`;
 
-    // Cargar progreso guardado desde Supabase o LocalStorage
-    useEffect(() => {
-        const cargarProgreso = async () => {
-            if (userId !== "anon" && config.id) {
-                try {
-                    const { data: progreso } = await supabase
-                        .from("progreso_actividades")
-                        .select("completada")
-                        .eq("usuario_id", userId)
-                        .eq("actividad_id", config.id)
-                        .maybeSingle();
-
-                    if (progreso) return;
-                } catch (err) {
-                    console.warn("Error cargando progreso de Supabase, intentando local...", err);
-                }
-            }
-        };
-
-        cargarProgreso();
-    }, [config.id, userId]);
-
     const handleContinue = async () => {
-        const payload = { leido: true, fechaCompleto: new Date().toISOString() };
-
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: payload,
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
-                console.warn("Offline, progreso guardado localmente", err);
+                console.warn("Offline, guardado localmente", err);
             }
         }
-
         localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
-    // Mapeo dinámico de las secciones según el JSON recibido
+    // Mapeo dinamico de las secciones segun el JSON recibido
     const secCuenta = secciones.find((s) => s.id === "cuenta_ahorro") || {};
     const secSubcuenta = secciones.find((s) => s.id === "subcuenta_creciendo_juntos") || {};
 
@@ -80,7 +61,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4 max-w-4xl mx-auto px-2">
                 <button
                     onClick={onBack}
@@ -124,7 +105,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                     )}
                 </div>
 
-                {/* SECCIÓN 1: CUENTA DE AHORRO (CLUB AMIGOS DE ALIANZITO) */}
+                {/* SECCION 1: CUENTA DE AHORRO (CLUB AMIGOS DE ALIANZITO) */}
                 {secCuenta.id && (
                     <div className="space-y-6">
                         <div className="flex flex-col md:flex-row items-center gap-6 bg-sky-50 p-5 sm:p-6 rounded-3xl border-2 border-sky-200">
@@ -159,7 +140,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* SECCIÓN 2: SUBCUENTA CRECIENDO JUNTOS */}
+                {/* SECCION 2: SUBCUENTA CRECIENDO JUNTOS */}
                 {secSubcuenta.id && (
                     <div className="bg-gradient-to-b from-sky-50 to-amber-50 p-5 sm:p-8 rounded-3xl border-2 border-amber-300 space-y-6">
                         <div className="text-center space-y-2">
@@ -172,11 +153,11 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                             {secSubcuenta.descripcion}
                         </p>
 
-                        {/* Lista de características */}
+                        {/* Lista de caracteristicas */}
                         {secSubcuenta.caracteristicas && secSubcuenta.caracteristicas.length > 0 && (
                             <div className="bg-white p-4 sm:p-6 rounded-2xl border border-amber-200 shadow-sm max-w-2xl mx-auto">
                                 <h3 className="font-extrabold text-blue-900 text-base sm:text-lg mb-3">
-                                    Características principales:
+                                    Caracteristicas principales:
                                 </h3>
                                 <ul className="space-y-2">
                                     {secSubcuenta.caracteristicas.map((item, idx) => (
@@ -189,7 +170,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                             </div>
                         )}
 
-                        {/* Imágenes de metas / apoyo */}
+                        {/* Imagenes de metas / apoyo */}
                         {secSubcuenta.ejemplosMetas && secSubcuenta.ejemplosMetas.length > 0 && (
                             <div className="flex justify-center pt-2">
                                 {secSubcuenta.ejemplosMetas.map((meta, idx) => (
@@ -205,7 +186,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 )}
 
-                {/* BOTÓN CONTINUAR */}
+                {/* BOTON CONTINUAR */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

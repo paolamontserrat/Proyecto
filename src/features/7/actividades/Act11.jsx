@@ -23,10 +23,10 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act11-${rango}-${userId}`;
 
-    // Obtener los IDs de las opciones que SÍ requieren esfuerzo
+    // Obtener los IDs de las opciones que SI requieren esfuerzo
     const idsCorrectas = opciones.filter((o) => o.requiereEsfuerzo).map((o) => o.id);
 
-    // Determinar si ya seleccionó todas las correctas (sin dejar ninguna pendiente)
+    // Determinar si ya selecciono todas las correctas (sin dejar ninguna pendiente)
     const todasCorrectasSeleccionadas =
         idsCorrectas.length > 0 &&
         idsCorrectas.every((id) => seleccionadas.includes(id)) &&
@@ -68,7 +68,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
         cargarProgreso();
     }, [config.id, userId]);
 
-    // Manejo de clic instantáneo en cada opción
+    // Manejo de clic instantáneo en cada opcion
     const toggleOpcion = (opcion) => {
         const estaSeleccionada = seleccionadas.includes(opcion.id);
 
@@ -81,12 +81,12 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
             // Si está mal (o seleccionada previamente), permite desmarcarla
             setSeleccionadas(seleccionadas.filter((id) => id !== opcion.id));
         } else {
-            // Agregar selección
+            // Agregar seleccion
             setSeleccionadas([...seleccionadas, opcion.id]);
         }
     };
 
-    const handleReiniciarIntento = () => {
+    const handleReset = () => {
         setSeleccionadas([]);
     };
 
@@ -119,7 +119,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
 
     return (
         <LayoutActividad fondo={config.fondo}>
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-6 max-w-5xl mx-auto px-2">
                 <button
                     onClick={onBack}
@@ -141,7 +141,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
                     {config.titulo}
                 </h1>
 
-                {/* 1. SECCIÓN INFORMATIVA */}
+                {/* 1. SECCION INFORMATIVA */}
                 <div className="space-y-8">
                     {/* Bloque Ejemplos (2 en 2 con Cards Grandes) */}
                     <div className="bg-sky-50 border-3 border-sky-300 p-6 sm:p-8 rounded-3xl space-y-6">
@@ -200,7 +200,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
 
                 <hr className="border-t-4 border-dashed border-amber-300 my-6" />
 
-                {/* 2. DINÁMICA DE SELECCIÓN CON FEEDBACK INSTANTÁNEO */}
+                {/* 2. DINAMICA DE SELECCION CON FEEDBACK INSTANTANEO */}
                 <div className="space-y-8">
                     <div className="text-center space-y-3">
                         <h2 className="text-2xl sm:text-3xl font-black text-blue-900">
@@ -267,7 +267,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
                     {/* Botones de Control: Reiniciar y Continuar juntos */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8">
                         <button
-                            onClick={handleReiniciarIntento}
+                            onClick={handleReset}
                             className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-98 transition-all"
                         >
                             Reiniciar

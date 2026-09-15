@@ -20,23 +20,28 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
 
     const handleContinue = async () => {
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: { leido: true },
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
                 console.warn("Offline, guardado localmente", err);
             }
         }
-
-        localStorage.setItem(`act9-${rango}-${userId}`, JSON.stringify({ completada: true }));
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -52,7 +57,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -96,19 +101,19 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
                             />
                         </div>
 
-                        {/* Infografía $1,000 (39.png) */}
+                        {/* Infografia $1,000 (39.png) */}
                         <div className="md:col-span-7 flex justify-center">
                             <div className="animate-float-slow">
                                 <img 
                                     src={intro.montoGrafico} 
-                                    alt="Aportación de $1,000" 
+                                    alt="Aportacion de $1,000" 
                                     className="w-full h-full object-contain select-none"
                                 />
                             </div>
                         </div>
                     </div>
 
-                    {/* Nota de devolución */}
+                    {/* Nota de devolucion */}
                     <div className="bg-amber-500 text-white p-4 rounded-2xl text-center shadow-md">
                         <p className="text-base md:text-lg font-black italic">
                             “{intro.notaFooter}”
@@ -116,7 +121,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 </div>
 
-                {/* SECCIÓN 2: Título de Beneficios */}
+                {/* SECCIÓN 2: Titulo de Beneficios */}
                 <div className="bg-sky-900 text-white rounded-2xl p-6 text-center shadow-md">
                     <h2 className="text-lg md:text-2xl font-black leading-snug">
                         {config.subtituloBeneficios}
@@ -140,7 +145,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
                             >
                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                                     
-                                    {/* Imagen Círculo */}
+                                    {/* Imagen Circulo */}
                                     <div className={`md:col-span-4 flex justify-center ${
                                         esIzquierda ? "order-1" : "order-1 md:order-2"
                                     }`}>
@@ -176,7 +181,7 @@ const Act09 = ({ data, onComplete, onBack, rango }) => {
                     })}
                 </div>
 
-                {/* Botón Continuar */}
+                {/* Boton Continuar */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

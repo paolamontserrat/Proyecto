@@ -8,7 +8,6 @@ const Act10 = ({ data, onComplete, onBack, rango }) => {
     const config = data || {};
     const puntos = config.puntos || [];
 
-    // --- SISTEMA DE GUARDADO DE PROGRESO (Idéntico a Act01, Act05 y Act09) ---
     const getUser = () => {
         try {
             return JSON.parse(localStorage.getItem("usuario"));
@@ -20,46 +19,29 @@ const Act10 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act10-${rango}-${userId}`;
 
-    const guardar = async () => {
-        localStorage.setItem(storageKey, JSON.stringify({}));
-
-        if (userId !== "anon" && config.id) {
+    const handleContinue = async () => {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
                 await supabase
                     .from("progreso_actividades")
                     .upsert(
                         {
                             usuario_id: userId,
-                            actividad_id: config.id,
-                            datos_actividad: {},
+                            actividad_id: data.id,
+                            datos_actividad: payload,
                             completada: true,
                         },
                         {
                             onConflict: "usuario_id,actividad_id",
                         }
                     );
-            } catch {
-                console.warn("Offline, se sincroniza después");
+            } catch (err) {
+                console.warn("Offline, guardado localmente", err);
             }
         }
-    };
-
-    // Guardar progreso al cargar el componente[cite: 2]
-    useEffect(() => {
-        guardar();
-    }, [config.id]);
-
-    // Intentar re-guardar si se recupera conexión a internet[cite: 2]
-    useEffect(() => {
-        const handleOnline = () => guardar();
-        window.addEventListener("online", handleOnline);
-        return () => {
-            window.removeEventListener("online", handleOnline);
-        };
-    }, [config.id]);
-
-    const handleContinue = async () => {
-        await guardar();
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -75,7 +57,7 @@ const Act10 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación superior */}
+            {/* Navegacion superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -129,7 +111,7 @@ const Act10 = ({ data, onComplete, onBack, rango }) => {
                         <div className="w-full flex justify-center py-4 mb-4">
                             <img
                                 src={`${config.imagen}`}
-                                alt="Ilustración jóvenes honestos"
+                                alt="Ilustracion jovenes honestos"
                                 className="w-64 md:w-80 h-auto object-contain select-none animate-float filter drop-shadow-xl"
                             />
                         </div>

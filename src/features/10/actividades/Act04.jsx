@@ -564,10 +564,10 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
               </div>
             </div>
 
-            <div className="flex justify-center gap-5 pt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8">
               <button
                 onClick={reiniciar}
-                className="bg-slate-200 hover:bg-slate-300 px-8 py-3 rounded-full font-bold text-slate-800 transition"
+                className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-98 transition-all"
               >
                 Reiniciar
               </button>
@@ -575,7 +575,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                 type="button"
                 disabled={!terminado}
                 onClick={onComplete}
-                className={`w-full sm:w-2/3 py-4 rounded-full font-black text-xl sm:text-2xl shadow-xl transition-all uppercase tracking-wider ${
+                className={`py-4 rounded-full font-black text-xl shadow-lg transition-all ${
                   terminado
                     ? "bg-amber-400 text-blue-950 hover:bg-amber-300 hover:scale-105 active:scale-95 cursor-pointer"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"

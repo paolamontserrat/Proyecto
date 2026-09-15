@@ -30,9 +30,9 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
 
     // Estado para porcentajes de Distribución
     const [distribucionPct, setDistribucionPct] = useState({
-        ahorro: 40,
-        gastos: 50,
-        emergencias: 10
+        ahorro: data.distribucionBase[0],
+        gastos: data.distribucionBase[1],
+        emergencias: data.distribucionBase[2]
     });
 
     const getUser = () => {
@@ -164,6 +164,23 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
 
     const esFormularioValido = tieneAlMenosUnIngreso && !gastosExcedenIngresos && porcentajesCorrectos;
 
+    const handleReset = async () => {
+        const filasVacias = Array.from({ length: filasIniciales }, () => ({
+            concepto: "",
+            cantidad: ""
+        }));
+
+        const distInicial = {
+            ahorro: data.distribucionBase[0],
+            gastos: data.distribucionBase[1],
+            emergencias: data.distribucionBase[2]
+        };
+
+        setIngresos(filasVacias);
+        setGastos(filasVacias);
+        setDistribucionPct(distInicial);
+    };
+    
     const handleContinue = async () => {
         if (!esFormularioValido) return;
 
@@ -440,18 +457,25 @@ const Act05 = ({ data, onComplete, onBack, rango }) => {
                 </div>
 
                 {/* Botón Finalizar */}
-                <div className="pt-4 text-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-2xl mx-auto mt-8">
+                    <button
+                        onClick={handleReset}
+                        className="py-4 rounded-full font-black text-xl bg-red-500 hover:bg-red-600 text-white shadow-md active:scale-98 transition-all"
+                    >
+                        Reiniciar
+                    </button>
+
                     <button
                         onClick={handleContinue}
                         disabled={!esFormularioValido}
-                        className={`w-full md:w-2/3 py-4 rounded-full font-black text-lg sm:text-xl shadow-lg transition-all ${
+                        className={`py-4 rounded-full font-black text-xl shadow-lg transition-all ${
                             !esFormularioValido
                                 ? "bg-gray-300 text-gray-500 cursor-not-allowed opacity-60"
-                                : "bg-alianza-amarillo text-alianza-azul hover:scale-105 active:scale-95"
+                                : "bg-alianza-amarillo text-alianza-azul hover:scale-102 active:scale-98"
                         }`}
                     >
                         {esFormularioValido
-                            ? "Guardar Presupuesto"
+                            ? "Continuar"
                             : gastosExcedenIngresos
                             ? "Tus gastos superan a tus ingresos ⚠️"
                             : !tieneAlMenosUnIngreso

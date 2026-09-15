@@ -20,27 +20,27 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
     const storageKey = `act12-${rango}-${userId}`;
 
     const handleContinue = async () => {
-        const payload = {
-            completado: true,
-            fechaCompleto: new Date().toISOString(),
-        };
-
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: payload,
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
-                console.warn("Error guardando en Supabase:", err);
+                console.warn("Offline, guardado localmente", err);
             }
         }
-
         localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
@@ -63,7 +63,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                     animation: bounce-gentle 2.5s ease-in-out infinite;
                 }
             `}</style>
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-6 max-w-5xl mx-auto px-2">
                 <button
                     onClick={onBack}
@@ -110,7 +110,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                         {info.notaFormasAyuda}
                     </p>
 
-                    {/* Imagen Ilustrativa Principal con Animación Flotante Suave */}
+                    {/* Imagen Ilustrativa Principal con Animacion Flotante Suave */}
                     {info.imagenIlustrativa && (
                         <div className="flex justify-center pt-2">
                             <img
@@ -135,7 +135,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                         )}
                     </div>
 
-                    {/* GRID CON EFECTO HOVER Y ZOOM EN IMÁGENES */}
+                    {/* GRID CON EFECTO HOVER Y ZOOM EN IMAGENES */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
                         {info.ejemplos?.map((item, idx) => (
                             <div
@@ -153,7 +153,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                         ))}
                     </div>
 
-                    {/* BANNER CONCLUSIÓN CON ALIANZITO ANIMADO */}
+                    {/* BANNER CONCLUSION CON ALIANZITO ANIMADO */}
                     <div className="bg-amber-100 border-3 border-amber-400 p-6 rounded-3xl max-w-3xl mx-auto flex flex-col sm:flex-row items-center gap-6 shadow-md">
                         {info.imagenAlianzito && (
                             <img
@@ -171,7 +171,7 @@ const Act12 = ({ data, onComplete, onBack, rango }) => {
                         )}
                     </div>
 
-                    {/* BOTÓN CONTINUAR */}
+                    {/* BOTON CONTINUAR */}
                     <div className="flex justify-center pt-4">
                         <button
                             onClick={handleContinue}

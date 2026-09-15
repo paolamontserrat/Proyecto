@@ -20,23 +20,28 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
 
     const handleContinue = async () => {
-        if (userId !== "anon" && config.id) {
+        const payload = { leido: true};
+    
+        if (userId !== "anon" && data?.id) {
             try {
-                await supabase.from("progreso_actividades").upsert(
-                    {
-                        usuario_id: userId,
-                        actividad_id: config.id,
-                        datos_actividad: { leido: true },
-                        completada: true,
-                    },
-                    { onConflict: "usuario_id,actividad_id" }
-                );
+                await supabase
+                    .from("progreso_actividades")
+                    .upsert(
+                        {
+                            usuario_id: userId,
+                            actividad_id: data.id,
+                            datos_actividad: payload,
+                            completada: true,
+                        },
+                        {
+                            onConflict: "usuario_id,actividad_id",
+                        }
+                    );
             } catch (err) {
                 console.warn("Offline, guardado localmente", err);
             }
         }
-
-        localStorage.setItem(`act11-${rango}-${userId}`, JSON.stringify({ completada: true }));
+        localStorage.setItem(storageKey, JSON.stringify(payload));
         onComplete();
     };
 
@@ -52,7 +57,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
                 }
             `}</style>
 
-            {/* Navegación Superior */}
+            {/* Navegacion Superior */}
             <div className="flex justify-between items-center mb-4">
                 <button
                     onClick={onBack}
@@ -87,7 +92,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
                         )}
                     </div>
 
-                    {/* Tarjetas Crédito: 2 arriba y la 3ra centrada abajo */}
+                    {/* Tarjetas Credito: 2 arriba y la 3ra centrada abajo */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                         {credito.tarjetas?.map((card, idx) => (
                             <div 
@@ -140,7 +145,7 @@ const Act11 = ({ data, onComplete, onBack, rango }) => {
                     </div>
                 </div>
 
-                {/* Botón Continuar */}
+                {/* Boton Continuar */}
                 <div className="pt-4 text-center">
                     <button
                         onClick={handleContinue}

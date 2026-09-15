@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 
 const Act03 = ({ data, onComplete, onBack, rango }) => {
     const navigate = useNavigate();
-
-    // Estados para las entradas de usuario
     const [ingresos, setIngresos] = useState("");
     const [gastos, setGastos] = useState("");
     const [ahorroPlaneado, setAhorroPlaneado] = useState("");
     const [error, setError] = useState("");
+    const ahorro = data.configuracion.reglas.distribucion.ahorro;
+    const gasto = data.configuracion.reglas.distribucion.gastos;
+    const emergencia = data.configuracion.reglas.distribucion.emergencia;
 
     const getUser = () => {
         try {
@@ -151,9 +152,9 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
         };
     }, [data?.id, ingresos, gastos, ahorroPlaneado]);
 
-    const calculoAhorro = (ing * 0.40).toFixed(2);
-    const calculoGastos = (ing * 0.50).toFixed(2);
-    const calculoEmergencia = (ing * 0.10).toFixed(2);
+    const calculoAhorro = (ing * ahorro).toFixed(2);
+    const calculoGastos = (ing * gasto).toFixed(2);
+    const calculoEmergencia = (ing * emergencia).toFixed(2);
 
     const handleReset = () => {
         setIngresos("");

@@ -8,9 +8,6 @@ const Act15 = ({ data, onComplete, onBack, rango }) => {
     const navigate = useNavigate();
     const config = data || {};
 
-    // =========================
-    // USER GLOBAL (UNIFICADO)
-    // =========================
     const getUser = () => {
         try {
         return JSON.parse(localStorage.getItem('usuario'));
@@ -32,21 +29,17 @@ const Act15 = ({ data, onComplete, onBack, rango }) => {
     const userId = user?.id;
     const safeUserId = userId || getAnonId();
 
-    // =========================
     // KEYS MULTIUSUARIO
-    // =========================
     const keyFoto = `act15-foto-${safeUserId}-${config.id || 'act15'}`;
     const keyFile = `act15-file-${safeUserId}-${config.id || 'act15'}`;
 
     const [previewUrl, setPreviewUrl] = useState(null);
     const [subiendo, setSubiendo] = useState(false);
 
-    // =========================
     // CARGAR LOCAL Y SUPABASE
-    // =========================
     useEffect(() => {
         if (!userId) {
-        // usuario anónimo: solo local
+        // usuario anonimo: solo local
         const savedImage = localStorage.getItem(keyFoto);
         if (savedImage) setPreviewUrl(savedImage);
         return;
@@ -92,9 +85,7 @@ const Act15 = ({ data, onComplete, onBack, rango }) => {
         );
     };
 
-    // =========================
     // SUBIR IMAGEN
-    // =========================
     const manejarCambioImagen = async (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -134,9 +125,7 @@ const Act15 = ({ data, onComplete, onBack, rango }) => {
         setSubiendo(false);
     };
 
-    // =========================
     // ELIMINAR IMAGEN
-    // =========================
     const eliminarImagen = async () => {
         try {
         const fileName = localStorage.getItem(keyFile);
@@ -164,7 +153,7 @@ const Act15 = ({ data, onComplete, onBack, rango }) => {
 
     return (
         <LayoutActividad fondo={config.fondo || '/images/7/Fondo72.jpg'}>
-        {/* NAVEGACIÓN SUPERIOR */}
+        {/* NAVEGACION SUPERIOR */}
         <div className="flex justify-between items-center mb-6 max-w-4xl mx-auto px-2">
             <button
             onClick={onBack}
@@ -186,7 +175,7 @@ const Act15 = ({ data, onComplete, onBack, rango }) => {
             className="bg-white/95 p-6 sm:p-10 rounded-3xl border-4 border-amber-400 shadow-2xl max-w-4xl mx-auto space-y-8"
             translate="no"
         >
-            {/* TÍTULO PRINCIPAL */}
+            {/* TITULO PRINCIPAL */}
             <h1 className="text-2xl sm:text-4xl font-black text-blue-950 text-center leading-tight">
             {config.titulo || "Actividad: Sube una foto tuya practicando el valor de ayuda mutua en casa o escuela."}
             </h1>
@@ -227,7 +216,7 @@ const Act15 = ({ data, onComplete, onBack, rango }) => {
             )}
             </div>
 
-            {/* SECCIÓN REFLEXIVA DE LA COOPERATIVA */}
+            {/* SECCION REFLEXIVA DE LA COOPERATIVA */}
             <div className="bg-sky-100 border-3 border-sky-300 p-6 sm:p-8 rounded-3xl shadow-md text-center space-y-4">
             <h2 className="text-2xl sm:text-3xl font-black text-blue-900">
                 {config.subtitulo || "La ayuda mutua en las cooperativas"}
@@ -238,7 +227,7 @@ const Act15 = ({ data, onComplete, onBack, rango }) => {
             </p>
             </div>
 
-            {/* BOTÓN CONTINUAR / RETO CUMPLIDO */}
+            {/* BOTON CONTINUAR / RETO CUMPLIDO */}
             <div className="pt-2">
             <button
                 onClick={onComplete}
