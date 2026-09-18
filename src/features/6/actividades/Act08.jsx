@@ -3,7 +3,6 @@ import LayoutActividad from "../../../components/layout/LayoutActividad";
 import { supabase } from "../../../supabaseClient";
 
 const Act08 = ({ data, onBack, onComplete, rango }) => {
-
   const [jugadores, setJugadores] = useState(0);
   const [dado, setDado] = useState(null);
   const [piezas, setPiezas] = useState([]);
@@ -29,7 +28,7 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
     "bg-green-500",
     "bg-yellow-500",
     "bg-purple-500",
-    "bg-pink-500"
+    "bg-pink-500",
   ];
 
   // =========================
@@ -67,7 +66,6 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
             localStorage.setItem(storageKey, JSON.stringify(parsed));
           }
         }
-
       } catch (err) {
         console.warn(err);
       } finally {
@@ -82,7 +80,6 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
   //  SYNC
   // =========================
   const syncAll = async (newState) => {
-
     if (!datosCargados) return;
 
     localStorage.setItem(storageKey, JSON.stringify(newState));
@@ -90,14 +87,17 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
     if (!userId) return;
 
     try {
-      await supabase.from("progreso_actividades").upsert({
-        usuario_id: userId,
-        actividad_id: data.id,
-        datos_actividad: newState,
-        completada: false
-      }, {
-        onConflict: "usuario_id,actividad_id"
-      });
+      await supabase.from("progreso_actividades").upsert(
+        {
+          usuario_id: userId,
+          actividad_id: data.id,
+          datos_actividad: newState,
+          completada: false,
+        },
+        {
+          onConflict: "usuario_id,actividad_id",
+        },
+      );
     } catch (err) {
       console.warn("sync offline:", err);
     }
@@ -122,7 +122,7 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
       nuevas.push({
         id: i,
         x: 10 + i * 40,
-        y: 10
+        y: 10,
       });
     }
 
@@ -147,12 +147,16 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
     const tablero = tableroRef.current.getBoundingClientRect();
     const size = window.innerWidth < 768 ? 32 : 48;
 
-    const x = Math.max(0, Math.min(clientX - tablero.left - size / 2, tablero.width - size));
-    const y = Math.max(0, Math.min(clientY - tablero.top - size / 2, tablero.height - size));
-
-    setPiezas(prev =>
-      prev.map(p => (p.id === id ? { ...p, x, y } : p))
+    const x = Math.max(
+      0,
+      Math.min(clientX - tablero.left - size / 2, tablero.width - size),
     );
+    const y = Math.max(
+      0,
+      Math.min(clientY - tablero.top - size / 2, tablero.height - size),
+    );
+
+    setPiezas((prev) => prev.map((p) => (p.id === id ? { ...p, x, y } : p)));
   };
 
   // =========================
@@ -168,23 +172,24 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
     localStorage.setItem(storageKey, JSON.stringify(reset));
 
     if (userId) {
-      await supabase.from("progreso_actividades").upsert({
-        usuario_id: userId,
-        actividad_id: data.id,
-        datos_actividad: reset,
-        completada: false
-      }, {
-        onConflict: "usuario_id,actividad_id"
-      });
+      await supabase.from("progreso_actividades").upsert(
+        {
+          usuario_id: userId,
+          actividad_id: data.id,
+          datos_actividad: reset,
+          completada: false,
+        },
+        {
+          onConflict: "usuario_id,actividad_id",
+        },
+      );
     }
   };
 
   return (
     <LayoutActividad fondo={data.recursos.fondo}>
-
       {/* HEADER */}
       <div className="flex justify-between items-center mb-4">
-
         <button
           onClick={onBack}
           className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold shadow"
@@ -192,24 +197,45 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
           ← Regresar
         </button>
 
-        <button onClick={() => navigate(`/dashboard/${rango}`)}
-          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold">
+        <button
+          onClick={() => navigate(`/dashboard/${rango}`)}
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-bold"
+        >
           🏠 Inicio
         </button>
-
       </div>
 
       <div className="bg-white/90 p-6 md:p-10 rounded-[2rem] shadow-2xl border-4 border-alianza-amarillo">
-
         <h2 className="text-2xl md:text-4xl font-black text-center text-alianza-azul mb-6">
           {data.titulo}
         </h2>
 
         {/* JUGADORES */}
         <div className="mb-8 text-center">
-          <h3 className="font-black mb-3">¿Cuántos jugadores?</h3>
+          <div className="flex flex-col items-center text-center max-w-3xl mx-auto px-4 my-4 space-y-4">
+            <h3 className="font-black text-xl text-gray-800 leading-snug">
+              {data.instrucciones[0]}
+            </h3>
 
-          {[1,2,3,4,5,6].map(num => (
+            <p className="font-semibold text-gray-700">
+              {data.instrucciones[1]}
+            </p>
+
+            <ul className="space-y-2 text-gray-600 bg-white/60 p-4 rounded-xl shadow-sm border border-amber-100 w-full text-left sm:text-center">
+              {data.instrucciones.slice(2).map((pregunta, index) => (
+                <li
+                  key={index}
+                  className="flex sm:justify-center items-start sm:items-center space-x-2"
+                >
+                  <span className="text-amber-500 font-bold">•</span>
+                  <span>{pregunta.trim()}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <h3 className="font-black mb-3">¿CUÁNTOS JUGADORES?</h3>
+
+          {[1, 2, 3, 4, 5, 6].map((num) => (
             <button
               key={num}
               onClick={() => crearJugadores(num)}
@@ -231,9 +257,7 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
             🎲 Lanzar dado
           </button>
 
-          {dado && (
-            <div className="text-6xl font-black mt-3">{dado}</div>
-          )}
+          {dado && <div className="text-6xl font-black mt-3">{dado}</div>}
         </div>
 
         {/* TABLERO */}
@@ -256,7 +280,9 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
               onTouchEnd={() => setPiezaActiva(null)}
             >
               <img src={data.recursos.pieza} className="w-full h-full" />
-              <div className={`absolute -top-1 -right-1 w-5 h-5 ${colores[index]} rounded-full`} />
+              <div
+                className={`absolute -top-1 -right-1 w-5 h-5 ${colores[index]} rounded-full`}
+              />
             </div>
           ))}
         </div>
@@ -277,7 +303,6 @@ const Act08 = ({ data, onBack, onComplete, rango }) => {
         >
           ¡Continuar!
         </button>
-
       </div>
     </LayoutActividad>
   );

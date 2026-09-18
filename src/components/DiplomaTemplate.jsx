@@ -34,7 +34,7 @@ const DiplomaTemplate = forwardRef(({ nombre, numero, fecha }, ref) => {
           textAlign: 'center',
         }}
       >
-        <img src="/images/Logo2.png" alt="Logo" style={{ width: '130px', marginBottom: '16px' }} />
+        <img src="/images/LogoBlanco.png" alt="Logo" style={{ width: '130px', marginBottom: '16px' }} />
         <p style={{ fontSize: '26px', letterSpacing: '5px', textTransform: 'uppercase', color: '#FACC15', margin: 0 }}>
           Diploma de reconocimiento
         </p>

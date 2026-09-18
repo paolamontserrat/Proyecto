@@ -228,9 +228,9 @@
     "instrucciones": [
         "Más que ganar, lo importante es conversar.",
         "En cada casilla pregunta a tu pequeño(a):",
-        "¿Por qué crees que esta fue una buena decisión?",
-        "¿Qué harías diferente la próxima vez?"
-    ],
+        "  ¿Por qué crees que esta fue una buena decisión?",
+        "  ¿Qué harías diferente la próxima vez?",
+        "  ¿Qué aprendiste de esta decisión?"],
     "maxJugadores": 6
     },
     {

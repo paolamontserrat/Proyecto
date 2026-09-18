@@ -38,7 +38,7 @@ function AvisoDiplomas() {
   return (
     <>
       {/* Banner rojo con el conteo de diplomas nuevos */}
-      <div className="max-w-sm mx-auto bg-red-500 text-white rounded-2xl p-4 mb-4 shadow-lg flex items-center justify-between">
+      <div className="w-full bg-red-500 text-white rounded-2xl p-4 mb-4 shadow-lg flex items-center justify-between">
         <div>
           <p className="font-black text-sm">
             🎖️ ¡Tienes {pendientes.length} diploma{pendientes.length > 1 ? 's' : ''} nuevo{pendientes.length > 1 ? 's' : ''}!

@@ -104,16 +104,16 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
   //=========================================
   const zonas = {
     sandia: {
-      inicio: { x: 50, y: 55, w: 90, h: 90 },
-      meta: { x: 505, y: 95, w: 120, h: 90 },
+      inicio: { x: 90, y: 1, w: 90, h: 90 },
+      meta: { x: 650, y: 2, w: 120, h: 90 },
     },
     naranja: {
-      inicio: { x: -25, y: 480, w: 90, h: 90 },
-      meta: { x: 505, y: 420, w: 120, h: 90 },
+      inicio: { x: -10, y: 440, w: 90, h: 90 },
+      meta: { x: 660, y: 390, w: 120, h: 90 },
     },
     pina: {
-      inicio: { x: -25, y: 580, w: 90, h: 90 },
-      meta: { x: 430, y: 900, w: 120, h: 90 },
+      inicio: { x: -15, y: 550, w: 90, h: 90 },
+      meta: { x: 560, y: 920, w: 120, h: 90 },
     },
   };
 
@@ -429,10 +429,10 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
           <h2 className="text-center text-3xl font-black text-alianza-azul mb-2">
             Ayuda a Alianzito a poner la fruta en su lugar correcto.
           </h2>
-          <p className="text-center text-gray-600 mb-6">
+          <p className="text-center text-xl text-gray-600 mb-6">
             Une cada fruta con su canasta correspondiente.
           </p>
-          <p className="text-center text-xs md:text-sm text-gray-500 font-semibold mb-3">
+          <p className="text-center text-xl md:text-sm text-gray-500 font-semibold mb-4">
             💡 En pantallas táctiles el juego es más flexible. Para más
             dificultad —donde tocar la pared sí te hace perder— juega desde una
             computadora con mouse.

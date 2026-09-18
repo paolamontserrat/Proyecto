@@ -13,14 +13,14 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
   const canvasRef = useRef(null);
   const mazeCanvasRef = useRef(null);
   const containerRef = useRef(null);
+  // Igual que en Act03: foto del canvas justo antes de cada trazo nuevo.
+  // Si se toca la pared, se restaura esta foto (no se borra todo el
+  // canvas), así los caminos ya completados no se pierden.
   const snapshotRef = useRef(null);
-  const puntoInicioRef = useRef(null);
-  const [colorDebug, setColorDebug] = useState(null);
 
-  // ⚠️ IMPORTANTE: estas dimensiones ahora coinciden EXACTAMENTE con el
-  // tamaño natural del archivo /images/10/35.png (587x607). Así lo que
-  // se ve en pantalla y lo que se analiza para detectar la pared son
-  // siempre el mismo pixel — sin estiramientos que desalineen todo.
+  // ⚠️ Estas dimensiones coinciden EXACTAMENTE con el tamaño natural del
+  // archivo /images/10/35.png (587x607), para que lo que se ve en pantalla
+  // y lo que se analiza para detectar la pared sea siempre el mismo pixel.
   const BASE_WIDTH = 587;
   const BASE_HEIGHT = 607;
 
@@ -28,6 +28,13 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
   const [isDrawing, setIsDrawing] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [caminoActual, setCaminoActual] = useState(null);
+
+  // 🛠️ MODO DE CALIBRACIÓN: ponlo en true mientras ajustas las
+  // coordenadas de "zonas". Te muestra en pantalla el x,y exacto donde
+  // está el mouse sobre el laberinto, para que copies esos números.
+  // Cuando termines de calibrar, vuelve a ponerlo en false.
+  const MOSTRAR_COORDENADAS = false;
+  const [coordActual, setCoordActual] = useState(null);
 
   const [quienAhorraMas, setQuienAhorraMas] = useState("");
   const [completadas, setCompletadas] = useState({
@@ -49,35 +56,43 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
   const userId = getUser()?.id || "anon";
   const storageKey = `act04-${rango}-${userId}-${data?.id || "default"}`;
 
-  // Coordenadas recalculadas con un único factor de escala uniforme
-  // (587/300 = 1.9567) a partir de tus 6 puntos capturados. Ya no hay
-  // distorsión entre eje X y eje Y.
+  //=========================================
+  // COORDENADAS
+  //=========================================
+  // 👉 Ajusta estos valores (x, y, w, h en pixeles sobre la imagen de
+  // 587x607) hasta que los emojis de inicio/fin queden exactamente sobre
+  // las flechas/canastas de tu laberinto. Es el mismo esquema que usa
+  // Act03 con las frutas: "inicio" es donde debe empezar el trazo y
+  // "meta" es donde debe terminar.
   const zonas = {
     opcion1: {
-      inicio: { x: 141, y: 18, w: 70, h: 70 },
-      meta: { x: 405, y: 35, w: 70, h: 70 },
+      inicio: { x: 153, y: 35, w: 40, h: 40 },
+      meta: { x: 420, y: 45, w: 40, h: 40 },
     },
     opcion2: {
-      inicio: { x: 96, y: 341, w: 70, h: 70 },
-      meta: { x: 296, y: 525, w: 70, h: 70 },
+      inicio: { x: 106, y: 350, w: 40, h: 40 },
+      meta: { x: 300, y: 535, w: 40, h: 40 },
     },
     opcion3: {
-      inicio: { x: 401, y: 245, w: 70, h: 70 },
-      meta: { x: 71, y: 276, w: 70, h: 70 },
+      inicio: { x: 400, y: 260, w: 40, h: 40 },
+      meta: { x: 82, y: 290, w: 40, h: 40 },
     },
   };
 
-  // ⚠️ MODO DEPURACIÓN: actívalo, dibuja sobre una pared real, y verás
-  // en pantalla el color exacto bajo el cursor para calibrar si hace falta.
-  const DEBUG_COLOR = true;
+  // Emoji de inicio y de fin para cada uno de los 3 pares (puedes
+  // cambiarlos por los que prefieras).
+  const emojisCamino = {
+    opcion1: { inicio: "1️⃣", meta: "🏁" },
+    opcion2: { inicio: "2️⃣", meta: "🏁" },
+    opcion3: { inicio: "3️⃣", meta: "🏁" },
+  };
 
+  // Color de pared de ESTE laberinto (azul). La lógica de detección es
+  // la misma idea que en Act03 (leer el pixel bajo el trazo y comparar
+  // contra el color de la pared); solo cambia el color de referencia
+  // porque esta imagen usa paredes azules en vez de rojas.
   const AZUL_PARED = { r: 59, g: 58, b: 167 };
   const TOLERANCIA = 90;
-
-  // Ya no debería necesitarse una zona de gracia tan grande, porque la
-  // detección ahora es precisa. Se deja un margen pequeño de todos modos.
-  const DISTANCIA_GRACIA = 20;
-
   const esPared = (r, g, b) => {
     const distancia = Math.sqrt(
       (r - AZUL_PARED.r) ** 2 +
@@ -85,30 +100,6 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
         (b - AZUL_PARED.b) ** 2,
     );
     return distancia < TOLERANCIA;
-  };
-
-  // Promedia un pequeño bloque de pixeles en vez de leer solo uno, para
-  // que el antialiasing de los bordes de la pared no dé falsos positivos
-  // ni falsos negativos.
-  const colorPromedio = (ctx, x, y) => {
-    const tam = 3;
-    const datos = ctx.getImageData(
-      Math.max(0, Math.round(x) - 1),
-      Math.max(0, Math.round(y) - 1),
-      tam,
-      tam,
-    ).data;
-    let r = 0,
-      g = 0,
-      b = 0,
-      n = 0;
-    for (let i = 0; i < datos.length; i += 4) {
-      r += datos[i];
-      g += datos[i + 1];
-      b += datos[i + 2];
-      n++;
-    }
-    return { r: r / n, g: g / n, b: b / n };
   };
 
   const guardarTodo = async (state) => {
@@ -157,9 +148,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
       img.onload = async () => {
         const mazeCanvas = mazeCanvasRef.current;
         if (!mazeCanvas) return;
-        const mazeCtx = mazeCanvas.getContext("2d", {
-          willReadFrequently: true,
-        });
+        const mazeCtx = mazeCanvas.getContext("2d");
         mazeCanvas.width = BASE_WIDTH;
         mazeCanvas.height = BASE_HEIGHT;
         // Se dibuja al tamaño NATURAL de la imagen, sin estirar.
@@ -247,6 +236,9 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     });
   };
 
+  //=========================================
+  // INICIAR DIBUJO (idéntico en espíritu a Act03)
+  //=========================================
   const startDrawing = (e) => {
     if (terminado) return;
     const { x, y } = getCoords(e);
@@ -259,8 +251,8 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     });
 
     if (!idCamino) {
-      setMensaje("Haz clic sobre la punta de una flecha negra de entrada.");
-      setTimeout(() => setMensaje(""), 2500);
+      setMensaje("Debes comenzar desde un punto de inicio.");
+      setTimeout(() => setMensaje(""), 2000);
       return;
     }
 
@@ -271,15 +263,19 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     }
 
     setCaminoActual(idCamino);
-    puntoInicioRef.current = { x, y };
     const ctx = getCtx();
     if (!ctx) return;
+    // Foto del canvas ANTES de dibujar este trazo, para poder revertir
+    // solo este intento si se toca la pared, sin perder lo ya completado.
     snapshotRef.current = ctx.getImageData(0, 0, BASE_WIDTH, BASE_HEIGHT);
     ctx.beginPath();
     ctx.moveTo(x, y);
     setIsDrawing(true);
   };
 
+  //=========================================
+  // DIBUJAR (misma lógica de pared que Act03: un solo pixel, solo mouse)
+  //=========================================
   const draw = (e) => {
     if (!isDrawing) return;
     const { x, y } = getCoords(e);
@@ -287,31 +283,17 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     if (!ctx) return;
     const esTouch = e.type.includes("touch");
 
-    // ⚠️ La detección de "chocar con la pared" solo aplica en dispositivos
-    // sin pantalla táctil (mouse). En celulares/tablets queda deshabilitada
-    // a propósito, porque dibujar con el dedo es mucho menos preciso.
+    //==========================
+    // RESTRICCIÓN DE PARED: SOLO CON MOUSE (COMPUTADORA)
+    //==========================
     if (!esTouch && mazeCanvasRef.current) {
-      const mazeCtx = mazeCanvasRef.current.getContext("2d", {
-        willReadFrequently: true,
-      });
-      const { r, g, b } = colorPromedio(mazeCtx, x, y);
-
-      if (DEBUG_COLOR) {
-        setColorDebug({
-          x: Math.round(x),
-          y: Math.round(y),
-          r: Math.round(r),
-          g: Math.round(g),
-          b: Math.round(b),
-        });
-      }
-
-      const inicio = puntoInicioRef.current;
-      const distanciaDesdeInicio = inicio
-        ? Math.hypot(x - inicio.x, y - inicio.y)
-        : DISTANCIA_GRACIA + 1;
-
-      if (distanciaDesdeInicio > DISTANCIA_GRACIA && esPared(r, g, b)) {
+      const mazeCtx = mazeCanvasRef.current.getContext("2d");
+      const pixel = mazeCtx.getImageData(x, y, 1, 1).data;
+      const [r, g, b] = pixel;
+      if (esPared(r, g, b)) {
+        // Se revierte SOLO el trazo actual (restaurando la foto de antes
+        // de empezarlo), no todo el canvas — así los caminos ya
+        // completados siguen dibujados.
         if (snapshotRef.current) {
           ctx.putImageData(snapshotRef.current, 0, 0);
         } else {
@@ -321,7 +303,7 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
         setCaminoActual(null);
         guardar();
         setMensaje("¡Tocaste la pared!");
-        setTimeout(() => setMensaje(""), 1800);
+        setTimeout(() => setMensaje(""), 2000);
         return;
       }
     }
@@ -333,6 +315,9 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
     ctx.lineJoin = "round";
     ctx.stroke();
 
+    //==========================
+    // ¿LLEGÓ A SU META?
+    //==========================
     if (caminoActual && dentro(x, y, zonas[caminoActual].meta)) {
       const nuevoEstado = { ...completadas, [caminoActual]: true };
       setCompletadas(nuevoEstado);
@@ -354,11 +339,20 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
       setTimeout(() => setMensaje(""), 2000);
       return;
     }
+    guardar();
   };
 
   const stopDrawing = () => {
     setIsDrawing(false);
     setCaminoActual(null);
+  };
+
+  // Solo para el modo de calibración: no afecta el dibujo ni la
+  // detección de pared, solo lee y muestra la posición del mouse.
+  const moverParaCalibrar = (e) => {
+    if (!MOSTRAR_COORDENADAS) return;
+    const { x, y } = getCoords(e);
+    setCoordActual({ x: Math.round(x), y: Math.round(y) });
   };
 
   const handleTextoChange = (e) => {
@@ -508,8 +502,27 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
             <p className="text-center text-xs md:text-sm text-gray-500 font-semibold mb-3">
               💡 En pantallas táctiles el juego es más flexible. Para más
               dificultad —donde tocar la pared sí te hace perder— juega desde
-              una computadora con mouse.
+              una computadora con mouse pero si es muy dificil haz zoom en la lupa de tu dispositivo.
             </p>
+
+            {/* INDICADORES (igual que Act03) */}
+            <div className="flex justify-center gap-4 mb-2">
+              <div
+                className={`px-4 py-2 rounded-full font-bold ${completadas.opcion1 ? "bg-green-500 text-white" : "bg-gray-200"}`}
+              >
+                1️⃣ Camino 1
+              </div>
+              <div
+                className={`px-4 py-2 rounded-full font-bold ${completadas.opcion2 ? "bg-green-500 text-white" : "bg-gray-200"}`}
+              >
+                2️⃣ Camino 2
+              </div>
+              <div
+                className={`px-4 py-2 rounded-full font-bold ${completadas.opcion3 ? "bg-green-500 text-white" : "bg-gray-200"}`}
+              >
+                3️⃣ Camino 3
+              </div>
+            </div>
 
             <div className="w-full max-w-[587px] mx-auto">
               <div
@@ -522,38 +535,65 @@ const Act04 = ({ data, onComplete, onBack, rango }) => {
                     {mensaje}
                   </div>
                 )}
-                {DEBUG_COLOR && colorDebug && (
-                  <div className="absolute z-20 bottom-3 left-3 bg-black/80 text-white text-xs font-mono px-3 py-2 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <span
-                        className="w-4 h-4 rounded border border-white/50 inline-block"
-                        style={{
-                          backgroundColor: `rgb(${colorDebug.r},${colorDebug.g},${colorDebug.b})`,
-                        }}
-                      />
-                      r:{colorDebug.r} g:{colorDebug.g} b:{colorDebug.b}
-                    </div>
-                    <div className="text-white/60">
-                      x:{colorDebug.x} y:{colorDebug.y}
-                    </div>
+
+                {MOSTRAR_COORDENADAS && coordActual && (
+                  <div className="absolute z-30 bottom-3 left-3 bg-black/80 text-white text-xs font-mono px-3 py-2 rounded-lg pointer-events-none">
+                    x: {coordActual.x} &nbsp; y: {coordActual.y}
                   </div>
                 )}
 
-                {/* Ahora la imagen ocupa exactamente el mismo espacio que
-                    el canvas de análisis, sin letterboxing ni distorsión. */}
+                {/* LABERINTO */}
                 <img
                   src={laberintoImg}
                   alt="Laberinto"
                   className="absolute inset-0 w-full h-full pointer-events-none"
                 />
 
+                {/* EMOJIS DE INICIO / FIN (igual patrón que las frutas de
+                    Act03, pero con emoji en vez de imagen). Ajusta las
+                    coordenadas de "zonas" arriba hasta que calcen. */}
+                {Object.entries(zonas).map(([nombre, zona]) => (
+                  <React.Fragment key={nombre}>
+                    <div
+                      className="absolute flex items-center justify-center pointer-events-none select-none"
+                      style={{
+                        left: zona.inicio.x * scale,
+                        top: zona.inicio.y * scale,
+                        width: zona.inicio.w * scale,
+                        height: zona.inicio.h * scale,
+                        fontSize: zona.inicio.w * scale * 0.7,
+                        lineHeight: 1,
+                      }}
+                    >
+                      {emojisCamino[nombre].inicio}
+                    </div>
+                    <div
+                      className="absolute flex items-center justify-center pointer-events-none select-none"
+                      style={{
+                        left: zona.meta.x * scale,
+                        top: zona.meta.y * scale,
+                        width: zona.meta.w * scale,
+                        height: zona.meta.h * scale,
+                        fontSize: zona.meta.w * scale * 0.7,
+                        lineHeight: 1,
+                      }}
+                    >
+                      {emojisCamino[nombre].meta}
+                    </div>
+                  </React.Fragment>
+                ))}
+
+                {/* DIBUJO */}
                 <canvas
                   ref={canvasRef}
                   width={BASE_WIDTH}
                   height={BASE_HEIGHT}
                   className="absolute inset-0 w-full h-full cursor-crosshair z-10"
                   onMouseDown={startDrawing}
-                  onMouseMove={draw}
+                  onMouseMove={(e) => {
+                    moverParaCalibrar(e);
+                    draw(e);
+                  }}
                   onMouseUp={stopDrawing}
                   onMouseLeave={stopDrawing}
                   onTouchStart={startDrawing}

@@ -110,7 +110,6 @@ function ModalRegistrarDeposito({ usuario, onClose, onRegistrado }) {
           </>
         ) : (
 
-          // Después de registrar muestra el resultado
           <div className="text-center">
             <p className="text-4xl mb-2">
               {resultado.sello_otorgado ? '🏅' : '✅'}

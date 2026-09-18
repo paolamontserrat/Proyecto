@@ -236,31 +236,6 @@ const Passport = () => {
     if (data.diploma_nuevo) {
       setMostrarDiploma(true);
       cargarDiplomas();
-
-      const { data: usuarioDb } = await supabase.rpc(
-        "obtener_correo_para_notificar",
-        {
-          p_usuario_id: userId
-        }
-      );
-
-      if (usuarioDb?.correo_contacto) {
-        const { data: envio, error: envioError } =
-          await supabase.functions.invoke(
-            "enviar-diploma-email",
-            {
-              body: {
-                correo: usuarioDb.correo_contacto,
-                nombre: usuarioDb.nombre,
-                numeroDiploma: data.numero_diploma,
-              },
-            }
-          );
-
-        if (!envioError && envio?.ok) {
-          setCorreoEnviado(true);
-        }
-      }
     }
   };
 
