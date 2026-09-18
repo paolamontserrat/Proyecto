@@ -29,9 +29,7 @@ const ContenedorActividades = () => {
 
   const [data, setData] = useState(null);
 
-  // =========================
   // USER MULTIUSUARIO
-  // =========================
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const userId = usuario?.id || "anon";
 
@@ -64,9 +62,7 @@ const ContenedorActividades = () => {
 
   const actividades = actividadesPorRango[rango] || [];
 
-  // =========================
   // CARGAR JSON
-  // =========================
   useEffect(() => {
     fetch(`/data/${rango}.json`)
       .then((res) => res.json())
@@ -74,16 +70,14 @@ const ContenedorActividades = () => {
       .catch(console.error);
   }, [rango]);
 
-  // =========================
+  
   // SCROLL
-  // =========================
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [pasoVisible]);
 
-  // =========================
+  
   // SINCRONIZAR PROGRESO (SUPABASE + LOCAL)
-  // =========================
   useEffect(() => {
     const sync = async () => {
       if (userId === "anon") return;
@@ -127,12 +121,10 @@ const ContenedorActividades = () => {
     };
 
     sync();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId, rango]);
 
-  // =========================
+  
   // TOTAL PASOS
-  // =========================
   const totalPasos = Math.min(
     data?.pasos?.length || 0,
     actividades.length || 0,
@@ -140,9 +132,8 @@ const ContenedorActividades = () => {
 
   const pasoSeguro = Math.min(pasoVisible, totalPasos || 1);
 
-  // =========================
+  
   // GUARDAR PROGRESO
-  // =========================
   const guardarProgreso = async (idActividad) => {
     if (userId === "anon") return;
 
@@ -158,7 +149,7 @@ const ContenedorActividades = () => {
     } catch {}
   };
 
-  // Avanza solo la vista; si estaba en la frontera, ahí sí mueve el progreso real
+  // Avanza solo la vista; si estaba en la ultima, ahi si mueve el progreso real
   const avanzarVista = () => {
     const siguiente = pasoVisible + 1;
     setPasoVisible(siguiente);
@@ -168,9 +159,8 @@ const ContenedorActividades = () => {
     }
   };
 
-  // =========================
-  // TERMINAR PASO (pasa por gamificación solo si es frontera y nueva)
-  // =========================
+  
+  // TERMINAR PASO
   const terminarPaso = async () => {
     const actividadObj = actividades[pasoSeguro - 1];
     const idReal = actividadObj?.id || pasoSeguro;
@@ -188,7 +178,7 @@ const ContenedorActividades = () => {
     if (!resultado.nuevo || !esFrontera) {
       avanzarVista();
     }
-    // si es frontera y es nueva, el avance ocurre al cerrar el modal de celebración
+    // si es nueva, el avance ocurre al cerrar el modal de celebración
   };
 
   const continuarDespuesDeCelebracion = () => {
@@ -196,9 +186,8 @@ const ContenedorActividades = () => {
     avanzarVista();
   };
 
-  // =========================
+  
   // RETROCEDER
-  // =========================
   const retroceder = () => {
     if (pasoVisible > 1) {
       setPasoVisible(pasoVisible - 1);
@@ -211,9 +200,8 @@ const ContenedorActividades = () => {
     if (n <= pasoActual) setPasoVisible(n);
   };
 
-  // =========================
+  
   // ESTADOS BASE
-  // =========================
   if (!data?.pasos) {
     return <div className="p-20 text-center">Cargando actividades...</div>;
   }
@@ -221,10 +209,8 @@ const ContenedorActividades = () => {
   if (actividades.length === 0) {
     return <div className="p-20 text-center">Sin actividades configuradas</div>;
   }
-
-  // =========================
+  
   // FINAL
-  // =========================
   if (pasoVisible > totalPasos) {
     return (
       <div

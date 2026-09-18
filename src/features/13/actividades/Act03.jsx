@@ -24,7 +24,7 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
     const userId = getUser()?.id || "anon";
     const storageKey = `act03-${rango}-${userId}`;
 
-    // Cargar progreso guardado al montar (Supabase + LocalStorage)
+    // Cargar progreso guardado
     useEffect(() => {
         const cargarProgreso = async () => {
             if (userId !== "anon" && data?.id) {
@@ -66,12 +66,12 @@ const Act03 = ({ data, onComplete, onBack, rango }) => {
         cargarProgreso();
     }, [data?.id, userId]);
 
-    // Valores numéricos para validaciones dinámicas
+    // Valores numericos para validaciones dinámicas
     const ing = parseFloat(ingresos) || 0;
     const gas = parseFloat(gastos) || 0;
     const aho = parseFloat(ahorroPlaneado) || 0;
 
-    // Validación interactiva en tiempo real
+    // Validacion interactiva en tiempo real
     useEffect(() => {
         setError("");
 
