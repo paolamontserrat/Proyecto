@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Trophy } from "lucide-react";
 import { supabase } from "../supabaseClient";
+import { hoyMX } from "../utils/fecha";
 
 const AvisoRetos = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const AvisoRetos = () => {
       });
 
       // Se utiliza para comprobar si el reto está vigente.
-      const hoy = new Date().toISOString().slice(0, 10);
+      const hoy = hoyMX();
       // Consulta los retos asociados al usuario.
       const { data, error } = await supabase
         .from("retos_usuario")

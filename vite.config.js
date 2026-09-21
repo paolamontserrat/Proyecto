@@ -11,6 +11,12 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
 
+      // El bundle principal ya pasa de 2 MiB (límite por defecto del precaché).
+      // Sin esto, "vite build" falla en el paso del service worker.
+      workbox: {
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
+      },
+
       manifest: {
         name: "Finanzas Alianzito",
         short_name: "Alianzito",

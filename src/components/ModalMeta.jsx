@@ -22,11 +22,11 @@ function ModalMeta({ descripcion, onClose, onCrearOtraMeta }) {
 
         <button
           onClick={onCrearOtraMeta}
-          className="w-full bg-alianza-azul text-white py-3 rounded-lg font-bold"
+          className="w-full bg-alianza-azul text-white py-3 rounded-full font-black shadow active:scale-95 transition-transform"
         >
           Crear nueva meta
         </button>
-        <button onClick={onClose} className="w-full mt-2 text-gray-400 text-sm">
+        <button onClick={onClose} className="w-full mt-2 text-gray-400 text-sm font-bold">
           Cerrar
         </button>
       </div>

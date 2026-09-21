@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { supabase } from "../supabaseClient";
 import Footer from "../components/Footer";
 import Confetti from "../components/Confetti";
@@ -12,33 +12,23 @@ import AlcanciaMonedas from "../components/AlcanciaMonedas";
 import { registrarProgreso } from "../registrarProgreso";
 
 
+const MESES = [
+  "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+  "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre",
+];
+
+
 const Passport = () => {
   const navigate = useNavigate();
   const { rango } = useParams();
+  const location = useLocation();
 
   // Obtiene los datos del usuario que inició sesión
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   const userId = usuario?.id || "anon";
 
 
-  const nombreMesActual = (() => {
-    const meses = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre",
-    ];
-
-    return meses[new Date().getMonth()];
-  })();
+  const nombreMesActual = MESES[new Date().getMonth()];
 
   const anioActual = new Date().getFullYear();
 
@@ -72,6 +62,8 @@ const Passport = () => {
   // Controla los retos completados y actualiza la sección de retos
   const [colaRetos, setColaRetos] = useState([]);
   const [refreshRetosKey, setRefreshRetosKey] = useState(0);
+  const [refreshAlcanciaKey, setRefreshAlcanciaKey] = useState(0); // actualiza el total de monedas
+  const [reconocimientoPendienteId, setReconocimientoPendienteId] = useState(null); // reto de ahorro cuyo reconocimiento se abrirá
 
   // Guarda la información de una meta recién completada
   const [metaCompletadaInfo, setMetaCompletadaInfo] = useState(null);
@@ -252,6 +244,7 @@ const Passport = () => {
         ...prev,
         ...resultado.retosCompletados
       ]);
+      setRefreshAlcanciaKey((k) => k + 1);
     }
 
     // Si una meta se completó con este depósito, muestra el modal
@@ -451,17 +444,17 @@ const Passport = () => {
     >
 
       {/* Botones de navegación */}
-      <div className="max-w-md mx-auto mb-4 flex justify-between">
+      <div className="max-w-3xl mx-auto mb-4 px-2 md:px-0 flex justify-between">
         <button
           onClick={() => navigate(-1)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-full font-bold"
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-black shadow-lg active:scale-95 transition-transform"
         >
           ← Volver
         </button>
 
         <button
           onClick={() => navigate(`/dashboard/${rango}`)}
-          className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold"
+          className="bg-alianza-azul text-white px-5 py-2 rounded-full font-black shadow-lg active:scale-95 transition-transform"
         >
           Inicio
         </button>
@@ -469,19 +462,26 @@ const Passport = () => {
 
 
       {/* Muestra el total ahorrado */}
-      <div className="bg-alianza-azul text-white p-4 rounded-3xl mb-6 text-center">
-        <p>Total ahorrado</p>
-
-        <p className="text-3xl font-black text-alianza-amarillo">
-          ${calcularTotal()}
-        </p>
+      <div className="max-w-3xl mx-auto mb-4 px-2 md:px-0">
+        <div className="relative overflow-hidden rounded-3xl p-5 bg-gradient-to-r from-sky-400 to-alianza-azul shadow-xl flex items-center gap-4">
+          <span className="text-8xl leading-none drop-shadow-md">💰</span>
+          <div>
+            <p className="text-xs font-black text-white/90 uppercase tracking-wide drop-shadow-sm">
+              Total ahorrado
+            </p>
+            <p className="text-4xl font-black text-white drop-shadow-sm">
+              ${calcularTotal()}
+            </p>
+          </div>
+          <span className="absolute -right-4 -bottom-4 text-8xl opacity-20">💵</span>
+        </div>
       </div>
 
 
       {/* Alcancía con monedas */}
       {userId !== "anon" && (
         <div className="max-w-3xl mx-auto mb-4 px-2 md:px-0">
-          <AlcanciaMonedas usuarioId={userId} />
+          <AlcanciaMonedas key={refreshAlcanciaKey} usuarioId={userId} />
         </div>
       )}
 
@@ -503,173 +503,199 @@ const Passport = () => {
           <SeccionRetos
             key={refreshRetosKey}
             usuarioId={userId}
+            irARetos={!!location.state?.irARetos}
+            onCambio={() => setRefreshAlcanciaKey((k) => k + 1)}
+            reconocimientoInicialId={reconocimientoPendienteId}
+            onReconocimientoAbierto={() => setReconocimientoPendienteId(null)}
           />
         )}
       </div>
 
 
       {/* Aviso para registrar únicamente ahorros reales */}
-      <div className="max-w-3xl mx-auto bg-amber-50 border-2 border-amber-300 rounded-2xl px-5 py-4 mb-6 flex items-center gap-4 shadow-md">
+      <div className="max-w-3xl mx-auto mb-6 px-2 md:px-0">
+        <div className="rounded-3xl bg-gradient-to-br from-yellow-200 to-amber-300 shadow-lg px-5 py-4 flex items-center gap-4">
 
-        <img
-          src="/images/6/16.png"
-          alt="Acude a tu sucursal"
-          className="w-24 h-20 object-contain shrink-0"
-        />
+          <img
+            src="/images/6/16.png"
+            alt="Acude a tu sucursal"
+            className="w-24 h-20 object-contain shrink-0"
+          />
 
-        <span className="text-4xl shrink-0">
-          ⚠️
-        </span>
-
-        <p className="text-base md:text-lg text-amber-900 leading-relaxed font-semibold">
-          <span className="font-black text-amber-950 text-lg md:text-xl">
-            ¡Importante!
-          </span>{" "}
-          Registra tu ahorro aquí solo cuando realmente lo hayas guardado.{" "}
-          <span className="font-black">
-            Acude a tu sucursal a depositarlo
-          </span>{" "}
-          y conserva tu ticket. Con eso tu sello y diploma quedan validados de
-          forma oficial y podrás recoger tu recompensa en Caja Popular.
-        </p>
+          <p className="text-base md:text-lg text-amber-950 leading-relaxed font-semibold">
+            <span className="font-black text-lg md:text-xl">
+              ⚠️ ¡Importante!
+            </span>{" "}
+            Registra tu ahorro aquí solo cuando realmente lo hayas guardado.{" "}
+            <span className="font-black">
+              Acude a tu sucursal a depositarlo
+            </span>{" "}
+            y conserva tu ticket. Con eso tu sello y diploma quedan validados de
+            forma oficial y podrás recoger tu recompensa en Caja Popular.
+          </p>
+        </div>
       </div>
 
 
       {/* Lista de meses y ahorros registrados */}
-      <div className="max-w-sm mx-auto space-y-4">
+      <section className="max-w-3xl mx-auto px-2 md:px-0" aria-label="Mis ahorros por mes">
+        <h3 className="inline-block font-black text-alianza-azul text-lg mb-3 bg-white/85 rounded-full px-4 py-1 shadow">
+          📅 Mis ahorros
+        </h3>
 
-        {[
-          "Enero",
-          "Febrero",
-          "Marzo",
-          "Abril",
-          "Mayo",
-          "Junio",
-          "Julio",
-          "Agosto",
-          "Septiembre",
-          "Octubre",
-          "Noviembre",
-          "Diciembre",
-        ].map((mes) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
+          {MESES.map((mes) => {
 
-          // Calcula el total ahorrado durante cada mes
-          const totalMes =
-            ahorros[mes]?.reduce(
-              (s, a) => s + Number(a.monto),
-              0
-            ) || 0;
+            // Calcula el total ahorrado durante cada mes
+            const totalMes =
+              ahorros[mes]?.reduce(
+                (s, a) => s + Number(a.monto),
+                0
+              ) || 0;
 
-          const tieneEstrella =
-            ahorros[mes]?.some((a) => a.estrella);
+            const tieneEstrella =
+              ahorros[mes]?.some((a) => a.estrella);
 
+            const esActual = mes === nombreMesActual;
+            const abierto = mesExpandido === mes;
+            const depositos = ahorros[mes] || [];
 
-          return (
-            <div
-              key={mes}
-              className="bg-white rounded-2xl border-2 overflow-hidden"
-            >
-
-              {/* Botón para expandir o cerrar el mes */}
-              <button
-                onClick={() =>
-                  setMesExpandido(
-                    mesExpandido === mes ? null : mes
-                  )
-                }
-                className={`w-full p-4 flex justify-between font-black ${
-                  mes === nombreMesActual
-                    ? "bg-alianza-amarillo text-alianza-azul"
-                    : ""
-                }`}
+            return (
+              <div
+                key={mes}
+                className="bg-white rounded-3xl shadow-lg overflow-hidden border border-gray-100"
               >
-                {mes} {tieneEstrella && "⭐"}{" "}
-                {tieneSelloReal(mes) && "🏅"}
 
-                <span>${totalMes}</span>
-              </button>
+                {/* Botón para expandir o cerrar el mes */}
+                <button
+                  onClick={() =>
+                    setMesExpandido(abierto ? null : mes)
+                  }
+                  aria-expanded={abierto}
+                  className={`w-full px-5 py-3 flex items-center justify-between gap-2 font-black text-alianza-azul text-left ${
+                    esActual
+                      ? "bg-gradient-to-r from-yellow-300 to-amber-400"
+                      : ""
+                  }`}
+                >
+                  <span>
+                    {mes} {tieneEstrella && "⭐"}{" "}
+                    {tieneSelloReal(mes) && "🏅"}
+                  </span>
+
+                  <span
+                    className={`text-sm px-3 py-0.5 rounded-full ${
+                      esActual ? "bg-white/50" : "bg-alianza-azul/10"
+                    }`}
+                  >
+                    ${totalMes}
+                  </span>
+                </button>
 
 
-              {/* Muestra los depósitos del mes seleccionado */}
-              {mesExpandido === mes && (
-                <div className="p-4">
+                {/* Muestra los depósitos del mes seleccionado */}
+                {abierto && (
+                  <div className="p-4 grid gap-2">
 
-                  {(ahorros[mes] || []).map((a) => (
-                    <div
-                      key={a.id}
-                      className="flex justify-between py-2 border-b"
-                    >
+                    {depositos.length === 0 && (
+                      <p className="text-sm text-gray-400 text-center py-2">
+                        Aún no hay ahorros en {mes}.
+                      </p>
+                    )}
 
-                      <div>
-                        <p className="text-sm">
-                          {a.fecha}
-                        </p>
+                    {depositos.map((a) => (
+                      <div
+                        key={a.id}
+                        className="flex items-center justify-between bg-gray-50 rounded-2xl px-4 py-2.5"
+                      >
 
-                        <p className="font-black">
-                          ${a.monto}
-                        </p>
-                      </div>
+                        <div>
+                          <p className="font-black text-alianza-azul">
+                            ${a.monto}
+                          </p>
 
-
-                      {/* Editar y eliminar solo están disponibles
-                          para el mes actual */}
-                      {mes === nombreMesActual && (
-                        <div className="flex gap-2">
-
-                          <button
-                            onClick={() =>
-                              iniciarEdicion(a)
-                            }
-                          >
-                            ✏️
-                          </button>
-
-                          <button
-                            onClick={() =>
-                              handleDelete(a.id)
-                            }
-                          >
-                            🗑️
-                          </button>
-
+                          <p className="text-xs text-gray-500">
+                            {a.fecha}
+                          </p>
                         </div>
-                      )}
-                    </div>
-                  ))}
 
 
-                  {/* Botón para agregar un nuevo ahorro */}
-                  {puedeEditar && (
-                    <button
-                      onClick={() => {
-                        setFormData({
-                          fecha: "",
-                          monto: "",
-                          id: null
-                        });
+                        {/* Editar y eliminar solo están disponibles
+                            para el mes actual */}
+                        {esActual && (
+                          <div className="flex gap-2">
 
-                        setShowForm(true);
-                        setError("");
-                      }}
-                      className="w-full mt-2 bg-alianza-azul text-white py-2 rounded"
-                    >
-                      + Agregar ahorro
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
+                            <button
+                              onClick={() =>
+                                iniciarEdicion(a)
+                              }
+                              aria-label="Editar ahorro"
+                              title="Editar"
+                              className="w-9 h-9 rounded-full bg-white shadow flex items-center justify-center active:scale-95 transition-transform"
+                            >
+                              ✏️
+                            </button>
+
+                            <button
+                              onClick={() =>
+                                handleDelete(a.id)
+                              }
+                              aria-label="Eliminar ahorro"
+                              title="Eliminar"
+                              className="w-9 h-9 rounded-full bg-white shadow flex items-center justify-center active:scale-95 transition-transform"
+                            >
+                              🗑️
+                            </button>
+
+                          </div>
+                        )}
+                      </div>
+                    ))}
+
+
+                    {/* Botón para agregar un nuevo ahorro */}
+                    {puedeEditar && (
+                      <button
+                        onClick={() => {
+                          setFormData({
+                            fecha: "",
+                            monto: "",
+                            id: null
+                          });
+
+                          setShowForm(true);
+                          setError("");
+                        }}
+                        className="w-full mt-1 bg-alianza-azul text-white py-3 rounded-full font-black shadow active:scale-95 transition-transform"
+                      >
+                        + Agregar ahorro
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
 
       {/* Formulario para registrar o editar un ahorro */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
 
           <div className="bg-white p-6 rounded-3xl w-full max-w-sm">
 
+            <div className="text-center mb-4">
+              <p className="text-5xl mb-1">🐷</p>
+              <h3 className="text-xl font-black text-alianza-azul">
+                {formData.id ? "Editar ahorro" : "Nuevo ahorro"}
+              </h3>
+            </div>
+
+            <label className="text-sm font-bold text-alianza-azul">
+              Fecha
+            </label>
             <input
               type="date"
               value={formData.fecha}
@@ -679,9 +705,12 @@ const Passport = () => {
                   fecha: e.target.value
                 })
               }
-              className="w-full p-3 border mb-2"
+              className="w-full px-4 py-3 border rounded-xl mt-1 mb-3"
             />
 
+            <label className="text-sm font-bold text-alianza-azul">
+              Monto ($)
+            </label>
             <input
               type="number"
               value={formData.monto}
@@ -691,7 +720,7 @@ const Passport = () => {
                   monto: e.target.value
                 })
               }
-              className="w-full p-3 border mb-2"
+              className="w-full px-4 py-3 border rounded-xl mt-1 mb-2"
             />
 
             {error && (
@@ -700,18 +729,18 @@ const Passport = () => {
               </p>
             )}
 
-            <div className="flex gap-2 mt-2">
+            <div className="flex gap-3 mt-4">
 
               <button
                 onClick={() => setShowForm(false)}
-                className="flex-1 bg-gray-200 py-2 rounded"
+                className="flex-1 bg-gray-100 text-gray-600 py-3 rounded-full font-black"
               >
                 Cancelar
               </button>
 
               <button
                 onClick={handleSave}
-                className="flex-1 bg-blue-600 text-white py-2 rounded"
+                className="flex-1 bg-alianza-azul text-white py-3 rounded-full font-black shadow active:scale-95 transition-transform"
               >
                 Guardar
               </button>
@@ -724,7 +753,7 @@ const Passport = () => {
 
       {/* Modal cuando se obtiene un sello */}
       {mostrarSello && sinceSello && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
 
           <Confetti />
 
@@ -740,13 +769,13 @@ const Passport = () => {
               ¡Sello digital ganado!
             </h3>
 
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-500 text-sm mt-2">
               Ahorraste ${sinceSello.monto} en {sinceSello.mes}
             </p>
 
             <button
               onClick={() => setMostrarSello(false)}
-              className="w-full mt-4 bg-alianza-azul text-white py-2 rounded-lg font-semibold"
+              className="w-full mt-4 bg-alianza-azul text-white py-3 rounded-full font-black shadow active:scale-95 transition-transform"
             >
               ¡Genial!
             </button>
@@ -758,7 +787,7 @@ const Passport = () => {
 
       {/* Modal cuando se obtiene un diploma */}
       {mostrarDiploma && (
-        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
 
           <Confetti />
 
@@ -770,13 +799,13 @@ const Passport = () => {
               ¡Diploma ganado!
             </h3>
 
-            <p className="text-gray-600 mt-2">
+            <p className="text-gray-500 text-sm mt-2">
               Completaste 3 sellos más. Descarga tu diploma en la sección de diplomas.
             </p>
 
             <button
               onClick={() => setMostrarDiploma(false)}
-              className="w-full mt-4 bg-alianza-azul text-white py-2 rounded-lg font-semibold"
+              className="w-full mt-4 bg-alianza-azul text-white py-3 rounded-full font-black shadow active:scale-95 transition-transform"
             >
               Cerrar
             </button>
@@ -791,6 +820,14 @@ const Passport = () => {
         <ModalReto
           titulo={colaRetos[0].titulo}
           monedas={colaRetos[0].monedas}
+          onVerReconocimiento={
+            colaRetos[0].retos_usuario_id
+              ? () => {
+                  setReconocimientoPendienteId(colaRetos[0].retos_usuario_id);
+                  setColaRetos((prev) => prev.slice(1));
+                }
+              : undefined
+          }
           onClose={() =>
             setColaRetos((prev) => prev.slice(1))
           }
