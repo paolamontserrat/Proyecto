@@ -32,5 +32,818 @@
             "Tus papás pueden obtener un esquema de crédito atractivo."
         ]
         }
+    ],
+    "pasos": [
+        {
+        "id": "1",
+        "titulo": "¿Hacia dónde quiero llegar?",
+        "Fondo": "/images/15/Fondo151.png",
+        "subtitulo": "Mi primera brújula financiera",
+        "tipo": "interactiva",
+        "secciones": [
+            {
+            "id": "bienvenida",
+            "titulo": "¿HACIA DONDE QUIERO IR?",
+            "imagen1": "/images/15/10.png",
+            "parrafos": [
+                "A veces pensamos en el futuro como algo que todavía está muy lejos. Sin embargo, muchas de las cosas que queremos lograr comienzan con decisiones que tomamos desde ahora.",
+                "Tener una meta nos ayuda a saber qué queremos conseguir y para qué estamos tomando ciertas decisiones. Cuando tenemos claro hacia dónde queremos llegar, es más fácil identificar qué necesitamos hacer para conseguirlo y qué cosas pueden alejarnos de nuestros objetivos.",
+                "No necesitas tener toda tu vida planeada a tus 15 años, lo importante es comenzar a preguntarte:"
+            ],
+            "ejemplos": [
+                {
+                "id": "estudios",
+                "texto": "Terminar nuestros estudios",
+                "icono": "🎓"
+                },
+                {
+                "id": "comprar",
+                "texto": "Comprar algo que deseamos o necesitamos",
+                "icono": "💵"
+                },
+                {
+                "id": "aprender",
+                "texto": "Aprender una nueva habilidad",
+                "icono": "🎸"
+                },
+                {
+                "id": "viajar",
+                "texto": "Viajar e incluso",
+                "icono": "✈️"
+                },
+                {
+                "id": "trabajar",
+                "texto": "Comenzar a trabajar",
+                "icono": "💼"
+                }
+            ],
+            "preguntaReflexion": "¿Qué quiero lograr próximamente y qué puedo empezar a hacer desde hoy para conseguirlo?",
+            "boton": "Comenzar mi ruta"
+            },
+            {
+            "id": "actividad",
+            "titulo": "¿Hacia dónde quiero llegar?",
+            "instruccion": "Elige tu meta y descubre qué necesitas hacer para conseguirla.",
+            "pasos": [
+                {
+                "id": 1,
+                "tipo": "seleccion",
+                "pregunta": "Elige tu meta: ¿qué te gustaría conseguir o lograr en los próximos meses o en el próximo año?",
+                "opciones": [
+                    {
+                    "id": "comprar",
+                    "texto": "Comprar algo",
+                    "icono": "🎧"
+                    },
+                    {
+                    "id": "tecnologia",
+                    "texto": "Tecnología",
+                    "icono": "📱"
+                    },
+                    {
+                    "id": "estudios",
+                    "texto": "Estudios",
+                    "icono": "🎓"
+                    },
+                    {
+                    "id": "viaje",
+                    "texto": "Viaje/experiencia",
+                    "icono": "✈️"
+                    },
+                    {
+                    "id": "aprender",
+                    "texto": "Aprender algo",
+                    "icono": "🎸"
+                    },
+                    {
+                    "id": "ahorrar",
+                    "texto": "Ahorrar",
+                    "icono": "💰"
+                    },
+                    {
+                    "id": "otra",
+                    "texto": "Otra meta",
+                    "icono": "🎯"
+                    }
+                ],
+                "permitirOtra": true,
+                "placeholderOtra": "Escribe cuál es tu meta"
+                },
+                {
+                "id": 2,
+                "tipo": "texto",
+                "pregunta": "¿Por qué la quieres? ¿Por qué sería importante para ti conseguir esta meta?",
+                "placeholder": "Escribe por qué esta meta es importante para ti..."
+                },
+                {
+                "id": 3,
+                "tipo": "texto",
+                "pregunta": "¿Cuándo quieres conseguirla?",
+                "placeholder": "Ejemplo: En seis meses, al terminar el año..."
+                },
+                {
+                "id": 4,
+                "tipo": "texto",
+                "pregunta": "¿Qué necesitas para conseguirla?",
+                "placeholder": "Escribe qué recursos, conocimientos o acciones necesitas..."
+                },
+                {
+                "id": 5,
+                "tipo": "texto",
+                "pregunta": "Mi primer paso para conseguir esta meta es:",
+                "placeholder": "Escribe una acción que puedas comenzar a realizar desde hoy..."
+                }
+            ]
+            },
+            {
+            "id": "resumen",
+            "titulo": "¡TU RUTA HA COMENZADO!",
+            "descripcion": "Una meta deja de ser solamente algo que quieres cuando comienzas a pensar qué necesitas hacer para conseguirla.",
+            "imagen": "/images/15/15.png"
+            }
+        ]
+        },
+        {
+        "id": "2",
+        "titulo": "¿Hacia dónde quiero llegar?",
+        "Fondo": "/images/15/Fondo151.png",
+        "subtitulo": "Mi primera brújula financiera",
+        "tipo": "interactiva",
+        "secciones": {
+            "introduccion": {
+            "id": "bienvenida",
+            "titulo": "¿QUE VA PRIMERO?",
+            "imagen1": "/images/15/17.png",
+            "parrafos": [
+                "No todo lo que queremos comprar tiene la misma importancia.",
+                "Aprender a reconocer qué necesitamos, qué deseamos y qué podemos esperar nos ayuda a utilizar mejor nuestro dinero y a evitar decisiones impulsivas.",
+                "Cuando tenemos una meta, también necesitamos aprender a priorizar, es decir, decidir qué es lo que necesita nuestra atención y nuestro dinero antes que todo lo demás."
+            ]
+            },
+            "actividad": {
+            "id": "ordenamiento",
+            "titulo": "ORDENA TUS PRIORIDADES",
+            "instruccion": "Imagina que tienes una cantidad limitada de dinero y debes prepararte para el próximo mes. A continuación, encontrarás diferentes situaciones. Ordénalas del 1 al 6, colocando primero aquello que consideres más importante y al final lo que podría esperar.",
+            "imagen2": "/images/15/31.png",
+            "imagen3": "/images/15/34.png",
+            "opciones": [
+                {
+                "id": 1,
+                "texto": "Comprar materiales que necesito para la escuela",
+                "categoriaSugerida": "necesidad"
+                },
+                {
+                "id": 2,
+                "texto": "Comprar unos audífonos porque están de moda",
+                "categoriaSugerida": "deseo"
+                },
+                {
+                "id": 3,
+                "texto": "Guardar una parte de mi dinero para una meta",
+                "categoriaSugerida": "ahorro"
+                },
+                {
+                "id": 4,
+                "texto": "Pagar el transporte de la semana",
+                "categoriaSugerida": "necesidad"
+                },
+                {
+                "id": 5,
+                "texto": "Salir a comer con amigos",
+                "categoriaSugerida": "deseo"
+                },
+                {
+                "id": 6,
+                "texto": "Comprar ropa nueva, aunque la que tengo es más que suficiente",
+                "categoriaSugerida": "deseo"
+                }
+            ]
+            },
+            "reflexion": {
+            "id": "justificacion",
+            "pregunta": "¿POR QUÉ ELEGISTE ASÍ?",
+            "placeholder": "Escribe brevemente la razón por la que ordenaste tus prioridades de esta manera..."
+            },
+            "tarjetaFinal": {
+            "id": "resumen",
+            "titulo": "¡TU RUTA SIGUE EN CAMINO!",
+            "mensajePrincipal": "PRIORIZAR NO SIGNIFICA RENUNCIAR.",
+            "subtexto": "Significa decidir qué necesita tu dinero primero y qué puede esperar.",
+            "tip": "Antes de gastar pregúntate: ¿Lo necesito, lo quiero o puede esperar?",
+            "imagen": "/images/15/15.png"
+            }
+        }
+        },
+        {
+        "id": "3",
+        "titulo": "Organiza tu dinero",
+        "Fondo": "/images/15/Fondo151.png",
+        "subtitulo": "Ahorcado Financiero",
+        "tipo": "interactiva",
+        "secciones": {
+            "introduccion": {
+            "id": "bienvenida",
+            "titulo": "PONLE NUMEROS A TUS METAS",
+            "imagen1": "/images/15/21.png",
+            "parrafos": [
+                "Tener una meta es el primer paso, pero para alcanzarla necesitamos saber cuánto cuesta y la manera en que podemos organizarnos.",
+                "La planificación nos permite conocer lo que tenemos y lo que necesitamos, además de la cantidad de dinero que destinaremos a cada cosa.",
+                "Un presupuesto no significa dejar de gastar, sino decidir con anticipación cómo utilizar nuestro dinero para que alcance y nos acerque a cada una de nuestras metas."
+            ]
+            },
+            "actividad": {
+            "id": "ahorcado",
+            "titulo": "AHORCADO FINANCIERO",
+            "instrucciones": [
+                "1. Se jugará un total de 6 rondas.",
+                "2. En cada ronda aparecerá una palabra financiera que deberás adivinar y se proporcionará su definición. Con esta información deberás descubrir de qué palabra se trata.",
+                "3. Tendrás 2 intentos por ronda para intentar adivinar la palabra completa.",
+                "4. Si aciertas en el primer intento, avanzas a la siguiente ronda y obtienes una pista para la siguiente palabra.",
+                "5. Si fallas en el primer intento, se romperá una parte de la alcancía y tendrás una segunda oportunidad.",
+                "6. Si fallas nuevamente, la ronda termina y se rompe el puerquito completo. Se reiniciará la ronda."
+            ],
+            "imagenesAlcancia": {
+                "normal": "/images/15/52.png",
+                "falla1": "/images/15/54.png",
+                "falla2": "/images/15/56.png"
+            },
+            "palabras": [
+                {
+                "id": 1,
+                "palabra": "AHORRO",
+                "definicion": "Dinero que decides guardar en lugar de gastarlo, con la intención de utilizarlo más adelante."
+                },
+                {
+                "id": 2,
+                "palabra": "INGRESO",
+                "definicion": "Dinero que recibes y que puede provenir de diferentes fuentes, como un trabajo, una venta, una actividad realizada, etc."
+                },
+                {
+                "id": 3,
+                "palabra": "GASTO",
+                "definicion": "Dinero que utilizas para comprar algo, pagar un servicio o cubrir una necesidad."
+                },
+                {
+                "id": 4,
+                "palabra": "META",
+                "definicion": "Aquello que quieres conseguir y que requiere establecer un objetivo y trabajar para alcanzarlo."
+                },
+                {
+                "id": 5,
+                "palabra": "PRESUPUESTO",
+                "definicion": "Plan que te permite organizar el dinero que tienes, considerando cuánto recibes, cuánto gastas y cuánto puedes guardar."
+                },
+                {
+                "id": 6,
+                "palabra": "PLANIFICACION",
+                "definicion": "Proceso de pensar con anticipación qué quieres lograr, qué necesitas y qué acciones puedes realizar para conseguirlo."
+                }
+            ]
+            },
+            "tarjetaFinal": {
+            "id": "resumen",
+            "titulo": "¡EXCELENTE TRABAJO!",
+            "mensajePrincipal": "EL CONOCIMIENTO ES TU MEJOR HERRAMIENTA FINANCIERA.",
+            "subtexto": "Conocer estos conceptos te ayudará a administrar mejor tu dinero y alcanzar tus metas más rápido.",
+            "imagen": "/images/15/15.png"
+            }
+        }
+        },
+        {
+        "id": "4",
+        "titulo": "¿Puedes llegar a tu meta?",
+        "Fondo": "/images/15/Fondo151.png",
+        "subtitulo": "Reto de Planificación Financiera",
+        "tipo": "interactiva",
+        "secciones": {
+            "introduccion": {
+            "id": "bienvenida",
+            "titulo": "RETO DE PLANIFICACIÓN",
+            "subtitulo": "Calcula y alcanza tu meta a tiempo",
+            "parrafos": [
+                "Para alcanzar una meta no basta con desearla, necesitamos calcular cuánto dinero nos falta y en cuánto tiempo podemos juntarlo.",
+                "A continuación te presentamos un reto contra reloj. ¡Demuestra qué tan rápido puedes hacer tus cálculos financieros!"
+            ]
+            },
+            "actividad": {
+            "id": "reto_meta",
+            "titulo": "RETO: ¿PUEDES LLEGAR A TU META?",
+            "tiempoPorRonda": 30,
+            "imagenPersonaje": "/images/15/7.png",
+            "datosReto": {
+                "costoMeta": 1800,
+                "ahorroActual": 600,
+                "ahorroMensual": 200,
+                "montoFaltanteCorrecto": 1200,
+                "mesesOpciones": [1, 3, 6, 9],
+                "mesesCorrecto": 6
+            },
+            "retroalimentacion": {
+                "exito": {
+                "titulo": "¡EXACTO!",
+                "mensaje": "Te faltan $1,200. Ahorrando $200 cada mes necesitarías aproximadamente 6 meses."
+                },
+                "tiempoAgotado": {
+                "titulo": "¡TIEMPO AGOTADO!",
+                "mensaje": "El tiempo terminó. Recuerda que para calcular el dinero que te falta debes restar lo que tienes de lo que cuesta tu meta."
+                }
+            }
+            },
+            "tarjetaFinal": {
+            "id": "resumen",
+            "titulo": "CONCEPTO DESBLOQUEADO: PLANIFICACIÓN",
+            "imagenCarro": "/images/15/15.png",
+            "subtexto": "Una meta se vuelve mucho más alcanzable cuando sabes cuánto necesitas, cuánto tienes y cuánto puedes guardar."
+            }
+        }
+        },
+        {
+        "id": "5",
+        "titulo": "Construye tu camino",
+        "Fondo": "/images/15/Fondo151.png",
+        "subtitulo": "Construye tu Ruta Financiera",
+        "tipo": "interactiva",
+        "secciones": {
+            "introduccion": {
+            "id": "chat_introduccion",
+            "titulo": "CONSTRUYE TU CAMINO",
+            "mensajesChat": [
+                {
+                "id": 1,
+                "remitente": "sistema",
+                "texto": "Alcanzar una meta requiere más que saber cuánto cuesta. También necesitamos pensar cómo podemos conseguir los recursos necesarios. Ahorrar, buscar oportunidades para obtener ingresos y aprovechar lo que ya tenemos son algunas formas de acercarnos a nuestros objetivos.",
+                "hora": "5:18 PM"
+                },
+                {
+                "id": 2,
+                "remitente": "sistema",
+                "texto": "No existe un único camino para conseguir una meta. Lo importante es encontrar uno que sea realista, responsable y adecuado para nosotros.",
+                "hora": "5:18 PM"
+                },
+                {
+                "id": 3,
+                "remitente": "usuario",
+                "emojis": ["😃", "🎯"],
+                "hora": "5:20 PM"
+                },
+                {
+                "id":4,
+                "remitente":"usuario",
+                "imagenPersonaje": "/images/15/13.png",
+                "hora": "5:20 PM"   
+                }
+            ]
+            },
+            "actividad": {
+            "id": "ordenar_ruta",
+            "titulo": "CONSTRUYE TU RUTA",
+            "metaContexto": "Meta: Comprar una consola de $4,500.",
+            "instruccion": "Ordena los pasos de la ruta financiera para que el coche pueda llegar a su meta:",
+            "imagenCarro": "/images/15/3.png",
+            "pasosRuta": [
+                {
+                "id": "paso_1",
+                "ordenCorrecto": 1,
+                "texto": "CUÁNTO NECESITO",
+                "subtexto": "Definir el costo total de la consola ($4,500)"
+                },
+                {
+                "id": "paso_2",
+                "ordenCorrecto": 2,
+                "texto": "PLAZO",
+                "subtexto": "Establecer en cuántos meses planeas lograrlo"
+                },
+                {
+                "id": "paso_3",
+                "ordenCorrecto": 3,
+                "texto": "AHORRO",
+                "subtexto": "Guardar una cantidad constante cada mes"
+                },
+                {
+                "id": "paso_4",
+                "ordenCorrecto": 4,
+                "texto": "REVISAR AVANCE",
+                "subtexto": "Monitorear periódicamente cuánto te falta"
+                },
+                {
+                "id": "paso_5",
+                "ordenCorrecto": 5,
+                "texto": "META CONSEGUIDA",
+                "subtexto": "¡Comprar la consola con tu ahorro suficiente!"
+                }
+            ],
+            "retroalimentacion": {
+                "exito": {
+                "titulo": "¡RUTA PERFECTA! 🚗💨",
+                "mensaje": "Has ordenado correctamente los pasos para alcanzar cualquier meta financiera."
+                },
+                "error": {
+                "titulo": "¡REVISA TU RUTA! 🛑",
+                "mensaje": "Asegúrate de definir primero lo que necesitas antes de fijar tu plazo y empezar a ahorrar."
+                }
+            }
+            }
+        }
+        },
+        {
+        "id": "6",
+        "titulo": "Memorama Financiero",
+        "fondo": "/images/15/Fondo151.png",
+        "secciones": {
+            "actividad": {
+            "titulo": "MEMORAMA FINANCIERO",
+            "instruccion": "Encuentra el par correcto relacionando cada concepto financiero con su ilustración correspondiente.",
+            "parejas": [
+                {
+                "id": 1,
+                "concepto": "META",
+                "imagen": "/images/15/57.png",
+                "descripcionAlt": "Bandera roja en un campo verde marcando un punto de llegada"
+                },
+                {
+                "id": 2,
+                "concepto": "PLANIFICACIÓN",
+                "imagen": "/images/15/58.png",
+                "descripcionAlt": "Calendario del mes de Julio con fechas marcadas"
+                },
+                {
+                "id": 3,
+                "concepto": "AHORRO",
+                "imagen": "/images/15/59.png",
+                "descripcionAlt": "Alcancía de cerdito rosa recibiendo una moneda de oro"
+                },
+                {
+                "id": 4,
+                "concepto": "PRESUPUESTO",
+                "imagen": "/images/15/60.png",
+                "descripcionAlt": "Terminal de pago con billetes de dinero"
+                },
+                {
+                "id": 5,
+                "concepto": "PASOS",
+                "imagen": "/images/15/61.png",
+                "descripcionAlt": "Escalera de madera con un trofeo en la cima"
+                },
+                {
+                "id": 6,
+                "concepto": "PLAZO",
+                "imagen": "/images/15/62.png",
+                "descripcionAlt": "Calendario del mes de Julio junto a un reloj de arena"
+                },
+                {
+                "id": 7,
+                "concepto": "COMPARAR",
+                "imagen": "/images/15/63.png",
+                "descripcionAlt": "Lupa examinando distintas opciones de gorras"
+                },
+                {
+                "id": 8,
+                "concepto": "DECISIÓN",
+                "imagen": "/images/15/64.png",
+                "descripcionAlt": "Carretera dividida en dos caminos con un letrero de direcciones"
+                },
+                {
+                "id": 9,
+                "concepto": "RECURSOS",
+                "imagen": "/images/15/65.png",
+                "descripcionAlt": "Caja de herramientas con llave, destornillador y engranes"
+                },
+                {
+                "id": 10,
+                "concepto": "IMPREVISTO",
+                "imagen": "/images/15/66.png",
+                "descripcionAlt": "Ambulancia de emergencia con ojos atentos observando"
+                }
+            ]
+            },
+            "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "Una meta no se alcanza de un solo paso. Planear significa dividirla en pequeñas acciones, aprovechar tus recursos y revisar tu avance hasta llegar a donde quieres.",
+            "imagen": "/images/15/15.png"
+            }
+        }
+        },
+        {
+        "id": "7",
+        "titulo": "Alianzito Pide: Escudo Antiimpulsos",
+        "fondo": "/images/15/Fondo151.png",
+        "secciones": {
+            "introduccion": {
+            "titulo": "ACTIVA TU ESCUDO ANTIIMPULSOS",
+            "mensajeGeneral": "Antes de utilizar nuestro dinero, es importante detenernos y pensar. Comparar opciones, analizar consecuencias y preguntarnos si una decisión realmente nos beneficia o puede ayudarnos a evitar compras impulsivas y a elegir mejor.",
+            "herramienta": {
+                "nombre": "La regla de los 5 minutos",
+                "descripcion": "Detenerse a pensar antes de dar clic en 'comprar' o gastar tu dinero es como activar un escudo contra las trampas del internet y el hype de las redes sociales. Darle un respiro a tu mente te ayuda a tomar el control, descubrir si realmente necesitas eso o si solo es un impulso del momento, y así guardar tus ahorros para lo que de verdad vale la pena."
+            },
+            "imagenEscudo": "/images/15/25.png"
+            },
+            "actividad": {
+            "titulo": "Alianzito (adolescente) pide",
+            "instruccion": "Lee la definición que pide Alianzito y selecciona o arrastra el concepto correcto correspondientes de la lista de opciones.",
+            "bancoOpciones": [
+                "Comparar",
+                "Priorizar",
+                "Analizar",
+                "Consecuencia",
+                "Compra impulsiva",
+                "Costo",
+                "Garantía",
+                "Calidad"
+            ],
+            "preguntas": [
+                {
+                "id": 1,
+                "numero": 1,
+                "definicion": "Aquello que consiste en revisar dos o más opciones para identificar sus diferencias, ventajas y desventajas antes de elegir.",
+                "respuestaCorrecta": "Comparar"
+                },
+                {
+                "id": 2,
+                "numero": 2,
+                "definicion": "Aquello que consiste en organizar diferentes opciones según su importancia para decidir cuáles deben atenderse primero.",
+                "respuestaCorrecta": "Priorizar"
+                },
+                {
+                "id": 3,
+                "numero": 3,
+                "definicion": "Aquello que consiste en examinar cuidadosamente una situación, considerando sus características y posibles resultados antes de tomar una decisión.",
+                "respuestaCorrecta": "Analizar"
+                },
+                {
+                "id": 4,
+                "numero": 4,
+                "definicion": "El resultado que puede ocurrir después de realizar una acción o tomar una decisión.",
+                "respuestaCorrecta": "Consecuencia"
+                },
+                {
+                "id": 5,
+                "numero": 5,
+                "definicion": "Aquello que consiste en adquirir algo de manera repentina, sin haberlo planeado o pensado suficientemente antes de hacerlo.",
+                "respuestaCorrecta": "Compra impulsiva"
+                },
+                {
+                "id": 6,
+                "numero": 6,
+                "definicion": "El compromiso que ofrece un vendedor o fabricante para responder durante un periodo determinado si un producto presenta ciertos problemas.",
+                "respuestaCorrecta": "Garantía"
+                }
+            ]
+            },
+            "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "No todas las decisiones que puedes tomar son decisiones que te convienen. Antes de elegir, piensa en cómo puede afectar tus planes y tu futuro.",
+            "imagen1": "/images/15/13.png",
+            "imagen": "/images/15/15.png"
+            }
+        }
+        },
+        {
+        "id": "8",
+        "titulo": "Sé proteger mi dinero: 3 en raya",
+        "fondo": "/images/15/Fondo151.png",
+        "secciones": {
+            "introduccion": {
+            "titulo": "SÉ PROTEGER MI DINERO",
+            "mensajeGeneral": "Cuidar nuestro dinero también significa aprender a protegerlo.",
+            "mensajeDetalle": "Actualmente realizamos muchas actividades por internet, por lo que debemos ser cuidadosos con nuestros datos, nuestras cuentas y las personas o sitios en los que confiamos.",
+            "imagenEscudo": "/images/15/27.png",
+            "imagenScooter": "/images/15/24.png"
+            },
+            "juego": {
+            "titulo": "Actividad: 3 en raya",
+            "reglas": [
+                "Jugarás contra la máquina. Tú utilizarás O y la máquina X.",
+                "En tu turno, selecciona una casilla disponible. Al hacerlo, aparecerá una pregunta financiera.",
+                "Si respondes correctamente, ganas la casilla y colocas tu O.",
+                "Si respondes incorrectamente, pierdes tu oportunidad y sera el turno de la máquina.",
+                "En el turno de la máquina, se selecciona aleatoriamente una casilla. Después, el azar decidirá si la máquina llena o no la casilla con su X. Es decir, si acierta, la llena; si no, pierde su turno.",
+                "Gana quien consiga primero tres casillas consecutivas, ya sea horizontal, vertical o diagonalmente.",
+                "Si todas las casillas se ocupan y nadie consigue tres en raya, el juego termina en empate."
+            ],
+            "preguntas": [
+                {
+                "id": 1,
+                "dificultad": "facil",
+                "pregunta": "Dinero que decides guardar para utilizarlo en el futuro o alcanzar una meta.",
+                "respuestaCorrecta": "AHORRO",
+                "opciones": ["AHORRO", "GASTO", "PRESUPUESTO"]
+                },
+                {
+                "id": 2,
+                "dificultad": "facil",
+                "pregunta": "Plan que permite organizar el dinero que recibes, gastas y puedes guardar.",
+                "respuestaCorrecta": "PRESUPUESTO",
+                "opciones": ["PLANIFICAR", "PRESUPUESTO", "META"]
+                },
+                {
+                "id": 3,
+                "dificultad": "facil",
+                "pregunta": "Aquello que quieres conseguir y para lo que estableces un objetivo.",
+                "respuestaCorrecta": "META",
+                "opciones": ["PLAZO", "ESTRATEGIA", "META"]
+                },
+                {
+                "id": 4,
+                "dificultad": "mediana",
+                "pregunta": "Tiempo establecido para conseguir una meta financiera.",
+                "respuestaCorrecta": "PLAZO",
+                "opciones": ["PLAZO", "CONSECUENCIA", "GASTO"]
+                },
+                {
+                "id": 5,
+                "dificultad": "mediana",
+                "pregunta": "Dinero que utilizas para comprar productos, pagar servicios o cubrir necesidades.",
+                "respuestaCorrecta": "GASTO",
+                "opciones": ["AHORRO", "GASTO", "COSTO"]
+                },
+                {
+                "id": 6,
+                "dificultad": "mediana",
+                "pregunta": "Acción de revisar diferentes opciones antes de elegir la que más te conviene.",
+                "respuestaCorrecta": "COMPARAR",
+                "opciones": ["ANALIZAR", "PRIORIZAR", "COMPARAR"]
+                },
+                {
+                "id": 7,
+                "dificultad": "dificil",
+                "pregunta": "Forma o conjunto de acciones que eliges para conseguir una meta.",
+                "respuestaCorrecta": "ESTRATEGIA",
+                "opciones": ["PRIORIZAR", "ESTRATEGIA", "PLANIFICAR"]
+                },
+                {
+                "id": 8,
+                "dificultad": "dificil",
+                "pregunta": "Decidir qué objetivos son más importantes cuando no puedes cumplirlos todos al mismo tiempo.",
+                "respuestaCorrecta": "PRIORIZAR",
+                "opciones": ["PRIORIZAR", "COMPARAR", "ANALIZAR"]
+                },
+                {
+                "id": 9,
+                "dificultad": "dificil",
+                "pregunta": "Organizar con anticipación los pasos y recursos necesarios para alcanzar una meta.",
+                "respuestaCorrecta": "PLANIFICAR",
+                "opciones": ["PRESUPUESTO", "PLANIFICAR", "ESTRATEGIA"]
+                }
+            ]
+            },
+            "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "Tu información también tiene valor. Evita compartir datos personales, contraseñas o información financiera con personas o sitios que no sean seguros.",
+            "imagen": "/images/15/15.png"
+            }
+        }
+        },
+        {
+        "id": "9",
+        "titulo": "Séptima Brújula Financiera: ME PREPARO PARA LOS IMPREVISTOS",
+        "fondo": "/images/15/Fondo151.png",
+        "secciones": {
+            "introduccion": {
+            "titulo": "ME PREPARO PARA LOS IMPREVISTOS",
+            "imagenAlianzito": "/images/15/11.png",
+            "mensajeGeneral": "No siempre podemos saber qué ocurrirá mañana. Un gasto inesperado puede aparecer en cualquier momento y cambiar nuestros planes.",
+            "mensajeDetalle": "Por eso, aprender a prevenir y guardar una parte de nuestros recursos puede ayudarnos a enfrentar situaciones inesperadas sin perder de vista nuestros objetivos."
+            },
+            "juego": {
+            "titulo": "Actividad: Verdadero o Falso",
+            "instrucciones": "Lee cada afirmación y decide si es verdadera (V) o falsa (F). (CON TIEMPO PARA RESPONDER)",
+            "tiempoPorPreguntaSegundos": 15,
+            "preguntas": [
+                {
+                "id": 1,
+                "afirmacion": "Guardar una parte de mi dinero puede ayudarme a enfrentar un gasto inesperado.",
+                "respuestaCorrecta": true
+                },
+                {
+                "id": 2,
+                "afirmacion": "Si tengo una meta de ahorro, debo utilizar todo mi dinero en ella, aunque aparezca una emergencia.",
+                "respuestaCorrecta": false
+                },
+                {
+                "id": 3,
+                "afirmacion": "Planear mis gastos puede ayudarme a estar mejor preparado ante situaciones inesperadas.",
+                "respuestaCorrecta": true
+                },
+                {
+                "id": 4,
+                "afirmacion": "Los imprevistos siempre se pueden evitar si organizo correctamente mi dinero.",
+                "respuestaCorrecta": false
+                },
+                {
+                "id": 5,
+                "afirmacion": "Tener una cantidad de dinero disponible para emergencias puede evitar que tenga que cambiar por completo mis planes.",
+                "respuestaCorrecta": true
+                },
+                {
+                "id": 6,
+                "afirmacion": "Si un gasto inesperado aparece, puedo revisar y ajustar mi presupuesto para hacerle frente.",
+                "respuestaCorrecta": true
+                },
+                {
+                "id": 7,
+                "afirmacion": "Prepararse para un imprevisto significa guardar todo el dinero y no utilizarlo nunca.",
+                "respuestaCorrecta": false
+                },
+                {
+                "id": 8,
+                "afirmacion": "Pensar con anticipación en posibles problemas financieros es una forma de prevención.",
+                "respuestaCorrecta": true
+                }
+            ]
+            },
+            "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "Prepararte para lo inesperado también es parte de cuidar tu futuro. No se trata de esperar que algo salga mal, sino de estar listo por si sucede.",
+            "imagen": "/images/15/15.png"
+            }
+        }
+        },
+        {
+        "id": "10",
+        "titulo": "Planifico mis semanas",
+        "fondo": "/images/15/Fondo151.png",
+        "secciones": {
+            "introduccion": {
+            "titulo": "CONSTRUYO MI FUTURO",
+            "mensajeGeneral": "El futuro no se construye de un día para otro.",
+            "mensajeDetalle": "Las decisiones que tomamos hoy, aunque parezcan pequeñas, pueden acercarnos o alejarnos de lo que queremos conseguir. Planear, ahorrar, cuidar nuestro dinero y establecer metas son herramientas que pueden ayudarnos a construir poco a poco la vida que imaginamos.",
+            "imagenAlianzito": "/images/15/32.png"
+            },
+            "tablaPlanificacion": {
+            "titulo": "Actividad: \"Planifico mis semanas\"",
+            "instrucciones": "Piensa en las próximas 4 semanas y completa el siguiente cuadro con cantidades aproximadas. No es necesario que tengas ingresos o gastos todos los días; puedes incluir únicamente los que normalmente tienes.",
+            "columnas": [
+                "Semana",
+                "Dinero que recibo",
+                "Gastos",
+                "Dinero que ahorro",
+                "¿En qué debó cuidar mi dinero?"
+            ],
+            "filasDefecto": [
+                { "semana": "Semana 1", "recibo": "", "gastos": "", "ahorro": "", "cuidado": "" },
+                { "semana": "Semana 2", "recibo": "", "gastos": "", "ahorro": "", "cuidado": "" },
+                { "semana": "Semana 3", "recibo": "", "gastos": "", "ahorro": "", "cuidado": "" },
+                { "semana": "Semana 4", "recibo": "", "gastos": "", "ahorro": "", "cuidado": "" }
+            ],
+            "preguntas": [
+                {
+                "id": "pregunta1",
+                "label": "¿En qué semana crees que necesitarás organizar mejor tu dinero?"
+                },
+                {
+                "id": "pregunta2",
+                "label": "¿Hay algún gasto que puedas reducir o evitar?"
+                },
+                {
+                "id": "pregunta3",
+                "label": "¿Cuánto te gustaría haber ahorrado al terminar las 4 semanas?"
+                }
+            ]
+            },
+            "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "Tu futuro empieza mucho antes de que llegue. Cada decisión responsable que tomas hoy puede convertirse en una oportunidad para mañana.",
+            "imagen": "/images/15/15.png"
+            }
+        }
+        },
+        {
+        "id": "11",
+        "titulo": "Tus 8 Brújulas Financieras",
+        "fondo": "/images/15/Fondo151.png",
+        "brujulas": [
+            { "id": 1, "icono": "🎯", "texto": "Tengo una meta" },
+            { "id": 2, "icono": "⚖️", "texto": "Sé priorizar" },
+            { "id": 3, "icono": "💰", "texto": "Sé cuánto necesito" },
+            { "id": 4, "icono": "🗺️", "texto": "Puedo crear un plan" },
+            { "id": 5, "icono": "🧠", "texto": "Pienso antes de decidir" },
+            { "id": 6, "icono": "🔐", "texto": "Protejo mi dinero" },
+            { "id": 7, "icono": "🚨", "texto": "Me preparo para imprevistos" },
+            { "id": 8, "icono": "🚀", "texto": "Pienso en mi futuro" }
+        ],
+        "imagen": "/images/15/18.png",
+        "compromiso": {
+            "instruccion": "Ahora que conoces tus 8 brújulas, elige una acción que puedas comenzar a realizar desde hoy para cuidar y planear mejor tu futuro.",
+            "opciones": [
+            "Ahorrar una cantidad específica.",
+            "Registrar mis gastos.",
+            "Evitar una compra impulsiva.",
+            "Crear una meta.",
+            "Comparar antes de comprar.",
+            "Guardar dinero para imprevistos.",
+            "Proteger mejor mis cuentas.",
+            "Crear mi propia acción."
+            ],
+            "preguntas": [
+            "A partir de hoy me comprometo a:",
+            "¿Cuándo comenzaré?",
+            "¿Qué quiero conseguir con este cambio?"
+            ]
+        },
+        "fraseFinal":{
+            "fraseFinal": "“No necesitas conocer todo el camino para comenzar. Solo necesitas saber hacia dónde quieres ir y dar el primer paso.”",
+            "imagen2": "/images/15/15.png"
+        }
+        }
     ]
 }

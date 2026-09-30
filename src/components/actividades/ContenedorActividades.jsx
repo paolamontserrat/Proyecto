@@ -11,7 +11,7 @@ import actividades11 from "../../features/11/actividades/actividades";
 import actividades12 from "../../features/12/actividades/actividades";
 import actividades13 from "../../features/13/actividades/actividades";
 import actividades14 from "../../features/14/actividades/actividades";
-// import actividades15 from "../../features/15/actividades/actividades";
+import actividades15 from "../../features/15/actividades/actividades";
 import actividades16 from "../../features/16/actividades/actividades";
 // import actividades17 from "../../features/17/actividades/actividades";
 
@@ -55,7 +55,7 @@ const ContenedorActividades = () => {
     12: actividades12,
     13: actividades13,
     14: actividades14,
-    // 15: actividades15,
+    15: actividades15,
     16: actividades16,
     // 17: actividades17,
   };
