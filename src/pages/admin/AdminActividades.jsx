@@ -96,7 +96,7 @@ function AdminActividades() {
       </p>
 
       <div className="flex gap-2 mb-4 flex-wrap">
-        // Botones para seleccionar el rango de edad y actualizar la vista de progreso.
+        {/*Botones para seleccionar el rango de edad y actualizar la vista de progreso.*/}
         {RANGOS.map((r) => (
           <button
             key={r}
@@ -112,7 +112,7 @@ function AdminActividades() {
         ))}
       </div>
 
-      // Muestra un mensaje de error si no se pudo determinar el total de actividades desde el archivo JSON correspondiente al rango seleccionado.
+      {/*Muestra un mensaje de error si no se pudo determinar el total de actividades desde el archivo JSON correspondiente al rango seleccionado.*/}
       {totalActividades === null && !cargando && (
         <div className="bg-amber-50 border border-amber-300 text-amber-700 text-sm rounded-xl p-3 mb-4">
           No pude determinar el total de actividades de la edad {rango} desde{' '}
@@ -169,7 +169,7 @@ function AdminActividades() {
               </tr>
             )}
 
-            // Muestra la lista de usuarios con su progreso en actividades completadas y un indicador visual del porcentaje de avance.
+            {/* Muestra la lista de usuarios con su progreso en actividades completadas y un indicador visual del porcentaje de avance. */}
             {usuarios.map((u) => {
               const pct = totalActividades
                 ? Math.min(

@@ -75,7 +75,7 @@ const Passport = () => {
 
     const { data } = await supabase
       .from("diplomas")
-      .select("numero")
+      .select("numero, fecha_generado")
       .eq("usuario_id", String(userId))
       .order("numero");
 
@@ -496,7 +496,9 @@ const Passport = () => {
         />
 
         <PasaporteDiplomas
+          key={refreshRetosKey}
           diplomas={misDiplomas}
+          usuarioId={userId}
         />
 
         {userId !== "anon" && (
