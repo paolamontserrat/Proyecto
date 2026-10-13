@@ -43,6 +43,7 @@ function ModalReconocimiento({ ru, nombreUsuario, onClose }) {
     setGenerando(true);
     setError('');
     try {
+      await document.fonts?.ready; // espera a que cargue la tipografía
       const canvas = await html2canvas(ref.current, { scale: 2 });
       const a = document.createElement('a');
       a.href = canvas.toDataURL('image/png');

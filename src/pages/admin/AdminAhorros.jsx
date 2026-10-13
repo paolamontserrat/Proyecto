@@ -478,7 +478,7 @@ function TabSellos() {
   );
 }
 
-// TAB 3: Diplomas pendientes de entregar
+// TAB 3: Diplomas obtenidos (con la fecha en que se generó cada uno)
 function TabDiplomas() {
   const [pendientes, setPendientes] = useState([]);
   const [cargando, setCargando] = useState(true);
@@ -489,8 +489,7 @@ function TabDiplomas() {
     const { data } = await supabase
       .from("diplomas")
       .select("usuario_id, numero, fecha_generado")
-      .eq("entregado", false)
-      .order("fecha_generado");
+      .order("fecha_generado", { ascending: false });
 
     if (!data || data.length === 0) {
       setPendientes([]);
@@ -519,15 +518,6 @@ function TabDiplomas() {
     cargar();
   }, [cargar]);
 
-  // Función para marcar un diploma como entregado en la base de datos y refrescar la lista de diplomas pendientes.
-  const marcarEntregado = async (usuarioId, numero) => {
-    await supabase.rpc("admin_marcar_diploma_entregado", {
-      p_usuario_id: usuarioId,
-      p_numero: numero,
-    });
-    cargar();
-  };
-
   return (
     <div className="bg-white rounded-2xl shadow overflow-x-auto">
       <table className="w-full text-sm">
@@ -535,22 +525,21 @@ function TabDiplomas() {
           <tr>
             <th className="p-3">Usuario</th>
             <th className="p-3">Diploma</th>
-            <th className="p-3">Fecha generado</th>
-            <th className="p-3">Acción</th>
+            <th className="p-3">Fecha obtenido</th>
           </tr>
         </thead>
         <tbody>
           {cargando && (
             <tr>
-              <td colSpan={4} className="p-4 text-center text-gray-400">
+              <td colSpan={3} className="p-4 text-center text-gray-400">
                 Cargando...
               </td>
             </tr>
           )}
           {!cargando && pendientes.length === 0 && (
             <tr>
-              <td colSpan={4} className="p-4 text-center text-gray-400">
-                No hay diplomas pendientes
+              <td colSpan={3} className="p-4 text-center text-gray-400">
+                Aún no hay diplomas
               </td>
             </tr>
           )}
@@ -567,19 +556,12 @@ function TabDiplomas() {
                 <td className="p-3 text-gray-500">
                   {new Date(p.fecha_generado).toLocaleDateString()}
                 </td>
-                <td className="p-3">
-                  <button
-                    onClick={() => marcarEntregado(p.usuario_id, p.numero)}
-                    className="text-green-600 text-xs font-semibold"
-                  >
-                    Marcar entregado
-                  </button>
-                </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+
     </div>
   );
 }

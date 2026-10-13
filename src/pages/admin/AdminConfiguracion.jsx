@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../../supabaseClient';
+import ModalConfirmar from '../../components/admin/ModalConfirmar';
 
 // Componente de administración para configurar reglas de ahorro y gamificación.
 function AdminConfiguracion() {
@@ -87,6 +88,8 @@ function SeccionInsignias() {
   const [cargando, setCargando] = useState(true);
   const [editando, setEditando] = useState(null);
   const [error, setError] = useState('');
+  const [insigniaAEliminar, setInsigniaAEliminar] = useState(null); // id pendiente de confirmar
+  const [eliminando, setEliminando] = useState(false);
 
   const cargar = useCallback(async () => {
     setCargando(true);
@@ -128,9 +131,15 @@ function SeccionInsignias() {
     cargar();
   };
 
-  const eliminar = async (id) => {
-    if (!confirm('¿Eliminar esta insignia? Los niños que ya la ganaron la conservan en su historial, pero deja de otorgarse a partir de ahora.')) return;
-    await supabase.rpc('admin_eliminar_insignia', { p_id: id });
+  // Al pulsar "Eliminar" solo se abre el modal de confirmación
+  const eliminar = (id) => setInsigniaAEliminar(id);
+
+  // Elimina la insignia después de confirmar en el modal
+  const confirmarEliminar = async () => {
+    setEliminando(true);
+    await supabase.rpc('admin_eliminar_insignia', { p_id: insigniaAEliminar });
+    setEliminando(false);
+    setInsigniaAEliminar(null);
     cargar();
   };
 
@@ -272,6 +281,19 @@ function SeccionInsignias() {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Modal de confirmación para eliminar una insignia */}
+      {insigniaAEliminar !== null && (
+        <ModalConfirmar
+          variante="peligro"
+          titulo="Eliminar insignia"
+          mensaje="Los niños que ya la ganaron la conservan en su historial, pero deja de otorgarse a partir de ahora."
+          textoConfirmar="Eliminar"
+          cargando={eliminando}
+          onConfirmar={confirmarEliminar}
+          onCancelar={() => setInsigniaAEliminar(null)}
+        />
       )}
     </div>
   );

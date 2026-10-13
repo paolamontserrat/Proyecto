@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { supabase } from "../supabaseClient"; // ajusta la ruta según tu proyecto
+import { supabase } from "../supabaseClient";
 import { hoyMX } from "../utils/fecha";
 import ModalMeta from "./ModalMeta";
 import ProgresoDias from "./ProgresoDias";
+
+// Cuántas metas vigentes (sin cumplir) puede tener un socio al mismo tiempo.
+const MAX_METAS_ACTIVAS = 5;
 
 const FORM_VACIO = {
   tipo: "ahorro",
@@ -23,44 +26,48 @@ const MENSAJES_ERROR = {
   no_es_habito: "Esta meta no es de hábito.",
 };
 
-// Componente que muestra la meta personal del socio y su avance.
-// La meta puede ser de ahorro (se avanza al registrar ahorros) o de hábito (se marca cada día).
+// Porcentaje de avance de una meta (de ahorro por monto, de hábito por días)
+const porcentajeDe = (m) => {
+  const actual = Number(m.tipo === "habito" ? m.dias_cumplidos : m.monto_actual) || 0;
+  const total = Number(m.tipo === "habito" ? m.meta_dias : m.monto_meta) || 0;
+  return total > 0 ? Math.min(100, Math.round((actual / total) * 100)) : 0;
+};
+
+// Muestra TODAS las metas vigentes del socio con su avance, y permite crear más.
+// Cada meta puede ser de ahorro (avanza al registrar ahorros) o de hábito (se marca cada día).
 const MetaPersonal = ({ usuarioId }) => {
-  const [meta, setMeta] = useState(null);           // la meta más reciente del socio (o null si nunca ha creado una)
+  const [metas, setMetas] = useState([]);              // todas las metas del socio (más nuevas primero)
   const [cargando, setCargando] = useState(true);
   const [mostrarForm, setMostrarForm] = useState(false);
-  const [mostrarModal, setMostrarModal] = useState(false);
+  const [metaModal, setMetaModal] = useState(null);    // meta recién cumplida a la que falta felicitar
   const [form, setForm] = useState(FORM_VACIO);
-  const [marcando, setMarcando] = useState(false);  // "Hoy lo cumplí" en curso
-  const [errorCheckin, setErrorCheckin] = useState("");
+  const [marcandoId, setMarcandoId] = useState(null);  // id de la meta de hábito que se está marcando
+  const [errorCheckin, setErrorCheckin] = useState({}); // { [metaId]: mensaje }
 
-  // Trae de la base de datos la meta más reciente del socio, sin importar si ya la completó.
+  // Trae de la base de datos todas las metas del socio.
   // silencioso = true refresca sin ocultar el componente mientras carga.
-  const cargarMeta = async (silencioso = false) => {
+  const cargarMetas = async (silencioso = false) => {
     if (!silencioso) setCargando(true);
     const { data } = await supabase
       .from("metas_personales")
       .select("*")
       .eq("usuario_id", usuarioId)
-      .order("creada_en", { ascending: false }) // la más nueva primero
-      .limit(1)
-      .maybeSingle();
-    setMeta(data || null);
+      .order("creada_en", { ascending: false }); // la más nueva primero
+    const lista = data || [];
+    setMetas(lista);
     setCargando(false);
-    // Muestra el modal de "¡meta cumplida!"
-    if (data?.completada && !data?.notificada) setMostrarModal(true);
+    // Si hay metas cumplidas sin felicitar, muestra el modal de la primera (las demás salen una por una)
+    setMetaModal(lista.find((m) => m.completada && !m.notificada) || null);
   };
 
-  // Carga la meta en cuanto se conoce el id del usuario.
   useEffect(() => {
-    if (usuarioId) cargarMeta();
+    if (usuarioId) cargarMetas();
   }, [usuarioId]);
 
   // Guarda una meta nueva
   const crearMeta = async () => {
     const esHabito = form.tipo === "habito";
 
-    // Validación
     if (!form.descripcion.trim()) {
       alert("Escribe tu meta.");
       return;
@@ -85,69 +92,58 @@ const MetaPersonal = ({ usuarioId }) => {
       fecha_prevista: form.fecha_prevista || null, // la fecha es opcional
     });
     if (error) return alert("No se pudo crear la meta: " + error.message);
-    // Limpia el formulario y lo oculta, y refresca la meta desde la base de datos.
+
     setForm(FORM_VACIO);
     setMostrarForm(false);
-    setMostrarModal(false);
-    cargarMeta();
+    cargarMetas(true);
   };
 
   // "Hoy lo cumplí" de una meta de hábito
-  const marcarHoy = async () => {
-    if (marcando || !meta) return;
-    setMarcando(true);
-    setErrorCheckin("");
+  const marcarHoy = async (meta) => {
+    if (marcandoId) return;
+    setMarcandoId(meta.id);
+    setErrorCheckin((prev) => ({ ...prev, [meta.id]: "" }));
 
     const { data, error } = await supabase.rpc("registrar_checkin_meta", {
       p_usuario_id: usuarioId,
       p_meta_id: meta.id,
     });
-    setMarcando(false);
+    setMarcandoId(null);
 
     if (error || !data?.ok) {
-      setErrorCheckin(MENSAJES_ERROR[data?.error] || "No se pudo guardar. Inténtalo de nuevo.");
-      if (data?.error) cargarMeta(true);
+      const mensaje = MENSAJES_ERROR[data?.error] || "No se pudo guardar. Inténtalo de nuevo.";
+      setErrorCheckin((prev) => ({ ...prev, [meta.id]: mensaje }));
+      if (data?.error) cargarMetas(true);
       return;
     }
 
-    // Refresca; si la meta quedó completa, cargarMeta abre el modal de felicitación.
-    await cargarMeta(true);
+    // Refresca; si la meta quedó completa, cargarMetas abre el modal de felicitación.
+    await cargarMetas(true);
   };
 
-  // Se ejecuta al cerrar el modal de felicitación: marca en la base de datos que ya se
-  // le avisó al socio (para que no vuelva a salir el modal) y refresca los datos.
+  // Al cerrar el modal de felicitación se marca esa meta como notificada y se refresca
+  // (si hay otra meta cumplida pendiente, aparece su modal).
   const cerrarModal = async () => {
-    if (meta?.id) {
-      await supabase.rpc("marcar_meta_notificada", { p_meta_id: meta.id });
+    if (metaModal?.id) {
+      await supabase.rpc("marcar_meta_notificada", { p_meta_id: metaModal.id });
     }
-    setMostrarModal(false);
-    cargarMeta(true); // refresca para que meta.notificada quede en true localmente
+    setMetaModal(null);
+    cargarMetas(true);
   };
 
   // Mientras se consulta Supabase no se dibuja nada, para no mostrar un estado a medias.
   if (cargando) return null;
 
-  // El socio puede crear una meta nueva si nunca ha tenido una, o si la última ya se completó
-  const puedeCrearNueva = !meta || meta.completada;
-
-  const esHabitoActual = meta?.tipo === "habito";
-  const hechoHoy = meta?.ultimo_checkin === hoyMX();
-
-  // Porcentaje de avance de la meta actual
-  const porcentaje =
-    meta && !meta.completada
-      ? esHabitoActual
-        ? Math.min(100, Math.round((meta.dias_cumplidos / meta.meta_dias) * 100))
-        : Math.min(100, Math.round((meta.monto_actual / meta.monto_meta) * 100))
-      : 0;
-
+  const activas = metas.filter((m) => !m.completada);
+  const cumplidas = metas.filter((m) => m.completada).slice(0, 3); // solo las 3 últimas
+  const puedeCrear = activas.length < MAX_METAS_ACTIVAS;
   const esHabitoForm = form.tipo === "habito";
 
   return (
     <div>
       {/* Formulario para crear una meta nueva */}
       {mostrarForm && (
-        <div className="grid gap-3">
+        <div className="grid gap-3 mb-4">
           {/* Tipo de meta */}
           <div className="grid grid-cols-2 gap-2">
             {Object.entries(TIPOS).map(([clave, t]) => (
@@ -196,100 +192,119 @@ const MetaPersonal = ({ usuarioId }) => {
           <input
             type="date"
             className="border rounded-xl px-3 py-2 text-sm"
+            placeholder="Fecha prevista de cumplimiento"
             value={form.fecha_prevista}
             onChange={(e) => setForm({ ...form, fecha_prevista: e.target.value })}
           />
           <div className="flex gap-2">
-            <button
-              onClick={crearMeta}
-              className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold text-sm"
-            >
+            <button onClick={crearMeta} className="bg-alianza-azul text-white px-4 py-2 rounded-full font-bold text-sm">
               Guardar meta
             </button>
-            <button
-              onClick={() => setMostrarForm(false)}
-              className="text-gray-400 text-sm font-bold"
-            >
+            <button onClick={() => setMostrarForm(false)} className="text-gray-400 text-sm font-bold">
               Cancelar
             </button>
           </div>
         </div>
       )}
 
-      {/* Meta de ahorro en progreso: barra de avance */}
-      {!mostrarForm && meta && !meta.completada && !esHabitoActual && (
-        <div>
-          <p className="text-sm font-bold text-gray-700">{meta.descripcion}</p>
-          <div className="w-full bg-gray-100 rounded-full h-3 mt-3 overflow-hidden">
-            <div
-              className="bg-alianza-amarillo h-3 rounded-full transition-all"
-              style={{ width: `${porcentaje}%` }}
-            />
-          </div>
-          <p className="text-xs text-gray-500 mt-1">
-            ${meta.monto_actual} / ${meta.monto_meta} · {porcentaje}%
-            {meta.fecha_prevista ? ` · meta: ${meta.fecha_prevista}` : ""}
-          </p>
-        </div>
+      {/* Sin metas vigentes */}
+      {!mostrarForm && activas.length === 0 && (
+        <p className="text-sm text-gray-400 mb-3">Aún no tienes metas vigentes. ¡Crea la primera!</p>
       )}
 
-      {/* Meta de hábito en progreso: días cumplidos y botón "Hoy lo cumplí" */}
-      {!mostrarForm && meta && !meta.completada && esHabitoActual && (
-        <div>
-          <p className="text-sm font-bold text-gray-700">🌱 {meta.descripcion}</p>
-          <div className="mt-3">
-            <ProgresoDias actual={meta.dias_cumplidos} meta={meta.meta_dias} porcentaje={porcentaje} />
-          </div>
-          <p className="text-xs text-gray-500 mt-1">
-            {meta.dias_cumplidos} / {meta.meta_dias} días · {porcentaje}%
-            {meta.fecha_prevista ? ` · meta: ${meta.fecha_prevista}` : ""}
-          </p>
+      {/* Metas vigentes: una tarjeta por meta */}
+      {!mostrarForm && activas.length > 0 && (
+        <div className="grid gap-3 mb-3">
+          {activas.map((meta) => {
+            const esHabito = meta.tipo === "habito";
+            const porcentaje = porcentajeDe(meta);
+            const hechoHoy = meta.ultimo_checkin === hoyMX();
 
-          <div className="mt-4">
-            {hechoHoy ? (
-              <p className="text-sm text-green-700 bg-green-50 rounded-2xl p-3 text-center font-bold">
-                ¡Hoy ya la cumpliste! Vuelve mañana 🌙
-              </p>
-            ) : (
-              <>
-                <button
-                  onClick={marcarHoy}
-                  disabled={marcando}
-                  className="w-full bg-alianza-azul text-white py-3 rounded-full font-black shadow disabled:opacity-60 active:scale-95 transition-transform"
-                >
-                  {marcando ? "Guardando..." : "✅ Hoy lo cumplí"}
-                </button>
-                <p className="text-xs text-gray-400 text-center mt-2">
-                  Márcalo solo si de verdad lo hiciste 😉
+            return (
+              <div key={meta.id} className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
+                <p className="text-sm font-bold text-gray-700">
+                  {TIPOS[meta.tipo]?.emoji || "🎯"} {meta.descripcion}
                 </p>
-              </>
-            )}
-            {errorCheckin && <p className="text-sm text-red-500 text-center mt-2">{errorCheckin}</p>}
-          </div>
+
+                {esHabito ? (
+                  <>
+                    <div className="mt-3">
+                      <ProgresoDias actual={meta.dias_cumplidos} meta={meta.meta_dias} porcentaje={porcentaje} />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {meta.dias_cumplidos} / {meta.meta_dias} días · {porcentaje}%
+                      {meta.fecha_prevista ? ` · meta: ${meta.fecha_prevista}` : ""}
+                    </p>
+
+                    <div className="mt-3">
+                      {hechoHoy ? (
+                        <p className="text-sm text-green-700 bg-green-50 rounded-2xl p-3 text-center font-bold">
+                          ¡Hoy ya la cumpliste! Vuelve mañana 🌙
+                        </p>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => marcarHoy(meta)}
+                            disabled={marcandoId === meta.id}
+                            className="w-full bg-alianza-azul text-white py-3 rounded-full font-black shadow disabled:opacity-60 active:scale-95 transition-transform"
+                          >
+                            {marcandoId === meta.id ? "Guardando..." : "✅ Hoy lo cumplí"}
+                          </button>
+                          <p className="text-xs text-gray-400 text-center mt-2">Márcalo solo si de verdad lo hiciste 😉</p>
+                        </>
+                      )}
+                      {errorCheckin[meta.id] && (
+                        <p className="text-sm text-red-500 text-center mt-2">{errorCheckin[meta.id]}</p>
+                      )}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="w-full bg-gray-200 rounded-full h-3 mt-3 overflow-hidden">
+                      <div
+                        className="bg-alianza-amarillo h-3 rounded-full transition-all"
+                        style={{ width: `${porcentaje}%` }}
+                      />
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      ${meta.monto_actual} / ${meta.monto_meta} · {porcentaje}%
+                      {meta.fecha_prevista ? ` · meta: ${meta.fecha_prevista}` : ""}
+                    </p>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
 
-      {/* Meta ya completada: mensaje de logro */}
-      {!mostrarForm && meta && meta.completada && (
-        <p className="text-sm text-green-600 font-bold mb-2">
-          ✅ Meta cumplida: {meta.descripcion}
-        </p>
+      {/* Metas cumplidas (las últimas 3) */}
+      {!mostrarForm && cumplidas.length > 0 && (
+        <div className="mb-3">
+          {cumplidas.map((m) => (
+            <p key={m.id} className="text-sm text-green-600 font-bold mb-1">
+              ✅ Meta cumplida: {m.descripcion}
+            </p>
+          ))}
+        </div>
       )}
 
-      {/* Botón para crear meta nueva */}
-      {!mostrarForm && puedeCrearNueva && (
-        <button
-          onClick={() => setMostrarForm(true)}
-          className="text-sm font-bold text-alianza-azul underline"
-        >
+      {/* Botón para crear otra meta (puede haber varias vigentes a la vez) */}
+      {!mostrarForm && puedeCrear && (
+        <button onClick={() => setMostrarForm(true)} className="text-sm font-bold text-alianza-azul underline">
           + Crear una meta
         </button>
       )}
+      {!mostrarForm && !puedeCrear && (
+        <p className="text-xs text-gray-400">
+          Ya tienes {MAX_METAS_ACTIVAS} metas vigentes. Cumple una para crear otra.
+        </p>
+      )}
 
-      {/* Modal de felicitación al completar la meta */}
-      {mostrarModal && meta && (
+      {/* Modal de felicitación al completar una meta */}
+      {metaModal && (
         <ModalMeta
-          descripcion={meta.descripcion}
+          descripcion={metaModal.descripcion}
           onClose={cerrarModal}
           onCrearOtraMeta={() => {
             cerrarModal();

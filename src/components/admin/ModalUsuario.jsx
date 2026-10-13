@@ -200,7 +200,7 @@ function ModalUsuario({ usuario, onClose, onGuardado }) {
             <label className="block text-xs font-semibold text-gray-500 mb-1">
               Correo de contacto
               <span className="text-gray-300 font-normal">
-                {' '}(opcional, pero recomendado)
+                {' '}(opcional)
               </span>
             </label>
 
@@ -212,9 +212,7 @@ function ModalUsuario({ usuario, onClose, onGuardado }) {
               className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm"
             />
 
-            <p className="text-[11px] text-gray-400 mt-1">
-              Se usa para avisarle por correo cuando gane un diploma.
-            </p>
+
           </div>
 
 

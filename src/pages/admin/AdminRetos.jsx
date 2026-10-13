@@ -3,6 +3,7 @@ import { Plus, Trash2, Pencil, Coins, ImagePlus, X } from "lucide-react";
 import { supabase } from "../../supabaseClient";
 import { hoyMX, diasEntre } from "../../utils/fecha";
 import { comprimirImagen } from "../../utils/imagen";
+import ModalConfirmar from "../../components/admin/ModalConfirmar";
 
 const BUCKET = "retos-imagenes";
 
@@ -45,6 +46,9 @@ const AdminRetos = () => {
   const [form, setForm] = useState(VACIO);
   const [editandoId, setEditandoId] = useState(null);
   const [mostrarForm, setMostrarForm] = useState(false);
+  const [retoAEliminar, setRetoAEliminar] = useState(null); // reto pendiente de confirmar para eliminar
+  const [eliminando, setEliminando] = useState(false);
+  const [errorEliminar, setErrorEliminar] = useState("");
   const [guardando, setGuardando] = useState(false);
 
   // Imagen opcional: archivo nuevo elegido (aún sin subir) y su vista previa local.
@@ -199,10 +203,19 @@ const AdminRetos = () => {
     cargarRetos();
   };
 
-  const eliminar = async (reto) => {
-    if (!confirm(`¿Eliminar el reto "${reto.titulo}"? Esto borra también el progreso de los usuarios.`)) return;
-    const { error } = await supabase.from("retos").delete().eq("id", reto.id);
-    if (error) return alert("Error al eliminar: " + error.message);
+  // Al pulsar el bote de basura solo se abre el modal de confirmación
+  const eliminar = (reto) => {
+    setErrorEliminar("");
+    setRetoAEliminar(reto);
+  };
+
+  // Elimina el reto después de confirmar en el modal
+  const confirmarEliminar = async () => {
+    setEliminando(true);
+    const { error } = await supabase.from("retos").delete().eq("id", retoAEliminar.id);
+    setEliminando(false);
+    if (error) return setErrorEliminar("Error al eliminar: " + error.message);
+    setRetoAEliminar(null);
     cargarRetos();
   };
 
@@ -482,6 +495,19 @@ const AdminRetos = () => {
             );
           })}
         </div>
+      )}
+
+      {/* Modal de confirmación para eliminar un reto */}
+      {retoAEliminar && (
+        <ModalConfirmar
+          variante="peligro"
+          titulo="Eliminar reto"
+          mensaje={`¿Eliminar el reto "${retoAEliminar.titulo}"? Esto borra también el progreso de los usuarios.${errorEliminar ? `\n\n${errorEliminar}` : ""}`}
+          textoConfirmar="Eliminar"
+          cargando={eliminando}
+          onConfirmar={confirmarEliminar}
+          onCancelar={() => setRetoAEliminar(null)}
+        />
       )}
     </div>
   );

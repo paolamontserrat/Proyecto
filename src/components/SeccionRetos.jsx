@@ -47,7 +47,7 @@ const SeccionRetos = ({
     // Se asegura de que el usuario esté inscrito en todos los retos activos
     await supabase.rpc("asegurar_retos_usuario", { p_usuario_id: usuarioId });
 
-    const [{ data: retosData }, { data: metaData }] = await Promise.all([
+    const [{ data: retosData }, { data: metasData }] = await Promise.all([
       supabase
         .from("retos_usuario")
         .select(
@@ -57,11 +57,9 @@ const SeccionRetos = ({
         .eq("oculto", false),
       supabase
         .from("metas_personales")
-        .select("descripcion")
+        .select("descripcion, completada")
         .eq("usuario_id", usuarioId)
-        .order("creada_en", { ascending: false })
-        .limit(1)
-        .maybeSingle(),
+        .order("creada_en", { ascending: false }),
     ]);
 
     // El orden por fecha de creación se hace aquí: el order() de PostgREST sobre una
@@ -69,7 +67,14 @@ const SeccionRetos = ({
     setRetos(
       (retosData || []).filter((r) => r.reto?.activo).sort(porMasReciente)
     );
-    setUltimaMeta(metaData?.descripcion || null);
+    // Resumen de la tarjeta: cuántas metas vigentes hay (o la descripción si solo hay una)
+    const listaMetas = metasData || [];
+    const vigentes = listaMetas.filter((m) => !m.completada);
+    setUltimaMeta(
+      vigentes.length > 1
+        ? `${vigentes.length} metas vigentes`
+        : vigentes[0]?.descripcion || listaMetas[0]?.descripcion || null
+    );
     setCargando(false);
   }, [usuarioId]);
 
@@ -160,7 +165,7 @@ const SeccionRetos = ({
 
       <TarjetaVistosa
         emoji="🎯"
-        titulo="Mi meta"
+        titulo="Mis metas"
         resumen={cargando ? undefined : ultimaMeta ? acortar(ultimaMeta) : "Sin meta aún"}
         color="morado"
       >

@@ -76,7 +76,7 @@ function AdminCiclos() {
             {!cargando && ciclos.length === 0 && (
               <tr><td colSpan={5} className="p-4 text-center text-gray-400">Nadie ha completado 2 ciclos todavía</td></tr>
             )}
-            // Muestra la lista de ciclos completados con la información del usuario, los sellos obtenidos en cada año y el estado de entrega de los beneficios asociados.
+            {/* Muestra la lista de ciclos completados con la información del usuario, los sellos obtenidos en cada año y el estado de entrega de los beneficios asociados. */}
             {ciclos.map((c, i) => {
               const credito = beneficios[`${c.usuario_id}-${c.anio_inicio}`];
               const becaEntregada = credito?.tipo === 'beca' && credito?.entregado;
