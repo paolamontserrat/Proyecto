@@ -13,7 +13,7 @@ import actividades13 from "../../features/13/actividades/actividades";
 import actividades14 from "../../features/14/actividades/actividades";
 import actividades15 from "../../features/15/actividades/actividades";
 import actividades16 from "../../features/16/actividades/actividades";
-// import actividades17 from "../../features/17/actividades/actividades";
+import actividades17 from "../../features/17/actividades/actividades";
 
 import Footer from "../Footer";
 import CapturarCoordenadas from "./CapturarCoordenadas";
@@ -57,7 +57,7 @@ const ContenedorActividades = () => {
     14: actividades14,
     15: actividades15,
     16: actividades16,
-    // 17: actividades17,
+    17: actividades17,
   };
 
   const actividades = actividadesPorRango[rango] || [];
