@@ -32,5 +32,839 @@
             "Tus papás pueden obtener un esquema de crédito atractivo."
         ]
         }
+    ],
+    "pasos":[
+        {
+        "id": "1",
+        "titulo": "Estás cerca de los 18. ¿Estás listo para tomar el control de tu dinero?",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "secciones": [
+            {
+            "id": 1,
+            "parrafos": [
+                "Los 18 están cada vez más cerca.",
+                "Con ellos llegarán nuevas decisiones: estudiar, trabajar, ahorrar, comprar, emprender, utilizar servicios financieros y comenzar a construir tus propios proyectos.",
+                "No necesitas tener todo resuelto.",
+                "Pero sí puedes comenzar a prepararte.",
+                "Durante esta ruta enfrentarás decisiones similares a las que encontrarás en los próximos años."
+            ],
+            "preguntaFinal": "¿Comenzamos?",
+            "imagen": "/images/17/9.png"
+            }
+        ]
+        },
+        {
+        "id": "2",
+        "titulo": "¿ESTOY LISTO PARA MIS 18?",
+        "instruccion": "Antes de comenzar necesitamos saber algo: ¿Cómo manejas tu dinero actualmente? No hay respuestas buenas o malas. Contesta pensando en lo que realmente haces.",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "preguntas": [
+            {
+            "id": 1,
+            "pregunta": "Cuando recibo dinero... Sé aproximadamente cuánto puedo gastar.",
+            "imagen": "/images/17/8.png",
+            "opciones": [
+                { "texto": "Todavía no", "color": "rojo" },
+                { "texto": "A veces", "color": "amarillo" },
+                { "texto": "Casi siempre", "color": "verde" }
+            ]
+            },
+            {
+            "id": 2,
+            "pregunta": "Guardo una parte.",
+            "imagen": "/images/17/7.png",
+            "opciones": [
+                { "texto": "Todavía no", "color": "rojo" },
+                { "texto": "A veces", "color": "amarillo" },
+                { "texto": "Casi siempre", "color": "verde" }
+            ]
+            },
+            {
+            "id": 3,
+            "pregunta": "Sé en qué se me va el dinero.",
+            "imagen": "/images/17/10.png",
+            "opciones": [
+                { "texto": "Todavía no", "color": "rojo" },
+                { "texto": "A veces", "color": "amarillo" },
+                { "texto": "Casi siempre", "color": "verde" }
+            ]
+            },
+            {
+            "id": 4,
+            "pregunta": "Tengo alguna meta financiera.",
+            "imagen": "/images/17/11.png",
+            "opciones": [
+                { "texto": "Todavía no", "color": "rojo" },
+                { "texto": "Más o menos", "color": "amarillo" },
+                { "texto": "Sí", "color": "verde" }
+            ]
+            },
+            {
+            "id": 5,
+            "pregunta": "Pienso antes de realizar una compra.",
+            "imagen": "/images/17/12.png",
+            "opciones": [
+                { "texto": "Casi nunca", "color": "rojo" },
+                { "texto": "A veces", "color": "amarillo" },
+                { "texto": "Casi siempre", "color": "verde" }
+            ]
+            }
+        ],
+        "mensajesSemaforo": {
+            "rojo": "TENEMOS TIEMPO PARA MEJORAR",
+            "amarillo": "VAS POR BUEN CAMINO",
+            "verde": "LLEVAS MUY BIEN TUS FINANZAS"
+        },
+        "textoFinal": [
+            "Este es solamente tu punto de partida.",
+            "Durante las siguientes estaciones descubrirás herramientas que pueden ayudarte a mejorar. Cuando termines, veremos cuánto avanzaste.",
+            "En Caja Popular Alianza queremos que llegues a esta etapa con más herramientas para tomar esas decisiones. Ser socio puede significar contar con una institución que te acompañe mientras comienzas a construir tus propias metas financieras."
+        ]
+        },
+        {
+        "id": "3",
+        "titulo": "TU PRIMER MES CON TU PROPIO DINERO",
+        "montoInicial": 3500,
+        "tiempoLimiteSegundos": 180,
+        "fondo": "/images/17/Fondo171.jpeg",
+        "introduccion": "Cumplir 18 no significa solamente poder hacer más cosas por tu cuenta, también significa comenzar a tomar decisiones que antes dependían de otras personas. Una de ellas puede ser elegir dónde ahorrar, cómo administrar tu dinero y qué institución quieres que te acompañe.",
+        "imagen": "/images/17/15.png",
+        "distribucionInicial": {
+            "subtitulo": "Actividad: SOBREVIVE A TU PRIMER MES",
+            "instruccion": "Imagina que tienes 18 años. Recibiste $3,500.",
+            "imagenDinero": "/images/17/16.png",
+            "pregunta": "Este dinero tendrá que acompañarte durante las próximas semanas. ¿Cómo lo administrarías?",
+            "indicacion": "Antes de empezar: DISTRIBUYE TU DINERO",
+            "categorias": [
+            { "id": "ahorro", "label": "Ahorro" },
+            { "id": "diversion", "label": "Diversión" },
+            { "id": "gastos", "label": "Gastos necesarios" },
+            { "id": "emergencias", "label": "Emergencias" }
+            ]
+        },
+        "eventos": [
+            {
+            "id": 1,
+            "titulo": "EVENTO 1: Salida con amigos",
+            "descripcion": "Tus amigos quieren salir el fin de semana.",
+            "costo": 350,
+            "imagen": "/images/17/56.png",
+            "opciones": [
+                { "texto": "SÍ, IR", "tipo": "gasto", "categoria": "diversion", "monto": 350 },
+                { "texto": "NO IR", "tipo": "ninguno", "monto": 0 }
+            ]
+            },
+            {
+            "id": 2,
+            "titulo": "EVENTO 2: Oferta de Audífonos",
+            "descripcion": "Los audífonos que querías tienen 30% de descuento.",
+            "costo": 750,
+            "imagen": "/images/17/57.png",
+            "opciones": [
+                { "texto": "COMPRAR", "tipo": "gasto", "categoria": "diversion", "monto": 750 },
+                { "texto": "PASAR", "tipo": "ninguno", "monto": 0 }
+            ]
+            },
+            {
+            "id": 3,
+            "titulo": "EVENTO 3: Ingreso Extra",
+            "descripcion": "Hiciste un pequeño trabajo y ganaste $500.",
+            "monto": 500,
+            "imagen": "/images/17/58.png",
+            "opciones": [
+                { "texto": "GASTAR EN DIVERSIÓN", "tipo": "ingreso", "destino": "diversion", "monto": 500 },
+                { "texto": "AHORRAR UNA PARTE", "tipo": "ingreso", "destino": "ahorro", "monto": 500 }
+            ]
+            },
+            {
+            "id": 4,
+            "titulo": "EVENTO 4: Imprevisto",
+            "descripcion": "Necesitas pagar un gasto que no habías contemplado.",
+            "costo": 600,
+            "imagen": "/images/17/59.png",
+            "opciones": [
+                { "texto": "PAGAR DE EMERGENCIAS", "tipo": "gasto_emergencia", "monto": 600 }
+            ]
+            }
+        ]
+        },
+        {
+        "id": "4",
+        "titulo": "Tu dinero necesita un lugar",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "estacion": "Tercer estación: TU DINERO NECESITA UN LUGAR",
+        "imagenEstacion": "/images/17/17.png",
+        "descripcionEstacion": "Aprender a darle un destino adecuado a tus ahorros es la clave para alcanzar tus metas.",
+        "textoBotonFinalizar": "Continuar",
+        "reflexion": {
+            "pregunta": "¿Tienes una meta que quieres alcanzar?",
+            "subtexto": "Tal vez comprar algo que necesites, continuar con tus estudios, viajar, emprender o simplemente tener dinero disponible para una emergencia.",
+            "conclusion": "Ahorrar no tiene que comenzar con grandes cantidades; lo importante es desarrollar el hábito y aprender a darle un propósito a tu dinero. 😎"
+        },
+        "imagenMetas": "/images/17/12.png",
+        "reto": {
+            "titulo": "RETO: ¿QUÉ HARÍAS CON $5,000?",
+            "pregunta": "Imagina que durante varios meses lograste juntar: $5,000. ¿Qué harías?:",
+            "imagen": "/images/17/58.png",
+            "retroalimentacionGenerica": "La opción más completa sería la D. ¡Buena decisión!",
+            "opciones": [
+            {
+                "id": "A",
+                "texto": "A) Guardarlos todos en casa.",
+                "feedback": "Guardarlos en casa es una opción, pero definir la meta e investigar (Opción D) es la alternativa más completa."
+            },
+            {
+                "id": "B",
+                "texto": "B) Gastarlos porque para eso ahorré.",
+                "feedback": "¡Cuidado! Gastarlo todo sin planificar te dejará sin respaldo. Definir una meta primero te ayuda a usarlo mejor."
+            },
+            {
+                "id": "C",
+                "texto": "C) Buscar una institución financiera donde pueda mantener y administrar mi dinero.",
+                "feedback": "¡Es una buena idea! Sin embargo, definir primero tu meta exacta (Opción D) te ayudará a elegir la mejor opción."
+            },
+            {
+                "id": "D",
+                "texto": "D) Primero definir qué quiero hacer con ellos y después investigar mis opciones.",
+                "feedback": "La opción más completa sería D. ¡Buena decisión!"
+            }
+            ]
+        },
+        "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "Conoce antes de elegir. Compara opciones y pregunta antes de contratar cualquier producto financiero.",
+            "imagen": "/images/17/11.png"
+        }
+        },
+        {
+        "id": "5",
+        "titulo": "¿Y Caja Popular Cerano?",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "prefacio": "Antes de elegir dónde colocar tu dinero, primero debes saber qué quieres conseguir con él y después comparar las alternativas disponibles.",
+        "estacion": "¿Y CAJA POPULAR CERANO?",
+        "descripcionEstacion": "Una cooperativa de ahorro y préstamo es una opción que puedes conocer al comenzar tu vida financiera. Al convertirte en socio no solamente utilizas determinados productos y servicios: formas parte de la cooperativa y tienes acceso a múltiples beneficios.",
+        "imagenEstacion": "/images/17/19.png"
+        },
+        {
+        "id": 6,
+        "fondo": "/images/17/Fondo171.jpeg",
+        "titulo": "Alianzito completa la sopa de letras",
+        "palabras": [
+            { "texto": "META", "inicio": [0, 0], "fin": [0, 3] },
+            { "texto": "AHORRO", "inicio": [0, 11], "fin": [0, 16] },
+            { "texto": "PLAN", "inicio": [6, 16], "fin": [9, 16] },
+            { "texto": "FUTURO", "inicio": [2, 10], "fin": [2, 15] },
+            { "texto": "OBJETIVO", "inicio": [3, 3], "fin": [3, 10] },
+            { "texto": "INGRESO", "inicio": [14, 3], "fin": [8, 9] },
+            { "texto": "RECURSOS", "inicio": [17, 9], "fin": [17, 16] },
+            { "texto": "PRESUPUESTO", "inicio": [11, 5], "fin": [11, 15] },
+            { "texto": "DECISION", "inicio": [14, 5], "fin": [14, 12] },
+            { "texto": "PRIORIDAD", "inicio": [1, 2], "fin": [9, 2] },
+            { "texto": "INVERSION", "inicio": [19, 0], "fin": [19, 8] },
+            { "texto": "PROYECTO", "inicio": [11, 19], "fin": [18, 19] }
+        ],
+        "grid": [
+            ["M","E","T","A","R","O","J","D","X","C","S","A","H","O","R","R","O","I","R","C"],
+            ["B","A","P","M","I","N","T","O","N","R","K","A","D","M","I","P","T","O","N","R"],
+            ["E","R","R","J","D","I","T","D","B","E","F","U","T","U","R","O","O","D","F","I"],
+            ["E","M","I","O","B","J","E","T","I","V","O","M","Y","N","O","R","N","U","H","C"],
+            ["H","F","O","H","B","B","N","L","O","K","E","F","E","H","B","B","N","L","O","K"],
+            ["D","Z","R","O","U","R","R","E","G","E","R","V","A","O","U","R","I","Y","C","I"],
+            ["U","P","I","K","B","O","S","J","K","T","R","I","R","K","B","O","P","J","K","N"],
+            ["B","H","D","T","R","A","G","P","E","E","C","D","E","A","I","B","L","W","E","S"],
+            ["F","O","A","T","B","A","L","L","S","O","F","T","S","K","T","O","A","L","Y","T"],
+            ["U","M","D","Z","A","T","O","T","S","H","U","M","E","Z","A","T","N","A","G","A"],
+            ["S","T","A","V","F","Q","J","E","X","C","S","T","R","V","F","Q","R","D","X","O"],
+            ["B","A","O","M","R","P","R","E","S","U","P","U","E","S","T","O","I","O","N","P"],
+            ["E","Q","O","L","G","G","E","D","F","W","E","Q","E","L","G","M","D","D","F","R"],
+            ["E","M","E","F","N","R","N","U","H","C","I","Y","O","Z","T","U","A","E","H","O"],
+            ["L","I","N","I","L","D","E","C","I","S","I","O","N","A","I","B","D","L","O","Y"],
+            ["D","Z","Y","O","U","R","I","C","C","E","D","Z","O","O","K","R","I","Y","C","E"],
+            ["U","P","J","K","B","O","T","T","S","I","C","H","J","E","T","O","S","J","K","C"],
+            ["U","D","S","K","I","B","F","I","E","R","E","C","U","R","S","O","S","W","E","T"],
+            ["F","O","O","T","B","A","L","W","Y","D","S","P","O","H","L","F","X","L","Y","O"],
+            ["I","N","V","E","R","S","I","O","N","T","O","M","P","Z","A","T","O","A","G","H"]
+        ]
+        },
+        {
+        "id": "7",
+        "titulo": "De algún día a voy a lograrlo",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "estacion": "DE \"ALGÚN DÍA\" A \"VOY A LOGRARLO\"",
+        "imagenEstacion": "/images/17/20.png",
+        "pasos": [
+            {
+            "numero": "1",
+            "titulo": "META",
+            "imagen": "/images/17/21.png"
+            },
+            {
+            "numero": "2",
+            "titulo": "MEDIOS",
+            "imagen": "/images/17/16.png"
+            },
+            {
+            "numero": "3",
+            "titulo": "LOGRO",
+            "imagen": "/images/17/20.png"
+            }
+        ],
+        "explicacion": "Tener una meta es solamente el primer paso. Para alcanzarla necesitas saber cuánto cuesta, cuánto puedes destinar y cuánto tiempo necesitarás. Cuando aprendes a organizar y planificar tu dinero, tus objetivos dejan de ser solamente deseos y empiezan a convertirse en proyectos.",
+        "mensajeCooperativa": "Caja Popular Alianza puede acompañarte mientras cumples esos deseos en realidad. Conforme tus necesidades y metas cambien, también podrás conocer las distintas alternativas que la cooperativa tiene para sus socios y elegir aquellas que realmente se adapten a tu situación.",
+        "imagenCooperativa": "/images/17/22.png",
+        "textoBotonFinalizar": "Continuar"
+        },
+        {
+        "id": "8",
+        "titulo": "El recorrido financiero",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "descripcionActividad": "Ayuda al carrito de Alianzitocon con una situación donde debes decidir si GASTAR o AHORRAR para llegar a lameta. Salimos con $1000 pesos de inicio.",
+        "saldoInicial": 1000,
+        "imagenCarro": "/images/17/9.png",
+        "mecanica": {
+            "consumibles": [
+            { "nombre": "Ahorro", "efecto": "aumenta tus recursos." },
+            { "nombre": "Bono", "efecto": "avanzas más rápido." },
+            { "nombre": "Buena decisión", "efecto": "avanzas más rápido." }
+            ],
+            "obstaculos": [
+            { "nombre": "Gasto hormiga", "efecto": "pierdes recursos." },
+            { "nombre": "Compra impulsiva", "efecto": "retrocedes." },
+            { "nombre": "Mala decisión", "efecto": "retrocedes." }
+            ]
+        },
+        "preguntas": [
+            {
+            "id": 1,
+            "situacion": "Me dieron unos tíos $500 pesos por ayudar en casa.",
+            "monto": 500,
+            "retroalimentacionGasto": "Mala decisión 🚨: Al gastar este ingreso extra no estás aumentando tus recursos.",
+            "retroalimentacionAhorro": "¡Enhorabuena! ¡Qué excelente decisión! 🎉 Sumas este dinero a tus ahorros."
+            },
+            {
+            "id": 2,
+            "situacion": "Una bebida para el camino, ¿qué tanto puede afectar?",
+            "monto": 30,
+            "retroalimentacionGasto": "Gasto hormiga 🚨: Los pequeños antojos diarios suman grandes cifras al final del mes.",
+            "retroalimentacionAhorro": "¡Enhorabuena! ¡Qué excelente decisión! 🎉 Evitaste un gasto innecesario."
+            },
+            {
+            "id": 3,
+            "situacion": "Mi papá me dio $200 por mi domingo.",
+            "monto": 200,
+            "retroalimentacionGasto": "Mala decisión 🚨: Podrías haber guardado al menos una parte.",
+            "retroalimentacionAhorro": "¡Enhorabuena! ¡Qué excelente decisión! 🎉 Tu dinero guardado sigue creciendo."
+            },
+            {
+            "id": 4,
+            "situacion": "Solo voy a gastar $20 en este juego.",
+            "monto": 20,
+            "retroalimentacionGasto": "Gasto hormiga 🚨: Compras digitales pequeñas de forma recurrente desgastan tus ahorros.",
+            "retroalimentacionAhorro": "¡Enhorabuena! ¡Qué excelente decisión! 🎉 Mantuviste tu disciplina financiera."
+            },
+            {
+            "id": 5,
+            "situacion": "La oferta en el Buen Fin es tentadora pero ya tengo suficientes tenis.",
+            "monto": 800,
+            "retroalimentacionGasto": "Compra impulsiva 🚨: Comprar algo que no necesitas solo por estar en oferta frena tus metas.",
+            "retroalimentacionAhorro": "¡Enhorabuena! ¡Qué excelente decisión! 🎉 Identificaste que no lo necesitabas."
+            },
+            {
+            "id": 6,
+            "situacion": "Ya estoy en la tienda... mejor compro esto también.",
+            "monto": 150,
+            "retroalimentacionGasto": "Compra impulsiva 🚨: Agregar objetos al carrito por antojo al momento de pagar.",
+            "retroalimentacionAhorro": "¡Enhorabuena! ¡Qué excelente decisión! 🎉 Te apegaste a tu lista inicial."
+            },
+            {
+            "id": 7,
+            "situacion": "Comprar un helado total solo son $10 no me afecta.",
+            "monto": 10,
+            "retroalimentacionGasto": "Gasto hormiga 🚨: Esos $10 parecen poco, pero repetidos diario marcan diferencia.",
+            "retroalimentacionAhorro": "¡Enhorabuena! ¡Qué excelente decisión! 🎉 Cuidaste tus monedas."
+            },
+            {
+            "id": 8,
+            "situacion": "Un cafecito no cuenta, son solo $30.",
+            "monto": 30,
+            "retroalimentacionGasto": "Gasto hormiga 🚨: Pequeñas compras no planificadas se acumulan rápidamente.",
+            "retroalimentacionAhorro": "¡Enhorabuena! ¡Qué excelente decisión! 🎉 Preferiste cuidar tu saldo."
+            },
+            {
+            "id": 9,
+            "situacion": "Ropa que está en oferta, sería tonto no aprovecharla.",
+            "monto": 350,
+            "retroalimentacionGasto": "Compra impulsiva 🚨: Ofertas no planificadas reducen tu capacidad de ahorro real.",
+            "retroalimentacionAhorro": "¡Enhorabuena! ¡Qué excelente decisión! 🎉 Priorizaste tus metas financieras."
+            }
+        ],
+        "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "texto": "No gastes todo lo que recibes. Separa una parte para ahorrar antes de comenzar a gastar.",
+            "imagen": "/images/17/10.png"
+        },
+        "textoBotonFinalizar": "Continuar"
+        },
+        {
+        "id": "9",
+        "titulo": "UN MUNDO DE OPCIONES PARA TI",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "descripcionEstacion": "Cuando pensamos en una institución financiera, muchas veces se nos viene a la mente solamente ahorrar y guardar dinero. Sin embargo, ser socio de una cooperativa puede darte acceso a diferentes productos y servicios diseñados para atender distintas necesidades financieras.\n\nContamos con alternativas para nuestros socios que puedes conocer ahora. Informarte desde ya sobre ellas te permitirá llegar a los 18 con una mayor claridad y saber qué opciones disponibles tienes para ti cuando comiences a manejar tus propios recursos.",
+        "imagenEstacion": "/images/17/25.png",
+        "imagenOpciones": "/images/17/60.png",
+        "actividad": {
+            "titulo": "Actividad: \"Descubre al impostor\"",
+            "instrucciones": "Seis jóvenes, seis formas diferentes de manejar su dinero... pero algo no encaja. Cada uno tiene sus propios hábitos, decisiones y maneras de organizarse. A simple vista, todos parecen tener una buena relación con su dinero, pero uno de ellos oculta un hábito que podría ponerlo en problemas. Lee cuidadosamente las historias, analiza sus comportamientos y encuentra al impostor antes de que sea demasiado tarde.",
+            "personajes": [
+            {
+                "id": "rodrigo",
+                "nombre": "Rodrigo",
+                "descripcion": "Tiene el hábito de guardar una parte de lo que recibe. Aunque todavía no tiene mucho ahorro, intenta aumentarlo poco a poco para estar preparado ante situaciones inesperadas.",
+                "imagen": "/images/17/26.png",
+                "esImpostor": false,
+                "feedback": "Rodrigo no es el impostor. Él tiene el hábito de ahorrar para imprevistos."
+            },
+            {
+                "id": "camila",
+                "nombre": "Camila",
+                "descripcion": "Lleva un registro de sus gastos y procura conservar una parte de su dinero sin gastar. Si aparece un imprevisto, primero analiza cuánto puede pagar sin afectar sus gastos importantes.",
+                "imagen": "/images/17/27.png",
+                "esImpostor": false,
+                "feedback": "Camila no es la impostora. Analiza y registra sus finanzas para no endeudarse."
+            },
+            {
+                "id": "sofia",
+                "nombre": "Sofía",
+                "descripcion": "Recibe $1,500 al mes. Guarda $200 y procura no tocar ese dinero, ya que quiere tenerlo disponible si surge algún gasto inesperado.",
+                "imagen": "/images/17/28.png",
+                "esImpostor": false,
+                "feedback": "Sofía no es la impostora. Destina una cantidad fija mensual a un fondo de reserva."
+            },
+            {
+                "id": "diego",
+                "nombre": "Diego",
+                "descripcion": "Cuando recibe dinero, primero cubre sus gastos necesarios y después guarda una parte. Si tiene un gasto inesperado, revisa qué puede ajustar antes de gastar sus ahorros.",
+                "imagen": "/images/17/29.png",
+                "esImpostor": false,
+                "feedback": "Diego no es el impostor. Prioriza sus gastos necesarios y ajusta antes de tocar ahorros."
+            },
+            {
+                "id": "abril",
+                "nombre": "Abril",
+                "descripcion": "Tiene una meta de ahorro y aparta una cantidad cada vez que recibe dinero. También intenta mantener una pequeña cantidad disponible para situaciones que no tenía contempladas.",
+                "imagen": "/images/17/30.png",
+                "esImpostor": false,
+                "feedback": "Abril no es la impostora. Ahorra tanto para metas como para imprevistos."
+            },
+            {
+                "id": "santiago",
+                "nombre": "Santiago",
+                "descripcion": "Si recibe dinero extra, normalmente lo gasta en cosas que quiere. Considera que, si algún día surge un imprevisto, simplemente encontrará la manera de conseguir dinero en ese momento.",
+                "imagen": "/images/17/31.png",
+                "esImpostor": true,
+                "feedback": "¡Encontraste al impostor! 🎉 Santiago no ahorra para emergencias y confía en improvisar cuando surja un problema, lo cual pone en riesgo sus finanzas."
+            }
+            ]
+        },
+        "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "Ponles fecha a tus metas. Una meta con cantidad y fecha es mucho más fácil de alcanzar.",
+            "imagen": "/images/17/13.png"
+        },
+        "textoBotonFinalizar": "Continuar"
+        },
+        {
+        "id": "10",
+        "titulo": "CUANDO TUS PLANES NECESITAN UN IMPULSO",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "imagenEstacion": "/images/17/33.png",
+        "reflexion": {
+            "texto": "En algún momento puede que quieras comprar algo importante, iniciar algún negocio o realizar algún proyecto para el cual tus ahorros todavía no sean suficientes. En ese tipo de situaciones, conocer las distintas opciones de financiamiento puede ayudarte a analizar qué alternativas existen y cuáles son convenientes para ti.\n\nComo socio de Caja Popular Alianza, podrás conocer las opciones de financiamiento que la cooperativa ofrece, y si cumples con los requisitos correspondientes, analizar si alguna puede ayudarte a alcanzar tu proyecto. Recuerda que solicitar financiamiento siempre implica una responsabilidad y debe ser una decisión bien analizada.",
+            "imagen": "/images/17/34.png"
+        },
+        "reto": {
+            "titulo": "RETO: ¿LO PEDIRÍAS?",
+            "descripcion": "Quieres comprar una computadora para tus estudios.",
+            "precio": 18000,
+            "ahorrado": 10000,
+            "faltante": 8000,
+            "pregunta": "Te ofrecen financiamiento. ¿Qué información necesitas conocer antes de aceptar? Selecciona todas las opciones indispensables:",
+            "imagen": "/images/17/35.png",
+            "opciones": [
+            { "id": "1", "texto": "Cuánto pagaré en total" },
+            { "id": "2", "texto": "Cuánto pagaré periódicamente" },
+            { "id": "3", "texto": "Durante cuánto tiempo" },
+            { "id": "4", "texto": "Intereses y otros costos aplicables" },
+            { "id": "5", "texto": "Qué pasa si no pago" },
+            { "id": "6", "texto": "Si puedo pagarlo con mis ingresos" }
+            ],
+            "conclusion": "¡EXACTO! Un crédito no es dinero extra. Es dinero que tendrás que devolver bajo determinadas condiciones.\n\nFrase clave: No preguntes solamente \"¿cuánto me prestan?\". Pregunta también \"¿cuánto terminaré pagando y puedo cumplirlo?\"."
+        },
+        "solicitudDemo": {
+            "titulo": "Llena tu solicitud para darte una idea de los datos que te pedirán en cualquier crédito",
+            "subtitulo": "Aprende cómo solicitar un crédito (Simulador demostrativo)",
+            "aviso": "Esta solicitud es únicamente DEMOSTRATIVA y tiene fines educativos.",
+            "opcionesNecesidad": [
+            "Estudiar",
+            "Comprar una computadora",
+            "Emprender un negocio",
+            "Comprar algo que necesito",
+            "Otro"
+            ],
+            "opcionesIngreso": [
+            "Trabajo",
+            "Negocio",
+            "Apoyo familiar",
+            "Otro"
+            ]
+        },
+        "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "Usa el crédito responsablemente. Antes de solicitarlo, asegúrate de entender cuánto pagarás y si realmente lo necesitas.",
+            "imagen": "/images/17/23.png"
+        }
+        },
+        {
+        "id": "11",
+        "titulo": "PROTEGE TU VIDA FINANCIERA",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "imagenEstacion": "/images/17/36.png",
+        "reflexion": "Tener dinero también implica aprender a protegerlo. Cuidar tus datos personales, utilizar opciones seguras, revisar las condiciones de los servicios que contratas y evitar decisiones impulsivas son hábitos que debes adquirir para ayudarte durante tu vida financiera.\nCon nosotros, además de encontrar productos y servicios financieros, puedes acercarte a una institución donde la educación y el manejo responsable de tus recursos pueden formar parte de tu camino como socio. Conocer antes de decidir también es parte de cuidar tu dinero.",
+        "imagenReflexion": "/images/17/24.png",
+        "actividadRelacionar": {
+            "titulo": "Relaciona conceptos",
+            "instrucciones": "Lee cada definición y selecciona la opción que corresponde correctamente al concepto financiero.",
+            "preguntas": [
+            {
+                "id": "c1",
+                "definicion": "Aquello que consideras más importante al momento de decidir cómo utilizar tus recursos.",
+                "respuestaCorrecta": "Prioridad",
+                "opciones": ["Decisión financiera", "Prioridad", "Comparación"]
+            },
+            {
+                "id": "c2",
+                "definicion": "Buscar una distribución adecuada entre lo que necesitas, quieres y puedes permitirte.",
+                "respuestaCorrecta": "Equilibrio",
+                "opciones": ["Equilibrio", "Planificación", "Crecimiento financiero"]
+            },
+            {
+                "id": "c3",
+                "definicion": "Elección que puede afectar tus recursos, metas o situación económica.",
+                "respuestaCorrecta": "Decisión financiera",
+                "opciones": ["Prevención", "Riesgo financiero", "Decisión financiera"]
+            },
+            {
+                "id": "c4",
+                "definicion": "Organizar con anticipación tus recursos y acciones para alcanzar un objetivo.",
+                "respuestaCorrecta": "Planificación",
+                "opciones": ["Planificación", "Privacidad", "Responsabilidad financiera"]
+            },
+            {
+                "id": "c5",
+                "definicion": "Revisar diferentes opciones antes de elegir dónde comprar, contratar o utilizar un servicio.",
+                "respuestaCorrecta": "Comparación",
+                "opciones": ["Equilibrio", "Comparación", "Prioridad"]
+            },
+            {
+                "id": "c6",
+                "definicion": "Situación que puede provocar una pérdida de dinero o afectar tus recursos.",
+                "respuestaCorrecta": "Riesgo financiero",
+                "opciones": ["Riesgo financiero", "Prevención", "Decisión financiera"]
+            },
+            {
+                "id": "c7",
+                "definicion": "Cuidado de tu información personal y financiera para evitar que otras personas hagan un uso indebido de ella.",
+                "respuestaCorrecta": "Privacidad",
+                "opciones": ["Responsabilidad financiera", "Privacidad", "Planificación"]
+            },
+            {
+                "id": "c8",
+                "definicion": "Acciones que realizas con anticipación para reducir la posibilidad de tener problemas financieros.",
+                "respuestaCorrecta": "Prevención",
+                "opciones": ["Prevención", "Crecimiento financiero", "Prioridad"]
+            },
+            {
+                "id": "c9",
+                "definicion": "Proceso de mejorar poco a poco tu capacidad para administrar y aprovechar tus recursos.",
+                "respuestaCorrecta": "Crecimiento financiero",
+                "opciones": ["Equilibrio", "Crecimiento financiero", "Comparación"]
+            },
+            {
+                "id": "c10",
+                "definicion": "Capacidad de asumir las consecuencias de tus decisiones y actuar pensando en tu bienestar futuro.",
+                "respuestaCorrecta": "Responsabilidad financiera",
+                "opciones": ["Responsabilidad financiera", "Riesgo financiero", "Privacidad"]
+            }
+            ]
+        },
+        "simulacionFraude": {
+            "titulo": "SIMULACIÓN DE FRAUDE",
+            "mensajeTexto": {
+            "remitente": "MENSAJES",
+            "texto": "\"Detectamos un problema con tu cuenta. Ingresa AHORA al siguiente enlace para evitar que sea bloqueada.\"",
+            "pregunta": "¿Qué haces?",
+            "opciones": [
+                { "id": "A", "texto": "A) Entro al enlace." },
+                { "id": "B", "texto": "B) Respondo el mensaje." },
+                { "id": "C", "texto": "C) No entro. Contacto directamente a la institución mediante sus canales oficiales." }
+            ],
+            "respuestaCorrecta": "C"
+            },
+            "llamada": {
+            "remitente": "LLAMADA DESCONOCIDA",
+            "texto": "\"Somos de tu institución financiera. Necesitamos el código que acaba de llegar a tu celular.\"",
+            "pregunta": "¿Lo compartes?",
+            "opciones": [
+                { "id": "SI", "texto": "SÍ" },
+                { "id": "NO", "texto": "NO" }
+            ],
+            "respuestaCorrecta": "NO",
+            "retroalimentacion": "¡Bien! Tus contraseñas, NIP y códigos de seguridad deben mantenerse protegidos."
+            }
+        },
+        "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "Protege tus datos financieros. Nunca compartas contraseñas, NIP o códigos de seguridad.",
+            "imagen": "/images/17/37.png"
+        }
+        },
+        {
+        "id": "12",
+        "titulo": "AQUÍ NO ERES SOLO UN CLIENTE",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "preguntaEstacion": "¿QUÉ SIGNIFICA SER SOCIO?",
+        "subtextoEstacion": "Cuando escuchas \"ser socio de una cooperativa\", ¿qué crees que significa?",
+        "tituloAnimacion": "SER SOCIO ES FORMAR PARTE",
+        "videoUrl": "/images/17/Video.mp4",
+        "actividadMochila": {
+            "titulo": "¿Qué llevarías en tu mochila?",
+            "instrucciones": "Imagina que estás a punto de cumplir 18 y comenzarás una nueva etapa de tu vida. Solo puedes llevar contigo 5 elementos financieros de los que aprendiste durante el recorrido. Selecciona los que consideres más importantes para afrontar tu futuro.",
+            "limiteSeleccion": 5,
+            "elementos": [
+            "AHORRO",
+            "BUENAS DECISIONES",
+            "COMPARACIÓN DE OPCIONES",
+            "PRESUPUESTO",
+            "PREVENCIÓN",
+            "PLANIFICACIÓN",
+            "METAS",
+            "SEGURIDAD",
+            "CONOCER INSTITUCIONES FINANCIERAS",
+            "PRIORIDAD"
+            ],
+            "imagenMochila": "/images/17/61.png"
+        },
+        "tipFinanciero": {
+            "titulo": "Tip financiero:",
+            "mensaje": "Pregunta cuando tengas dudas. En Caja Popular Alianza, conocer antes de decidir también es parte de ser un buen socio.",
+            "imagen": "/images/17/38.png"
+        }
+        },
+        {
+        "id": "13",
+        "titulo": "HOY COMIENZAS, MAÑANA PUEDES LLEGAR MÁS LEJOS",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "descripcionEstacion": "Tus necesidades financieras de hoy probablemente sean muy diferentes a las que tendrás dentro de diez, veinte e incluso treinta años. Primero vienen las metas personales relativamente accesibles, después vienen proyectos más grandes como un emprendimiento, un automóvil o incluso una vivienda.\nPor eso, conocer desde ahora a Caja Popular Cerano puede ayudarte a identificar una institución que pueda acompañarte durante diferentes etapas de la vida. Tus metas cambiarán, y tu manera de administrar el dinero también, pero contar con opciones y tomar decisiones informadas nunca dejará de ser importante.",
+        "imagenEstacion": "/images/17/39.png",
+        "actividadAcompanamiento": {
+            "titulo": "Creo que Caja Popular Cerano podría acompañarme",
+            "instrucciones": "Imagina que ya tienes 18 años y comienzas una nueva etapa. Lee las siguientes situaciones y marca aquellas en las que crees que Caja Popular Cerano podría acompañarte:",
+            "opciones": [
+            { "id": "1", "texto": "Quiero comenzar a ahorrar para una meta." },
+            { "id": "2", "texto": "Necesito organizar mejor mi dinero." },
+            { "id": "3", "texto": "Tengo un proyecto que quiero hacer realidad." },
+            { "id": "4", "texto": "Quiero conocer opciones para manejar mis ahorros." },
+            { "id": "5", "texto": "Necesito prepararme para un gasto importante." },
+            { "id": "6", "texto": "Quiero conocer las opciones de financiamiento disponibles." },
+            { "id": "7", "texto": "Quiero aprender más sobre cómo manejar mi dinero." },
+            { "id": "8", "texto": "Quiero formar parte de una comunidad de socios." }
+            ]
+        },
+        "viajaAlFuturo": {
+            "titulo": "VIAJA AL FUTURO",
+            "subtitulo": "Tienes 17 años. Imagina que puedes hablar con tu versión de 25 años. ¿Qué te gustaría que hubiera logrado?",
+            "imagenEspejo": "/images/17/41.png",
+            "opcionesLogros": [
+            { "id": "l1", "texto": "Terminar mis estudios" },
+            { "id": "l2", "texto": "Tener trabajo" },
+            { "id": "l3", "texto": "Tener un negocio" },
+            { "id": "l4", "texto": "Comprar un vehículo" },
+            { "id": "l5", "texto": "Comenzar un proyecto de vivienda" },
+            { "id": "l6", "texto": "Tener ahorros" },
+            { "id": "l7", "texto": "Viajar" },
+            { "id": "l8", "texto": "Tener estabilidad financiera" }
+            ],
+            "subtituloSegundaParte": "Ahora imagina que tu \"yo\" de 25 años pudiera hablar contigo. ¿Qué crees que te pediría comenzar hoy?",
+            "imagenEspejo2": "/images/17/42.png",
+            "opcionesPeticiones": [
+            { "id": "p1", "texto": "Ahorrar" },
+            { "id": "p2", "texto": "Organizar mis gastos" },
+            { "id": "p3", "texto": "Establecer metas" },
+            { "id": "p4", "texto": "Aprender sobre finanzas" },
+            { "id": "p5", "texto": "Conocer instituciones financieras" },
+            { "id": "p6", "texto": "Evitar malas decisiones" }
+            ]
+        },
+        "mensajeFinal": {
+            "titulo": "Tu futuro no comienza a los 25",
+            "mensaje": "Comienza con algunas de las decisiones que tomas desde ahora. Conocer desde joven una cooperativa puede ayudarte a entender las herramientas financieras que podrías utilizar conforme tus metas cambien.",
+            "imagen": "/images/17/43.png"
+        }
+        },
+        {
+        "id": "14",
+        "titulo": "LA DECISIÓN QUE SIGUE ES TUYA",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "descripcionEstacion": "Llegaste al final de este pasaporte, pero en realidad apenas estás comenzando tu camino financiero. Dentro de poco tendrás la oportunidad de tomar decisiones que antes no dependían completamente de ti. Ahorrar, establecer metas, cuidar tu dinero y elegir con quién quieres manejarlo serán parte de esta nueva etapa.\nCaja Popular Cerano quiere acompañarte en este comienzo. Cuando cumplas 18 años, podrás decidir si quieres formar parte de nuestra comunidad de socios, conocer nuestras opciones y comenzar a construir tu futuro financiero con una institución que puede estar presente en tus próximos proyectos.",
+        "imagenEstacion": "/images/17/44.png",
+        "actividadRuta": {
+            "titulo": "Mini actividad \"Traza tu ruta\"",
+            "instrucciones": "Tu siguiente destino depende de las decisiones que tomes en el camino. Imagina cómo te gustaría que fuera tu vida financiera durante los próximos años y construye una pequeña ruta para acercarte a ella.",
+            "pasos": [
+            {
+                "id": "paso1",
+                "numero": "1",
+                "label": "MI DESTINO",
+                "pregunta": "¿Qué quiero lograr?"
+            },
+            {
+                "id": "paso2",
+                "numero": "2",
+                "label": "LO QUE NECESITO",
+                "pregunta": "¿Qué necesitaré para conseguirlo?"
+            },
+            {
+                "id": "paso3",
+                "numero": "3",
+                "label": "MI FECHA DE LLEGADA",
+                "pregunta": "¿Cuándo me gustaría conseguirlo?"
+            },
+            {
+                "id": "paso4",
+                "numero": "4",
+                "label": "MI PRIMER PASO",
+                "pregunta": "¿Qué puedo comenzar a hacer desde ahora?"
+            },
+            {
+                "id": "paso5",
+                "numero": "5",
+                "label": "UN OBSTÁCULO EN EL CAMINO",
+                "pregunta": "¿Qué podría alejarme de mi meta?"
+            },
+            {
+                "id": "paso6",
+                "numero": "6",
+                "label": "¿CÓMO LO ENFRENTARÉ?",
+                "pregunta": "¿Qué haré si ese obstáculo aparece?"
+            },
+            {
+                "id": "paso7",
+                "numero": "7",
+                "label": "¿CÓMO SABRÉ SI LLEGUÉ?",
+                "pregunta": "¿Qué tendrá que suceder para considerar que alcancé mi meta?"
+            }
+            ]
+        }
+        },
+        {
+        "id": "15",
+        "titulo": "¿Caja Popular Alianza podría formar parte de tu ruta?",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "subtitulo": "Primero:",
+        "pregunta": "¿QUÉ TE INTERESARÍA CONOCER?",
+        "imagen": "/images/17/5.png",
+        "opciones": [
+            { "id": "1", "texto": "Cómo puedo comenzar a ahorrar" },
+            { "id": "2", "texto": "Qué necesito para ser socio" },
+            { "id": "3", "texto": "Qué beneficios tiene ser socio" },
+            { "id": "4", "texto": "Qué servicios podría utilizar" },
+            { "id": "5", "texto": "Cómo funciona una cooperativa" },
+            { "id": "6", "texto": "Qué opciones existen para jóvenes" },
+            { "id": "7", "texto": "Solo quiero aprender más por ahora" }
+        ],
+        "cierre": {
+        "titulo": "¡COMPLETASTE TU RUTA FINANCIERA!",
+        "mensaje": "Hoy aprendiste algo que puede acompañarte mucho más allá de esta aplicación: Tu futuro financiero no comienza cuando tengas mucho dinero. Comienza cuando aprendes a tomar buenas decisiones con el dinero que tienes.",
+        "tituloHabilidades": "HABILIDADES DESBLOQUEADAS",
+        "habilidades": [
+        { "id": "h1", "texto": "Establecer metas", "icono": "🎯" },
+        { "id": "h2", "texto": "Planificar", "icono": "📅" },
+        { "id": "h3", "texto": "Conocer instituciones financieras", "icono": "🏦" },
+        { "id": "h4", "texto": "Administrar dinero", "icono": "💵" },
+        { "id": "h5", "texto": "Comprender el crédito", "icono": "💳" },
+        { "id": "h6", "texto": "Comprender qué significa ser socio", "icono": "🤝" },
+        { "id": "h7", "texto": "Ahorrar", "icono": "🐷" },
+        { "id": "h8", "texto": "Proteger mi información", "icono": "🔒" },
+        { "id": "h9", "texto": "Pensar en mi futuro", "icono": "🚀" }
+        ],
+        "imagenPersonaje": "/images/17/45.png"
+        }
+        },
+        {
+        "id": "16",
+        "titulo": "Información",
+        "fondo": "/images/17/Fondo171.jpeg",
+        "introduccion": {
+            "titulo": "Tus 18 están a la vuelta de la esquina.",
+            "mensaje": "Cuando llegue el momento, tú decidirás qué camino tomar. Caja Popular Cerano puede ser una de las opciones que conozcas para comenzar tu vida financiera.",
+            "imagenPersonaje": "/images/17/46.png",
+            "imagenEdificio": "/images/17/22.png"
+        },
+        "requisitos": {
+            "titulo": "A continuación te damos a conocer los requisitos para ser socio.",
+            "lista": [
+            {
+                "id": "req1",
+                "nombre": "ACTA DE NACIMIENTO",
+                "imagen": "/images/17/48.png"
+            },
+            {
+                "id": "req2",
+                "nombre": "COMPROBANTE DE DOMICILIO",
+                "imagen": "/images/17/49.png"
+            },
+            {
+                "id": "req3",
+                "nombre": "IDENTIFICACIÓN OFICIAL",
+                "imagen": "/images/17/47.png"
+            },
+            {
+                "id": "req4",
+                "nombre": "APORTACIÓN SOCIAL",
+                "imagen": "/images/17/50.png"
+            }
+            ]
+        },
+        "beneficios": {
+            "titulo": "Beneficios de ser socio",
+            "lista": [
+            {
+                "id": "b1",
+                "nombre": "BECAS ESCOLARES",
+                "imagen": "/images/17/52.png"
+            },
+            {
+                "id": "b2",
+                "nombre": "PROTECCIÓN AL AHORRO",
+                "imagen": "/images/17/45.png"
+            },
+            {
+                "id": "b3",
+                "nombre": "PROTECCIÓN DE PRÉSTAMOS",
+                "imagen": "/images/17/53.png"
+            },
+            {
+                "id": "b4",
+                "nombre": "APOYOS A COMUNIDADES",
+                "imagen": "/images/17/54.png"
+            },
+            {
+                "id": "b5",
+                "nombre": "AYUDA FUNERARIA",
+                "imagen": "/images/17/55.png"
+            }
+            ]
+        }
+        }
     ]
 }

@@ -37,7 +37,7 @@
         {
         "id": "1",
         "titulo": "¿Hacia dónde quiero llegar?",
-        "Fondo": "/images/15/Fondo151.png",
+        "Fondo": "/images/15/Fondo151.jpeg",
         "subtitulo": "Mi primera brújula financiera",
         "tipo": "interactiva",
         "secciones": [
@@ -166,7 +166,7 @@
         {
         "id": "2",
         "titulo": "¿Hacia dónde quiero llegar?",
-        "Fondo": "/images/15/Fondo151.png",
+        "Fondo": "/images/15/Fondo151.jpeg",
         "subtitulo": "Mi primera brújula financiera",
         "tipo": "interactiva",
         "secciones": {
@@ -237,7 +237,7 @@
         {
         "id": "3",
         "titulo": "Organiza tu dinero",
-        "Fondo": "/images/15/Fondo151.png",
+        "Fondo": "/images/15/Fondo151.jpeg",
         "subtitulo": "Ahorcado Financiero",
         "tipo": "interactiva",
         "secciones": {
@@ -312,7 +312,7 @@
         {
         "id": "4",
         "titulo": "¿Puedes llegar a tu meta?",
-        "Fondo": "/images/15/Fondo151.png",
+        "Fondo": "/images/15/Fondo151.jpeg",
         "subtitulo": "Reto de Planificación Financiera",
         "tipo": "interactiva",
         "secciones": {
@@ -360,7 +360,7 @@
         {
         "id": "5",
         "titulo": "Construye tu camino",
-        "Fondo": "/images/15/Fondo151.png",
+        "Fondo": "/images/15/Fondo151.jpeg",
         "subtitulo": "Construye tu Ruta Financiera",
         "tipo": "interactiva",
         "secciones": {
@@ -448,7 +448,7 @@
         {
         "id": "6",
         "titulo": "Memorama Financiero",
-        "fondo": "/images/15/Fondo151.png",
+        "fondo": "/images/15/Fondo151.jpeg",
         "secciones": {
             "actividad": {
             "titulo": "MEMORAMA FINANCIERO",
@@ -526,7 +526,7 @@
         {
         "id": "7",
         "titulo": "Alianzito Pide: Escudo Antiimpulsos",
-        "fondo": "/images/15/Fondo151.png",
+        "fondo": "/images/15/Fondo151.jpeg",
         "secciones": {
             "introduccion": {
             "titulo": "ACTIVA TU ESCUDO ANTIIMPULSOS",
@@ -600,7 +600,7 @@
         {
         "id": "8",
         "titulo": "Sé proteger mi dinero: 3 en raya",
-        "fondo": "/images/15/Fondo151.png",
+        "fondo": "/images/15/Fondo151.jpeg",
         "secciones": {
             "introduccion": {
             "titulo": "SÉ PROTEGER MI DINERO",
@@ -696,7 +696,7 @@
         {
         "id": "9",
         "titulo": "Séptima Brújula Financiera: ME PREPARO PARA LOS IMPREVISTOS",
-        "fondo": "/images/15/Fondo151.png",
+        "fondo": "/images/15/Fondo151.jpeg",
         "secciones": {
             "introduccion": {
             "titulo": "ME PREPARO PARA LOS IMPREVISTOS",
@@ -761,7 +761,7 @@
         {
         "id": "10",
         "titulo": "Planifico mis semanas",
-        "fondo": "/images/15/Fondo151.png",
+        "fondo": "/images/15/Fondo151.jpeg",
         "secciones": {
             "introduccion": {
             "titulo": "CONSTRUYO MI FUTURO",
@@ -810,7 +810,7 @@
         {
         "id": "11",
         "titulo": "Tus 8 Brújulas Financieras",
-        "fondo": "/images/15/Fondo151.png",
+        "fondo": "/images/15/Fondo151.jpeg",
         "brujulas": [
             { "id": 1, "icono": "🎯", "texto": "Tengo una meta" },
             { "id": 2, "icono": "⚖️", "texto": "Sé priorizar" },
