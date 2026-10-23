@@ -1,4 +1,5 @@
 import { forwardRef } from 'react';
+import { estiloFondo } from '../constants/fondosDiplomas';
 
 const FUENTE = "'Fredoka','Baloo 2','Trebuchet MS',Arial,sans-serif";
 const AZUL = '#004A99';
@@ -42,10 +43,7 @@ const DiplomaTemplate = forwardRef(({ nombre, numero, fecha }, ref) => {
         position: 'relative',
         overflow: 'hidden',
         boxSizing: 'border-box',
-        backgroundColor: '#eef2ff',
-        backgroundImage: "url('/images/FondoAdmin.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'right center',
+        ...estiloFondo('diploma'), // fondo configurable en src/constants/fondosDiplomas.js
         fontFamily: FUENTE,
         color: AZUL_OSCURO,
       }}

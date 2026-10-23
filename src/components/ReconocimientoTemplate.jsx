@@ -1,11 +1,12 @@
 import { forwardRef } from 'react';
+import { estiloFondo } from '../constants/fondosDiplomas';
 
 const FUENTE = "'Fredoka','Baloo 2','Trebuchet MS',Arial,sans-serif";
 
 // Colores según el tipo de reto (sin verde, que es el color de la competencia)
 const TIPOS = {
   ahorro: { emoji: '💰', etiqueta: 'Reto de ahorro', color: '#F59E0B', oscuro: '#B45309', suave: '#FEF3C7' },
-  habito: { emoji: '🌱', etiqueta: 'Reto de hábito', color: '#1E3A8A', oscuro: '#172554', suave: '#DBEAFE' },
+  habito: { emoji: '🌱', etiqueta: 'Reto de hábito', color: '#C026D3', oscuro: '#86198F', suave: '#FAE8FF' },
 };
 
 const fechaLarga = (iso) =>
@@ -56,10 +57,8 @@ const ReconocimientoTemplate = forwardRef(({ nombre, reto, fecha, reflexion }, r
         position: 'relative',
         overflow: 'hidden',
         boxSizing: 'border-box',
-        backgroundColor: '#eef2ff',
-        backgroundImage: "url('/images/FondoAdmin.png')",
-        backgroundSize: 'cover',
-        backgroundPosition: 'right center',
+        // fondo configurable en src/constants/fondosDiplomas.js
+        ...estiloFondo(reto.tipo === 'habito' ? 'reconocimientoHabito' : 'reconocimientoAhorro'),
         fontFamily: FUENTE,
         color: '#1f2a4d',
       }}
