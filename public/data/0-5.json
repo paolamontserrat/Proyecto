@@ -246,10 +246,10 @@
       },
       "imagenExtra": "/images/0-5/19.png",
       "actividad": {
-        "titulo": "Encuentra las 6 diferencias",
+        "titulo": "Encuentra las 5 diferencias",
         "imagenA": "/images/0-5/20.png",
         "imagenB": "/images/0-5/22.png",
-        "totalDiferencias": 6,
+        "totalDiferencias": 5,
         "diferencias": [
           { "x": 68, "y": 16, "radio": 7, "descripción": "Manzana" },
           { "x": 70, "y": 60, "radio": 6, "descripción": "Sonrisa" },
