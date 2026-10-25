@@ -10,6 +10,7 @@ function MapaAventuraDashboard({ rango, info }) {
   const userId = usuario?.id;
 
   const [pasoActual, setPasoActual] = useState(1);
+  const [bloqueadaHoy, setBloqueadaHoy] = useState(false);
   const [total, setTotal] = useState(null);
   const [cargando, setCargando] = useState(true);
   const [mostrarMapa, setMostrarMapa] = useState(false);
@@ -20,12 +21,15 @@ function MapaAventuraDashboard({ rango, info }) {
       setCargando(true);
 
       const [{ data: progreso }, jsonRes] = await Promise.all([
-        supabase.from('progreso_actividades').select('actividad_id').eq('usuario_id', userId).eq('completada', true),
+        supabase.from('progreso_actividades').select('actividad_id, fecha_completado').eq('usuario_id', userId).eq('completada', true),
         fetch(`/data/${rango}.json`).then((r) => r.json()).catch(() => null),
       ]);
 
       const max = progreso && progreso.length > 0 ? Math.max(...progreso.map((p) => p.actividad_id)) : 0;
       setPasoActual(max + 1);
+      const ultima = (progreso || []).find(p => Number(p.actividad_id) === max);
+      const dia = fecha => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(fecha));
+      setBloqueadaHoy(Boolean(ultima?.fecha_completado && dia(ultima.fecha_completado) >= dia(new Date())));
       setTotal(Array.isArray(jsonRes?.pasos) ? jsonRes.pasos.length : null);
       setCargando(false);
     };

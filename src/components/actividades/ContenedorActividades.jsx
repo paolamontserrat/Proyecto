@@ -43,6 +43,21 @@ const ContenedorActividades = () => {
     return isNaN(guardado) ? 1 : guardado;
   });
   const [pasoVisible, setPasoVisible] = useState(pasoActual);
+  const [fechaUltima, setFechaUltima] = useState(null);
+  const [cargandoProgreso, setCargandoProgreso] = useState(true);
+  const [ahora, setAhora] = useState(Date.now());
+  const [mensajeManana, setMensajeManana] = useState(false);
+  const [guardando, setGuardando] = useState(false);
+
+  // Fecha del calendario en México, no intervalo de 24 horas.
+  const diaMexico = (fecha) => new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Mexico_City', year: 'numeric', month: '2-digit', day: '2-digit'
+  }).format(new Date(fecha));
+  const bloqueadaHoy = Boolean(fechaUltima && diaMexico(fechaUltima) >= diaMexico(ahora));
+  useEffect(() => {
+    const id = setInterval(() => setAhora(Date.now()), 30000);
+    return () => clearInterval(id);
+  }, []);
 
   const actividadesPorRango = {
     "0-5": actividades05,
@@ -80,12 +95,12 @@ const ContenedorActividades = () => {
   // SINCRONIZAR PROGRESO (SUPABASE + LOCAL)
   useEffect(() => {
     const sync = async () => {
-      if (userId === "anon") return;
+      if (userId === "anon") { setCargandoProgreso(false); return; }
 
       try {
         const { data: progreso } = await supabase
           .from("progreso_actividades")
-          .select("actividad_id")
+          .select("actividad_id, fecha_completado")
           .eq("usuario_id", userId)
           .eq("completada", true);
 
@@ -106,6 +121,10 @@ const ContenedorActividades = () => {
           }
         }
 
+        const ultima = (progreso || []).find(p =>
+          String(p.actividad_id) === String(actividades[frontera - 2]?.id ?? frontera - 1)
+        );
+        setFechaUltima(ultima?.fecha_completado || null);
         setPasoActual(frontera);
         localStorage.setItem(progresoKey, frontera);
 
@@ -117,6 +136,8 @@ const ContenedorActividades = () => {
         }
       } catch (err) {
         console.warn("Sync error:", err);
+      } finally {
+        setCargandoProgreso(false);
       }
     };
 
@@ -135,18 +156,16 @@ const ContenedorActividades = () => {
   
   // GUARDAR PROGRESO
   const guardarProgreso = async (idActividad) => {
-    if (userId === "anon") return;
+    if (userId === "anon") return new Date().toISOString();
 
-    try {
-      await supabase.from("progreso_actividades").upsert(
-        {
-          usuario_id: userId,
-          actividad_id: idActividad,
-          completada: true,
-        },
-        { onConflict: "usuario_id,actividad_id" },
-      );
-    } catch {}
+    const fecha = new Date().toISOString();
+    const { error } = await supabase.from("progreso_actividades").upsert(
+      { usuario_id: userId, actividad_id: idActividad, completada: true,
+        fecha_completado: fecha },
+      { onConflict: "usuario_id,actividad_id" }
+    );
+    if (error) throw error;
+    return fecha;
   };
 
   // Avanza solo la vista; si estaba en la ultima, ahi si mueve el progreso real
@@ -162,31 +181,37 @@ const ContenedorActividades = () => {
   
   // TERMINAR PASO
   const terminarPaso = async () => {
+    if (guardando || cargandoProgreso || (userId !== 'anon' && bloqueadaHoy && pasoVisible === pasoActual)) return;
     const actividadObj = actividades[pasoSeguro - 1];
-    const idReal = actividadObj?.id || pasoSeguro;
-
-    await guardarProgreso(idReal);
-
-    if (userId === "anon") {
-      avanzarVista();
-      return;
-    }
-
+    const idReal = actividadObj?.id ?? pasoSeguro;
     const esFrontera = pasoVisible === pasoActual;
-    const resultado = await registrarActividad(idReal);
-
-    if (!resultado.nuevo || !esFrontera) {
+    if (!esFrontera) { setPasoVisible(Math.min(pasoVisible + 1, pasoActual)); return; }
+    setGuardando(true);
+    try {
+      // Registrar gamificación antes del progreso: la función RPC decide si es nueva.
+      if (userId !== 'anon') {
+        const resultado = await registrarActividad(idReal);
+        if (!resultado.nuevo) {
+          alert('No fue posible registrar una actividad nueva. Actualiza tu progreso.');
+          return;
+        }
+      }
+      const fecha = await guardarProgreso(idReal);
+      setFechaUltima(fecha);
       avanzarVista();
-    }
-    // si es nueva, el avance ocurre al cerrar el modal de celebración
+      if (userId === 'anon') setMensajeManana(true);
+      // Si hay celebración, el mensaje aparece al cerrarla.
+    } catch (error) {
+      console.error('No se pudo guardar el progreso:', error);
+      alert('No se pudo guardar tu avance. Inténtalo de nuevo.');
+    } finally { setGuardando(false); }
   };
 
   const continuarDespuesDeCelebracion = () => {
     cerrarCelebracion();
-    avanzarVista();
+    setMensajeManana(true);
   };
 
-  
   // RETROCEDER
   const retroceder = () => {
     if (pasoVisible > 1) {
@@ -197,12 +222,12 @@ const ContenedorActividades = () => {
   };
 
   const irANodo = (n) => {
-    if (n <= pasoActual) setPasoVisible(n);
+    if (n <= pasoActual && !(n === pasoActual && bloqueadaHoy)) setPasoVisible(n);
   };
 
   
   // ESTADOS BASE
-  if (!data?.pasos) {
+  if (!data?.pasos || cargandoProgreso) {
     return <div className="p-20 text-center">Cargando actividades...</div>;
   }
 
@@ -284,11 +309,39 @@ const ContenedorActividades = () => {
               pasoVisible={pasoVisible}
               onSeleccionar={irANodo}
               variante="horizontal"
+              bloqueadaHoy={bloqueadaHoy}
             />
           </div>
         )}
 
-        {DEBUG_COORDENADAS ? (
+        {mensajeManana && (
+          <div role="dialog" aria-modal="true" className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4">
+            <div className="bg-white rounded-3xl p-8 text-center max-w-sm w-full shadow-2xl">
+              <p className="text-6xl mb-4">📅</p>
+              <h2 className="text-2xl font-black text-alianza-azul">¡Próxima actividad mañana!</h2>
+              <p className="mt-3 text-gray-600">¡Excelente trabajo! Regresa mañana para continuar tu aventura.</p>
+              <button onClick={() => navigate(`/dashboard/${rango}`)} className="mt-6 w-full rounded-xl bg-alianza-azul text-white font-bold py-3">Volver al inicio</button>
+            </div>
+          </div>
+        )}
+        {bloqueadaHoy && pasoVisible === pasoActual ? (
+          <div className="rounded-3xl p-8 text-center max-w-lg mx-auto">
+            <div className="flex justify-between items-center mb-4 justify-center">
+                <button
+                    onClick={() => navigate(`/dashboard/${rango}`)}
+                    className="bg-azul-oscuro text-white px-16 py-3 rounded-full border-2 border-white font-bold shadow hover:scale-105 transition"
+                >
+                    🏠 Inicio
+                </button>
+            </div>
+
+            <div className="bg-white rounded-3xl p-8 text-center max-w-lg mx-auto shadow-xl">
+              <p className="text-5xl mb-4">🔒</p>
+              <h2 className="text-2xl font-black text-alianza-azul">¡Próxima actividad mañana!</h2>
+              <p className="mt-3">Puedes repasar las actividades anteriores mientras tanto.</p>
+            </div>
+          </div>
+        ) : DEBUG_COORDENADAS ? (
           <CapturarCoordenadas imagen="/images/10/35.png" total={6} />
         ) : (
           <ActividadActual

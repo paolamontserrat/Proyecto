@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { Lock } from 'lucide-react';
 
-function MapaActividades({ totalPasos, pasoActual, pasoVisible, onSeleccionar, variante = 'horizontal' }) {
+function MapaActividades({ totalPasos, pasoActual, pasoVisible, onSeleccionar, variante = 'horizontal', bloqueadaHoy = false }) {
   const contenedorRef = useRef(null);
 
   useEffect(() => {
@@ -16,9 +16,9 @@ function MapaActividades({ totalPasos, pasoActual, pasoVisible, onSeleccionar, v
   const renderNodo = (n) => {
     const completado = n < pasoActual;
     const esFrontera = n === pasoActual;
-    const bloqueado = n > pasoActual;
+    const bloqueado = n > pasoActual || (esFrontera && bloqueadaHoy);
     const seleccionado = n === pasoVisible;
-    const clicable = completado || esFrontera;
+    const clicable = completado || (esFrontera && !bloqueadaHoy);
 
     // Variante horizontal (texto arriba, sin línea intermedia)
     if (variante === 'horizontal') {
