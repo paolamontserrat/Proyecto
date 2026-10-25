@@ -4,6 +4,7 @@ import { supabase } from "../../supabaseClient";
 import { hoyMX, diasEntre } from "../../utils/fecha";
 import { comprimirImagen } from "../../utils/imagen";
 import ModalConfirmar from "../../components/admin/ModalConfirmar";
+import AdminRetosCumplidos from "./AdminRetosCumplidos";
 
 const BUCKET = "retos-imagenes";
 
@@ -40,7 +41,7 @@ const resumenMeta = (reto) =>
     : `Meta $${reto.meta_monto}`;
 
 // Componente de administración para mostrar, crear, editar y eliminar retos.
-const AdminRetos = () => {
+const GestionRetos = () => {
   const [retos, setRetos] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [form, setForm] = useState(VACIO);
@@ -509,6 +510,32 @@ const AdminRetos = () => {
           onCancelar={() => setRetoAEliminar(null)}
         />
       )}
+    </div>
+  );
+};
+
+// Pantalla de Retos con dos pestañas: administrar los retos y ver cuántos lleva cumplidos cada niño.
+const AdminRetos = () => {
+  const [vista, setVista] = useState("retos");
+
+  const pestana = (clave, texto) => (
+    <button
+      onClick={() => setVista(clave)}
+      className={`px-4 py-2 rounded-lg text-sm font-semibold ${
+        vista === clave ? "bg-alianza-azul text-white" : "bg-white text-alianza-azul border"
+      }`}
+    >
+      {texto}
+    </button>
+  );
+
+  return (
+    <div>
+      <div className="flex gap-2 px-6 pt-6">
+        {pestana("retos", "Retos")}
+        {pestana("cumplidos", "Retos cumplidos por niño")}
+      </div>
+      {vista === "retos" ? <GestionRetos /> : <AdminRetosCumplidos />}
     </div>
   );
 };
